@@ -76,6 +76,9 @@ VAR
 
     (* Spezial *)
     iStartProcessTimeMili : UDINT; // start of the processing time, accurate at 100ns 
+	
+	_bBewegung : BOOL;
+	_bBewegungDist : INT := 20;
 
 END_VAR
 VAR CONSTANT
@@ -209,6 +212,16 @@ ST100_Modify_e.proceedOperation_1: (*  *)
     IF xIN_NextStep AND (GetTick() - iStartProcessTimeMili) >= (iProcessTimeMili1) THEN
         iStartProcessTimeMili := GetTick();
         iOUT_Step             := ST100_Modify_e.proceedOperation_2;
+    ELSIF __ISVALIDREF(Mover) THEN
+        IF Mover.MoverAxis.isInPos THEN
+            IF _bBewegung THEN
+                Mover.MoverAxis.RelMoveTo(_bBewegungDist);
+            ELSE
+                Mover.MoverAxis.RelMoveTo(-_bBewegungDist);
+            END_IF
+
+            _bBewegung := NOT _bBewegung;
+        END_IF;
     END_IF;
 
 ST100_Modify_e.proceedOperation_2: (*  *)
@@ -244,7 +257,7 @@ END_CASE;
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_ABL_MODIFY">
-      <LineId Id="882" Count="158" />
+      <LineId Id="1810" Count="168" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

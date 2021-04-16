@@ -25,6 +25,8 @@ VAR
     _lrNextStopPos : LREAL; // local variable used to get next stop
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+	
+	_CurrentDir : MoverDirection_e := MoverDirection_e.Farward;
 END_VAR
 
 VAR CONSTANT
@@ -42,7 +44,8 @@ END_VAR
       <ST><![CDATA[IF NOT xIN_StopMover THEN // Do not change momemtum when we stop the movers from HMI
     IF NOT _IsColliding THEN
 
-        IF THIS^.GetStopLen(_Velocity, SIMU.lrAccelMover) >= DistToTravel(_CurrentPos, _TargetPos) OR THIS^._willCollide THEN
+        IF THIS^.GetStopLen(_Velocity, SIMU.lrAccelMover) >= DistToTravel(_CurrentPos, _TargetPos) OR
+           THIS^._willCollide THEN
             _Velocity := _Velocity - SIMU.lrAccelMover;
 
         ELSIF SIMU.lrSpeedMover > _Velocity AND _CurrentPos <> _TargetPos THEN
@@ -67,8 +70,11 @@ IF NOT _IsColliding AND NOT xIN_StopMover THEN
         _CurrentPos := _CurrentPos + _Velocity;
 
     ELSIF (_CurrentPos - _Velocity) > _TargetPos THEN
-        //_CurrentPos := _CurrentPos - _Velocity;
-        _CurrentPos := _CurrentPos + _Velocity; // always move at the positive way
+        IF MoverDirection_e.Farward = THIS^._CurrentDir THEN
+            _CurrentPos := _CurrentPos + _Velocity;
+        ELSIF MoverDirection_e.Reverse = THIS^._CurrentDir THEN
+            _CurrentPos := _CurrentPos - _Velocity;
+        END_IF
 
     ELSE
         _CurrentPos := _TargetPos;
@@ -232,15 +238,38 @@ END_VAR
       </Set>
     </Property>
     <Method Name="MoveTo" Id="{27ffc6e2-2e43-4eb2-aced-4a958cfe10ec}">
-      <Declaration><![CDATA[METHOD PUBLIC MoveTo : POINTER TO FB_SimuMoverAxis
+      <Declaration><![CDATA[METHOD PUBLIC MoveTo : REFERENCE TO FB_SimuMoverAxis
 VAR_INPUT
     Position : LREAL; // move the axis to this position
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^._TargetPos := Position;
+THIS^._CurrentDir := MoverDirection_e.Farward;
 isInPos := THIS^._CurrentPos = THIS^._TargetPos;
-MoveTo := THIS;
+MoveTo REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RelMoveTo" Id="{63f20b0f-13f1-4d11-9d44-19187e776860}">
+      <Declaration><![CDATA[// Move relatively of this position
+// With this function, a negative value move the mover at the reverse direction
+METHOD RelMoveTo : REFERENCE TO FB_SimuMoverAxis
+VAR_INPUT
+    RelativePos : LREAL; // move the axis to this amount¨
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._TargetPos := THIS^._TargetPos + RelativePos;
+
+IF RelativePos >= 0 THEN
+    THIS^._CurrentDir := MoverDirection_e.Farward;
+ELSE
+    THIS^._CurrentDir := MoverDirection_e.Reverse;
+END_IF
+
+isInPos   := THIS^._CurrentPos = THIS^._TargetPos;
+RelMoveTo REF= THIS^;
 ]]></ST>
       </Implementation>
     </Method>
@@ -390,7 +419,7 @@ END_VAR
       </Set>
     </Property>
     <LineIds Name="FB_SimuMoverAxis">
-      <LineId Id="1177" Count="48" />
+      <LineId Id="1273" Count="52" />
       <LineId Id="60" Count="0" />
     </LineIds>
     <LineIds Name="FB_SimuMoverAxis.CurrentPos.Get">
@@ -427,8 +456,14 @@ END_VAR
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_SimuMoverAxis.MoveTo">
-      <LineId Id="13" Count="2" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="14" Count="1" />
       <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.RelMoveTo">
+      <LineId Id="19" Count="9" />
+      <LineId Id="8" Count="0" />
     </LineIds>
     <LineIds Name="FB_SimuMoverAxis.ResolvePos">
       <LineId Id="792" Count="45" />
