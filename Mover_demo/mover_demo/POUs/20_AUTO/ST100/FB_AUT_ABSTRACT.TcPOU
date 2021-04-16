@@ -104,9 +104,30 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="iProcessTimeMili" Id="{8a91a320-6ef0-40f0-9503-6d27209218cd}">
+    <Property Name="iProcessTimeMili_1" Id="{00789763-b0c1-46da-b435-85ea24c17c60}">
       <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili : DINT
+PROPERTY iProcessTimeMili_1 : DINT
+]]></Declaration>
+      <Get Name="Get" Id="{804867bb-2eb1-42d5-be2d-daa9d1665638}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{1517f5af-3a45-47e8-823c-2d24b76bb472}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="iProcessTimeMili_2" Id="{8a91a320-6ef0-40f0-9503-6d27209218cd}">
+      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
+PROPERTY iProcessTimeMili_2 : DINT
 ]]></Declaration>
       <Get Name="Get" Id="{0978e08d-b31b-4f3e-a166-9c86b7369801}">
         <Declaration><![CDATA[VAR
@@ -252,10 +273,16 @@ END_VAR
     <LineIds Name="FB_AUT_ABSTRACT.iCompletionPC.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_AUT_ABSTRACT.iProcessTimeMili.Get">
+    <LineIds Name="FB_AUT_ABSTRACT.iProcessTimeMili_1.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_AUT_ABSTRACT.iProcessTimeMili.Set">
+    <LineIds Name="FB_AUT_ABSTRACT.iProcessTimeMili_1.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AUT_ABSTRACT.iProcessTimeMili_2.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AUT_ABSTRACT.iProcessTimeMili_2.Set">
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_AUT_ABSTRACT.Mover.Get">

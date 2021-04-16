@@ -608,6 +608,7 @@ SetAllScenario REF= THIS^;
 // to at least 2 diffrents process
 METHOD SetAllTimers : REFERENCE TO FB_MoverMan
 VAR_INPUT
+	arrStationTime : POINTER TO DINT;
 END_VAR
 VAR
     i         : INT;
@@ -617,33 +618,36 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[getTime();
-rand.Seed := TO_INT(getTime.timeLoDW);
+        <ST><![CDATA[IF arrStationTime <> 0 THEN
 
-FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
-    rand();
-    PERS.iStationTimeDef[i] := TO_DINT((THIS^.HMI_TimeMax - THIS^.HMI_TimeMin) * (rand.Num) + THIS^.HMI_TimeMin);
-END_FOR
+    getTime();
+    rand.Seed := TO_INT(getTime.timeLoDW);
 
-tempIndex := 1;
+    FOR i := 0 TO CONST.STATION_NUMBER - 1 BY 1 DO
+        rand();
+        arrStationTime[i] := TO_DINT((THIS^.HMI_TimeMax - THIS^.HMI_TimeMin) * (rand.Num) + THIS^.HMI_TimeMin);
+    END_FOR
 
-FOR i := 2 TO CONST.STATION_NUMBER BY 1 DO
-    IF PERS.iStationTimeDef[i] < PERS.iStationTimeDef[tempIndex] THEN
-        tempIndex := i;
-    END_IF
-END_FOR
+    tempIndex := 0;
 
-PERS.iStationTimeDef[tempIndex] := THIS^.HMI_TimeMin;
+    FOR i := 1 TO CONST.STATION_NUMBER - 1 BY 1 DO
+        IF arrStationTime[i] < arrStationTime[tempIndex] THEN
+            tempIndex := i;
+        END_IF
+    END_FOR
 
-tempIndex := 1;
+    arrStationTime[tempIndex] := THIS^.HMI_TimeMin;
 
-FOR i := 2 TO CONST.STATION_NUMBER BY 1 DO
-    IF PERS.iStationTimeDef[i] > PERS.iStationTimeDef[tempIndex] THEN
-        tempIndex := i;
-    END_IF
-END_FOR
+    tempIndex := 0;
 
-PERS.iStationTimeDef[tempIndex] := THIS^.HMI_TimeMax;
+    FOR i := 1 TO CONST.STATION_NUMBER - 1 BY 1 DO
+        IF arrStationTime[i] > arrStationTime[tempIndex] THEN
+            tempIndex := i;
+        END_IF
+    END_FOR
+
+    arrStationTime[tempIndex] := THIS^.HMI_TimeMax;
+END_IF
 
 SetAllTimers REF= THIS^;
 ]]></ST>
@@ -716,7 +720,7 @@ END_VAR]]></Declaration>
       <LineId Id="11" Count="0" />
     </LineIds>
     <LineIds Name="FB_MoverMan.SetAllTimers">
-      <LineId Id="208" Count="28" />
+      <LineId Id="296" Count="31" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_MoverMan.ToString">

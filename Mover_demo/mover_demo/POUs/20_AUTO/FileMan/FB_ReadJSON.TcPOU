@@ -4,12 +4,14 @@
     <Declaration><![CDATA[{attribute 'c++_compatible'}
 FUNCTION_BLOCK FB_ReadJSON IMPLEMENTS ITcJsonSaxHandler
 VAR_INPUT
-    myArrayInput : REFERENCE TO ARRAY[1..CONSt.STATION_NUMBER] OF DINT;
+    myArrayInput1 : REFERENCE TO ARRAY[1..CONSt.STATION_NUMBER] OF DINT;
+    myArrayInput2 : REFERENCE TO ARRAY[1..CONSt.STATION_NUMBER] OF DINT;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
     iArrayIndex : INT;
+	iArrayNumber : INT := 0;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -163,7 +165,8 @@ END_VAR
 METHOD OnStartArray : HRESULT
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.iArrayIndex := 1;]]></ST>
+        <ST><![CDATA[THIS^.iArrayIndex := 1;
+THIS^.iArrayNumber := THIS^.iArrayNumber + 1;]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnStartObject" Id="{154319f1-7500-4601-a5ac-3b43c0d5ae1f}">
@@ -208,8 +211,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.myArrayInput[THIS^.iArrayIndex] := TO_DINT(value);
-This^.iArrayIndex := This^.iArrayIndex + 1;]]></ST>
+        <ST><![CDATA[IF THIS^.iArrayNumber = 1 THEN
+    THIS^.myArrayInput1[THIS^.iArrayIndex] := TO_DINT(value);
+    THIS^.iArrayIndex                      := THIS^.iArrayIndex + 1;
+ELSIF THIS^.iArrayNumber = 2 THEN
+    THIS^.myArrayInput2[THIS^.iArrayIndex] := TO_DINT(value);
+    THIS^.iArrayIndex                      := THIS^.iArrayIndex + 1;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnUlint" Id="{d82d5f58-11ea-4618-a7f0-e07444bf9b7e}">
@@ -300,6 +309,7 @@ METHOD TcRelease : UDINT
     </LineIds>
     <LineIds Name="FB_ReadJSON.OnStartArray">
       <LineId Id="9" Count="0" />
+      <LineId Id="16" Count="0" />
     </LineIds>
     <LineIds Name="FB_ReadJSON.OnStartObject">
       <LineId Id="9" Count="0" />
@@ -308,7 +318,8 @@ METHOD TcRelease : UDINT
       <LineId Id="15" Count="0" />
     </LineIds>
     <LineIds Name="FB_ReadJSON.OnUdint">
-      <LineId Id="12" Count="1" />
+      <LineId Id="35" Count="6" />
+      <LineId Id="26" Count="0" />
     </LineIds>
     <LineIds Name="FB_ReadJSON.OnUlint">
       <LineId Id="12" Count="0" />

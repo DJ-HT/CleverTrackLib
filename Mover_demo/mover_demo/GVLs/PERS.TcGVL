@@ -158,7 +158,8 @@ VAR_GLOBAL RETAIN
     (***********************************************************************************************)
     (* Application *)
     (***********************************************************************************************)
-    iStationTimeDef : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+    iStationTimeDef1 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+    iStationTimeDef2 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
 
 END_VAR
 ]]></Declaration>

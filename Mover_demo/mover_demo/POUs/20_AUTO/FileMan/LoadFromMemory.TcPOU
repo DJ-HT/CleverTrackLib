@@ -13,12 +13,14 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[pJsonParse.myArrayInput REF= PERS.iStationTimeDef;
+      <ST><![CDATA[pJsonParse.myArrayInput1 REF= PERS.iStationTimeDef1;
+pJsonParse.myArrayInput2 REF= PERS.iStationTimeDef2;
 fbJson.Parse(sJson := sData, ipHdl := pJsonParse);
 ]]></ST>
     </Implementation>
     <LineIds Name="LoadFromMemory">
       <LineId Id="31" Count="0" />
+      <LineId Id="42" Count="0" />
       <LineId Id="30" Count="0" />
       <LineId Id="7" Count="0" />
     </LineIds>

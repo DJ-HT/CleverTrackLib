@@ -12,23 +12,54 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbJson.ResetDocument();
+
+// array1
 fbJson.StartObject();
-fbJson.AddKey('StationTime');
+fbJson.AddKey('StationTime1');
 fbJson.StartArray();
 
 FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
-    fbJson.AddDint(PERS.iStationTimeDef[i]);
+    fbJson.AddDint(PERS.iStationTimeDef1[i]);
 END_FOR
 
 fbJson.EndArray();
 fbJson.EndObject();
+
+// array2
+fbJson.StartObject();
+fbJson.AddKey('StationTime2');
+fbJson.StartArray();
+
+FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
+    fbJson.AddDint(PERS.iStationTimeDef2[i]);
+END_FOR
+
+fbJson.EndArray();
+fbJson.EndObject();
+
+// end of file
 sData := fbJson.GetDocument();
 
 fbJson.ResetDocument();
 ]]></ST>
     </Implementation>
     <LineIds Name="SaveInMemory">
-      <LineId Id="1410" Count="13" />
+      <LineId Id="1410" Count="0" />
+      <LineId Id="1460" Count="0" />
+      <LineId Id="1459" Count="0" />
+      <LineId Id="1411" Count="5" />
+      <LineId Id="1433" Count="0" />
+      <LineId Id="1418" Count="1" />
+      <LineId Id="1439" Count="0" />
+      <LineId Id="1462" Count="0" />
+      <LineId Id="1457" Count="0" />
+      <LineId Id="1440" Count="1" />
+      <LineId Id="1453" Count="3" />
+      <LineId Id="1450" Count="2" />
+      <LineId Id="1420" Count="0" />
+      <LineId Id="1464" Count="0" />
+      <LineId Id="1463" Count="0" />
+      <LineId Id="1421" Count="2" />
       <LineId Id="135" Count="0" />
     </LineIds>
   </POU>
