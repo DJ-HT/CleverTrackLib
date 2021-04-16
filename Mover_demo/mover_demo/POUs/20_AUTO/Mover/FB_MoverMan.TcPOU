@@ -1,0 +1,726 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_MoverMan" Id="{46c19d28-7ae9-4f45-9321-6275282c7579}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_MoverMan
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    _PieceHolderList : ARRAY[1..2] OF FB_PieceHolder[
+        (0),
+        (60)];
+    _SimuMoverList : ARRAY[1..19] OF FB_SimuMoverAxis[
+        (116),
+        (433),
+        (750),
+        (1067),
+        (1384),
+        (1701),
+        (2018),
+        (2335),
+        (2652),
+        (3000),
+        (3400),
+        (3800),
+        (5200),
+        (5600),
+        (6000),
+        (6400),
+        (6800),
+        (7200),
+        (7600)];
+
+    _MoverList : ARRAY[1..19] OF FB_Mover[
+        (1, _SimuMoverList[1]),
+        (2, _SimuMoverList[2]),
+        (3, _SimuMoverList[3]),
+        (4, _SimuMoverList[4]),
+        (5, _SimuMoverList[5]),
+        (6, _SimuMoverList[6]),
+        (7, _SimuMoverList[7]),
+        (8, _SimuMoverList[8]),
+        (9, _SimuMoverList[9]),
+        (10, _SimuMoverList[10]),
+        (11, _SimuMoverList[11]),
+        (12, _SimuMoverList[12]),
+        (13, _SimuMoverList[13]),
+        (14, _SimuMoverList[14]),
+        (15, _SimuMoverList[15]),
+        (16, _SimuMoverList[16]),
+        (17, _SimuMoverList[17]),
+        (18, _SimuMoverList[18]),
+        (19, _SimuMoverList[19])];
+
+    _PosList : ARRAY[1..CONST.STATION_NUMBER] OF FB_Position[
+        (125, 1, 1),
+        (625, 1, 1),
+        (1125, 1, 1),
+        (1375, 1, 1),
+        (1625, 1, 1),
+        (2375, 1, 1),
+        (2625, 1, 1),
+        (2875, 1, 1),
+        (3125, 1, 1),
+        (3625, 1, 1),
+        (3875, 1, 1),
+        // second part
+        (5175, 1, 1),
+        (5425, 1, 1),
+        (6135, 1, 1),
+        (7335, 1, 1),
+        (7665, 1, 1),
+        (8625, 1, 1),
+        (8875, 1, 1)];
+
+    _StationList : ARRAY[1..CONST.STATION_NUMBER] OF FB_Station[
+        (_PosList[1], GVL._Process1, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
+        (_PosList[2], GVL._Process2, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
+        (_PosList[3], GVL._Process3, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
+        (_PosList[4], GVL._Process4, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[5], GVL._Process5, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[6], GVL._Process6, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
+        (_PosList[7], GVL._Process7, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[8], GVL._Process8, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[9], GVL._Process9, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[10], GVL._Process10, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
+        (_PosList[11], GVL._Process11, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[12], GVL._Process12, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
+        (_PosList[13], GVL._Process13, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[14], GVL._Process14, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
+        (_PosList[15], GVL._Process15, -400, ApproachScenario_e.WaitOnFinishedProcess, 3),
+        (_PosList[16], GVL._Process16, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[17], GVL._Process17, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
+        (_PosList[18], GVL._Process18, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
+
+    _StationSet1 : ARRAY[1..CONST.STATION_NUMBER] OF BOOL := [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    _StationSet2 : ARRAY[1..CONST.STATION_NUMBER] OF BOOL := [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+    _StationSet3 : ARRAY[1..CONST.STATION_NUMBER] OF BOOL := [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    _StationSet4 : ARRAY[1..CONST.STATION_NUMBER] OF BOOL := [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+
+    _SelWorkStationList : ARRAY[1..CONST.RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF BOOL
+        := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4)];
+
+    _WorkStationList : ARRAY[1..CONST.RECIPE_NUMBER] OF FB_StationMan[
+        (ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
+        (ADR(_StationList), _SelWorkStationList[2], _PieceHolderList[1]),
+        (ADR(_StationList), _SelWorkStationList[3], _PieceHolderList[2]),
+        (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[2])];
+
+    step : INT := 0; //test step
+
+    station1 : StationName_e := StationName_e.Station100; // first station of the demo
+    station2 : StationName_e := StationName_e.Station110; // second station of the demo
+    PH_num   : INT           := 1;                        // piece holder selection
+
+    fb_fileMan : FB_FileMan;
+    bSaveData  : BOOL := FALSE;
+    bLoadData  : BOOL := TRUE;
+    json_data  : STRING(2000);
+
+    i                   : INT;
+    bMoverSync          : BOOL := FALSE; // external trigger for movers
+    iNumOfMoverOnTheWay : INT;           // temp var to know how m
+
+    HMI_Scenario   : ApproachScenario_e := ApproachScenario_e.WaitOnFinishedProcess;
+    HMI_TimeAvg    : DINT               := 1000;
+    HMI_TimeMin    : DINT               := 900;
+    HMI_TimeMax    : DINT               := 1100;
+    HMI_xStopMover : BOOL               := FALSE;
+    HMI_iSelMover  : INT                := 1;
+
+    _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+END_VAR
+VAR CONSTANT
+    MOVER_NUMBER : INT := 18;
+END_VAR
+VAR_STAT
+    _iInstanceCounter : INT := 1; // instance counter
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+fb_fileMan(sPathName    := 'D:\tmp\mover_demo.json',
+           bSave        := bSaveData,
+           bLoad        := bLoadData,
+           sRefString   := ADR(json_data),
+           bError       =>,
+           nErrorId     =>,
+           currentState =>);
+
+IF fb_fileMan.currentState = 3 THEN
+    SaveInMemory(json_data);
+    fb_fileMan.uiStringLen := LEN(json_data);
+
+ELSIF fb_fileMan.currentState = 5 THEN
+    fb_fileMan.uiStringLen := 2000;
+
+ELSIF fb_fileMan.currentState = 9 THEN
+    LoadFromMemory(json_data);
+
+ELSIF fb_fileMan.currentState = 10 THEN
+    bSaveData := FALSE;
+    bLoadData := FALSE;
+END_IF
+
+CASE step OF
+0:
+    FOR i := 1 TO MOVER_NUMBER BY 1 DO
+        _MoverList[i].SetStation(_WorkStationList[PH_num].GetStartStation(_MoverList[i].MoverAxis.CurrentPos)^);
+        _MoverList[i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
+        _MoverList[i].MoveToStation();
+    END_FOR
+
+    IF THIS^.CheckWaitPosNotBehindStation() THEN
+        ASSERT(0);
+    END_IF
+
+    step := 1;
+1:
+    FOR i := 1 TO MOVER_NUMBER BY 1 DO
+        _MoverList[i].SetStation(THIS^._StationList[CONST.STATION_NUMBER]);
+        _MoverList[i].MoveToStation();
+    END_FOR
+
+    step := 2;
+2:
+// do nothing, init done
+
+END_CASE
+
+// should be done elsewhere ...
+SIMU.lrAccelMover := SIMU.lrAccelMoverSlider * SIMU.lrAccelMoverSlider;
+
+FOR i := 1 TO MOVER_NUMBER BY 1 DO
+    _MoverList[i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
+    // this only needed because the mover doesn't update themself automatically
+    _MoverList[i](xIN_StopMover := HMI_xStopMover);
+
+    // POUR LE MOI DE DEMAIN
+    // remplir les séquences de station puis insérer le code ici pour la gestion du code :)
+    IF HMI.enState = enState.StateAUTO THEN
+
+        CASE _MoverList[i].State OF
+
+        MoverState_e.OperationDone:
+            IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
+                _MoverList[i].Station.Process.TakeMover();
+            ELSE
+                // ASSERT HERE
+            END_IF
+
+            _MoverList[i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[i].Station)^);
+
+        MoverState_e.WaitOnNextStation:
+            // depending on the next station scenario, move
+            CASE _MoverList[i].Station.ApproachScenario OF
+            // do not wait
+            ApproachScenario_e.DoNotWait:
+                _MoverList[i].MoveToStation();
+
+            // wait on the next station to be free
+            ApproachScenario_e.WaitOnFinishedProcess:
+                // Are we in a waiting spot ?
+                IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
+
+                    iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[i]);
+
+                    IF 0 = iNumOfMoverOnTheWay THEN
+                        _MoverList[i].MoveToStation();
+
+                    ELSIF iNumOfMoverOnTheWay <= _MoverList[i].Station.iMaxWaitingMovers THEN
+                        _MoverList[i].MoveToWaitSpot();
+                    END_IF
+
+                ELSE
+                    _MoverList[i]
+                        .SetStation(_WorkStationList[PH_num].GetNextStationWithProcess(_MoverList[i].Station)^);
+                END_IF
+
+            ApproachScenario_e.WaitOnFreeStation:
+                // Are we in a waiting spot ?
+                IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
+
+                    iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[i]);
+
+                    IF 0 = iNumOfMoverOnTheWay THEN
+                        _MoverList[i].MoveToStation();
+                    END_IF
+                END_IF
+
+            // wait on the previous station to be free (syncronize with the previous)
+            ApproachScenario_e.WaitOnPrevProcess:
+                // TODO implement !!!!
+                _MoverList[i].MoveToStation();
+
+            // Move the mover only when all movers process are finished
+            ApproachScenario_e.WaitOnExternalTrigger:
+                IF bMoverSync THEN
+                    // move only when there are no mover currently going to the station
+                    IF NOT THIS^.IsMoverMovingToStation(i) THEN
+                        _MoverList[i].MoveToStation();
+                    END_IF
+                END_IF
+
+            END_CASE
+
+        MoverState_e.MovingToStation:
+            IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
+                iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[i]);
+
+                IF _MoverList[i].Station.Process.xMoverPathFree AND
+                   NOT (_MoverList[i].Station.Equals(THIS^.GetNextMover(_MoverList[i]).Station)) AND
+                   (iNumOfMoverOnTheWay <= 1) THEN
+                    _MoverList[i].MoveToStation();
+                END_IF
+
+            ELSIF _MoverList[i].MoverAxis.isInPos THEN
+                _MoverList[i].MoveToStation();
+
+            END_IF
+
+        MoverState_e.InStationPos:
+
+            IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
+                _MoverList[i].Station.Process.GiveMover(_MoverList[i]);
+
+            ELSE
+                //ASSERT HERE
+                // This might occur when recipe change or time change
+                // but we should be sure that we never fall here
+                _MoverList[i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[i].Station)^);
+            END_IF
+
+        END_CASE
+    END_IF
+END_FOR
+
+// update bMoverSync
+bMoverSync := THIS^.IsAllMoverAtPosition() OR THIS^.IsMoverStucked();
+
+FOR i := 1 TO MOVER_NUMBER BY 1 DO
+    // Only check for bMoverSync when the WaitOnExternalTrigger scenario is selected
+    IF __ISVALIDREF(_MoverList[i].Station.Process) AND
+       _MoverList[i].Station.ApproachScenario = ApproachScenario_e.WaitOnExternalTrigger THEN
+        //bMoverSync := bMoverSync AND
+        //              (_MoverList[i].Station.Process.xMoverPathFree AND NOT _MoverList[i].Station.Process.xNeedMover);
+    END_IF
+END_FOR
+
+// collision check **********************************************
+FOR i := 1 TO MOVER_NUMBER - 1 BY 1 DO
+    _MoverList[i].MoverAxis.IsColliding(_MoverList[i + 1].MoverAxis);
+    _MoverList[i].MoverAxis.WillCollide(_MoverList[i + 1].MoverAxis);
+
+    IF THIS^.IsMoverLost(THIS^._MoverList[i]) THEN
+        // ASSERT HERE, WE SHOULD NEVER GO HERE
+        ASSERT(0);
+    END_IF
+END_FOR
+
+_MoverList[MOVER_NUMBER].MoverAxis.IsColliding(_MoverList[1].MoverAxis); // do not forget to test this case, too
+_MoverList[MOVER_NUMBER].MoverAxis.WillCollide(_MoverList[1].MoverAxis);
+// end collision check **********************************************
+]]></ST>
+    </Implementation>
+    <Method Name="CheckWaitPosNotBehindStation" Id="{91490bb8-300b-4074-8087-f20c1e8574d1}">
+      <Declaration><![CDATA[// This method check if the wait pos of a given station is before another
+// station. This situation is not permitted by the system, yet
+METHOD CheckWaitPosNotBehindStation : BOOL
+VAR_INPUT
+END_VAR
+VAR
+    i : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CheckWaitPosNotBehindStation := FALSE;
+FOR i := 2 TO CONST.STATION_NUMBER BY 1 DO
+    CheckWaitPosNotBehindStation := CheckWaitPosNotBehindStation OR
+        THIS^._StationList[i].Position.lrWorkPosition + THIS^._StationList[i].WaitPos <
+        THIS^._StationList[i - 1].Position.lrWorkPosition;
+END_FOR
+
+// NO CHECK ARE MADE BETWEEN THE FIRST POS AND THE LAST ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{fd5a5773-894a-43ac-8825-e9a7ed4ad3aa}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode  : BOOL; // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+VAR
+    i : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._iID := THIS^._iInstanceCounter;
+THIS^._iInstanceCounter := THIS^._iInstanceCounter +1;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetMoverIndex" Id="{1a2aaf1c-a900-421f-9679-2dd26ea29f6f}">
+      <Declaration><![CDATA[METHOD GetMoverIndex : INT
+VAR_INPUT
+    mover : REFERENCE TO FB_Mover;
+END_VAR
+VAR
+    i : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i:= 1 TO THIS^.MOVER_NUMBER BY 1 DO 
+	IF mover.Equals(ADR(THIS^._MoverList[i])) THEN
+		GetMoverIndex := i;
+		EXIT;
+	END_IF
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetNextMover" Id="{f32fd12d-e722-40d2-a3bf-10f3112be7d9}">
+      <Declaration><![CDATA[METHOD GetNextMover : REFERENCE TO FB_Mover
+VAR_INPUT
+    Mover : REFERENCE TO FB_Mover;
+END_VAR
+VAR
+    moverIndex : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[moverIndex := THIS^.GetMoverIndex(Mover);
+
+IF moverIndex >= THIS^.MOVER_NUMBER THEN
+    GetNextMover REF= THIS^._MoverList[1];
+ELSE
+    GetNextMover REF= THIS^._MoverList[moverIndex + 1];
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetNumOfMoverOnTheWay" Id="{c5556811-485c-4ab9-ab25-9793f8b71c59}">
+      <Declaration><![CDATA[// we check if there is a mover between refMover and the refMover.Station
+// This method is used to unblock a mover that cannot move because of a mover
+// "Behind" it that also want to move to the same station
+// If a mover is at the station, 
+METHOD PRIVATE GetNumOfMoverOnTheWay : INT
+VAR_INPUT
+    refMover : REFERENCE TO FB_Mover; // The maybe stucking mover
+END_VAR
+VAR
+    lrMoverPosTemp   : LREAL; // we use this position beacuse maybe we are at the end of the track
+    lrStationPosTemp : LREAL; // we use this position beacuse maybe we are at the end of the track
+    i                : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetNumOfMoverOnTheWay := 0;
+
+FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+    // If the mover is in front of the tested mover, we add MAX_TRACK_LENGTH (maybe we are at the end of the track ?)
+    IF refMover.IsInFront(THIS^._MoverList[i].MoverAxis.CurrentPos) THEN
+        lrMoverPosTemp := THIS^._MoverList[i].MoverAxis.CurrentPos + CONST.MAX_TRACK_LENGTH;
+    ELSE
+        lrMoverPosTemp := THIS^._MoverList[i].MoverAxis.CurrentPos;
+    END_IF
+
+    // If the mover is in front of the station, we add MAX_TRACK_LENGTH (maybe we are at the end of the track ?)
+    IF refMover.IsInFront(refMover.Station.Position.lrWorkPosition) THEN
+        lrStationPosTemp := refMover.Station.Position.lrWorkPosition + CONST.MAX_TRACK_LENGTH;
+    ELSE
+        lrStationPosTemp := refMover.Station.Position.lrWorkPosition;
+    END_IF
+
+    IF (lrMoverPosTemp > refMover.MoverAxis.CurrentPos) AND
+       (lrMoverPosTemp <= lrStationPosTemp + refMover.AttachedPieceHolder.PosOffset) THEN
+	   // If a mover is at position but has
+        GetNumOfMoverOnTheWay := GetNumOfMoverOnTheWay + 1;
+    END_IF
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetPrevMover" Id="{2a592bc1-5769-4abc-8ff3-c03f54588b09}">
+      <Declaration><![CDATA[METHOD GetPrevMover : REFERENCE TO FB_Mover
+VAR_INPUT
+    Mover : REFERENCE TO FB_Mover;
+END_VAR
+VAR
+    moverIndex : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[moverIndex := THIS^.GetMoverIndex(Mover);
+
+IF moverIndex <= 1 THEN
+    GetPrevMover REF= THIS^._MoverList[THIS^.MOVER_NUMBER];
+ELSE
+    GetPrevMover REF= THIS^._MoverList[moverIndex - 1];
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsAllMoverAtPosition" Id="{fc0e89d4-7cf4-4d92-a63a-6ce23d60762e}">
+      <Declaration><![CDATA[METHOD IsAllMoverAtPosition : BOOL
+VAR_INPUT
+END_VAR
+VAR
+    i : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsAllMoverAtPosition := TRUE;
+
+FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+    IF THIS^._MoverList[i].State = MoverState_e.MovingToStation OR
+       THIS^._MoverList[i].State = MoverState_e.InStationPos THEN
+        IsAllMoverAtPosition := FALSE;
+        EXIT;
+    END_IF
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsMoverLost" Id="{a86b0de5-72c6-4a8d-9bd7-0385975e09ca}">
+      <Declaration><![CDATA[// If the target station of a mover is not between the target of the previous and the next mover
+// this function will return true. This function is attendend to debug only
+METHOD IsMoverLost : BOOL
+VAR_INPUT
+    mover : REFERENCE TO FB_Mover;
+END_VAR
+VAR
+    i : INT;
+
+    prevStationLoc  : LREAL;
+    nextStationLoc  : LREAL;
+    moverStationLoc : LREAL; // mover to test location
+    posList         : ARRAY[0..2] OF LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[(* the algorithm function as fallow 
+
+First we built a sorted array based on the station position
+Then we search for the previous station position and fix
+our search index
+Then we check if the squence of mover is correct. The sequence must be
+PreviousMoverStation -> CurrentMoverStation -> NextMoverStation
+If we don't get this sequence, then the mover is lost.
+
+In fact, since we have only 3 elements, we only need to check
+the next station
+*)
+IsMoverLost := FALSE;
+
+nextStationLoc  := THIS^.GetNextMover(mover).Station.Position.lrWorkPosition;
+prevStationLoc  := THIS^.GetPrevMover(mover).Station.Position.lrWorkPosition;
+moverStationLoc := mover.station.Position.lrWorkPosition;
+
+posList[0] := prevStationLoc;
+posList[1] := moverStationLoc;
+posList[2] := nextStationLoc;
+
+SortBubbleLREAL(ADR(posList), 0, 2);
+
+IF posList[0] = prevStationLoc THEN
+    IF posList[1] <> moverStationLoc THEN
+        IsMoverLost := TRUE;
+    END_IF
+
+ELSIF posList[0] = moverStationLoc THEN
+    IF posList[1] <> nextStationLoc THEN
+        IsMoverLost := TRUE;
+    END_IF
+
+ELSE (* posList[0] = nextStationLoc *)
+    IF posList[1] <> prevStationLoc THEN
+        IsMoverLost := TRUE;
+    END_IF
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsMoverMovingToStation" Id="{a4975eb6-1f25-4d80-9015-4a3063980072}">
+      <Declaration><![CDATA[METHOD PRIVATE IsMoverMovingToStation : BOOL
+VAR_INPUT
+    iMoverNumber : INT; // the current mover number 
+END_VAR
+VAR
+    i           : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsMoverMovingToStation := FALSE;
+
+FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+
+    // we don't check the tests mover station, else it will be always true
+    IF (iMoverNumber <> i) AND THIS^._MoverList[i].Station.Equals(THIS^._MoverList[iMoverNumber].Station) THEN
+        IsMoverMovingToStation := IsMoverMovingToStation OR
+                                  (THIS^._MoverList[i].State = MoverState_e.MovingToStation) OR
+                                  (THIS^._MoverList[i].State = MoverState_e.InStationPos);
+
+        // Do not exit here, since we OR the flag
+        // TODO maybe we should add an IF statement to exit when the flag is true
+        // because it will never be false again ... ? // PERFORMANCE ISSUE
+    END_IF
+
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsMoverStucked" Id="{4917e248-fe89-4b4c-aa0e-a0174a4c4558}">
+      <Declaration><![CDATA[// Return TRUE if at least one mover is stucked
+METHOD IsMoverStucked : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsMoverStucked := FALSE;
+
+FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+    IF THIS^._MoverList[i].MoverAxis.xStuck THEN
+        IsMoverStucked := TRUE;
+        EXIT;
+    END_IF
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetAllScenario" Id="{0a5392ea-83a4-43a8-8809-208b7b2e49ea}">
+      <Declaration><![CDATA[METHOD SetAllScenario : REFERENCE TO FB_MoverMan
+VAR_INPUT
+END_VAR
+VAR
+	i : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
+    THIS^._StationList[i].ApproachScenario := THIS^.HMI_Scenario;
+END_FOR
+
+SetAllScenario REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetAllTimers" Id="{9510fb8d-2798-43e3-8c46-2fda28470d14}">
+      <Declaration><![CDATA[// Give a random time for each process. It ensure at least the minimum and the maximum value are given
+// to at least 2 diffrents process
+METHOD SetAllTimers : REFERENCE TO FB_MoverMan
+VAR_INPUT
+END_VAR
+VAR
+    i         : INT;
+    rand      : DRAND;
+    tempIndex : INT := 0;
+    getTime   : GETSYSTEMTIME;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[getTime();
+rand.Seed := TO_INT(getTime.timeLoDW);
+
+FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
+    rand();
+    PERS.iStationTimeDef[i] := TO_DINT((THIS^.HMI_TimeMax - THIS^.HMI_TimeMin) * (rand.Num) + THIS^.HMI_TimeMin);
+END_FOR
+
+tempIndex := 1;
+
+FOR i := 2 TO CONST.STATION_NUMBER BY 1 DO
+    IF PERS.iStationTimeDef[i] < PERS.iStationTimeDef[tempIndex] THEN
+        tempIndex := i;
+    END_IF
+END_FOR
+
+PERS.iStationTimeDef[tempIndex] := THIS^.HMI_TimeMin;
+
+tempIndex := 1;
+
+FOR i := 2 TO CONST.STATION_NUMBER BY 1 DO
+    IF PERS.iStationTimeDef[i] > PERS.iStationTimeDef[tempIndex] THEN
+        tempIndex := i;
+    END_IF
+END_FOR
+
+PERS.iStationTimeDef[tempIndex] := THIS^.HMI_TimeMax;
+
+SetAllTimers REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ToString" Id="{4e88ac74-66ec-4fa0-af41-d4b82c4e1634}">
+      <Declaration><![CDATA[METHOD ToString : STRING
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ToString := CONCAT('FB_MoverMan_', TO_STRING(THIS^._iID));]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_MoverMan">
+      <LineId Id="16189" Count="181" />
+      <LineId Id="4289" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.CheckWaitPosNotBehindStation">
+      <LineId Id="43" Count="0" />
+      <LineId Id="33" Count="4" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="19" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.FB_init">
+      <LineId Id="60" Count="1" />
+      <LineId Id="38" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.GetMoverIndex">
+      <LineId Id="5" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.GetNextMover">
+      <LineId Id="67" Count="6" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.GetNumOfMoverOnTheWay">
+      <LineId Id="102" Count="2" />
+      <LineId Id="140" Count="17" />
+      <LineId Id="123" Count="1" />
+      <LineId Id="23" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.GetPrevMover">
+      <LineId Id="77" Count="6" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.IsAllMoverAtPosition">
+      <LineId Id="22" Count="8" />
+      <LineId Id="15" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.IsMoverLost">
+      <LineId Id="284" Count="38" />
+      <LineId Id="17" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.IsMoverMovingToStation">
+      <LineId Id="166" Count="0" />
+      <LineId Id="168" Count="14" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.IsMoverStucked">
+      <LineId Id="7" Count="3" />
+      <LineId Id="12" Count="3" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.SetAllScenario">
+      <LineId Id="12" Count="4" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.SetAllTimers">
+      <LineId Id="208" Count="28" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_MoverMan.ToString">
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="_20_AUTO" Id="{ed3c0593-2eeb-4b68-bf02-4ddd23f6166b}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM
+    _20_AUTO
+VAR_INPUT
+    xIN_Quit   : BOOL;    //Quittieren
+    enIN_State : enState; //Status der Maschine 
+END_VAR
+VAR
+    i : INT;
+
+    pFB_Load   : POINTER TO FB_AUT_LOAD;
+    pFB_Unload : POINTER TO FB_AUT_UNLOAD;
+    pFB_Modify : POINTER TO FB_AUT_MODIFY;
+    fbLofad    : FB_AUT_LOAD;
+    fb_Unload  : FB_AUT_UNLOAD;
+    fb_Modify  : FB_AUT_MODIFY;
+    bResult    : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Alarm Allgemein
+//POU_ERR_000(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
+//POU_MSG_000(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArMSG[1]));
+
+//Station01
+
+SIMU.iCompletionHMI[1]         := GVL._Process1.iCompletionPC;
+GVL._Process1.iProcessTimeMili := PERS.iStationTimeDef[1];
+GVL._Process1(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[2]         := GVL._Process2.iCompletionPC;
+GVL._Process2.iProcessTimeMili := PERS.iStationTimeDef[2];
+GVL._Process2(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[3]         := GVL._Process3.iCompletionPC;
+GVL._Process3.iProcessTimeMili := PERS.iStationTimeDef[3];
+GVL._Process3(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[4]         := GVL._Process4.iCompletionPC;
+GVL._Process4.iProcessTimeMili := PERS.iStationTimeDef[4];
+GVL._Process4(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[5]         := GVL._Process5.iCompletionPC;
+GVL._Process5.iProcessTimeMili := PERS.iStationTimeDef[5];
+GVL._Process5(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[6]         := GVL._Process6.iCompletionPC;
+GVL._Process6.iProcessTimeMili := PERS.iStationTimeDef[6];
+GVL._Process6(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[7]         := GVL._Process7.iCompletionPC;
+GVL._Process7.iProcessTimeMili := PERS.iStationTimeDef[7];
+GVL._Process7(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[8]         := GVL._Process8.iCompletionPC;
+GVL._Process8.iProcessTimeMili := PERS.iStationTimeDef[8];
+GVL._Process8(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[9]         := GVL._Process9.iCompletionPC;
+GVL._Process9.iProcessTimeMili := PERS.iStationTimeDef[9];
+GVL._Process9(xIN_Init       := HMI.enState = enState.StateINIT,
+              xIN_Start      := HMI.btArMain[9].press,
+              xIN_Step       := HMI.btArMain[1].rtrig,
+              xIN_ManuCycle  := FALSE,
+              xIN_ManuCycle  := FALSE,
+              xIN_Quit       := xIN_Quit,
+              xIN_AlarmAktiv := HMI.xAlarm,
+              xIN_DryCycle   := FALSE,
+              enIN_State     := enIN_State,
+              tIN_Timeout    := T#10S,
+              xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[10]         := GVL._Process10.iCompletionPC;
+GVL._Process10.iProcessTimeMili := PERS.iStationTimeDef[10];
+GVL._Process10(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[11]         := GVL._Process11.iCompletionPC;
+GVL._Process11.iProcessTimeMili := PERS.iStationTimeDef[11];
+GVL._Process11(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[12]         := GVL._Process12.iCompletionPC;
+GVL._Process12.iProcessTimeMili := PERS.iStationTimeDef[12];
+GVL._Process12(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[13]         := GVL._Process13.iCompletionPC;
+GVL._Process13.iProcessTimeMili := PERS.iStationTimeDef[13];
+GVL._Process13(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[14]         := GVL._Process14.iCompletionPC;
+GVL._Process14.iProcessTimeMili := PERS.iStationTimeDef[14];
+GVL._Process14(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[15]         := GVL._Process15.iCompletionPC;
+GVL._Process15.iProcessTimeMili := PERS.iStationTimeDef[15];
+GVL._Process15(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[16]         := GVL._Process16.iCompletionPC;
+GVL._Process16.iProcessTimeMili := PERS.iStationTimeDef[16];
+GVL._Process16(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[17]         := GVL._Process17.iCompletionPC;
+GVL._Process17.iProcessTimeMili := PERS.iStationTimeDef[17];
+GVL._Process17(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+
+SIMU.iCompletionHMI[18]         := GVL._Process18.iCompletionPC;
+GVL._Process18.iProcessTimeMili := PERS.iStationTimeDef[18];
+GVL._Process18(xIN_Init       := HMI.enState = enState.StateINIT,
+               xIN_Start      := HMI.btArMain[9].press,
+               xIN_Step       := HMI.btArMain[1].rtrig,
+               xIN_ManuCycle  := FALSE,
+               xIN_ManuCycle  := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AlarmAktiv := HMI.xAlarm,
+               xIN_DryCycle   := FALSE,
+               enIN_State     := enIN_State,
+               tIN_Timeout    := T#10S,
+               xIN_On         := TRUE);
+]]></ST>
+    </Implementation>
+    <LineIds Name="_20_AUTO">
+      <LineId Id="2978" Count="256" />
+      <LineId Id="1820" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

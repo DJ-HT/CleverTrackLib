@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="PERS" Id="{fbf39650-67ca-4454-aedb-fafdd3046409}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL RETAIN
+    (***********************************************************************************************)
+    (* COUNTER *)
+    (***********************************************************************************************)
+    //COUNTER 
+    udiTotalOK  : UDINT; // Total Counter  OK 
+    udiTotalNOK : UDINT; // Total Counter  NOK 
+
+    udiTempOK  : UDINT; // Temporary Counter  OK 
+    udiTempNOK : UDINT; // Temporary Counter  NOK 
+
+    //OPERATING HOURS
+    udiCountHon    : UDINT; // Operating hours SYSTEM POWER ON [h] 
+    udiCount6Mon   : UDINT; // Operating hours SYSTEM POWER ON [6min (0.1h)] 
+    udiCountHauto  : UDINT; // Operating hours SYSTEM IN AUTOMATIC MODE [h] 
+    udiCount6Mauto : UDINT; // Operating hours SYSTEM IN AUTOMATIC MODE [6min (0.1h)] 
+
+    (***********************************************************************************************)
+    (* PARAMETER *)
+    (***********************************************************************************************)
+    udiArCntST00 : ARRAY[0..4] OF UDINT; (* Counter ST00 
+															0:
+														*)
+    udiArCntST01 : ARRAY[0..4] OF UDINT; (* Counter ST01 
+															0:
+														 *)
+    udiArCntST02 : ARRAY[0..4] OF UDINT; (* Counter ST02 
+															0:
+														 *)
+    udiArCntST03 : ARRAY[0..4] OF UDINT; (* Counter ST03 
+															0:
+														 *)
+    udiArCntST04 : ARRAY[0..4] OF UDINT; (* Counter ST04 
+															0:
+														 *)
+    udiArCntST05 : ARRAY[0..4] OF UDINT; (* Counter ST05 
+															0:
+														 *)
+    udiArCntST06 : ARRAY[0..4] OF UDINT; (* Counter ST06 
+															0:
+														 *)
+    udiArCntST07 : ARRAY[0..4] OF UDINT; (* Counter ST07 
+															0:
+														 *)
+    udiArCntST08 : ARRAY[0..4] OF UDINT; (* Counter ST08 
+															0:
+														 *)
+    udiArCntST09 : ARRAY[0..4] OF UDINT; (* Counter ST09 
+															0:
+														 *)
+    udiArCntST10 : ARRAY[0..4] OF UDINT; (* Counter ST10 
+															0:
+														 *)
+
+    (***********************************************************************************************)
+    (* Timer *)
+    (***********************************************************************************************)
+    //Zylinder																		
+    dwArTimeZylST01 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST02 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST03 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST04 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST05 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST06 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST07 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST08 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST09 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    dwArTimeZylST10 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														*)
+    //Diverse
+    dwArTimeST00 : ARRAY[0..10] OF DWORD; (* Time zur ST00
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST01 : ARRAY[0..10] OF DWORD; (* Time zur ST01
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST02 : ARRAY[0..10] OF DWORD; (* Time zur ST02
+                                                            0:
+                                                            1:  PRESSEN
+                                                        *)
+    dwArTimeST03 : ARRAY[0..10] OF DWORD; (* Time zur ST03
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST04 : ARRAY[0..10] OF DWORD; (* Time zur ST04
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST05 : ARRAY[0..10] OF DWORD; (* Time zur ST05
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST06 : ARRAY[0..10] OF DWORD; (* Time zur ST06
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST07 : ARRAY[0..10] OF DWORD; (* Time zur ST07
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST08 : ARRAY[0..10] OF DWORD; (* Time zur ST08
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST09 : ARRAY[0..10] OF DWORD; (* Time zur ST09
+                                                            0:
+                                                            1:  
+                                                        *)
+    dwArTimeST10 : ARRAY[0..10] OF DWORD; (* Time zur ST10
+                                                            0:
+                                                            1:  
+                                                        *)
+
+    (***********************************************************************************************)
+    (* Werte *)
+    (***********************************************************************************************)
+    iWTstat : ARRAY[1..10] OF INT; (* STATUS WT [Station]
+																<0: NIO
+																 0: LEER
+																>0: STATION
+															*)
+
+    (***********************************************************************************************)
+    (* Application *)
+    (***********************************************************************************************)
+    iStationTimeDef : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

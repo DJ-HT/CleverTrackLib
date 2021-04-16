@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Position" Id="{19d2e78b-cfae-4850-ad5d-0977cfb50824}" SpecialFunc="None">
+    <Declaration><![CDATA[(*
+    1D Position class, used to express a given position
+	Since the position is in lreal format, you should
+	always give a left and a right margin so the isInPosition
+	flag will stay stable (beacause we cannot use the = 
+	operator on lreal! )
+*)
+FUNCTION_BLOCK FB_Position
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    _lrWorkPosition    : LREAL;      // Work position, use this to give a position
+    _lrWorkLeftMargin  : LREAL := 0; // The RELATIVE left position from the work position, need to be POSITIVE
+    _lrWorkRightMargin : LREAL := 0; // The RELATIVE right position from the work position, need to be POSITIVE
+	
+	_iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+END_VAR
+VAR_STAT
+	_iInstanceCounter : INT := 1; // instance counter
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{224498c0-3d16-4b9b-9d70-839b57b2352a}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode  : BOOL; // if TRUE, the instance afterwards gets moved into the copy code (online change)
+
+    lrWorkPosition    : LREAL;      // Work position, use this to give a position
+    lrWorkLeftMargin  : LREAL := 0; // The RELATIVE left position from the work position, need to be POSITIVE 
+    lrWorkRightMargin : LREAL := 0; // The RELATIVE right position from the work position, need to be POSITIVE
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._iID := THIS^._iInstanceCounter;
+THIS^._iInstanceCounter := THIS^._iInstanceCounter +1;
+THIS^._lrWorkPosition    := lrWorkPosition;
+THIS^._lrWorkLeftMargin  := lrWorkLeftMargin;
+THIS^._lrWorkRightMargin := lrWorkRightMargin;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="isInPos" Id="{9d453c86-6fd0-4331-a5cd-e5f8c47fd8fa}">
+      <Declaration><![CDATA[METHOD isInPos : BOOL
+VAR_INPUT
+	lrGivenPos : LREAL; // position to test
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[isInPos := FALSE;
+
+IF ((
+    lrGivenPos >= (THIS^._lrWorkPosition - THIS^._lrWorkLeftMargin)) AND
+    (lrGivenPos <= (THIS^._lrWorkPosition + THIS^._lrWorkRightMargin)))
+    THEN
+    isInPos := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="lrWorkPosition" Id="{b377bfec-342e-4fd1-8eb3-09ca755f397e}">
+      <Declaration><![CDATA[PROPERTY lrWorkPosition : LREAL]]></Declaration>
+      <Get Name="Get" Id="{c37236dd-d866-433f-8c2f-3290c43b182f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[lrWorkPosition := this^._lrWorkPosition;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="ToString" Id="{208d263d-d5b2-424c-ab39-c0e759d5d9a6}">
+      <Declaration><![CDATA[METHOD ToString : STRING
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ToString := CONCAT('FB_Position_', TO_STRING(THIS^._iID));]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Position">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Position.FB_init">
+      <LineId Id="53" Count="1" />
+      <LineId Id="41" Count="2" />
+      <LineId Id="22" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Position.isInPos">
+      <LineId Id="20" Count="7" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Position.lrWorkPosition.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Position.ToString">
+      <LineId Id="16" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

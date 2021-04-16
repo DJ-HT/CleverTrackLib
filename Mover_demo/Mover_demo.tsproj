@@ -1,4 +1,450 @@
 <?xml version="1.0"?>
-<TcSmProject>
-	<Project/>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.12">
+	<DataTypes>
+		<DataType>
+			<Name GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..4] OF UDINT</Name>
+			<BitSize>160</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000008}">UDINT</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>5</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..20] OF DWORD</Name>
+			<BitSize>672</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000007}">DWORD</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>21</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..10] OF DWORD</Name>
+			<BitSize>352</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000007}">DWORD</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>11</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{63601129-3DB8-1D24-9501-F769206256E6}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..10] OF INT</Name>
+			<BitSize>160</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>10</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..18] OF DINT</Name>
+			<BitSize>576</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000009}">DINT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>18</Elements>
+			</ArrayInfo>
+		</DataType>
+	</DataTypes>
+	<Project ProjectGUID="{DA0575BA-74C3-4A2E-87CF-393FDC9C77BB}" Target64Bit="true" Utf8Encoding="true" ShowHideConfigurations="#x106">
+		<System>
+			<Settings MaxCpus="8">
+				<Cpu CpuId="6" RtLimit="90"/>
+				<Cpu CpuId="7"/>
+				<IoIdleTask CycleTime="100000"/>
+			</Settings>
+			<Licenses>
+				<Target>
+					<ManualSelect>{2752D285-16AD-4E89-AE6C-80E72784D264}</ManualSelect>
+				</Target>
+			</Licenses>
+			<Tasks>
+				<Task Id="3" Priority="20" CycleTime="100000" AmsPort="350" AdtTasks="true">
+					<Name>PlcTask</Name>
+				</Task>
+				<Task Id="4" Priority="21" CycleTime="100000" AmsPort="351" Affinity="#x00000040" DisableFpExceptions="true" AdtTasks="true">
+					<Name>VISU_TASK</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{661135B6-1C1A-42C7-B5A3-99324D9796B9}" Name="mover_demo" PrjFilePath="mover_demo\mover_demo.plcproj" TmcFilePath="mover_demo\mover_demo.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="mover_demo\mover_demo.tmc">
+					<Name>mover_demo Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<Vars VarGrpType="8" AreaNo="4">
+						<Name>PlcTask Retains</Name>
+						<Var>
+							<Name>PERS.udiTotalOK</Name>
+							<Comment><![CDATA[ Total Counter  OK ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiTotalNOK</Name>
+							<Comment><![CDATA[ Total Counter  NOK ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiTempOK</Name>
+							<Comment><![CDATA[ Temporary Counter  OK ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiTempNOK</Name>
+							<Comment><![CDATA[ Temporary Counter  NOK ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiCountHon</Name>
+							<Comment><![CDATA[ Operating hours SYSTEM POWER ON [h] ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiCount6Mon</Name>
+							<Comment><![CDATA[ Operating hours SYSTEM POWER ON [6min (0.1h)] ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiCountHauto</Name>
+							<Comment><![CDATA[ Operating hours SYSTEM IN AUTOMATIC MODE [h] ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiCount6Mauto</Name>
+							<Comment><![CDATA[ Operating hours SYSTEM IN AUTOMATIC MODE [6min (0.1h)] ]]></Comment>
+							<Type>UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST00</Name>
+							<Comment><![CDATA[ Counter ST00 
+															0:
+														]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST01</Name>
+							<Comment><![CDATA[ Counter ST01 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST02</Name>
+							<Comment><![CDATA[ Counter ST02 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST03</Name>
+							<Comment><![CDATA[ Counter ST03 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST04</Name>
+							<Comment><![CDATA[ Counter ST04 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST05</Name>
+							<Comment><![CDATA[ Counter ST05 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST06</Name>
+							<Comment><![CDATA[ Counter ST06 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST07</Name>
+							<Comment><![CDATA[ Counter ST07 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST08</Name>
+							<Comment><![CDATA[ Counter ST08 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST09</Name>
+							<Comment><![CDATA[ Counter ST09 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.udiArCntST10</Name>
+							<Comment><![CDATA[ Counter ST10 
+															0:
+														 ]]></Comment>
+							<Type GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}">ARRAY [0..4] OF UDINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST01</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST02</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST03</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST04</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST05</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST06</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST07</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST08</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST09</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeZylST10</Name>
+							<Comment><![CDATA[ Time Zylinder Station 01
+																0: GENERAL
+																1: 
+														]]></Comment>
+							<Type GUID="{4166F583-A6AF-F0B5-CF92-6F1314A8384B}">ARRAY [0..20] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST00</Name>
+							<Comment><![CDATA[ Time zur ST00
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST01</Name>
+							<Comment><![CDATA[ Time zur ST01
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST02</Name>
+							<Comment><![CDATA[ Time zur ST02
+                                                            0:
+                                                            1:  PRESSEN
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST03</Name>
+							<Comment><![CDATA[ Time zur ST03
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST04</Name>
+							<Comment><![CDATA[ Time zur ST04
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST05</Name>
+							<Comment><![CDATA[ Time zur ST05
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST06</Name>
+							<Comment><![CDATA[ Time zur ST06
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST07</Name>
+							<Comment><![CDATA[ Time zur ST07
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST08</Name>
+							<Comment><![CDATA[ Time zur ST08
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST09</Name>
+							<Comment><![CDATA[ Time zur ST09
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.dwArTimeST10</Name>
+							<Comment><![CDATA[ Time zur ST10
+                                                            0:
+                                                            1:  
+                                                        ]]></Comment>
+							<Type GUID="{AC73E8AA-6F68-D4B9-8AD6-33786A8563B8}">ARRAY [0..10] OF DWORD</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.iWTstat</Name>
+							<Comment><![CDATA[ STATUS WT [Station]
+																<0: NIO
+																 0: LEER
+																>0: STATION
+															]]></Comment>
+							<Type GUID="{63601129-3DB8-1D24-9501-F769206256E6}">ARRAY [1..10] OF INT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.iStationTimeDef</Name>
+							<Comment><![CDATA[*********************************************************************************************
+ Application 
+*********************************************************************************************]]></Comment>
+							<Type GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}">ARRAY [1..18] OF DINT</Type>
+							<InOut>7</InOut>
+						</Var>
+					</Vars>
+					<Contexts>
+						<Context>
+							<Id NeedCalleeCall="true">0</Id>
+							<Name>PlcTask</Name>
+							<ManualConfig>
+								<OTCID>#x02010030</OTCID>
+							</ManualConfig>
+							<Priority>20</Priority>
+							<CycleTime>10000000</CycleTime>
+						</Context>
+						<Context>
+							<Id NeedCalleeCall="true">1</Id>
+							<Name>VISU_TASK</Name>
+							<ManualConfig>
+								<OTCID>#x02010040</OTCID>
+							</ManualConfig>
+							<Priority>21</Priority>
+							<CycleTime>10000000</CycleTime>
+						</Context>
+					</Contexts>
+					<TaskPouOids>
+						<TaskPouOid Prio="20" OTCID="#x08502001"/>
+						<TaskPouOid Prio="21" OTCID="#x08502002"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+		</Plc>
+	</Project>
 </TcSmProject>

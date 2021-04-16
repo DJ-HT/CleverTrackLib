@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <Itf Name="IStation" Id="{fa1d6360-5f8e-4b4c-8b1d-5d83c2a9962d}">
+    <Declaration><![CDATA[INTERFACE IStation
+]]></Declaration>
+    <Property Name="Position" Id="{42fce230-3fd5-4649-9ed7-60495560311f}">
+      <Declaration><![CDATA[PROPERTY Position : REFERENCE TO FB_Position]]></Declaration>
+      <Get Name="Get" Id="{651463c6-131b-4577-99ae-702213c4c5e2}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{f2c2670a-ec9b-4eda-9a0b-32a350131516}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="Process" Id="{01bf1ff3-01ac-4306-934d-936c8f13119a}">
+      <Declaration><![CDATA[PROPERTY Process : REFERENCE TO FB_AUT_ABSTRACT]]></Declaration>
+      <Get Name="Get" Id="{65b5f7fc-d95f-44a2-a294-f1e92ddb1ed5}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{3f6c809e-81de-404b-831f-a0485c893482}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+  </Itf>
+</TcPlcObject>

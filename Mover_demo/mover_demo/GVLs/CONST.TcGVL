@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="CONST" Id="{9b3680ca-efd7-44b5-8e7f-6ff4b0673f03}">
+    <Declaration><![CDATA[{attribute 'qualified_only' := ''}
+VAR_GLOBAL CONSTANT
+    (*******************************************************************)
+    (* Globale KONSTANTEN *)
+    (*******************************************************************)
+
+    STATION_NUMBER   : INT   := 18;
+    RECIPE_NUMBER    : INT   := 4;
+    MAX_TRACK_LENGTH : LREAL := 10000;
+    MAX_MOVER_SIZE   : LREAL := 200.0;
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

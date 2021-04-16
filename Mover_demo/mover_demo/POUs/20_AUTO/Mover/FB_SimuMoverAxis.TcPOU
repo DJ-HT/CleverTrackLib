@@ -1,0 +1,452 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_SimuMoverAxis" Id="{017f40e2-f1f1-4976-849d-fa06ef0a4cb5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SimuMoverAxis
+VAR_INPUT
+    xIN_StopMover : BOOL; // stop the mover from movinf
+END_VAR
+VAR_OUTPUT
+    outSimuCurrentPos : Pos2D_t; // Mover position, expressed as slot number
+    outSimuCurrentRot : INT;     // mover current rotation
+    isInPos           : BOOL;    // true when targetPos = currentPos
+END_VAR
+VAR
+    // with tick rate at 10ms, a value of 10 gives us 1m/s
+    _Velocity    : LREAL := 0;     // Mover velocity, expressed as mm per tick, max is 10m/s
+    _ErrorState  : INT   := 0;     // error state, not used
+    _TargetPos   : LREAL := 0;     // last target pos
+    _CurrentPos  : LREAL := 0;     // Current Pos, but with more resolution than the pixel
+    _IsColliding : BOOL  := FALSE; // When true, the mover should not move
+    _LastPos     : LREAL := 0;     // last position, used to trigger the xStuck flag
+    _xStuck      : BOOL;           // true when the axis does not move
+    _willCollide : BOOL := FALSE;  // TRUE if a collision will occure with the current velocity
+
+    {attribute 'hide'}
+    _lrNextStopPos : LREAL; // local variable used to get next stop
+
+    _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+END_VAR
+
+VAR CONSTANT
+    MAX_POS            : LREAL := CONST.MAX_TRACK_LENGTH; // should be defined elsewhere ...
+    MAX_SIZE           : LREAL := CONST.MAX_MOVER_SIZE;   // Maxium size of the mover
+    //MOVER_ACCEL        : LREAL := 0.1;                      // Mover acceleration, in mm/tick^2
+    //MOVER_VELOCITY_MAX : LREAL := 20;                     // Mover velocity, expressed as mm per tick, max is 10m/s
+    MOVER_VELOCITY_MIN : LREAL := 1;                      // Mover velocity, expressed as mm per tick, max is 10m/s
+END_VAR
+VAR_STAT
+    _iInstanceCounter : INT := 1; // instance counter
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF NOT xIN_StopMover THEN // Do not change momemtum when we stop the movers from HMI
+    IF NOT _IsColliding THEN
+
+        IF THIS^.GetStopLen(_Velocity, SIMU.lrAccelMover) >= DistToTravel(_CurrentPos, _TargetPos) OR THIS^._willCollide THEN
+            _Velocity := _Velocity - SIMU.lrAccelMover;
+
+        ELSIF SIMU.lrSpeedMover > _Velocity AND _CurrentPos <> _TargetPos THEN
+            _Velocity := _Velocity + SIMU.lrAccelMover;
+
+        END_IF
+    ELSE
+        _Velocity := _Velocity - SIMU.lrAccelMover;
+    END_IF
+END_IF
+
+// protect max and min speed
+IF SIMU.lrSpeedMover < _Velocity THEN
+    _Velocity := SIMU.lrSpeedMover;
+ELSIF _Velocity < MOVER_VELOCITY_MIN THEN
+    _Velocity := MOVER_VELOCITY_MIN;
+END_IF
+
+IF NOT _IsColliding AND NOT xIN_StopMover THEN
+
+    IF (_CurrentPos + _Velocity) < _TargetPos THEN
+        _CurrentPos := _CurrentPos + _Velocity;
+
+    ELSIF (_CurrentPos - _Velocity) > _TargetPos THEN
+        //_CurrentPos := _CurrentPos - _Velocity;
+        _CurrentPos := _CurrentPos + _Velocity; // always move at the positive way
+
+    ELSE
+        _CurrentPos := _TargetPos;
+
+    END_IF
+END_IF
+
+IF _CurrentPos >= MAX_POS THEN
+    _CurrentPos := _CurrentPos - MAX_POS;
+    // we prevent the stuck flag to be true at the end of the track
+    THIS^._LastPos := THIS^._LastPos - MAX_POS;
+END_IF
+
+isInPos := EqualDelta(_CurrentPos, _TargetPos, 1.0); // we use delta comparison beacause axis is always at a low value 
+outSimuCurrentPos
+    := THIS^.ResolvePos(_CurrentPos, outSimuCurrentRot);
+
+_xStuck        := (THIS^._CurrentPos < (THIS^._LastPos + _Velocity)) AND NOT isInPos;
+THIS^._LastPos := THIS^._CurrentPos;
+]]></ST>
+    </Implementation>
+    <Property Name="CurrentPos" Id="{c358a281-78eb-40b2-b89a-a18eff26d260}">
+      <Declaration><![CDATA[PROPERTY CurrentPos : LREAL]]></Declaration>
+      <Get Name="Get" Id="{b61bd9b1-08af-4926-b858-85c8eb24b2db}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CurrentPos := _CurrentPos;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{c5f537f5-5d8c-45ad-a5c5-df77003f95bc}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="CurrentVelocity" Id="{b8df0f34-d17e-487c-9bfd-ce3e7601077b}">
+      <Declaration><![CDATA[PROPERTY CurrentVelocity : LREAL]]></Declaration>
+      <Get Name="Get" Id="{4eba8587-6625-4315-9a97-80fc827c5652}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[CurrentVelocity := THIS^._Velocity;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{93f7958f-bf31-42ad-9468-d8476b3f9641}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="FB_init" Id="{b65ea979-747b-41ba-bf6e-1edaa259930c}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode  : BOOL; // if TRUE, the instance afterwards gets moved into the copy code (online change)
+
+    PosInit : LREAL; // initial position at startup
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._iID := THIS^._iInstanceCounter;
+THIS^._iInstanceCounter := THIS^._iInstanceCounter +1;
+IF PosInit < THIS^.MAX_POS THEN
+    THIS^._CurrentPos := PosInit;
+ELSE
+    THIS^._CurrentPos := 0;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetStopLen" Id="{b13fe67a-491d-4b80-98f9-d811ecbf3cca}">
+      <Declaration><![CDATA[METHOD PRIVATE GetStopLen : LREAL
+VAR_INPUT
+    currentVelocity : LREAL;
+    currentAccel    : LREAL;
+END_VAR
+VAR
+    tickToStop : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// This function search the position we will get if we stop now
+//
+// (velocity)
+//     ^          _________   <- we are here, at the end of the top slope
+//     |        /          \
+//     |       /            \
+//     |   ___/              \______
+//     |     
+//     ┼------------------------------>  (time)
+//
+// (position)
+//     ^ 
+//     |                      _________
+//     |                  .../
+//     |               ../    ^
+//     |            ../       |
+//     |          ../         we search this position
+//     |   ___.../
+//     | 
+//     ┼------------------------------>  (time)
+
+IF currentAccel <= 0 THEN
+    ASSERT(currentAccel > 0);
+    RETURN;
+END_IF
+
+// TO_INT floor the result, and we need at least 1 tick to stop
+tickToStop := TO_INT(currentVelocity / currentAccel) + 1;
+
+GetStopLen := tickToStop * currentVelocity / 2;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsColliding" Id="{57cc6fd2-d942-4280-a88c-6e6aadeff802}">
+      <Declaration><![CDATA[// only check the collision in one way, this prevent
+// all the mover chain to be stucked
+METHOD IsColliding : BOOL
+VAR_INPUT
+    nextMover : REFERENCE TO FB_SimuMoverAxis;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsColliding := FALSE;
+
+IF DistToTravel(THIS^.CurrentPos, nextMover.CurrentPos) <= CONST.MAX_MOVER_SIZE THEN
+    IsColliding := TRUE;
+END_IF
+
+THIS^._IsColliding := IsColliding;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="lrSize" Id="{3f5eb49f-ed52-46bf-b2f8-4f8ddd22b4dc}">
+      <Declaration><![CDATA[PROPERTY lrSize : LREAL]]></Declaration>
+      <Get Name="Get" Id="{b4b6bc32-75b3-4936-951a-961608a58a80}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[lrSize := THIS^.MAX_SIZE;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{6d91f2ce-d679-40a8-9f7b-bd8f6986c1db}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="MoveTo" Id="{27ffc6e2-2e43-4eb2-aced-4a958cfe10ec}">
+      <Declaration><![CDATA[METHOD PUBLIC MoveTo : POINTER TO FB_SimuMoverAxis
+VAR_INPUT
+    Position : LREAL; // move the axis to this position
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._TargetPos := Position;
+isInPos := THIS^._CurrentPos = THIS^._TargetPos;
+MoveTo := THIS;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ResolvePos" Id="{16435a25-f091-4756-88c1-e63202a0b39c}">
+      <Declaration><![CDATA[METHOD ResolvePos : Pos2D_t
+VAR_INPUT
+    inX      : LREAL;
+    rotation : REFERENCE TO INT;
+END_VAR
+VAR CONSTANT
+    (* The track has this dimension in reality
+              __________
+     1000mm (___________) 1000 mm
+              4000 mm
+			  
+     and we map it like that:
+	   __   80 (radius)
+	  |  |
+	  |  |  800
+	  |  |
+	  |__|
+	        80 (raidus)
+    *)
+    START_X     : DINT  := 0;
+    START_Y     : DINT  := 0;
+    MAX_SIMU_DX : DINT  := 80;
+    MAX_SIMU_DY : DINT  := 800;
+    RADIUS_X    : LREAL := 40.0;
+    RADIUS_Y    : LREAL := 60.0;
+
+    FIRST_RADIUS_START  : LREAL := 4000;
+    FIRST_RADIUS_END    : LREAL := 5000;
+    SECOND_RADIUS_START : LREAL := 9000;
+    SECOND_RADIUS_END   : LREAL := 10000;
+END_VAR
+
+VAR
+    x_rad_calc : LREAL;
+    y_rad_calc : LREAL;
+    FACTOR_Y   : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FACTOR_Y := FIRST_RADIUS_START / MAX_SIMU_DY;
+
+IF inX < 0 THEN
+    ResolvePos.x := START_X;
+    ResolvePos.y := START_Y;
+    rotation     := 0;
+
+ELSIF inX >= 0 AND inX <= FIRST_RADIUS_START THEN
+    ResolvePos.x := START_X;
+    ResolvePos.y := START_Y + TO_DINT(inX / FACTOR_Y);
+    rotation     := 0;
+
+ELSIF inX > FIRST_RADIUS_START AND inX < FIRST_RADIUS_END THEN
+
+    // should go between -1RAD and +1RAD
+    x_rad_calc   := ((inX - FIRST_RADIUS_START) * 2 / (FIRST_RADIUS_END - FIRST_RADIUS_START) - 1) * PI / 2;
+    ResolvePos.x := TO_DINT(SIN(x_rad_calc) * RADIUS_X) + START_X + TO_DINT(RADIUS_X);
+
+    // should go from 0RAD to 1RAD, then 0RAD
+    y_rad_calc   := (1 - (inX - FIRST_RADIUS_START) * 2 / (FIRST_RADIUS_END - FIRST_RADIUS_START)) * PI / 2;
+    ResolvePos.y := TO_DINT(COS(y_rad_calc) * RADIUS_Y + START_Y + MAX_SIMU_DY);
+
+    rotation := TO_INT(SIN(x_rad_calc) * 90 + 90);
+
+ELSIF inX >= FIRST_RADIUS_END AND inX <= SECOND_RADIUS_START THEN
+    ResolvePos.x := START_X + MAX_SIMU_DX;
+    ResolvePos.y := START_Y + MAX_SIMU_DY - TO_DINT((inX - FIRST_RADIUS_END) / FACTOR_Y);
+    rotation     := 180;
+
+ELSIF inX > SECOND_RADIUS_START AND inX < SECOND_RADIUS_END THEN
+    // should go between -1RAD and +1RAD
+    x_rad_calc   := ((inX - SECOND_RADIUS_START) * 2 / (SECOND_RADIUS_END - SECOND_RADIUS_START) - 1) * PI / 2;
+    ResolvePos.x := START_X - TO_DINT(SIN(x_rad_calc) * RADIUS_X) + TO_DINT(RADIUS_X);
+
+    // should go from 0RAD to 1RAD, then 0RAD
+    y_rad_calc   := (1 - (inX - SECOND_RADIUS_START) * 2 / (SECOND_RADIUS_END - SECOND_RADIUS_START)) * PI / 2;
+    ResolvePos.y := START_Y - TO_DINT(COS(y_rad_calc) * RADIUS_Y);
+
+    rotation := TO_INT(SIN(x_rad_calc) * 90 + 270);
+
+ELSE
+    ResolvePos.x := START_X;
+    ResolvePos.y := START_Y;
+    rotation     := 0;
+
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ToString" Id="{76b4f3b8-9490-4f7f-bb39-de0a0d71ce03}">
+      <Declaration><![CDATA[METHOD ToString : STRING
+VAR_INPUT
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ToString := CONCAT('FB_SimuMoverAxis_', TO_STRING(THIS^._iID));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="WillCollide" Id="{0d97bec0-b7d4-4420-83e5-72f1aaaf45d7}">
+      <Declaration><![CDATA[// Use this method in a collider manager so the simu axis 
+// will know when to stop itself
+METHOD WillCollide : BOOL
+VAR_INPUT
+    nextMover : REFERENCE TO FB_SimuMoverAxis;
+END_VAR
+VAR
+    diffVelocity : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^._Velocity > nextMover.CurrentVelocity THEN
+    diffVelocity := SQRT(THIS^._Velocity * THIS^._Velocity - (nextMover.CurrentVelocity * nextMover.CurrentVelocity));
+    THIS^._willCollide
+        := DistToTravel(THIS^.CurrentPos, nextMover.CurrentPos) <=
+           THIS^.GetStopLen(diffVelocity, SIMU.lrAccelMover) + CONST.MAX_MOVER_SIZE;
+ELSE
+    THIS^._willCollide := FALSE;
+
+END_IF
+
+WillCollide := THIS^._willCollide;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="xStuck" Id="{f828bdb7-715a-4f3c-9d48-98ebe68f4f98}">
+      <Declaration><![CDATA[PROPERTY xStuck : BOOL]]></Declaration>
+      <Get Name="Get" Id="{9f868acf-4f41-4320-ace9-846357c4a7b6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xStuck := _xStuck;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{717d36c5-f749-4432-8cb5-c2f33a7a865e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <LineIds Name="FB_SimuMoverAxis">
+      <LineId Id="1177" Count="48" />
+      <LineId Id="60" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.CurrentPos.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.CurrentPos.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.CurrentVelocity.Get">
+      <LineId Id="5" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.CurrentVelocity.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.FB_init">
+      <LineId Id="43" Count="1" />
+      <LineId Id="31" Count="4" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.GetStopLen">
+      <LineId Id="63" Count="29" />
+      <LineId Id="33" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.IsColliding">
+      <LineId Id="151" Count="0" />
+      <LineId Id="165" Count="5" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.lrSize.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.lrSize.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.MoveTo">
+      <LineId Id="13" Count="2" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.ResolvePos">
+      <LineId Id="792" Count="45" />
+      <LineId Id="8" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.ToString">
+      <LineId Id="16" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.WillCollide">
+      <LineId Id="136" Count="10" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.xStuck.Get">
+      <LineId Id="5" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SimuMoverAxis.xStuck.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
