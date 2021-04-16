@@ -608,7 +608,8 @@ SetAllScenario REF= THIS^;
 // to at least 2 diffrents process
 METHOD SetAllTimers : REFERENCE TO FB_MoverMan
 VAR_INPUT
-	arrStationTime : POINTER TO DINT;
+    arrStationTime : POINTER TO DINT;
+    udiOffset      : UDINT; // simple offset to apply to the seed
 END_VAR
 VAR
     i         : INT;
@@ -619,9 +620,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF arrStationTime <> 0 THEN
-
+	
     getTime();
-    rand.Seed := TO_INT(getTime.timeLoDW);
+    rand.Seed := TO_INT(getTime.timeLoDW + udiOffset);
 
     FOR i := 0 TO CONST.STATION_NUMBER - 1 BY 1 DO
         rand();
@@ -661,70 +662,5 @@ END_VAR]]></Declaration>
         <ST><![CDATA[ToString := CONCAT('FB_MoverMan_', TO_STRING(THIS^._iID));]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_MoverMan">
-      <LineId Id="16189" Count="181" />
-      <LineId Id="4289" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.CheckWaitPosNotBehindStation">
-      <LineId Id="43" Count="0" />
-      <LineId Id="33" Count="4" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="19" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.FB_init">
-      <LineId Id="60" Count="1" />
-      <LineId Id="38" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.GetMoverIndex">
-      <LineId Id="5" Count="0" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="17" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.GetNextMover">
-      <LineId Id="67" Count="6" />
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.GetNumOfMoverOnTheWay">
-      <LineId Id="102" Count="2" />
-      <LineId Id="140" Count="17" />
-      <LineId Id="123" Count="1" />
-      <LineId Id="23" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.GetPrevMover">
-      <LineId Id="77" Count="6" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.IsAllMoverAtPosition">
-      <LineId Id="22" Count="8" />
-      <LineId Id="15" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.IsMoverLost">
-      <LineId Id="284" Count="38" />
-      <LineId Id="17" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.IsMoverMovingToStation">
-      <LineId Id="166" Count="0" />
-      <LineId Id="168" Count="14" />
-      <LineId Id="8" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.IsMoverStucked">
-      <LineId Id="7" Count="3" />
-      <LineId Id="12" Count="3" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.SetAllScenario">
-      <LineId Id="12" Count="4" />
-      <LineId Id="11" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.SetAllTimers">
-      <LineId Id="296" Count="31" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_MoverMan.ToString">
-      <LineId Id="7" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
