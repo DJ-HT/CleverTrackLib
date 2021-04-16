@@ -196,8 +196,6 @@ FOR i := 1 TO MOVER_NUMBER BY 1 DO
     // this only needed because the mover doesn't update themself automatically
     _MoverList[i](xIN_StopMover := HMI_xStopMover);
 
-    // POUR LE MOI DE DEMAIN
-    // remplir les séquences de station puis insérer le code ici pour la gestion du code :)
     IF HMI.enState = enState.StateAUTO THEN
 
         CASE _MoverList[i].State OF
