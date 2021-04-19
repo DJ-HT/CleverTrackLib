@@ -46,13 +46,13 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT xIN_StopMover THEN // Do not change momemtum when we stop the movers from HMI
-    IF NOT _IsColliding THEN
+    IF MoverDirection_e.Farward = THIS^._CurrentDir THEN
+        _MoverAccel := SIMU.lrAccelMover;
+    ELSE
+        _MoverAccel := -SIMU.lrAccelMover;
+    END_IF
 
-        IF MoverDirection_e.Farward = THIS^._CurrentDir THEN
-            _MoverAccel := SIMU.lrAccelMover;
-        ELSE
-            _MoverAccel := -SIMU.lrAccelMover;
-        END_IF
+    IF NOT _IsColliding THEN
 
         IF THIS^.GetStopLen(_Velocity, SIMU.lrAccelMover) >= DistToTravel(_CurrentPos, _TargetPos) OR
            THIS^._willCollide THEN
@@ -63,7 +63,7 @@ END_VAR
 
         END_IF
     ELSE
-        _Velocity := _Velocity - SIMU.lrAccelMover;
+        _Velocity := _Velocity - _MoverAccel;
     END_IF
 END_IF
 
@@ -231,25 +231,6 @@ THIS^._IsColliding := IsColliding;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="lrSize" Id="{3f5eb49f-ed52-46bf-b2f8-4f8ddd22b4dc}">
-      <Declaration><![CDATA[PROPERTY lrSize : LREAL]]></Declaration>
-      <Get Name="Get" Id="{b4b6bc32-75b3-4936-951a-961608a58a80}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[lrSize := THIS^.MAX_SIZE;]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{6d91f2ce-d679-40a8-9f7b-bd8f6986c1db}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
     <Method Name="MoveTo" Id="{27ffc6e2-2e43-4eb2-aced-4a958cfe10ec}">
       <Declaration><![CDATA[METHOD PUBLIC MoveTo : REFERENCE TO FB_SimuMoverAxis
 VAR_INPUT
