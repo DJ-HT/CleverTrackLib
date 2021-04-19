@@ -212,6 +212,8 @@ ST100_Modify_e.proceedOperation_1: (*  *)
     IF xIN_NextStep AND (GetTick() - iStartProcessTimeMili) >= (iProcessTimeMili1) THEN
         iStartProcessTimeMili := GetTick();
         iOUT_Step             := ST100_Modify_e.proceedOperation_2;
+		_bBewegung := FALSE;
+		
     ELSIF __ISVALIDREF(Mover) THEN
         IF Mover.MoverAxis.isInPos THEN
             IF _bBewegung THEN
@@ -256,9 +258,5 @@ ST100_Modify_e.ERROR: (* ERROR *) ;
 END_CASE;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_ABL_MODIFY">
-      <LineId Id="1810" Count="168" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
