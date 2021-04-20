@@ -109,18 +109,18 @@ VAR
 
     step : INT := 0; //test step
 
-    station1 : StationName_e := StationName_e.Station100; // first station of the demo
-    station2 : StationName_e := StationName_e.Station110; // second station of the demo
-    PH_num   : INT           := 1;                        // piece holder selection
+    PH_num : INT := 1; // piece holder selection
 
     fb_fileMan : FB_FileMan;
     bSaveData  : BOOL := FALSE;
     bLoadData  : BOOL := TRUE;
     json_data  : STRING(2000);
 
-    i                   : INT;
+    mv_i                : INT;           // mover index
     bMoverSync          : BOOL := FALSE; // external trigger for movers
-    iNumOfMoverOnTheWay : INT;           // temp var to know how m
+    iNumOfMoverOnTheWay : INT;           // temp var to know how many mover there are between a given mover and its next station
+
+    lastEmptyStation : REFERENCE TO FB_Station; // temp var to store the next free station
 
     HMI_Scenario   : ApproachScenario_e := ApproachScenario_e.WaitOnFinishedProcess;
     HMI_TimeAvg    : DINT               := 1000;
@@ -165,10 +165,10 @@ END_IF
 
 CASE step OF
 0:
-    FOR i := 1 TO MOVER_NUMBER BY 1 DO
-        _MoverList[i].SetStation(_WorkStationList[PH_num].GetStartStation(_MoverList[i].MoverAxis.CurrentPos)^);
-        _MoverList[i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
-        _MoverList[i].MoveToStation();
+    FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
+        _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetStartStation(_MoverList[mv_i].MoverAxis.CurrentPos)^);
+        _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
+        _MoverList[mv_i].MoveToStation();
     END_FOR
 
     IF THIS^.CheckWaitPosNotBehindStation() THEN
@@ -177,9 +177,9 @@ CASE step OF
 
     step := 1;
 1:
-    FOR i := 1 TO MOVER_NUMBER BY 1 DO
-        _MoverList[i].SetStation(THIS^._StationList[CONST.STATION_NUMBER]);
-        _MoverList[i].MoveToStation();
+    FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
+        _MoverList[mv_i].SetStation(THIS^._StationList[CONST.STATION_NUMBER]);
+        _MoverList[mv_i].MoveToStation();
     END_FOR
 
     step := 2;
@@ -191,18 +191,18 @@ END_CASE
 // should be done elsewhere ...
 SIMU.lrAccelMover := SIMU.lrAccelMoverSlider * SIMU.lrAccelMoverSlider;
 
-FOR i := 1 TO MOVER_NUMBER BY 1 DO
-    _MoverList[i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
+FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
+    _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
     // this only needed because the mover doesn't update themself automatically
-    _MoverList[i](xIN_StopMover := HMI_xStopMover);
+    _MoverList[mv_i](xIN_StopMover := HMI_xStopMover);
 
     IF HMI.enState = enState.StateAUTO THEN
 
-        CASE _MoverList[i].State OF
+        CASE _MoverList[mv_i].State OF
 
         MoverState_e.OperationDone:
-            IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
-                _MoverList[i].Station.Process.TakeMover();
+            IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+                _MoverList[mv_i].Station.Process.TakeMover();
             ELSE
                 // ASSERT HERE
             END_IF
@@ -211,82 +211,82 @@ FOR i := 1 TO MOVER_NUMBER BY 1 DO
 
         MoverState_e.WaitOnNextStation:
             // depending on the next station scenario, move
-            CASE _MoverList[i].Station.ApproachScenario OF
+            CASE _MoverList[mv_i].Station.ApproachScenario OF
             // do not wait
             ApproachScenario_e.DoNotWait:
-                _MoverList[i].MoveToStation();
+                _MoverList[mv_i].MoveToStation();
 
             // wait on the next station to be free
             ApproachScenario_e.WaitOnFinishedProcess:
                 // Are we in a waiting spot ?
-                IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
+                IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
 
-                    iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[i]);
+                    iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[mv_i]);
 
                     IF 0 = iNumOfMoverOnTheWay THEN
-                        _MoverList[i].MoveToStation();
+                        _MoverList[mv_i].MoveToStation();
 
-                    ELSIF iNumOfMoverOnTheWay <= _MoverList[i].Station.iMaxWaitingMovers THEN
-                        _MoverList[i].MoveToWaitSpot();
+                    ELSIF iNumOfMoverOnTheWay <= _MoverList[mv_i].Station.iMaxWaitingMovers THEN
+                        _MoverList[mv_i].MoveToWaitSpot();
                     END_IF
 
                 ELSE
-                    _MoverList[i]
-                        .SetStation(_WorkStationList[PH_num].GetNextStationWithProcess(_MoverList[i].Station)^);
+                    _MoverList[mv_i]
+                        .SetStation(_WorkStationList[PH_num].GetNextStationWithProcess(_MoverList[mv_i].Station)^);
                 END_IF
 
             ApproachScenario_e.WaitOnFreeStation:
                 // Are we in a waiting spot ?
-                IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
+                IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
 
-                    iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[i]);
+                    iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[mv_i]);
 
                     IF 0 = iNumOfMoverOnTheWay THEN
-                        _MoverList[i].MoveToStation();
+                        _MoverList[mv_i].MoveToStation();
                     END_IF
                 END_IF
 
             // wait on the previous station to be free (syncronize with the previous)
             ApproachScenario_e.WaitOnPrevProcess:
                 // TODO implement !!!!
-                _MoverList[i].MoveToStation();
+                _MoverList[mv_i].MoveToStation();
 
             // Move the mover only when all movers process are finished
             ApproachScenario_e.WaitOnExternalTrigger:
                 IF bMoverSync THEN
                     // move only when there are no mover currently going to the station
-                    IF NOT THIS^.IsMoverMovingToStation(i) THEN
-                        _MoverList[i].MoveToStation();
+                    IF NOT THIS^.IsMoverMovingToStation(mv_i) THEN
+                        _MoverList[mv_i].MoveToStation();
                     END_IF
                 END_IF
 
             END_CASE
 
         MoverState_e.MovingToStation:
-            IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
-                iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[i]);
+            IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+                iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[mv_i]);
 
-                IF _MoverList[i].Station.Process.xMoverPathFree AND
-                   NOT (_MoverList[i].Station.Equals(THIS^.GetNextMover(_MoverList[i]).Station)) AND
+                IF _MoverList[mv_i].Station.Process.xMoverPathFree AND
+                   NOT (_MoverList[mv_i].Station.Equals(THIS^.GetNextMover(_MoverList[mv_i]).Station)) AND
                    (iNumOfMoverOnTheWay <= 1) THEN
-                    _MoverList[i].MoveToStation();
+                    _MoverList[mv_i].MoveToStation();
                 END_IF
 
-            ELSIF _MoverList[i].MoverAxis.isInPos THEN
-                _MoverList[i].MoveToStation();
+            ELSIF _MoverList[mv_i].MoverAxis.isInPos THEN
+                _MoverList[mv_i].MoveToStation();
 
             END_IF
 
         MoverState_e.InStationPos:
 
-            IF __ISVALIDREF(_MoverList[i].Station.Process) THEN
-                _MoverList[i].Station.Process.GiveMover(_MoverList[i]);
+            IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+                _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);
 
             ELSE
                 //ASSERT HERE
                 // This might occur when recipe change or time change
                 // but we should be sure that we never fall here
-                _MoverList[i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[i].Station)^);
+                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station)^);
             END_IF
 
         END_CASE
@@ -296,21 +296,21 @@ END_FOR
 // update bMoverSync
 bMoverSync := THIS^.IsAllMoverAtPosition() OR THIS^.IsMoverStucked();
 
-FOR i := 1 TO MOVER_NUMBER BY 1 DO
+FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     // Only check for bMoverSync when the WaitOnExternalTrigger scenario is selected
-    IF __ISVALIDREF(_MoverList[i].Station.Process) AND
-       _MoverList[i].Station.ApproachScenario = ApproachScenario_e.WaitOnExternalTrigger THEN
+    IF __ISVALIDREF(_MoverList[mv_i].Station.Process) AND
+       _MoverList[mv_i].Station.ApproachScenario = ApproachScenario_e.WaitOnExternalTrigger THEN
         //bMoverSync := bMoverSync AND
         //              (_MoverList[i].Station.Process.xMoverPathFree AND NOT _MoverList[i].Station.Process.xNeedMover);
     END_IF
 END_FOR
 
 // collision check **********************************************
-FOR i := 1 TO MOVER_NUMBER - 1 BY 1 DO
-    _MoverList[i].MoverAxis.IsColliding(_MoverList[i + 1].MoverAxis);
-    _MoverList[i].MoverAxis.WillCollide(_MoverList[i + 1].MoverAxis);
+FOR mv_i := 1 TO MOVER_NUMBER - 1 BY 1 DO
+    _MoverList[mv_i].MoverAxis.IsColliding(_MoverList[mv_i + 1].MoverAxis);
+    _MoverList[mv_i].MoverAxis.WillCollide(_MoverList[mv_i + 1].MoverAxis);
 
-    IF THIS^.IsMoverLost(THIS^._MoverList[i]) THEN
+    IF THIS^.IsMoverLost(THIS^._MoverList[mv_i]) THEN
         // ASSERT HERE, WE SHOULD NEVER GO HERE
         ASSERT(0);
     END_IF
@@ -576,8 +576,8 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IsMoverStucked := FALSE;
 
-FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
-    IF THIS^._MoverList[i].MoverAxis.xStuck THEN
+FOR mv_i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+    IF THIS^._MoverList[mv_i].MoverAxis.xStuck THEN
         IsMoverStucked := TRUE;
         EXIT;
     END_IF

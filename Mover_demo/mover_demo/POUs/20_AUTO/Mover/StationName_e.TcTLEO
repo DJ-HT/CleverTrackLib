@@ -2,29 +2,28 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <EnumerationTextList Name="StationName_e" Id="{9c5c3967-f60b-4d52-bdf8-9d59f2175d7d}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-{attribute 'strict'}
 {attribute 'to_string'}
 TYPE
 StationName_e :
 (
-    Station100 := 1,
-    Station110 := 2,
-    Station120 := 3,
-    Station130 := 4,
-    Station140 := 5,
-    Station150 := 6,
-    Station160 := 7,
-    Station170 := 8,
-    Station180 := 9,
-    Station190 := 10,
-    Station200 := 11,
-    Station210 := 12,
-    Station220 := 13,
-    Station230 := 14,
-    Station240 := 15,
-    Station250 := 16,
-    Station260 := 17,
-    Station270 := 18
+    Station_105 := 1,
+    Station_110 := 2,
+    Station_115 := 3,
+    Station_120 := 4,
+    Station_125 := 5,
+    Station_130 := 6,
+    Station_135 := 7,
+    Station_140 := 8,
+    Station_145 := 9,
+    Station_150 := 10,
+    Station_155 := 11,
+    Station_160 := 12,
+    Station_165 := 13,
+    Station_170 := 14,
+    Station_175 := 15,
+    Station_176 := 16,
+    Station_180 := 17,
+    Station_185 := 18
 );
 END_TYPE
 ]]></Declaration>
@@ -33,92 +32,92 @@ END_TYPE
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
             <o>
-              <v n="TextID">"Station100"</v>
+              <v n="TextID">"Station_105"</v>
               <v n="TextDefault">"1"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station110"</v>
+              <v n="TextID">"Station_110"</v>
               <v n="TextDefault">"2"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station120"</v>
+              <v n="TextID">"Station_115"</v>
               <v n="TextDefault">"3"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station130"</v>
+              <v n="TextID">"Station_120"</v>
               <v n="TextDefault">"4"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station140"</v>
+              <v n="TextID">"Station_125"</v>
               <v n="TextDefault">"5"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station150"</v>
+              <v n="TextID">"Station_130"</v>
               <v n="TextDefault">"6"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station160"</v>
+              <v n="TextID">"Station_135"</v>
               <v n="TextDefault">"7"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station170"</v>
+              <v n="TextID">"Station_140"</v>
               <v n="TextDefault">"8"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station180"</v>
+              <v n="TextID">"Station_145"</v>
               <v n="TextDefault">"9"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station190"</v>
+              <v n="TextID">"Station_150"</v>
               <v n="TextDefault">"10"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station200"</v>
+              <v n="TextID">"Station_155"</v>
               <v n="TextDefault">"11"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station210"</v>
+              <v n="TextID">"Station_160"</v>
               <v n="TextDefault">"12"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station220"</v>
+              <v n="TextID">"Station_165"</v>
               <v n="TextDefault">"13"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station230"</v>
+              <v n="TextID">"Station_170"</v>
               <v n="TextDefault">"14"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station240"</v>
+              <v n="TextID">"Station_175"</v>
               <v n="TextDefault">"15"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station250"</v>
+              <v n="TextID">"Station_176"</v>
               <v n="TextDefault">"16"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station260"</v>
+              <v n="TextID">"Station_180"</v>
               <v n="TextDefault">"17"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Station270"</v>
+              <v n="TextID">"Station_185"</v>
               <v n="TextDefault">"18"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

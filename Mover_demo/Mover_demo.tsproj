@@ -2,15 +2,6 @@
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.12">
 	<DataTypes>
 		<DataType>
-			<Name GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..18] OF DINT</Name>
-			<BitSize>576</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000009}">DINT</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>18</Elements>
-			</ArrayInfo>
-		</DataType>
-		<DataType>
 			<Name GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..4] OF UDINT</Name>
 			<BitSize>160</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000008}">UDINT</BaseType>
@@ -46,6 +37,15 @@
 				<Elements>10</Elements>
 			</ArrayInfo>
 		</DataType>
+		<DataType>
+			<Name GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..18] OF DINT</Name>
+			<BitSize>576</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000009}">DINT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>18</Elements>
+			</ArrayInfo>
+		</DataType>
 	</DataTypes>
 	<Project ProjectGUID="{DA0575BA-74C3-4A2E-87CF-393FDC9C77BB}" Target64Bit="true" Utf8Encoding="true" ShowHideConfigurations="#x106">
 		<System>
@@ -75,19 +75,6 @@
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="8" AreaNo="4">
 						<Name>PlcTask Retains</Name>
-						<Var>
-							<Name>PERS.iStationTimeDef1</Name>
-							<Comment><![CDATA[*********************************************************************************************
- Application 
-*********************************************************************************************]]></Comment>
-							<Type GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}">ARRAY [1..18] OF DINT</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
-							<Name>PERS.iStationTimeDef2</Name>
-							<Type GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}">ARRAY [1..18] OF DINT</Type>
-							<InOut>7</InOut>
-						</Var>
 						<Var>
 							<Name>PERS.udiTotalOK</Name>
 							<Comment><![CDATA[ Total Counter  OK ]]></Comment>
@@ -421,6 +408,19 @@
 																>0: STATION
 															]]></Comment>
 							<Type GUID="{63601129-3DB8-1D24-9501-F769206256E6}">ARRAY [1..10] OF INT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.iStationTimeDef1</Name>
+							<Comment><![CDATA[*********************************************************************************************
+ Application 
+*********************************************************************************************]]></Comment>
+							<Type GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}">ARRAY [1..18] OF DINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.iStationTimeDef2</Name>
+							<Type GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}">ARRAY [1..18] OF DINT</Type>
 							<InOut>7</InOut>
 						</Var>
 					</Vars>

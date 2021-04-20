@@ -92,7 +92,8 @@ END_FOR
       </Implementation>
     </Method>
     <Method Name="GetNextStation" Id="{212e963e-1090-4787-968f-ba69381138b1}">
-      <Declaration><![CDATA[METHOD GetNextStation : POINTER TO FB_Station
+      <Declaration><![CDATA[// Return the next station to visit
+METHOD GetNextStation : POINTER TO FB_Station
 VAR_INPUT
     CurrentStation : REFERENCE TO FB_Station;
 END_VAR
@@ -244,52 +245,5 @@ END_VAR
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_StationMan">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.FB_init">
-      <LineId Id="220" Count="0" />
-      <LineId Id="219" Count="0" />
-      <LineId Id="221" Count="0" />
-      <LineId Id="195" Count="7" />
-      <LineId Id="161" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.FindCloserStationIndex">
-      <LineId Id="105" Count="21" />
-      <LineId Id="20" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.GetNextStation">
-      <LineId Id="102" Count="13" />
-      <LineId Id="127" Count="2" />
-      <LineId Id="116" Count="4" />
-      <LineId Id="125" Count="0" />
-      <LineId Id="121" Count="1" />
-      <LineId Id="126" Count="0" />
-      <LineId Id="123" Count="1" />
-      <LineId Id="18" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.GetNextStationWithProcess">
-      <LineId Id="128" Count="0" />
-      <LineId Id="111" Count="16" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.GetStartStation">
-      <LineId Id="18" Count="9" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.GetStationIndex">
-      <LineId Id="29" Count="7" />
-      <LineId Id="16" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.PieceHolder.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.PieceHolder.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_StationMan.ToString">
-      <LineId Id="22" Count="0" />
-      <LineId Id="21" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

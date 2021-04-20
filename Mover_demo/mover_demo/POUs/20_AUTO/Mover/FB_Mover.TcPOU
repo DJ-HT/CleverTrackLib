@@ -238,9 +238,8 @@ END_VAR
         <ST><![CDATA[IF __ISVALIDREF(Station) AND_THEN (THIS^._State <> MoverState_e.InOperation) THEN
     THIS^._Station REF= Station;
     THIS^._State   := MoverState_e.WaitOnNextStation;
-ELSE 
-	// ASSERT HERE
-	SetStation REF= THIS^;
+ELSE
+    ASSERT(0);
 END_IF
 
 SetStation REF= THIS^;
