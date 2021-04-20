@@ -207,7 +207,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 // ASSERT HERE
             END_IF
 
-            _MoverList[i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[i].Station)^);
+            _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station)^);
 
         MoverState_e.WaitOnNextStation:
             // depending on the next station scenario, move
