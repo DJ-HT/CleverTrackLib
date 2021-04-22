@@ -217,9 +217,9 @@ ST100_Modify_e.proceedOperation_1: (*  *)
     ELSIF __ISVALIDREF(Mover) THEN
         IF Mover.MoverAxis.isInPos THEN
             IF _bBewegung THEN
-                Mover.MoverAxis.RelMoveTo(_bBewegungDist);
+               // Mover.MoverAxis.RelMoveTo(_bBewegungDist);
             ELSE
-                Mover.MoverAxis.RelMoveTo(-_bBewegungDist);
+                //Mover.MoverAxis.RelMoveTo(-_bBewegungDist);
             END_IF
 
             _bBewegung := NOT _bBewegung;
