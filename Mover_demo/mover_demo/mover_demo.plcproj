@@ -56,6 +56,10 @@
     <Compile Include="GVLs\CONST.TcGVL">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GVLs\gMoverAxis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVLs\GVL.TcGVL">
       <SubType>Code</SubType>
     </Compile>
@@ -136,6 +140,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\ApproachScenario_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Mover\BuR_MoverAxis_Array_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Mover\BuR_MoverAxis_EtherCAT_st.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\DistToTravel.TcPOU">
