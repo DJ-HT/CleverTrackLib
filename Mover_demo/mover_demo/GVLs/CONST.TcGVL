@@ -7,9 +7,11 @@ VAR_GLOBAL CONSTANT
     (* Globale KONSTANTEN *)
     (*******************************************************************)
 
+    USE_SIMULATION   : BOOL := FALSE;
+	
     STATION_NUMBER   : INT   := 18;
     RECIPE_NUMBER    : INT   := 4;
-    MAX_TRACK_LENGTH : LREAL := 10060;
+    MAX_TRACK_LENGTH : LREAL := 10000;
     MAX_MOVER_SIZE   : LREAL := 200.0;
 END_VAR
 ]]></Declaration>

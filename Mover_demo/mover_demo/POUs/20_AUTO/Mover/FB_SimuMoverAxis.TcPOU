@@ -102,7 +102,7 @@ END_IF
 
 isInPos := EqualDelta(_CurrentPos, _TargetPos, 1.0); // we use delta comparison beacause axis is always at a low value 
 outSimuCurrentPos
-    := THIS^.ResolvePos(_CurrentPos, outSimuCurrentRot);
+    := THIS^.ResolvePos(this^.CurrentPos, outSimuCurrentRot);
 
 _xStuck        := (THIS^._CurrentPos < (THIS^._LastPos + _Velocity)) AND NOT isInPos;
 THIS^._LastPos := THIS^._CurrentPos;
@@ -115,7 +115,12 @@ THIS^._LastPos := THIS^._CurrentPos;
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[CurrentPos := _CurrentPos;]]></ST>
+          <ST><![CDATA[IF CONST.USE_SIMULATION THEN
+    CurrentPos := _CurrentPos;
+ELSE
+    CurrentPos := TO_LREAL(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._iID].diCurrentPos_um) / 1000.0;
+END_IF
+]]></ST>
         </Implementation>
       </Get>
       <Set Name="Set" Id="{c5f537f5-5d8c-45ad-a5c5-df77003f95bc}">
@@ -289,15 +294,15 @@ VAR CONSTANT
     *)
     START_X     : DINT  := 0;
     START_Y     : DINT  := 0;
-    MAX_SIMU_DX : DINT  := 80;
+    MAX_SIMU_DX : DINT  := 120;
     MAX_SIMU_DY : DINT  := 800;
-    RADIUS_X    : LREAL := 40.0;
-    RADIUS_Y    : LREAL := 60.0;
+    RADIUS_X    : LREAL := 60.0;
+    RADIUS_Y    : LREAL := 80.0;
 
     FIRST_RADIUS_START  : LREAL := 4000;
-    FIRST_RADIUS_END    : LREAL := 5030;
-    SECOND_RADIUS_START : LREAL := 9030;
-    SECOND_RADIUS_END   : LREAL := 10060;
+    FIRST_RADIUS_END    : LREAL := 5000;
+    SECOND_RADIUS_START : LREAL := 9000;
+    SECOND_RADIUS_END   : LREAL := 10000;
 END_VAR
 
 VAR
