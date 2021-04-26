@@ -93,7 +93,7 @@ END_FOR
     </Method>
     <Method Name="GetNextStation" Id="{212e963e-1090-4787-968f-ba69381138b1}">
       <Declaration><![CDATA[// Return the next station to visit
-METHOD GetNextStation : POINTER TO FB_Station
+METHOD GetNextStation : REFERENCE TO FB_Station
 VAR_INPUT
     CurrentStation : REFERENCE TO FB_Station;
 END_VAR
@@ -102,18 +102,18 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[GetNextStation   := NULL;
+        <ST><![CDATA[GetNextStation   REF= CurrentStation;
 CurrStationIndex := THIS^.GetStationIndex(ADR(CurrentStation));
 
 IF CurrStationIndex > 0 THEN
     IF CurrStationIndex >= CONST.STATION_NUMBER THEN
-        GetNextStation := THIS^._WorkStationList[1];
+        GetNextStation := THIS^._WorkStationList[1]^;
 
     ELSIF THIS^._WorkStationList[CurrStationIndex + 1] = 0 THEN
-        GetNextStation := THIS^._WorkStationList[1];
+        GetNextStation := THIS^._WorkStationList[1]^;
 
     ELSE
-        GetNextStation := THIS^._WorkStationList[CurrStationIndex + 1];
+        GetNextStation := THIS^._WorkStationList[CurrStationIndex + 1]^;
 
     END_IF
 	
@@ -123,10 +123,10 @@ ELSE
     CurrStationIndex := THIS^.FindCloserStationIndex(CurrentStation.Position.lrWorkPosition);
 
     IF CurrStationIndex > 0 THEN
-        GetNextStation := THIS^._WorkStationList[CurrStationIndex];
+        GetNextStation := THIS^._WorkStationList[CurrStationIndex]^;
 		
     ELSE
-        GetNextStation := THIS^._WorkStationList[1];
+        GetNextStation := THIS^._WorkStationList[1]^;
 		
     END_IF
 END_IF
@@ -137,28 +137,29 @@ END_IF
       <Declaration><![CDATA[// Get the next station with a valid process. If nothing is found, we 
 // simply return to the first station (this should be never the case
 // since your machine will be useless...)
-METHOD GetNextStationWithProcess : POINTER TO FB_Station
+METHOD GetNextStationWithProcess : REFERENCE TO FB_Station
 VAR_INPUT
-	CurrentStation : REFERENCE TO FB_Station;
+    CurrentStation : REFERENCE TO FB_Station;
 END_VAR
 VAR
-	// search station with process algorithme
-    iSearchNext : INT; // incremtal variable used to search in a set of next station
+    // search station with process algorithme
+    iSearchNext        : INT; // incremtal variable used to search in a set of next station
     iTempSearchStation : INT; // incremtal variable used to search in a set of next station
-	tempStation : POINTER TO FB_Station;
-END_VAR]]></Declaration>
+    tempStation        : REFERENCE TO FB_Station;
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[// If nothing found, we return to the first station
-GetNextStationWithProcess := THIS^._WorkStationList[1];
+GetNextStationWithProcess REF= THIS^._WorkStationList[1]^;
 
 IF __ISVALIDREF(CurrentStation) THEN
     iSearchNext := 1;
 
     WHILE iSearchNext < CONST.STATION_NUMBER DO
-        tempStation := THIS^.GetNextStation(CurrentStation);
+        tempStation REF= THIS^.GetNextStation(CurrentStation);
 
-        IF (tempStation <> 0) AND_THEN __ISVALIDREF(tempStation^.Process) THEN
-            GetNextStationWithProcess := tempStation;
+        IF __ISVALIDREF(tempStation) AND_THEN __ISVALIDREF(tempStation.Process) THEN
+            GetNextStationWithProcess REF= tempStation;
             EXIT;
         END_IF
 
@@ -214,6 +215,25 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="Group" Id="{b57c4146-fb85-426b-99cd-3dcf625368ed}">
+      <Declaration><![CDATA[PROPERTY Group : REFERENCE TO FB_Group]]></Declaration>
+      <Get Name="Get" Id="{db292943-f2e9-4277-ac1f-d9ba62779512}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b7a148fa-946b-4a18-859c-81c8ba66e2b1}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Property Name="PieceHolder" Id="{841d98de-2714-49eb-b307-1ba62a14bec0}">
       <Declaration><![CDATA[PROPERTY PieceHolder : REFERENCE TO FB_PieceHolder]]></Declaration>
       <Get Name="Get" Id="{5f76bd0d-1fb0-4d06-a07e-1a2b1b76d05d}">

@@ -207,7 +207,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 // ASSERT HERE
             END_IF
 
-            _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station)^);
+            _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
 
         MoverState_e.WaitOnNextStation:
             // depending on the next station scenario, move
@@ -232,7 +232,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 
                 ELSE
                     _MoverList[mv_i]
-                        .SetStation(_WorkStationList[PH_num].GetNextStationWithProcess(_MoverList[mv_i].Station)^);
+                        .SetStation(_WorkStationList[PH_num].GetNextStationWithProcess(_MoverList[mv_i].Station));
                 END_IF
 
             ApproachScenario_e.WaitOnFreeStation:
@@ -286,7 +286,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 //ASSERT HERE
                 // This might occur when recipe change or time change
                 // but we should be sure that we never fall here
-                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station)^);
+                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
             END_IF
 
         END_CASE
@@ -402,7 +402,6 @@ END_IF
       <Declaration><![CDATA[// we check if there is a mover between refMover and the refMover.Station
 // This method is used to unblock a mover that cannot move because of a mover
 // "Behind" it that also want to move to the same station
-// If a mover is at the station, 
 METHOD PRIVATE GetNumOfMoverOnTheWay : INT
 VAR_INPUT
     refMover : REFERENCE TO FB_Mover; // The maybe stucking mover
