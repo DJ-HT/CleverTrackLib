@@ -103,31 +103,31 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[GetNextStation   REF= CurrentStation;
-CurrStationIndex := THIS^.GetStationIndex(ADR(CurrentStation));
+CurrStationIndex := THIS^.GetStationIndex(CurrentStation);
 
 IF CurrStationIndex > 0 THEN
     IF CurrStationIndex >= CONST.STATION_NUMBER THEN
-        GetNextStation := THIS^._WorkStationList[1]^;
+        GetNextStation REF= THIS^._WorkStationList[1]^;
 
     ELSIF THIS^._WorkStationList[CurrStationIndex + 1] = 0 THEN
-        GetNextStation := THIS^._WorkStationList[1]^;
+        GetNextStation REF= THIS^._WorkStationList[1]^;
 
     ELSE
-        GetNextStation := THIS^._WorkStationList[CurrStationIndex + 1]^;
+        GetNextStation REF= THIS^._WorkStationList[CurrStationIndex + 1]^;
 
     END_IF
-	
-// when the current is not on the list, we try to move to the nearest
-// but only on the positive direction
+
+    // when the current is not on the list, we try to move to the nearest
+    // but only on the positive direction
 ELSE
     CurrStationIndex := THIS^.FindCloserStationIndex(CurrentStation.Position.lrWorkPosition);
 
     IF CurrStationIndex > 0 THEN
-        GetNextStation := THIS^._WorkStationList[CurrStationIndex]^;
-		
+        GetNextStation REF= THIS^._WorkStationList[CurrStationIndex]^;
+
     ELSE
-        GetNextStation := THIS^._WorkStationList[1]^;
-		
+        GetNextStation REF= THIS^._WorkStationList[1]^;
+
     END_IF
 END_IF
 ]]></ST>
@@ -197,7 +197,7 @@ END_IF
       <Declaration><![CDATA[// return the index of a given station, If the index is -1, no station where found
 METHOD PRIVATE GetStationIndex : INT
 VAR_INPUT
-    Station : POINTER TO FB_Station;
+    Station : REFERENCE TO FB_Station;
 END_VAR
 VAR
     i : INT;
@@ -207,7 +207,7 @@ END_VAR
         <ST><![CDATA[GetStationIndex := -1;
 
 FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
-    IF THIS^._WorkStationList[i] = Station THEN
+    IF Station.Equals(THIS^._WorkStationList[i]^) THEN
         GetStationIndex := i;
         EXIT;
     END_IF
