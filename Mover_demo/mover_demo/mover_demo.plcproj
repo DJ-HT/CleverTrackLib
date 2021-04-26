@@ -56,10 +56,6 @@
     <Compile Include="GVLs\CONST.TcGVL">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GVLs\gMoverAxis.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="GVLs\GVL.TcGVL">
       <SubType>Code</SubType>
     </Compile>
@@ -106,6 +102,16 @@
     <Compile Include="POUs\10_HMI\_14_STATE.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\BuR_MoverAxis_Array_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\BuR_MoverAxis_EtherCAT_st.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\gMoverAxis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\GetTick.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -140,12 +146,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\ApproachScenario_e.TcTLEO">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\Mover\BuR_MoverAxis_Array_u.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\Mover\BuR_MoverAxis_EtherCAT_st.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\DistToTravel.TcPOU">
@@ -273,6 +273,7 @@
     <Folder Include="POUs\20_AUTO" />
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
+    <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
     <Folder Include="POUs\20_AUTO\ST100" />
     <Folder Include="POUs\00_MAIN" />
     <Folder Include="POUs\20_AUTO\TOOL" />
