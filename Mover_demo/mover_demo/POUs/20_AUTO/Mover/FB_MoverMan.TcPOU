@@ -306,18 +306,20 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 END_FOR
 
 // collision check **********************************************
-FOR mv_i := 1 TO MOVER_NUMBER - 1 BY 1 DO
-    _MoverList[mv_i].MoverAxis.IsColliding(_MoverList[mv_i + 1].MoverAxis);
-    _MoverList[mv_i].MoverAxis.WillCollide(_MoverList[mv_i + 1].MoverAxis);
+IF CONST.USE_SIMULATION THEN
+    FOR mv_i := 1 TO MOVER_NUMBER - 1 BY 1 DO
+        _MoverList[mv_i].MoverAxis.IsColliding(_MoverList[mv_i + 1].MoverAxis);
+        _MoverList[mv_i].MoverAxis.WillCollide(_MoverList[mv_i + 1].MoverAxis);
 
-    IF THIS^.IsMoverLost(THIS^._MoverList[mv_i]) THEN
-        // ASSERT HERE, WE SHOULD NEVER GO HERE
-        ASSERT(0);
-    END_IF
-END_FOR
+        IF THIS^.IsMoverLost(THIS^._MoverList[mv_i]) THEN
+            // ASSERT HERE, WE SHOULD NEVER GO HERE
+            ASSERT(0);
+        END_IF
+    END_FOR
 
-_MoverList[MOVER_NUMBER].MoverAxis.IsColliding(_MoverList[1].MoverAxis); // do not forget to test this case, too
-_MoverList[MOVER_NUMBER].MoverAxis.WillCollide(_MoverList[1].MoverAxis);
+    _MoverList[MOVER_NUMBER].MoverAxis.IsColliding(_MoverList[1].MoverAxis); // do not forget to test this case, too
+    _MoverList[MOVER_NUMBER].MoverAxis.WillCollide(_MoverList[1].MoverAxis);
+END_IF
 // end collision check **********************************************
 ]]></ST>
     </Implementation>
