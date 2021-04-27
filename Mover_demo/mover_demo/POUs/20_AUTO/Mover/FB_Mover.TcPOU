@@ -2,7 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Mover" Id="{147d877f-8a39-46b8-8ff1-e23190be69f7}" SpecialFunc="None">
     <Declaration><![CDATA[{attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FB_Mover EXTENDS FB_Object
+FUNCTION_BLOCK FB_Mover
 VAR_INPUT
     xIN_StopMover : BOOL; // stop the mover from moving
 END_VAR
@@ -15,8 +15,13 @@ VAR
     _Station      : REFERENCE TO FB_Station;       // current station
 
     _State : MoverState_e := MoverState_e.WaitOnNextStation; // current mover state
+	
+	_iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
 VAR CONSTANT
+END_VAR
+VAR_STAT
+	_iInstanceCounter : INT := 1; // instance counter
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[CASE THIS^._State OF
@@ -80,6 +85,18 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="Equals" Id="{f14740f4-58b8-4c64-8940-c4b242e3aa11}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
+VAR_INPUT
+    mover : POINTER TO FB_Mover;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF mover <> 0 THEN
+	Equals := mover = THIS;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{f1ad25b4-41be-48ac-a3cf-a51a38b48b2b}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -91,7 +108,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^._ID := ID;
+        <ST><![CDATA[THIS^._iID := THIS^._iInstanceCounter;
+THIS^._iInstanceCounter := THIS^._iInstanceCounter +1;
+THIS^._ID := ID;
 THIS^._MoverAxis REF= MoverAxis;
 THIS^._AttachedTool REF=0;
 THIS^._Station REF=0;
@@ -291,7 +310,7 @@ END_IF
 VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ToString := CONCAT('FB_Mover_', TO_STRING(THIS^._diID));]]></ST>
+        <ST><![CDATA[ToString := CONCAT('FB_Mover_', TO_STRING(THIS^._iID));]]></ST>
       </Implementation>
     </Method>
   </POU>
