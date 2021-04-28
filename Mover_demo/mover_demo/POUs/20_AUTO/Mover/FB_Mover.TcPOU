@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Mover" Id="{147d877f-8a39-46b8-8ff1-e23190be69f7}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FB_Mover
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Mover IMPLEMENTS IObject
 VAR_INPUT
     xIN_StopMover : BOOL; // stop the mover from moving
 END_VAR
@@ -88,13 +87,11 @@ END_VAR
     <Method Name="Equals" Id="{f14740f4-58b8-4c64-8940-c4b242e3aa11}">
       <Declaration><![CDATA[METHOD Equals : BOOL
 VAR_INPUT
-    mover : POINTER TO FB_Mover;
+    object : ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF mover <> 0 THEN
-	Equals := mover = THIS;
-END_IF]]></ST>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{f1ad25b4-41be-48ac-a3cf-a51a38b48b2b}">

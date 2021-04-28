@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_SimuMoverAxis" Id="{017f40e2-f1f1-4976-849d-fa06ef0a4cb5}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_SimuMoverAxis
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SimuMoverAxis IMPLEMENTS IObject
 VAR_INPUT
     xIN_StopMover : BOOL; // stop the mover from movinf
 END_VAR
@@ -152,6 +152,16 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="Equals" Id="{cc3d2f0e-6990-4010-b51c-94056dc8eaec}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
+VAR_INPUT
+    object : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{b65ea979-747b-41ba-bf6e-1edaa259930c}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT

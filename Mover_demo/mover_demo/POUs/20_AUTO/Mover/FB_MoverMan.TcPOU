@@ -344,6 +344,16 @@ END_FOR
 // NO CHECK ARE MADE BETWEEN THE FIRST POS AND THE LAST ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="Equals" Id="{69e26c84-881e-456d-9a7a-7c7ef184dc60}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
+VAR_INPUT
+    object : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{fd5a5773-894a-43ac-8825-e9a7ed4ad3aa}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT

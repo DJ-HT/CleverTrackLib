@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Station" Id="{76f3a0a5-7330-41a9-8dcd-67e3fa45891a}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Station IMPLEMENTS IStation
+    <Declaration><![CDATA[{attribute 'reflection'}
+FUNCTION_BLOCK FB_Station IMPLEMENTS IStation, IObject
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -15,6 +16,10 @@ VAR
     _ApproachScenario : ApproachScenario_e := ApproachScenario_e.WaitOnFinishedProcess;
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+	
+    {attribute 'instance-path'}
+    {attribute 'noinit'}
+    sPath : STRING;
 END_VAR
 VAR_STAT
     _iInstanceCounter : INT := 1; // instance counter
@@ -44,20 +49,14 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Method Name="Equals" Id="{c76b8ece-aab6-47d5-90c3-9d4c81b08fdb}">
-      <Declaration><![CDATA[// Return true if the given object is equal to THIS^
-METHOD Equals : BOOL
+    <Method Name="Equals" Id="{9df595ea-0758-453c-a5c5-4866ebe694a8}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
 VAR_INPUT
-    Station : REFERENCE TO FB_Station;
+    object : ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Equals := FALSE;
-
-IF __ISVALIDREF(Station) THEN
-    Equals := THIS = ADR(Station);
-END_IF
-]]></ST>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{898dafd4-0828-4ee9-bb08-7822f297b3cc}">
@@ -161,8 +160,19 @@ SetWaitPosOffset REF= THIS^;
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ToString" Id="{754f94dd-b150-4629-9617-347a61796109}">
+    <Method Name="ToString" Id="{e92fcd0f-4798-488b-aab7-2e05aaeb6db9}">
       <Declaration><![CDATA[METHOD ToString : STRING
+VAR_INPUT
+END_VAR
+VAR_INST
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ToString := CONCAT('FB_Station_', TO_STRING(THIS^._iID));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ToString_2" Id="{754f94dd-b150-4629-9617-347a61796109}">
+      <Declaration><![CDATA[METHOD ToString_2 : STRING
 VAR_INPUT
 END_VAR
 VAR
@@ -171,7 +181,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[numStation := THIS^._iID;
-ToString := CONCAT('', TO_STRING(numStation));
+ToString_2 := CONCAT('', TO_STRING(numStation));
 ]]></ST>
       </Implementation>
     </Method>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_StationMan" Id="{e7308591-621f-46d0-be2d-dcc18f0e2f49}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationMan
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StationMan IMPLEMENTS IObject
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -19,6 +19,16 @@ END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Equals" Id="{28c49e9c-1354-4e90-9dca-12ec0a676f6a}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
+VAR_INPUT
+    object : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{12699bed-f24a-4d0e-a643-4e91ea7d9091}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -38,9 +48,9 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^._iID := THIS^._iInstanceCounter;
-THIS^._iInstanceCounter := THIS^._iInstanceCounter +1;
+        <ST><![CDATA[THIS^._iID              := THIS^._iInstanceCounter;
 THIS^._iInstanceCounter := THIS^._iInstanceCounter + 1;
+
 FOR i := 1 TO const.STATION_NUMBER BY 1 DO
     IF SelStationList^[i] THEN
         _WorkStationList[selStationCounter] := ADR(StationList^[i]);
@@ -207,7 +217,8 @@ END_VAR
         <ST><![CDATA[GetStationIndex := -1;
 
 FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
-    IF Station.Equals(THIS^._WorkStationList[i]^) THEN
+    //IF Station.Equals(THIS^._WorkStationList[i]^) 
+    IF THIS^._WorkStationList[i]^.Equals(Station) THEN
         GetStationIndex := i;
         EXIT;
     END_IF
