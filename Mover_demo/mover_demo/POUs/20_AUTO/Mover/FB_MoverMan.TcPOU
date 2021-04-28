@@ -371,7 +371,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[FOR i:= 1 TO THIS^.MOVER_NUMBER BY 1 DO 
-	IF mover.Equals(ADR(THIS^._MoverList[i])) THEN
+	IF mover.Equals(THIS^._MoverList[i]) THEN
 		GetMoverIndex := i;
 		EXIT;
 	END_IF
