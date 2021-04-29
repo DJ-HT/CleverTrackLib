@@ -176,6 +176,9 @@ CASE step OF
         _MoverList[mv_i].MoveToStation();
     END_FOR
 
+    // TODO here we have clearly somthing that will not work
+    // when using groups... Groups should use the first station to set the waiting position
+    // of the whole group
     IF THIS^.CheckWaitPosNotBehindStation() THEN
         ASSERT(0);
     END_IF
@@ -199,7 +202,7 @@ SIMU.lrAccelMover := SIMU.lrAccelMoverSlider * SIMU.lrAccelMoverSlider;
 FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
     // this only needed because the mover doesn't update themself automatically
-    _MoverList[mv_i](xIN_StopMover := HMI_xStopMover);
+    _MoverList[mv_i]();
 
     IF HMI.enState = enState.StateAUTO THEN
 
@@ -209,7 +212,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 _MoverList[mv_i].Station.Process.TakeMover();
             ELSE
-                // ASSERT HERE
+                ASSERT(0);
             END_IF
 
             _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
@@ -268,7 +271,15 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             END_CASE
 
         MoverState_e.MovingToStation:
-            IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+            IF _MoverList[mv_i].IsInStationPos() THEN
+                _MoverList[mv_i].State := MoverState_e.InStationPos;
+
+            ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
+                ASSERT(0);
+                _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
+                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+
+            ELSIF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[mv_i]);
 
                 IF _MoverList[mv_i].Station.Process.xMoverPathFree AND
@@ -282,15 +293,39 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             END_IF
 
         MoverState_e.InStationPos:
+            IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
+                ASSERT(0);
+                _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
+                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
 
-            IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
-                _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);
+                // If there is no station (waiting position)
+            ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+                _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
 
             ELSE
-                //ASSERT HERE
-                // This might occur when recipe change or time change
-                // but we should be sure that we never fall here
+                _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);
+
+                IF _MoverList[mv_i].Station.Process.xBusy THEN
+                    _MoverList[mv_i].State := MoverState_e.InOperation;
+                END_IF
+
+            END_IF
+
+        MoverState_e.InOperation:
+            IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
+                ASSERT(0);
+                _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
                 _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+
+            ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+                ASSERT(0);
+                _MoverList[mv_i].State := MoverState_e.OperationDone;
+
+            ELSE
+                IF _MoverList[mv_i].Station.Process.xMoverShouldLeave THEN
+                    _MoverList[mv_i].State := MoverState_e.OperationDone;
+                END_IF
+
             END_IF
 
         END_CASE
@@ -309,7 +344,15 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     END_IF
 END_FOR
 
-// collision check **********************************************
+// start update simu mover **********************************************
+IF CONST.USE_SIMULATION THEN
+    FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
+    	_MoverList[mv_i].MoverAxis(xIN_StopMover := HMI_xStopMover);
+	END_FOR
+END_IF
+// stop update simu mover **********************************************
+
+// start collision check **********************************************
 IF CONST.USE_SIMULATION THEN
     FOR mv_i := 1 TO MOVER_NUMBER - 1 BY 1 DO
         _MoverList[mv_i].MoverAxis.IsColliding(_MoverList[mv_i + 1].MoverAxis);

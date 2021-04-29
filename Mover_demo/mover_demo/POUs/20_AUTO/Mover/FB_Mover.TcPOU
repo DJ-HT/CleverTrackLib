@@ -3,7 +3,6 @@
   <POU Name="FB_Mover" Id="{147d877f-8a39-46b8-8ff1-e23190be69f7}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Mover IMPLEMENTS IObject
 VAR_INPUT
-    xIN_StopMover : BOOL; // stop the mover from moving
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -23,47 +22,7 @@ VAR_STAT
 	_iInstanceCounter : INT := 1; // instance counter
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[CASE THIS^._State OF
-MoverState_e.OperationDone:
-// nothing to be done here, we wait until MoverMan affect a new station
-
-MoverState_e.WaitOnNextStation:
-// do nothing, we wait on MoverMan to tell us to move
-
-MoverState_e.MovingToStation:
-    IF THIS^.IsInStationPos() THEN
-        _State := MoverState_e.InStationPos;
-    END_IF
-
-MoverState_e.InStationPos:
-	IF NOT __ISVALIDREF(_Station) THEN
-		// ASSERTION SHOULD BE DONE HERE
-        _State := MoverState_e.WaitOnNextStation;
-    // If there is no station (waiting position)
-    ELSIF NOT __ISVALIDREF(_Station.Process) THEN
-        _State := MoverState_e.WaitOnNextStation;
-    ELSE
-        IF _Station.Process.xBusy THEN
-            _State := MoverState_e.InOperation;
-        END_IF
-    END_IF
-
-MoverState_e.InOperation:
-	IF NOT __ISVALIDREF(_Station) THEN
-		// ASSERTION SHOULD BE DONE HERE
-        _State := MoverState_e.OperationDone;
-    ELSIF NOT __ISVALIDREF(_Station.Process) THEN
-		// ASSERTION SHOULD BE DONE HERE
-        _State := MoverState_e.OperationDone;
-    ELSE
-        IF _Station.Process.xMoverShouldLeave THEN
-            _State := MoverState_e.OperationDone;
-        END_IF
-    END_IF
-
-END_CASE
-
-_MoverAxis(xIN_StopMover := xIN_StopMover);]]></ST>
+      <ST><![CDATA[]]></ST>
     </Implementation>
     <Property Name="AttachedPieceHolder" Id="{1f1520b6-17b9-443d-9101-58c2158353cb}">
       <Declaration><![CDATA[PROPERTY AttachedPieceHolder : REFERENCE TO FB_PieceHolder]]></Declaration>
