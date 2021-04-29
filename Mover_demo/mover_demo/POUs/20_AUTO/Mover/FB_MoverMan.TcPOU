@@ -80,23 +80,27 @@ VAR
         (_PosList[4], GVL._Process4, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
         (_PosList[5], GVL._Process5, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
         (_PosList[6], GVL._Process6, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
-        (_PosList[7], GVL._Process7, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[7], GVL._Process7, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
         (_PosList[8], GVL._Process8, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
         (_PosList[9], GVL._Process9, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
         (_PosList[10], GVL._Process10, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
-        (_PosList[11], GVL._Process11, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[11], GVL._Process11, -500, ApproachScenario_e.WaitOnFinishedProcess, 1),
         (_PosList[12], GVL._Process12, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
-        (_PosList[13], GVL._Process13, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+        (_PosList[13], GVL._Process13, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
         (_PosList[14], GVL._Process14, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
         (_PosList[15], GVL._Process15, -400, ApproachScenario_e.WaitOnFinishedProcess, 3),
         (_PosList[16], GVL._Process16, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
         (_PosList[17], GVL._Process17, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
         (_PosList[18], GVL._Process18, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
 
-    _StationSet1 : ARRAY[1..CONST.STATION_NUMBER] OF BOOL := [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    _StationSet2 : ARRAY[1..CONST.STATION_NUMBER] OF BOOL := [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
-    _StationSet3 : ARRAY[1..CONST.STATION_NUMBER] OF BOOL := [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    _StationSet4 : ARRAY[1..CONST.STATION_NUMBER] OF BOOL := [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+    _StationSet1 :
+        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, 0, 0, 0, 0, 1, 1, 0, 0, 2, 2, 3, 3, 0, 0, 0, 0, 0];
+    _StationSet2 :
+        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1];
+    _StationSet3 :
+        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    _StationSet4 :
+        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, 0];
 
     _SelWorkStationList : ARRAY[1..CONST.RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF BOOL
         := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4)];
@@ -133,6 +137,7 @@ VAR
 END_VAR
 VAR CONSTANT
     MOVER_NUMBER : INT := 18;
+	caca : STRING := 'dise$20beispiel$20funktionniert$20!';
 END_VAR
 VAR_STAT
     _iInstanceCounter : INT := 1; // instance counter
@@ -274,7 +279,6 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 
             ELSIF _MoverList[mv_i].MoverAxis.isInPos THEN
                 _MoverList[mv_i].MoveToStation();
-
             END_IF
 
         MoverState_e.InStationPos:

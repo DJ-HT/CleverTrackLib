@@ -12,14 +12,11 @@ VAR
     _Process           : REFERENCE TO FB_AUT_ABSTRACT;
     _WaitPosOffset     : LREAL; // offset of the station position, should always be negative
     _iMaxWaitingMovers : INT;   // Maximum of waiting mover in front of the station
+    _iGroupNumber      : INT;   // The current group member
 
     _ApproachScenario : ApproachScenario_e := ApproachScenario_e.WaitOnFinishedProcess;
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
-	
-    {attribute 'instance-path'}
-    {attribute 'noinit'}
-    sPath : STRING;
 END_VAR
 VAR_STAT
     _iInstanceCounter : INT := 1; // instance counter
@@ -82,6 +79,27 @@ THIS^._iMaxWaitingMovers := iMaxWaitingMovers;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="GroupNumber" Id="{112b0dd1-d079-4ffd-b2a2-c3568449f4dc}">
+      <Declaration><![CDATA[PROPERTY GroupNumber : INT]]></Declaration>
+      <Get Name="Get" Id="{7fcdc3dc-5887-43d4-8a0c-cb9d553d395d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[GroupNumber := THIS^._iGroupNumber;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{05862da3-a5ca-4870-9d6a-5ed6ff358853}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._iGroupNumber := GroupNumber;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Property Name="iMaxWaitingMovers" Id="{6a45a41f-3689-4688-9ba9-b8da1a5ddf71}">
       <Declaration><![CDATA[// the maxuimum number of waiting movers at the front of the station
 PROPERTY iMaxWaitingMovers : INT]]></Declaration>
@@ -169,20 +187,6 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[ToString := CONCAT('FB_Station_', TO_STRING(THIS^._iID));]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="ToString_2" Id="{754f94dd-b150-4629-9617-347a61796109}">
-      <Declaration><![CDATA[METHOD ToString_2 : STRING
-VAR_INPUT
-END_VAR
-VAR
-    numStation : StationName_e;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[numStation := THIS^._iID;
-ToString_2 := CONCAT('', TO_STRING(numStation));
-]]></ST>
       </Implementation>
     </Method>
     <Property Name="WaitPos" Id="{2c905c9e-5fcb-4960-a6c3-5642ee2d9ad4}">
