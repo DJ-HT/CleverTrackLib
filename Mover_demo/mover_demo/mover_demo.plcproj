@@ -112,6 +112,24 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLIN_V1_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLMturn_V1_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLM_V1_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisSMC_V1_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisTURN_V1_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\JXCE1_Baustein.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\GetTick.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -247,6 +265,15 @@
     <Compile Include="POUs\20_AUTO\ST110\ST110_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\FB_ABL_115.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\FB_AUT_115.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\ST115_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\TOOL\ASSERT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -289,12 +316,16 @@
     <Folder Include="POUs\00_MAIN\FB%27s" />
     <Folder Include="POUs\10_HMI\FB%27s" />
     <Folder Include="POUs\20_AUTO\FB%27s" />
+    <Folder Include="POUs\20_AUTO\FB%27s\Achsen" />
     <Folder Include="POUs\20_AUTO\FB%27s\Vorlagen" />
     <Folder Include="POUs\10_HMI" />
     <Folder Include="POUs\20_AUTO" />
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST125" />
+    <Folder Include="POUs\20_AUTO\ST120" />
+    <Folder Include="POUs\20_AUTO\ST115" />
     <Folder Include="POUs\20_AUTO\ST110" />
     <Folder Include="POUs\20_AUTO\ST100" />
     <Folder Include="POUs\00_MAIN" />
