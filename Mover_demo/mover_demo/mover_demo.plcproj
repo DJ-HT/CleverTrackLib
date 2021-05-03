@@ -196,6 +196,9 @@
     <Compile Include="POUs\20_AUTO\ST100\F_GetPercent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\F_GetPercent_2.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST100\ST100_Load_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -233,6 +236,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST100\ST100_Unload_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\FB_ABL_110.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\FB_AUT_110.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\ST110_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\TOOL\ASSERT.TcPOU">
@@ -283,6 +295,7 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST110" />
     <Folder Include="POUs\20_AUTO\ST100" />
     <Folder Include="POUs\00_MAIN" />
     <Folder Include="POUs\20_AUTO\TOOL" />
