@@ -17,9 +17,20 @@ PROPERTY iCompletionPC : INT]]></Declaration>
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
-    <Property Name="iProcessTimeMili" Id="{31e98800-1932-4e20-af14-e98484b89832}">
+    <Property Name="iProcessTimeMili_1" Id="{e14769f7-47e8-4324-ad81-884361f556c6}">
       <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili : DINT]]></Declaration>
+PROPERTY iProcessTimeMili_1 : DINT
+]]></Declaration>
+      <Get Name="Get" Id="{a404e07c-edad-4d45-b4f7-6097ec06d15c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{222659ae-3b7c-400b-8d7f-dfbb06249b9e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="iProcessTimeMili_2" Id="{31e98800-1932-4e20-af14-e98484b89832}">
+      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
+PROPERTY iProcessTimeMili_2 : DINT]]></Declaration>
       <Get Name="Get" Id="{a8082181-d2b9-4efc-a70d-33c8c9c3e426}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>

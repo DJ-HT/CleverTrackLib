@@ -8,7 +8,7 @@
 	flag will stay stable (beacause we cannot use the = 
 	operator on lreal! )
 *)
-FUNCTION_BLOCK FB_Position
+FUNCTION_BLOCK FB_Position IMPLEMENTS IObject
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -17,15 +17,26 @@ VAR
     _lrWorkPosition    : LREAL;      // Work position, use this to give a position
     _lrWorkLeftMargin  : LREAL := 0; // The RELATIVE left position from the work position, need to be POSITIVE
     _lrWorkRightMargin : LREAL := 0; // The RELATIVE right position from the work position, need to be POSITIVE
-	
-	_iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+
+    _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
 VAR_STAT
-	_iInstanceCounter : INT := 1; // instance counter
-END_VAR]]></Declaration>
+    _iInstanceCounter : INT := 1; // instance counter
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Equals" Id="{8106def9-e089-4f97-b8e2-08bca265f932}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
+VAR_INPUT
+    object : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{224498c0-3d16-4b9b-9d70-839b57b2352a}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -85,23 +96,5 @@ END_VAR]]></Declaration>
         <ST><![CDATA[ToString := CONCAT('FB_Position_', TO_STRING(THIS^._iID));]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Position">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Position.FB_init">
-      <LineId Id="53" Count="1" />
-      <LineId Id="41" Count="2" />
-      <LineId Id="22" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Position.isInPos">
-      <LineId Id="20" Count="7" />
-      <LineId Id="8" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Position.lrWorkPosition.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Position.ToString">
-      <LineId Id="16" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

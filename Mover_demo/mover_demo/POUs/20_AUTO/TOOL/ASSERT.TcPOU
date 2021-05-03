@@ -10,16 +10,11 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT  bStatement THEN
+	{error <'Assertion has occured'>}
 	ASSERT := TRUE;
 ELSE
 	ASSERT := FALSE;
 END_IF]]></ST>
     </Implementation>
-    <LineIds Name="ASSERT">
-      <LineId Id="7" Count="0" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="27" Count="0" />
-      <LineId Id="15" Count="1" />
-    </LineIds>
   </POU>
 </TcPlcObject>

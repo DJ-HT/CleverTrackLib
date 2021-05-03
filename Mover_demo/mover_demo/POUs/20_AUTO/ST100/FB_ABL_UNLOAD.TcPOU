@@ -38,7 +38,8 @@ VAR_INPUT
     pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
 
     // Application specific
-    iProcessTimeMili : UDINT := 5000; // user defined station duration, in milisecond
+    iProcessTimeMili1 : UDINT := 5000; // user defined station duration, in milisecond
+    iProcessTimeMili2 : UDINT := 5000; // user defined station duration, in milisecond
     Mover            : REFERENCE TO FB_Mover;
     //xIN_MoverInPos  : BOOL;          // Set this flag when a mover is in position and ready to be handled
 END_VAR
@@ -130,31 +131,16 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST100_Unload_e.DONE);
 
-xOUT_MoverFree   := NOT (iOUT_Step >= ST100_Unload_e.MOVER_NEEDED_OP AND iOUT_Step < ST100_Unload_e.MOVER_FREE_OP);
+xOUT_MoverFree := NOT (iOUT_Step >= ST100_Unload_e.MOVER_NEEDED_OP AND iOUT_Step < ST100_Unload_e.MOVER_FREE_OP);
 
-IF iAktStep < ST100_Unload_e.START THEN
-    iOUT_ProcessCompletion := 0;
-ELSIF iAktStep > ST100_Unload_e.DONE THEN
-    iOUT_ProcessCompletion :=
-        getPercent(iPreStep, TO_INT(ST100_Unload_e.START), TO_INT(ST100_Unload_e.proceedOperation_2) + 1);
-ELSIF ST100_Unload_e.DONE = iAktStep THEN
-    iOUT_ProcessCompletion := 100;
-ELSE
-    // iOUT_ProcessCompletion := getPercent(iAktStep, TO_INT(ST100_Unload_e.START), TO_INT(ST100_Unload_e.releaseMover) + 1);
-    IF iProcessTimeMili > 0 THEN
-        IF iAktStep < ST100_Unload_e.proceedOperation_1 THEN
-            iOUT_ProcessCompletion := 0;
-        ELSIF iAktStep = ST100_Unload_e.proceedOperation_1 THEN
-            iOUT_ProcessCompletion := TO_INT(((GetTick() - iStartProcessTimeMili) * 100) / iProcessTimeMili);
-        ELSIF iAktStep = ST100_Unload_e.proceedOperation_2 THEN
-            iOUT_ProcessCompletion := 50 + TO_INT(((GetTick() - iStartProcessTimeMili) * 100) / iProcessTimeMili);
-        ELSE
-            iOUT_ProcessCompletion := 50;
-        END_IF
-    ELSE
-        iOUT_ProcessCompletion := 0;
-    END_IF
-END_IF
+iOUT_ProcessCompletion := F_GetPercent(iAktStep,
+                                       ST100_Unload_e.START,
+                                       ST100_Unload_e.DONE,
+                                       ST100_Unload_e.proceedOperation_1,
+                                       ST100_Unload_e.proceedOperation_2,
+                                       iStartProcessTimeMili,
+                                       TO_DINT(iProcessTimeMili1),
+                                       TO_DINT(iProcessTimeMili2));
 
 (*******************************************************************)
 (* Ablauf *)
@@ -219,7 +205,7 @@ ST100_Unload_e.waitOnMover: (*  *)
     END_IF;
 
 ST100_Unload_e.proceedOperation_1: (*  *)
-    IF xIN_NextStep AND (GetTick() - iStartProcessTimeMili) >= (iProcessTimeMili / 2) THEN
+    IF xIN_NextStep AND (GetTick() - iStartProcessTimeMili) >= (iProcessTimeMili1) THEN
         iOUT_Step := ST100_Unload_e.SYNC_MOVER_LEAVE;
     END_IF;
 
@@ -231,7 +217,7 @@ ST100_Unload_e.SYNC_MOVER_LEAVE:
     END_IF
 
 ST100_Unload_e.proceedOperation_2: (*  *)
-    IF xIN_NextStep AND (GetTick() - iStartProcessTimeMili) >= (iProcessTimeMili / 2) THEN
+    IF xIN_NextStep AND (GetTick() - iStartProcessTimeMili) >= (iProcessTimeMili2) THEN
         iOUT_Step := ST100_Unload_e.DONE;
     END_IF;
 
@@ -257,8 +243,7 @@ END_CASE;
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_ABL_UNLOAD">
-      <LineId Id="1088" Count="49" />
-      <LineId Id="1142" Count="122" />
+      <LineId Id="1283" Count="157" />
       <LineId Id="9" Count="0" />
     </LineIds>
   </POU>

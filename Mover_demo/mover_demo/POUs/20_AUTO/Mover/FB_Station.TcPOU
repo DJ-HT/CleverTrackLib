@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Station" Id="{76f3a0a5-7330-41a9-8dcd-67e3fa45891a}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Station IMPLEMENTS IStation
+    <Declaration><![CDATA[{attribute 'reflection'}
+FUNCTION_BLOCK FB_Station IMPLEMENTS IStation, IObject
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -11,6 +12,7 @@ VAR
     _Process           : REFERENCE TO FB_AUT_ABSTRACT;
     _WaitPosOffset     : LREAL; // offset of the station position, should always be negative
     _iMaxWaitingMovers : INT;   // Maximum of waiting mover in front of the station
+    _iGroupNumber      : INT;   // The current group member
 
     _ApproachScenario : ApproachScenario_e := ApproachScenario_e.WaitOnFinishedProcess;
 
@@ -44,20 +46,14 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Method Name="Equals" Id="{c76b8ece-aab6-47d5-90c3-9d4c81b08fdb}">
-      <Declaration><![CDATA[// Return true if the given object is equal to THIS^
-METHOD Equals : BOOL
+    <Method Name="Equals" Id="{9df595ea-0758-453c-a5c5-4866ebe694a8}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
 VAR_INPUT
-    Station : REFERENCE TO FB_Station;
+    object : ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[Equals := FALSE;
-
-IF __ISVALIDREF(Station) THEN
-    Equals := THIS = ADR(Station);
-END_IF
-]]></ST>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{898dafd4-0828-4ee9-bb08-7822f297b3cc}">
@@ -83,6 +79,27 @@ THIS^._iMaxWaitingMovers := iMaxWaitingMovers;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="GroupNumber" Id="{112b0dd1-d079-4ffd-b2a2-c3568449f4dc}">
+      <Declaration><![CDATA[PROPERTY GroupNumber : INT]]></Declaration>
+      <Get Name="Get" Id="{7fcdc3dc-5887-43d4-8a0c-cb9d553d395d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[GroupNumber := THIS^._iGroupNumber;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{05862da3-a5ca-4870-9d6a-5ed6ff358853}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._iGroupNumber := GroupNumber;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Property Name="iMaxWaitingMovers" Id="{6a45a41f-3689-4688-9ba9-b8da1a5ddf71}">
       <Declaration><![CDATA[// the maxuimum number of waiting movers at the front of the station
 PROPERTY iMaxWaitingMovers : INT]]></Declaration>
@@ -161,16 +178,15 @@ SetWaitPosOffset REF= THIS^;
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="ToString" Id="{754f94dd-b150-4629-9617-347a61796109}">
+    <Method Name="ToString" Id="{e92fcd0f-4798-488b-aab7-2e05aaeb6db9}">
       <Declaration><![CDATA[METHOD ToString : STRING
 VAR_INPUT
 END_VAR
-VAR
+VAR_INST
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[ToString := CONCAT('FB_Station_', TO_STRING(THIS^._iID));
-]]></ST>
+        <ST><![CDATA[ToString := CONCAT('FB_Station_', TO_STRING(THIS^._iID));]]></ST>
       </Implementation>
     </Method>
     <Property Name="WaitPos" Id="{2c905c9e-5fcb-4960-a6c3-5642ee2d9ad4}">
@@ -195,62 +211,5 @@ END_IF
         </Implementation>
       </Set>
     </Property>
-    <LineIds Name="FB_Station">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.ApproachScenario.Get">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.ApproachScenario.Set">
-      <LineId Id="6" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.Equals">
-      <LineId Id="194" Count="3" />
-      <LineId Id="199" Count="0" />
-      <LineId Id="159" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.FB_init">
-      <LineId Id="105" Count="6" />
-      <LineId Id="32" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.iMaxWaitingMovers.Get">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.iMaxWaitingMovers.Set">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.Position.Get">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.Position.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.Process.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.Process.Set">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.SetWaitPosOffset">
-      <LineId Id="12" Count="4" />
-      <LineId Id="6" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.ToString">
-      <LineId Id="22" Count="0" />
-      <LineId Id="21" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.WaitPos.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Station.WaitPos.Set">
-      <LineId Id="14" Count="2" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

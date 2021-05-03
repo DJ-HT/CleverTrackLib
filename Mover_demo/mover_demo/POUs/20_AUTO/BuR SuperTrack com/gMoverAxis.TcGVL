@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="gMoverAxis" Id="{35610ea1-6634-4e72-a8f5-f0189fb4ec29}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    I_BuR_MoverAxis AT %I* : BuR_MoverAxis_Array_u; // all the movers
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

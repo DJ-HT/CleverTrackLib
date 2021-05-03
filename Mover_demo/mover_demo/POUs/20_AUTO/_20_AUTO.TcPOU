@@ -26,8 +26,9 @@ END_VAR
 
 //Station01
 
-SIMU.iCompletionHMI[1]         := GVL._Process1.iCompletionPC;
-GVL._Process1.iProcessTimeMili := PERS.iStationTimeDef[1];
+SIMU.iCompletionHMI[1]           := GVL._Process1.iCompletionPC;
+GVL._Process1.iProcessTimeMili_1 := PERS.iStationTimeDef1[1];
+GVL._Process1.iProcessTimeMili_2 := PERS.iStationTimeDef2[1];
 GVL._Process1(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -41,7 +42,8 @@ GVL._Process1(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[2]         := GVL._Process2.iCompletionPC;
-GVL._Process2.iProcessTimeMili := PERS.iStationTimeDef[2];
+GVL._Process2.iProcessTimeMili_1 := PERS.iStationTimeDef1[2];
+GVL._Process2.iProcessTimeMili_2 := PERS.iStationTimeDef2[2];
 GVL._Process2(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -55,7 +57,8 @@ GVL._Process2(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[3]         := GVL._Process3.iCompletionPC;
-GVL._Process3.iProcessTimeMili := PERS.iStationTimeDef[3];
+GVL._Process3.iProcessTimeMili_1 := PERS.iStationTimeDef1[3];
+GVL._Process3.iProcessTimeMili_2 := PERS.iStationTimeDef2[3];
 GVL._Process3(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -69,7 +72,8 @@ GVL._Process3(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[4]         := GVL._Process4.iCompletionPC;
-GVL._Process4.iProcessTimeMili := PERS.iStationTimeDef[4];
+GVL._Process4.iProcessTimeMili_1 := PERS.iStationTimeDef1[4];
+GVL._Process4.iProcessTimeMili_2 := PERS.iStationTimeDef2[4];
 GVL._Process4(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -83,7 +87,8 @@ GVL._Process4(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[5]         := GVL._Process5.iCompletionPC;
-GVL._Process5.iProcessTimeMili := PERS.iStationTimeDef[5];
+GVL._Process5.iProcessTimeMili_1 := PERS.iStationTimeDef1[5];
+GVL._Process5.iProcessTimeMili_2 := PERS.iStationTimeDef2[5];
 GVL._Process5(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -97,7 +102,8 @@ GVL._Process5(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[6]         := GVL._Process6.iCompletionPC;
-GVL._Process6.iProcessTimeMili := PERS.iStationTimeDef[6];
+GVL._Process6.iProcessTimeMili_1 := PERS.iStationTimeDef1[6];
+GVL._Process6.iProcessTimeMili_2 := PERS.iStationTimeDef2[6];
 GVL._Process6(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -111,7 +117,8 @@ GVL._Process6(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[7]         := GVL._Process7.iCompletionPC;
-GVL._Process7.iProcessTimeMili := PERS.iStationTimeDef[7];
+GVL._Process7.iProcessTimeMili_1 := PERS.iStationTimeDef1[7];
+GVL._Process7.iProcessTimeMili_2 := PERS.iStationTimeDef2[7];
 GVL._Process7(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -125,7 +132,8 @@ GVL._Process7(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[8]         := GVL._Process8.iCompletionPC;
-GVL._Process8.iProcessTimeMili := PERS.iStationTimeDef[8];
+GVL._Process8.iProcessTimeMili_1 := PERS.iStationTimeDef1[8];
+GVL._Process8.iProcessTimeMili_2 := PERS.iStationTimeDef2[8];
 GVL._Process8(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -139,7 +147,8 @@ GVL._Process8(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[9]         := GVL._Process9.iCompletionPC;
-GVL._Process9.iProcessTimeMili := PERS.iStationTimeDef[9];
+GVL._Process9.iProcessTimeMili_1 := PERS.iStationTimeDef1[9];
+GVL._Process9.iProcessTimeMili_2 := PERS.iStationTimeDef2[9];
 GVL._Process9(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_Start      := HMI.btArMain[9].press,
               xIN_Step       := HMI.btArMain[1].rtrig,
@@ -153,7 +162,8 @@ GVL._Process9(xIN_Init       := HMI.enState = enState.StateINIT,
               xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[10]         := GVL._Process10.iCompletionPC;
-GVL._Process10.iProcessTimeMili := PERS.iStationTimeDef[10];
+GVL._Process10.iProcessTimeMili_1 := PERS.iStationTimeDef1[10];
+GVL._Process10.iProcessTimeMili_2 := PERS.iStationTimeDef2[10];
 GVL._Process10(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -167,7 +177,8 @@ GVL._Process10(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[11]         := GVL._Process11.iCompletionPC;
-GVL._Process11.iProcessTimeMili := PERS.iStationTimeDef[11];
+GVL._Process11.iProcessTimeMili_1 := PERS.iStationTimeDef1[11];
+GVL._Process11.iProcessTimeMili_2 := PERS.iStationTimeDef2[11];
 GVL._Process11(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -181,7 +192,8 @@ GVL._Process11(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[12]         := GVL._Process12.iCompletionPC;
-GVL._Process12.iProcessTimeMili := PERS.iStationTimeDef[12];
+GVL._Process12.iProcessTimeMili_1 := PERS.iStationTimeDef1[12];
+GVL._Process12.iProcessTimeMili_2 := PERS.iStationTimeDef2[12];
 GVL._Process12(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -195,7 +207,8 @@ GVL._Process12(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[13]         := GVL._Process13.iCompletionPC;
-GVL._Process13.iProcessTimeMili := PERS.iStationTimeDef[13];
+GVL._Process13.iProcessTimeMili_1 := PERS.iStationTimeDef1[13];
+GVL._Process13.iProcessTimeMili_2 := PERS.iStationTimeDef2[13];
 GVL._Process13(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -209,7 +222,8 @@ GVL._Process13(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[14]         := GVL._Process14.iCompletionPC;
-GVL._Process14.iProcessTimeMili := PERS.iStationTimeDef[14];
+GVL._Process14.iProcessTimeMili_1 := PERS.iStationTimeDef1[14];
+GVL._Process14.iProcessTimeMili_2 := PERS.iStationTimeDef2[14];
 GVL._Process14(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -223,7 +237,8 @@ GVL._Process14(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[15]         := GVL._Process15.iCompletionPC;
-GVL._Process15.iProcessTimeMili := PERS.iStationTimeDef[15];
+GVL._Process15.iProcessTimeMili_1 := PERS.iStationTimeDef1[15];
+GVL._Process15.iProcessTimeMili_2 := PERS.iStationTimeDef2[15];
 GVL._Process15(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -237,7 +252,8 @@ GVL._Process15(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[16]         := GVL._Process16.iCompletionPC;
-GVL._Process16.iProcessTimeMili := PERS.iStationTimeDef[16];
+GVL._Process16.iProcessTimeMili_1 := PERS.iStationTimeDef1[16];
+GVL._Process16.iProcessTimeMili_2 := PERS.iStationTimeDef2[16];
 GVL._Process16(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -251,7 +267,8 @@ GVL._Process16(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[17]         := GVL._Process17.iCompletionPC;
-GVL._Process17.iProcessTimeMili := PERS.iStationTimeDef[17];
+GVL._Process17.iProcessTimeMili_1 := PERS.iStationTimeDef1[17];
+GVL._Process17.iProcessTimeMili_2 := PERS.iStationTimeDef2[17];
 GVL._Process17(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -265,7 +282,8 @@ GVL._Process17(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_On         := TRUE);
 
 SIMU.iCompletionHMI[18]         := GVL._Process18.iCompletionPC;
-GVL._Process18.iProcessTimeMili := PERS.iStationTimeDef[18];
+GVL._Process18.iProcessTimeMili_1 := PERS.iStationTimeDef1[18];
+GVL._Process18.iProcessTimeMili_2 := PERS.iStationTimeDef2[18];
 GVL._Process18(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -280,7 +298,41 @@ GVL._Process18(xIN_Init       := HMI.enState = enState.StateINIT,
 ]]></ST>
     </Implementation>
     <LineIds Name="_20_AUTO">
-      <LineId Id="2978" Count="256" />
+      <LineId Id="3253" Count="22" />
+      <LineId Id="3511" Count="0" />
+      <LineId Id="3276" Count="13" />
+      <LineId Id="3512" Count="0" />
+      <LineId Id="3290" Count="13" />
+      <LineId Id="3513" Count="0" />
+      <LineId Id="3304" Count="13" />
+      <LineId Id="3514" Count="0" />
+      <LineId Id="3318" Count="13" />
+      <LineId Id="3515" Count="0" />
+      <LineId Id="3332" Count="13" />
+      <LineId Id="3516" Count="0" />
+      <LineId Id="3346" Count="13" />
+      <LineId Id="3517" Count="0" />
+      <LineId Id="3360" Count="13" />
+      <LineId Id="3518" Count="0" />
+      <LineId Id="3374" Count="12" />
+      <LineId Id="3519" Count="1" />
+      <LineId Id="3388" Count="13" />
+      <LineId Id="3521" Count="0" />
+      <LineId Id="3402" Count="13" />
+      <LineId Id="3522" Count="0" />
+      <LineId Id="3416" Count="13" />
+      <LineId Id="3523" Count="0" />
+      <LineId Id="3430" Count="13" />
+      <LineId Id="3524" Count="0" />
+      <LineId Id="3444" Count="13" />
+      <LineId Id="3525" Count="0" />
+      <LineId Id="3458" Count="13" />
+      <LineId Id="3526" Count="0" />
+      <LineId Id="3472" Count="13" />
+      <LineId Id="3527" Count="0" />
+      <LineId Id="3486" Count="13" />
+      <LineId Id="3528" Count="0" />
+      <LineId Id="3500" Count="10" />
       <LineId Id="1820" Count="0" />
     </LineIds>
   </POU>

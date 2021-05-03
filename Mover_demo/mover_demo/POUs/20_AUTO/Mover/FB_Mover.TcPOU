@@ -1,10 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Mover" Id="{147d877f-8a39-46b8-8ff1-e23190be69f7}" SpecialFunc="None">
-    <Declaration><![CDATA[{attribute 'enable_dynamic_creation'}
-FUNCTION_BLOCK FB_Mover
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Mover IMPLEMENTS IObject
 VAR_INPUT
-    xIN_StopMover : BOOL; // stop the mover from moving
 END_VAR
 VAR_OUTPUT
 END_VAR
@@ -24,47 +22,7 @@ VAR_STAT
 	_iInstanceCounter : INT := 1; // instance counter
 END_VAR]]></Declaration>
     <Implementation>
-      <ST><![CDATA[CASE THIS^._State OF
-MoverState_e.OperationDone:
-// nothing to be done here, we wait until MoverMan affect a new station
-
-MoverState_e.WaitOnNextStation:
-// do nothing, we wait on MoverMan to tell us to move
-
-MoverState_e.MovingToStation:
-    IF THIS^.IsInStationPos() THEN
-        _State := MoverState_e.InStationPos;
-    END_IF
-
-MoverState_e.InStationPos:
-	IF NOT __ISVALIDREF(_Station) THEN
-		// ASSERTION SHOULD BE DONE HERE
-        _State := MoverState_e.WaitOnNextStation;
-    // If there is no station (waiting position)
-    ELSIF NOT __ISVALIDREF(_Station.Process) THEN
-        _State := MoverState_e.WaitOnNextStation;
-    ELSE
-        IF _Station.Process.xBusy THEN
-            _State := MoverState_e.InOperation;
-        END_IF
-    END_IF
-
-MoverState_e.InOperation:
-	IF NOT __ISVALIDREF(_Station) THEN
-		// ASSERTION SHOULD BE DONE HERE
-        _State := MoverState_e.OperationDone;
-    ELSIF NOT __ISVALIDREF(_Station.Process) THEN
-		// ASSERTION SHOULD BE DONE HERE
-        _State := MoverState_e.OperationDone;
-    ELSE
-        IF _Station.Process.xMoverShouldLeave THEN
-            _State := MoverState_e.OperationDone;
-        END_IF
-    END_IF
-
-END_CASE
-
-_MoverAxis(xIN_StopMover := xIN_StopMover);]]></ST>
+      <ST><![CDATA[]]></ST>
     </Implementation>
     <Property Name="AttachedPieceHolder" Id="{1f1520b6-17b9-443d-9101-58c2158353cb}">
       <Declaration><![CDATA[PROPERTY AttachedPieceHolder : REFERENCE TO FB_PieceHolder]]></Declaration>
@@ -88,13 +46,11 @@ END_VAR
     <Method Name="Equals" Id="{f14740f4-58b8-4c64-8940-c4b242e3aa11}">
       <Declaration><![CDATA[METHOD Equals : BOOL
 VAR_INPUT
-    mover : POINTER TO FB_Mover;
+    object : ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF mover <> 0 THEN
-	Equals := mover = THIS;
-END_IF]]></ST>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
       </Implementation>
     </Method>
     <Method Name="FB_init" Id="{f1ad25b4-41be-48ac-a3cf-a51a38b48b2b}">
@@ -181,9 +137,8 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
     THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset));
+    THIS^._State := MoverState_e.MovingToStation;
 END_IF
-
-THIS^._State := MoverState_e.MovingToStation;
 
 MoveToStation REF= THIS^;
 ]]></ST>
@@ -239,9 +194,8 @@ END_VAR
         <ST><![CDATA[IF __ISVALIDREF(Station) AND_THEN (THIS^._State <> MoverState_e.InOperation) THEN
     THIS^._Station REF= Station;
     THIS^._State   := MoverState_e.WaitOnNextStation;
-ELSE 
-	// ASSERT HERE
-	SetStation REF= THIS^;
+ELSE
+    ASSERT(0);
 END_IF
 
 SetStation REF= THIS^;
@@ -315,89 +269,5 @@ END_VAR]]></Declaration>
         <ST><![CDATA[ToString := CONCAT('FB_Mover_', TO_STRING(THIS^._iID));]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_Mover">
-      <LineId Id="353" Count="39" />
-      <LineId Id="77" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.AttachedPieceHolder.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.AttachedPieceHolder.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.Equals">
-      <LineId Id="5" Count="0" />
-      <LineId Id="11" Count="1" />
-    </LineIds>
-    <LineIds Name="FB_Mover.FB_init">
-      <LineId Id="115" Count="1" />
-      <LineId Id="82" Count="1" />
-      <LineId Id="86" Count="0" />
-      <LineId Id="85" Count="0" />
-      <LineId Id="60" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.IsBehind">
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.IsInFront">
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.IsInStationPos">
-      <LineId Id="7" Count="0" />
-      <LineId Id="6" Count="0" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.MoverAxis.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.MoverAxis.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.MoveToStation">
-      <LineId Id="18" Count="2" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="21" Count="1" />
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.MoveToWaitSpot">
-      <LineId Id="52" Count="8" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.SetPieceHolder">
-      <LineId Id="18" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="16" Count="1" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.SetStation">
-      <LineId Id="29" Count="2" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="47" Count="0" />
-      <LineId Id="46" Count="0" />
-      <LineId Id="32" Count="0" />
-      <LineId Id="45" Count="0" />
-      <LineId Id="34" Count="0" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.State.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.State.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.Station.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.Station.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.TO_POS">
-      <LineId Id="35" Count="9" />
-      <LineId Id="11" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_Mover.ToString">
-      <LineId Id="7" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

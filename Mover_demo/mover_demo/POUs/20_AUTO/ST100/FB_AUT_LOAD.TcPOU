@@ -126,24 +126,46 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="iProcessTimeMili" Id="{efce186e-2e6e-408b-aa14-4e84634daff9}">
+    <Property Name="iProcessTimeMili_1" Id="{b663c6e9-53c1-4c6e-b816-fb0a4251036f}">
       <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili : DINT
+PROPERTY iProcessTimeMili_1 : DINT
 ]]></Declaration>
-      <Get Name="Get" Id="{ea64e38f-6511-4648-a11e-19f60553ff31}">
+      <Get Name="Get" Id="{38db67af-d210-4239-8553-2e2e1ac3d074}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[iProcessTimeMili := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili);]]></ST>
+          <ST><![CDATA[iProcessTimeMili_1 := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili1);]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{b0753cbd-0bf5-4403-87c6-0eee85e72898}">
+      <Set Name="Set" Id="{d3ca5f94-023b-4f72-b7a1-993eb9723275}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili := TO_UDINT(iProcessTimeMili);
+          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili1 := TO_UDINT(iProcessTimeMili_1);
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="iProcessTimeMili_2" Id="{20c766a8-a7ed-4842-9c6e-9a69efd4fee7}">
+      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
+PROPERTY iProcessTimeMili_2 : DINT
+]]></Declaration>
+      <Get Name="Get" Id="{f6dcc104-ede7-49e6-92c5-872f54919e62}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iProcessTimeMili_2 := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili2);]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{cfe3d7a1-2bd7-4278-9419-80daa5a4fd52}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili2 := TO_UDINT(iProcessTimeMili_2);
 ]]></ST>
         </Implementation>
       </Set>
@@ -246,10 +268,17 @@ END_VAR
     <LineIds Name="FB_AUT_LOAD.iCompletionPC.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_AUT_LOAD.iProcessTimeMili.Get">
+    <LineIds Name="FB_AUT_LOAD.iProcessTimeMili_1.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_AUT_LOAD.iProcessTimeMili.Set">
+    <LineIds Name="FB_AUT_LOAD.iProcessTimeMili_1.Set">
+      <LineId Id="5" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AUT_LOAD.iProcessTimeMili_2.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AUT_LOAD.iProcessTimeMili_2.Set">
       <LineId Id="5" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>

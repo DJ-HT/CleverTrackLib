@@ -12,24 +12,40 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbJson.ResetDocument();
+// global object
 fbJson.StartObject();
-fbJson.AddKey('StationTime');
+fbJson.AddKey('StationTimeArray');
+
+// array1
+fbJson.StartObject();
+fbJson.AddKey('StationTime1');
 fbJson.StartArray();
 
 FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
-    fbJson.AddDint(PERS.iStationTimeDef[i]);
+    fbJson.AddDint(PERS.iStationTimeDef1[i]);
+END_FOR
+
+fbJson.EndArray();
+
+// array2
+fbJson.AddKey('StationTime2');
+fbJson.StartArray();
+
+FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
+    fbJson.AddDint(PERS.iStationTimeDef2[i]);
 END_FOR
 
 fbJson.EndArray();
 fbJson.EndObject();
+
+fbJson.EndObject();
+// end global object
+
+// end of file
 sData := fbJson.GetDocument();
 
 fbJson.ResetDocument();
 ]]></ST>
     </Implementation>
-    <LineIds Name="SaveInMemory">
-      <LineId Id="1410" Count="13" />
-      <LineId Id="135" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

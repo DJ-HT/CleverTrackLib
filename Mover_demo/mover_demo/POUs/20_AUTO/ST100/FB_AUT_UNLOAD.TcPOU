@@ -127,16 +127,38 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="iProcessTimeMili" Id="{2872ff74-a66d-460e-883c-fc52f09425e2}">
+    <Property Name="iProcessTimeMili_1" Id="{503a05dd-ee28-47f2-a351-65c31a6ffaf8}">
       <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili : DINT
+PROPERTY iProcessTimeMili_1 : DINT
+]]></Declaration>
+      <Get Name="Get" Id="{e4e420c0-5d37-4c1c-b8f8-ada98e9f068c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iProcessTimeMili_1 := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili1);]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{4dbebae0-763a-4b6f-8c41-425305855dcb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili1 := TO_UDINT(iProcessTimeMili_1);
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="iProcessTimeMili_2" Id="{2872ff74-a66d-460e-883c-fc52f09425e2}">
+      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
+PROPERTY iProcessTimeMili_2 : DINT
 ]]></Declaration>
       <Get Name="Get" Id="{5d308021-d014-4b36-9753-ebfc19208604}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[iProcessTimeMili := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili);]]></ST>
+          <ST><![CDATA[iProcessTimeMili_2 := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili2);]]></ST>
         </Implementation>
       </Get>
       <Set Name="Set" Id="{99fb2195-ec95-46b4-a3e2-6268c1c077c0}">
@@ -144,7 +166,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili := TO_UDINT(iProcessTimeMili);
+          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili2 := TO_UDINT(iProcessTimeMili_2);
 ]]></ST>
         </Implementation>
       </Set>
@@ -246,10 +268,17 @@ END_VAR
     <LineIds Name="FB_AUT_UNLOAD.iCompletionPC.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili.Get">
+    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili_1.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili.Set">
+    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili_1.Set">
+      <LineId Id="5" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili_2.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili_2.Set">
       <LineId Id="5" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>

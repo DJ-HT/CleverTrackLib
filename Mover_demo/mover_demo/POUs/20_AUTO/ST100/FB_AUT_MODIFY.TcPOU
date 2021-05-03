@@ -58,13 +58,14 @@ xReset := ((enIN_State < StateREADY) AND (enIN_State <> StateINIT)) OR
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
-_FB_ABL_100A(xIN_Reset       := xReset,
-             xIN_Init        := xIN_Init,
-             xIN_Quit        := xIN_Quit,
-             xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
-             xIN_Sperre      := NOT xIN_On,
-             xIN_NextStep    := xNextStep,
-             xIN_AlarmAktiv  := xIN_AlarmAktiv,
+_FB_ABL_100A(xIN_Reset    := xReset,
+             xIN_Init     := xIN_Init,
+             xIN_Quit     := xIN_Quit,
+             xIN_Start    := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+             xIN_Sperre   := NOT xIN_On,
+             xIN_NextStep := xNextStep,
+             xIN_AlarmAktiv
+                 := xIN_AlarmAktiv,
              xIN_DryCycle    := xIN_DryCycle,
              xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out
              enIN_State      := enIN_State,
@@ -79,7 +80,7 @@ _FB_ABL_100A(xIN_Reset       := xReset,
              xOUT_Wait       =>,
              iOUT_Step       =>,
              bOUT_Error      =>);
-			 
+
 (*******************************************************************)
 (* Mover reset flags *)
 (*******************************************************************)
@@ -124,24 +125,46 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="iProcessTimeMili" Id="{9f1e3260-10ad-4f56-ba1f-45709124d7c3}">
+    <Property Name="iProcessTimeMili_1" Id="{9f00be05-9dc0-496c-a744-e965f30dc662}">
       <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili : DINT
+PROPERTY iProcessTimeMili_1 : DINT
 ]]></Declaration>
-      <Get Name="Get" Id="{6b411cd5-f3d8-4c85-9154-60d64e5d9840}">
+      <Get Name="Get" Id="{070f270d-a493-494c-8c5b-4e5e8fbe4a22}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[iProcessTimeMili := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili);]]></ST>
+          <ST><![CDATA[iProcessTimeMili_1 := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili1);]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{6445fa35-8e05-4eff-b02e-33bf402f26e0}">
+      <Set Name="Set" Id="{1479b1da-976b-4a9a-8fbe-7f9211817a97}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili := TO_UDINT(iProcessTimeMili);
+          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili1 := TO_UDINT(iProcessTimeMili_1);
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="iProcessTimeMili_2" Id="{c67e9ee2-c720-4147-823c-d3cdaae860ac}">
+      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
+PROPERTY iProcessTimeMili_2 : DINT
+]]></Declaration>
+      <Get Name="Get" Id="{1e5e800e-8829-4f5e-b0a1-10752abf92a3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iProcessTimeMili_2 := TO_DINT(this^._FB_ABL_100A.iProcessTimeMili2);]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{77e97f03-12df-451f-8c6f-6327451a704d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._FB_ABL_100A.iProcessTimeMili2 := TO_UDINT(iProcessTimeMili_2);
 ]]></ST>
         </Implementation>
       </Set>
@@ -233,9 +256,7 @@ END_VAR
       </Get>
     </Property>
     <LineIds Name="FB_AUT_MODIFY">
-      <LineId Id="10" Count="40" />
-      <LineId Id="104" Count="0" />
-      <LineId Id="51" Count="26" />
+      <LineId Id="105" Count="69" />
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="FB_AUT_MODIFY.GiveMover">
@@ -246,10 +267,17 @@ END_VAR
     <LineIds Name="FB_AUT_MODIFY.iCompletionPC.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_AUT_MODIFY.iProcessTimeMili.Get">
+    <LineIds Name="FB_AUT_MODIFY.iProcessTimeMili_1.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
-    <LineIds Name="FB_AUT_MODIFY.iProcessTimeMili.Set">
+    <LineIds Name="FB_AUT_MODIFY.iProcessTimeMili_1.Set">
+      <LineId Id="5" Count="0" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AUT_MODIFY.iProcessTimeMili_2.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_AUT_MODIFY.iProcessTimeMili_2.Set">
       <LineId Id="5" Count="0" />
       <LineId Id="2" Count="0" />
     </LineIds>

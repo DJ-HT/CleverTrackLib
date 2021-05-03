@@ -4,12 +4,14 @@
     <Declaration><![CDATA[{attribute 'c++_compatible'}
 FUNCTION_BLOCK FB_ReadJSON IMPLEMENTS ITcJsonSaxHandler
 VAR_INPUT
-    myArrayInput : REFERENCE TO ARRAY[1..CONSt.STATION_NUMBER] OF DINT;
+    myArrayInput1 : REFERENCE TO ARRAY[1..CONSt.STATION_NUMBER] OF DINT;
+    myArrayInput2 : REFERENCE TO ARRAY[1..CONSt.STATION_NUMBER] OF DINT;
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
     iArrayIndex : INT;
+	iArrayNumber : INT := 0;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -58,7 +60,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[OnEndArray := S_OK;]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnEndObject" Id="{3852d89c-fafd-4e01-bb18-7e78a637b1f3}">
@@ -73,7 +75,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[OnEndObject := S_OK;]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnKey" Id="{ceb41c6f-bffd-4d12-bea7-c139a1d358a7}">
@@ -91,7 +93,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[OnKey := S_OK;]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnLint" Id="{265a7821-0589-4d69-be9b-1f75863bafc1}">
@@ -163,7 +165,9 @@ END_VAR
 METHOD OnStartArray : HRESULT
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.iArrayIndex := 1;]]></ST>
+        <ST><![CDATA[THIS^.iArrayIndex := 1;
+THIS^.iArrayNumber := THIS^.iArrayNumber + 1;
+OnStartArray := S_OK;]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnStartObject" Id="{154319f1-7500-4601-a5ac-3b43c0d5ae1f}">
@@ -175,7 +179,7 @@ METHOD OnStartArray : HRESULT
 METHOD OnStartObject : HRESULT
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[OnStartObject := S_OK;]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnString" Id="{0b5aa270-bf48-441d-8d33-34dbae61aa92}">
@@ -208,8 +212,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.myArrayInput[THIS^.iArrayIndex] := TO_DINT(value);
-This^.iArrayIndex := This^.iArrayIndex + 1;]]></ST>
+        <ST><![CDATA[IF THIS^.iArrayNumber = 1 THEN
+    THIS^.myArrayInput1[THIS^.iArrayIndex] := TO_DINT(value);
+    THIS^.iArrayIndex                      := THIS^.iArrayIndex + 1;
+ELSIF THIS^.iArrayNumber = 2 THEN
+    THIS^.myArrayInput2[THIS^.iArrayIndex] := TO_DINT(value);
+    THIS^.iArrayIndex                      := THIS^.iArrayIndex + 1;
+END_IF
+OnUdint := S_OK;]]></ST>
       </Implementation>
     </Method>
     <Method Name="OnUlint" Id="{d82d5f58-11ea-4618-a7f0-e07444bf9b7e}">
@@ -267,60 +277,5 @@ METHOD TcRelease : UDINT
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_ReadJSON">
-      <LineId Id="33" Count="0" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnBool">
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnDint">
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnEndArray">
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnEndObject">
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnKey">
-      <LineId Id="17" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnLint">
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnLreal">
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnNull">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnRawNumber">
-      <LineId Id="15" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnStartArray">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnStartObject">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnString">
-      <LineId Id="15" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnUdint">
-      <LineId Id="12" Count="1" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.OnUlint">
-      <LineId Id="12" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.TcAddRef">
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.TcQueryInterface">
-      <LineId Id="13" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_ReadJSON.TcRelease">
-      <LineId Id="9" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

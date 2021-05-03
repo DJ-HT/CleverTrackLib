@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_SimuMoverAxis" Id="{017f40e2-f1f1-4976-849d-fa06ef0a4cb5}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_SimuMoverAxis
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_SimuMoverAxis IMPLEMENTS IObject
 VAR_INPUT
     xIN_StopMover : BOOL; // stop the mover from movinf
 END_VAR
@@ -25,6 +25,12 @@ VAR
     _lrNextStopPos : LREAL; // local variable used to get next stop
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+	
+	_CurrentDir : MoverDirection_e := MoverDirection_e.Farward;
+END_VAR
+
+VAR_TEMP
+	_MoverAccel : LREAL;	// Mover acceleration, can be positive or negative depending on the direction
 END_VAR
 
 VAR CONSTANT
@@ -40,38 +46,50 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[IF NOT xIN_StopMover THEN // Do not change momemtum when we stop the movers from HMI
+    IF MoverDirection_e.Farward = THIS^._CurrentDir THEN
+        _MoverAccel := SIMU.lrAccelMover;
+    ELSE
+        _MoverAccel := -SIMU.lrAccelMover;
+    END_IF
+
     IF NOT _IsColliding THEN
 
-        IF THIS^.GetStopLen(_Velocity, SIMU.lrAccelMover) >= DistToTravel(_CurrentPos, _TargetPos) OR THIS^._willCollide THEN
-            _Velocity := _Velocity - SIMU.lrAccelMover;
+        IF THIS^.GetStopLen(_Velocity, SIMU.lrAccelMover) >= DistToTravel(_CurrentPos, _TargetPos) OR
+           THIS^._willCollide THEN
+            _Velocity := _Velocity - _MoverAccel;
 
-        ELSIF SIMU.lrSpeedMover > _Velocity AND _CurrentPos <> _TargetPos THEN
-            _Velocity := _Velocity + SIMU.lrAccelMover;
+        ELSIF SIMU.lrSpeedMover > ABS(_Velocity) AND _CurrentPos <> _TargetPos THEN
+            _Velocity := _Velocity + _MoverAccel;
 
         END_IF
     ELSE
-        _Velocity := _Velocity - SIMU.lrAccelMover;
+        _Velocity := _Velocity - _MoverAccel;
     END_IF
 END_IF
 
 // protect max and min speed
-IF SIMU.lrSpeedMover < _Velocity THEN
-    _Velocity := SIMU.lrSpeedMover;
-ELSIF _Velocity < MOVER_VELOCITY_MIN THEN
-    _Velocity := MOVER_VELOCITY_MIN;
+IF SIMU.lrSpeedMover < ABS(_Velocity) THEN
+    IF MoverDirection_e.Farward = THIS^._CurrentDir THEN
+        _Velocity := SIMU.lrSpeedMover;
+    ELSE
+        _Velocity := -SIMU.lrSpeedMover;
+    END_IF
+ELSIF ABS(_Velocity) < MOVER_VELOCITY_MIN THEN
+    IF MoverDirection_e.Farward = THIS^._CurrentDir THEN
+        _Velocity := MOVER_VELOCITY_MIN;
+    ELSE
+        _Velocity := -MOVER_VELOCITY_MIN;
+    END_IF
 END_IF
 
 IF NOT _IsColliding AND NOT xIN_StopMover THEN
 
-    IF (_CurrentPos + _Velocity) < _TargetPos THEN
+    IF DistToTravel(_CurrentPos, _TargetPos) > ABS(_Velocity) THEN
         _CurrentPos := _CurrentPos + _Velocity;
-
-    ELSIF (_CurrentPos - _Velocity) > _TargetPos THEN
-        //_CurrentPos := _CurrentPos - _Velocity;
-        _CurrentPos := _CurrentPos + _Velocity; // always move at the positive way
 
     ELSE
         _CurrentPos := _TargetPos;
+        _Velocity   := 0;
 
     END_IF
 END_IF
@@ -84,7 +102,7 @@ END_IF
 
 isInPos := EqualDelta(_CurrentPos, _TargetPos, 1.0); // we use delta comparison beacause axis is always at a low value 
 outSimuCurrentPos
-    := THIS^.ResolvePos(_CurrentPos, outSimuCurrentRot);
+    := THIS^.ResolvePos(this^.CurrentPos, outSimuCurrentRot);
 
 _xStuck        := (THIS^._CurrentPos < (THIS^._LastPos + _Velocity)) AND NOT isInPos;
 THIS^._LastPos := THIS^._CurrentPos;
@@ -97,7 +115,12 @@ THIS^._LastPos := THIS^._CurrentPos;
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[CurrentPos := _CurrentPos;]]></ST>
+          <ST><![CDATA[IF CONST.USE_SIMULATION THEN
+    CurrentPos := _CurrentPos;
+ELSE
+    CurrentPos := TO_LREAL(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._iID].diCurrentPos_um) / 1000.0;
+END_IF
+]]></ST>
         </Implementation>
       </Get>
       <Set Name="Set" Id="{c5f537f5-5d8c-45ad-a5c5-df77003f95bc}">
@@ -129,6 +152,16 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="Equals" Id="{cc3d2f0e-6990-4010-b51c-94056dc8eaec}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
+VAR_INPUT
+    object : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{b65ea979-747b-41ba-bf6e-1edaa259930c}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT
@@ -206,41 +239,46 @@ END_VAR
 
 IF DistToTravel(THIS^.CurrentPos, nextMover.CurrentPos) <= CONST.MAX_MOVER_SIZE THEN
     IsColliding := TRUE;
+
 END_IF
 
 THIS^._IsColliding := IsColliding;
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="lrSize" Id="{3f5eb49f-ed52-46bf-b2f8-4f8ddd22b4dc}">
-      <Declaration><![CDATA[PROPERTY lrSize : LREAL]]></Declaration>
-      <Get Name="Get" Id="{b4b6bc32-75b3-4936-951a-961608a58a80}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[lrSize := THIS^.MAX_SIZE;]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{6d91f2ce-d679-40a8-9f7b-bd8f6986c1db}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
     <Method Name="MoveTo" Id="{27ffc6e2-2e43-4eb2-aced-4a958cfe10ec}">
-      <Declaration><![CDATA[METHOD PUBLIC MoveTo : POINTER TO FB_SimuMoverAxis
+      <Declaration><![CDATA[METHOD PUBLIC MoveTo : REFERENCE TO FB_SimuMoverAxis
 VAR_INPUT
     Position : LREAL; // move the axis to this position
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[THIS^._TargetPos := Position;
+THIS^._CurrentDir := MoverDirection_e.Farward;
 isInPos := THIS^._CurrentPos = THIS^._TargetPos;
-MoveTo := THIS;
+MoveTo REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RelMoveTo" Id="{63f20b0f-13f1-4d11-9d44-19187e776860}">
+      <Declaration><![CDATA[// Move relatively of this position
+// With this function, a negative value move the mover at the reverse direction
+METHOD RelMoveTo : REFERENCE TO FB_SimuMoverAxis
+VAR_INPUT
+    RelativePos : LREAL; // move the axis to this amount¨
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._TargetPos := THIS^._TargetPos + RelativePos;
+
+IF RelativePos >= 0 THEN
+    THIS^._CurrentDir := MoverDirection_e.Farward;
+ELSE
+    THIS^._CurrentDir := MoverDirection_e.Reverse;
+END_IF
+
+isInPos   := THIS^._CurrentPos = THIS^._TargetPos;
+RelMoveTo REF= THIS^;
 ]]></ST>
       </Implementation>
     </Method>
@@ -266,10 +304,10 @@ VAR CONSTANT
     *)
     START_X     : DINT  := 0;
     START_Y     : DINT  := 0;
-    MAX_SIMU_DX : DINT  := 80;
+    MAX_SIMU_DX : DINT  := 120;
     MAX_SIMU_DY : DINT  := 800;
-    RADIUS_X    : LREAL := 40.0;
-    RADIUS_Y    : LREAL := 60.0;
+    RADIUS_X    : LREAL := 60.0;
+    RADIUS_Y    : LREAL := 100.0;
 
     FIRST_RADIUS_START  : LREAL := 4000;
     FIRST_RADIUS_END    : LREAL := 5000;
@@ -355,15 +393,24 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF THIS^._Velocity > nextMover.CurrentVelocity THEN
-    diffVelocity := SQRT(THIS^._Velocity * THIS^._Velocity - (nextMover.CurrentVelocity * nextMover.CurrentVelocity));
-    THIS^._willCollide
-        := DistToTravel(THIS^.CurrentPos, nextMover.CurrentPos) <=
-           THIS^.GetStopLen(diffVelocity, SIMU.lrAccelMover) + CONST.MAX_MOVER_SIZE;
-ELSE
-    THIS^._willCollide := FALSE;
+        <ST><![CDATA[THIS^._willCollide := FALSE;
+diffVelocity       := 0;
 
+// If the 2 movers are moving tarwards each other
+IF (THIS^._Velocity > 0) AND (nextMover.CurrentVelocity < 0) THEN
+    diffVelocity := SQRT(THIS^._Velocity * THIS^._Velocity + (nextMover.CurrentVelocity * nextMover.CurrentVelocity));
+
+    // If the 2 movers are moving in the same direction
+ELSE
+    IF ABS(THIS^._Velocity) > ABS(nextMover.CurrentVelocity) THEN
+        diffVelocity :=
+            SQRT(THIS^._Velocity * THIS^._Velocity - (nextMover.CurrentVelocity * nextMover.CurrentVelocity));
+    END_IF
 END_IF
+
+THIS^._willCollide
+    := DistToTravel(THIS^.CurrentPos, nextMover.CurrentPos) <=
+       THIS^.GetStopLen(diffVelocity, SIMU.lrAccelMover) + CONST.MAX_MOVER_SIZE;
 
 WillCollide := THIS^._willCollide;
 ]]></ST>
@@ -389,64 +436,5 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <LineIds Name="FB_SimuMoverAxis">
-      <LineId Id="1177" Count="48" />
-      <LineId Id="60" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.CurrentPos.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.CurrentPos.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.CurrentVelocity.Get">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.CurrentVelocity.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.FB_init">
-      <LineId Id="43" Count="1" />
-      <LineId Id="31" Count="4" />
-      <LineId Id="7" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.GetStopLen">
-      <LineId Id="63" Count="29" />
-      <LineId Id="33" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.IsColliding">
-      <LineId Id="151" Count="0" />
-      <LineId Id="165" Count="5" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.lrSize.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.lrSize.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.MoveTo">
-      <LineId Id="13" Count="2" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.ResolvePos">
-      <LineId Id="792" Count="45" />
-      <LineId Id="8" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.ToString">
-      <LineId Id="16" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.WillCollide">
-      <LineId Id="136" Count="10" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.xStuck.Get">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SimuMoverAxis.xStuck.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
