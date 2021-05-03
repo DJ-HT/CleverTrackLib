@@ -123,6 +123,7 @@ CurrStationIndex := THIS^.GetStationIndex(CurrentStation);
 IF CurrStationIndex > 0 THEN
 
     IF CurrentStation.GroupNumber > 0 THEN
+		// We search for a station which is not from the same group
         WHILE GetNextStation.GroupNumber = CurrentStation.GroupNumber DO
             CurrStationIndex := THIS^.GetNextStationIndex(CurrStationIndex);
             GetNextStation   REF= THIS^._WorkStationList[CurrStationIndex]^;
