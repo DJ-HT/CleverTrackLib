@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="AxisBase_t" Id="{bcc92f59-cb67-4638-a1e0-6e3bbfb57cb3}">
+    <Declaration><![CDATA[TYPE AxisBase_t :
+STRUCT
+END_STRUCT
+	rActPos		:	REAL;		// Current position
+	bInPos		:	SINT;		// Achse in Position  (99= nicht in Pos)
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

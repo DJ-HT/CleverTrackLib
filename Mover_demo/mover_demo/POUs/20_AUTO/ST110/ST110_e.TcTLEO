@@ -9,6 +9,8 @@ ST110_e :
 (
     RESET := 0,         // Reset
     INIT := 100,        // Initialisieren 
+	InitPnP_up,
+	Init_caca,
     READY := 999,       // READY to Start, Init Done 
     START := 1000,      // Start Zyklisch
     MOVER_FREE_OP,      // Ab here, operation without mover can be done
@@ -63,6 +65,16 @@ END_TYPE
             <o>
               <v n="TextID">"INIT"</v>
               <v n="TextDefault">"100"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"InitPnP_up"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_caca"</v>
+              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

@@ -2,19 +2,19 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_AUT_110" Id="{3a75638e-4197-4ed4-a9b7-03c2fb32897f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_110 EXTENDS FB_AUT_ABSTRACT
-    (****************************************************************************)
-    (*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
-    (*	Status				ungetestet											*)
-    (*  Version:			1.0													*)
-    (*	Beschrieb:																*)
-    (*																			*)
-    (*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
-    (*																			*)
-    (*																			*)
-    (* 	25.09.2019/Dj															*)
-    (****************************************************************************)
-    (*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
-    (****************************************************************************)
+(****************************************************************************)
+(*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
+(*	Status				ungetestet											*)
+(*  Version:			1.0													*)
+(*	Beschrieb:																*)
+(*																			*)
+(*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
+(*																			*)
+(*																			*)
+(* 	25.09.2019/Dj															*)
+(****************************************************************************)
+(*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
+(****************************************************************************)
 VAR_INPUT
     (* spezifische Eingänge *)
 
@@ -26,6 +26,12 @@ END_VAR
 VAR
     (* Bausteine *)
     _fb_abl_1 : FB_ABL_110;
+
+    fb_hor   : FB_AxisLM_V1_1;
+    fb_ver_1 : FB_AxisLIN_V1_1;
+    fb_ver_2 : FB_AxisLIN_V1_1;
+	
+	
 END_VAR
 ]]></Declaration>
     <Implementation>

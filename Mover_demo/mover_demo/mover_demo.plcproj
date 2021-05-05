@@ -29,6 +29,15 @@
     <Released>false</Released>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DUTs\Helptec\Axis\AxisBase_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Helptec\Axis\typeInputArea.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Helptec\Axis\typeOutputArea.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Helptec\enLamp.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -52,6 +61,10 @@
     </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\AXIS.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="GVLs\CONST.TcGVL">
       <SubType>Code</SubType>
@@ -78,7 +91,13 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\00_MAIN\FB%27s\FB_Safety.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\00_MAIN\MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\00_MAIN\_02_SAFETY.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\00_MAIN\_05_FLAGS.TcPOU">
@@ -160,9 +179,6 @@
     <Compile Include="POUs\20_AUTO\FileMan\SaveInMemory.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\IProcessSampleMover.TcIO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\20_AUTO\Mover\ApproachScenario_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -193,6 +209,9 @@
     <Compile Include="POUs\20_AUTO\Mover\FB_StationMan.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\Mover\IProcessSampleMover.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\Mover\IStation.TcIO">
       <SubType>Code</SubType>
     </Compile>
@@ -215,6 +234,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST100\F_GetPercent_2.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\IProcessSampleMover_1.TcIO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST100\ST100_Load_e.TcTLEO">
@@ -305,6 +327,10 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="VISUs\VISU_ST110.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="VISU_TASK.TcTTO">
       <SubType>Code</SubType>
     </Compile>
@@ -312,6 +338,7 @@
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="DUTs\Helptec" />
+    <Folder Include="DUTs\Helptec\Axis" />
     <Folder Include="GVLs" />
     <Folder Include="POUs\00_MAIN\FB%27s" />
     <Folder Include="POUs\10_HMI\FB%27s" />
@@ -323,6 +350,7 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\Simu" />
     <Folder Include="POUs\20_AUTO\ST125" />
     <Folder Include="POUs\20_AUTO\ST120" />
     <Folder Include="POUs\20_AUTO\ST115" />
@@ -380,6 +408,14 @@
       <SystemLibrary>true</SystemLibrary>
       <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_MC2">
+      <DefaultResolution>Tc2_MC2, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_MC2</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_MC2_Drive">
+      <DefaultResolution>Tc2_MC2_Drive, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_MC2_Drive</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_Standard">
       <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_Standard</Namespace>
@@ -405,6 +441,11 @@
     <None Include="mover_demo.tmc">
       <SubType>Content</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="VisuSymbols,3.5.10.0,System">
+      <Namespace>VisuSymbols</Namespace>
+    </LibraryReference>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
