@@ -116,6 +116,8 @@ VAR
 	TON_WaitReset	: TON;				//Warte nach Reset
 	TON_ToutReset	: TON;				//Reset-Ablauf Timeout
 	TOF_PowSafety	: TOF;				//Achse PowerOFF über Safety
+	
+	iIN_Velocity : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>

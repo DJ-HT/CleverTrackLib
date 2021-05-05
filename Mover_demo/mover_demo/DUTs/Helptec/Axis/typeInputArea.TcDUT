@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="typeInputArea" Id="{50aeef5d-4187-4725-b295-eea373056699}">
+    <Declaration><![CDATA[TYPE typeInputArea :
+STRUCT
+	SigAllToTheInpPor: UINT;
+      	ControllerInformationFlag: UINT;
+      	CurrentPosition : DINT;
+      	CurrentSpeed : UINT;
+      	CurrentPushForce : UINT;
+      	TargetPosition : DINT;
+      	Alarm1 : USINT;
+      	Alarm2 : USINT;
+      	Alarm3 : USINT;
+      	Alarm4 : USINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
