@@ -45,16 +45,16 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
     (* standart Ausgänge *)
-    xOUT_ErrFlag  : BOOL;   // Error Flag 
-    xOUT_Busy     : BOOL;   // Baustein befindet sich im Ablauf 
-    xOUT_Done     : BOOL;   // Baustein hat den Ablauf beendet 		
-    xOUT_Ready    : BOOL;   // Ready to begin, should be the same state as done	
-    xOUT_Timeout  : BOOL;   // Timeout FB 
-    xOUT_InitDone : BOOL;   // initialisierung fertig
-    xOUT_Wait     : BOOL;   // Wartet auf Bedingung
-    iOUT_Step     : ST110_e;    // Aktueller Schritt 
-    sOUT_Step     : STRING; // Aktueller Schritt but in string format
-    bOUT_Error    : BYTE;   // Fehlernummer
+    xOUT_ErrFlag  : BOOL;    // Error Flag 
+    xOUT_Busy     : BOOL;    // Baustein befindet sich im Ablauf 
+    xOUT_Done     : BOOL;    // Baustein hat den Ablauf beendet 		
+    xOUT_Ready    : BOOL;    // Ready to begin, should be the same state as done	
+    xOUT_Timeout  : BOOL;    // Timeout FB 
+    xOUT_InitDone : BOOL;    // initialisierung fertig
+    xOUT_Wait     : BOOL;    // Wartet auf Bedingung
+    iOUT_Step     : ST110_e; // Aktueller Schritt 
+    sOUT_Step     : STRING;  // Aktueller Schritt but in string format
+    bOUT_Error    : BYTE;    // Fehlernummer
 
     iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
     xOUT_MoverFree         : BOOL; // The mover is free to move
@@ -78,6 +78,10 @@ VAR
     udiStartProcessTimeMili : UDINT; // start of the processing time, accurate at 100ns 
 
     udiWaitTimeBetweenStep : UDINT; // waiting time between 2 steps
+
+    fb_axis110_01Y : FB_AxisLM_V1_2_RS;
+    fb_axis110_02Z : FB_AxisLIN_V1_2_RS;
+    fb_axis110_03Z : FB_AxisLIN_V1_2_RS;
 
 END_VAR
 VAR CONSTANT
@@ -109,6 +113,91 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
+fb_axis110_01Y(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons   := FALSE,
+               xIN_Quit         := xIN_Quit,
+               xIN_PARAMok      := TRUE, (*TODO*)
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST110_Axis.const110_01Y.POS_MIN,
+               rIN_POSMAX       := ST110_Axis.const110_01Y.POS_MAX,
+               rIN_VELOMAX      := ST110_Axis.const110_01Y.VELO_MAX,
+               rIN_VELOMANU     := ST110_Axis.const110_01Y.VELO_MANU,
+               rIN_VELOOPEN     := ST110_Axis.const110_01Y.VELO_MANU / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               xIN_Execute      :=,
+               xIN_Relative     :=,
+               rIN_Position     :=,
+               rIN_Velocity     := 100, // always move at 100%
+               rIN_Acceleration :=,
+               rIN_Deceleration :=,
+               rIN_Jerk         :=,
+               xIN_Reset        := xIN_Reset,
+               axisIN_REF       := ST110_Axis.axis110_01Y.axis,
+               xIN_Simu         := TRUE);
+
+fb_axis110_02Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons   := FALSE,
+               xIN_Quit         := xIN_Quit,
+               axisIN_REF       := ST110_Axis.axis110_02Z.axis,
+               xIN_AX5000       := FALSE,
+               xIN_ENC_ABS      := TRUE, // TODO set accordingly
+               xIN_PARAMok      := TRUE,
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST110_Axis.const110_02Z.POS_MIN,
+               rIN_POSMAX       := ST110_Axis.const110_02Z.POS_MAX,
+               rIN_VELOMAX      := ST110_Axis.const110_02Z.VELO_MAX,
+               rIN_VELOMANU     := ST110_Axis.const110_02Z.VELO_MANU,
+               rIN_VELOOPEN     := ST110_Axis.const110_02Z.POS_MAX / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               rIN_JogVelo      :=,
+               xIN_HomeExe      :=,
+               xIN_HomeCalib    :=,
+               xIN_Execute      :=,
+               xIN_Relative     :=,
+               rIN_Position     :=,
+               rIN_Velocity     :=,
+               rIN_Acceleration :=,
+               rIN_Deceleration :=,
+               rIN_Jerk         :=,
+               xIN_Reset        := xIN_Reset,
+               xIN_ESout        := _02_SAFETY.xOUT_ESout,
+               xIN_MonOut       := _02_SAFETY.xOUT_MonOut,
+               // output
+               xOUT_ErrFlag =>,
+               xOUT_READY   =>,
+               xOUT_DONE    =>,
+               bOUT_Error   =>,
+               rOUT_ActPos  =>);
+
+fb_axis110_03Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons   := FALSE,
+               xIN_Quit         := xIN_Quit,
+               xIN_PARAMok      := TRUE, (*TODO*)
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST110_Axis.const110_03Z.POS_MIN,
+               rIN_POSMAX       := ST110_Axis.const110_03Z.POS_MAX,
+               rIN_VELOMAX      := ST110_Axis.const110_03Z.VELO_MAX,
+               rIN_VELOMANU     := ST110_Axis.const110_03Z.VELO_MANU,
+               rIN_VELOOPEN     := ST110_Axis.const110_03Z.VELO_MANU / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               xIN_Execute      :=,
+               xIN_Relative     :=,
+               rIN_Position     :=,
+               rIN_Acceleration :=,
+               rIN_Deceleration :=,
+               rIN_Jerk         :=,
+               xIN_Reset        := xIN_Reset,
+               axisIN_REF       := ST110_Axis.axis110_03Z.axis,
+               xIN_AX5000       := FALSE,
+               xIN_ENC_ABS      := TRUE, // TODO set accordingly
+               xIN_ESout        := _02_SAFETY.xOUT_ESout,
+               xIN_MonOut       := _02_SAFETY.xOUT_MonOut);
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -136,10 +225,10 @@ xOUT_Wait := (iOUT_Step = ST110_e.DONE);
 xOUT_MoverFree := iOUT_Step >= ST110_e.MOVER_FREE_OP AND iOUT_Step < ST110_e.MOVER_NEEDED_OP;
 
 iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
-                                       ST110_e.PnP_Hor_ToRotTablePos,
-                                       ST110_e.PnP_Hor_ToTrackPos,
-                                       ST110_e.PnP_Ver_ShuttleDown,
-                                       ST110_e.PnP_Ver_ShuttleUp);
+                                         ST110_e.PnP_Hor_ToRotTablePos,
+                                         ST110_e.PnP_Hor_ToTrackPos,
+                                         ST110_e.PnP_Ver_ShuttleDown,
+                                         ST110_e.PnP_Ver_ShuttleUp);
 
 (*******************************************************************)
 (* Ablauf *)
@@ -171,19 +260,86 @@ ST110_e.RESET: (* Schritt 0-99 *)
     //Initialisierungen
     //Start Init Ablauf
     IF xIN_Init THEN
-        iOUT_Step := ST110_e.INIT;
+        fb_axis110_01Y.xIN_Reset := TRUE;
+        fb_axis110_02Z.xIN_Reset := TRUE;
+        fb_axis110_03Z.xIN_Reset := TRUE;
+        iOUT_Step                := ST110_e.ResetAxis_releaseSignal;
         //Start Manu Ablauf
     ELSIF enIN_State = StateMANU AND xIN_NextStep THEN
-        iOUT_Step := ST110_e.INIT;
+        iOUT_Step := ST110_e.ResetAxis_releaseSignal;
     END_IF;
+
+ST110_e.ResetAxis_releaseSignal:
+    fb_axis110_01Y.xIN_Reset := FALSE;
+    fb_axis110_02Z.xIN_Reset := FALSE;
+    fb_axis110_03Z.xIN_Reset := FALSE;
+    iOUT_Step                := ST110_e.INIT;
 
 (***** INIT *****)
 ST110_e.INIT: (* Grundstellung ? *)
-    IF TRUE THEN
+    IF FALSE THEN
         iOUT_Step := ST110_e.READY;
     ELSE
-        iOUT_Step := ST110_e.INIT;
+        iOUT_Step                  := ST110_e.HomeVerticals_start;
+        fb_axis110_01Y.xIN_Execute := FALSE;
+        fb_axis110_02Z.xIN_Execute := FALSE;
+        fb_axis110_03Z.xIN_Execute := FALSE;
     END_IF;
+
+ST110_e.HomeVerticals_start:
+    IF fb_axis110_02Z.xOUT_READY AND fb_axis110_03Z.xOUT_READY THEN
+        iOUT_Step := ST110_e.MoveVerticalsUp_start;
+    ELSE
+        fb_axis110_02Z.xIN_HomeExe := TRUE;
+        fb_axis110_03Z.xIN_HomeExe := TRUE;
+        iOUT_Step                  := ST110_e.HomeVerticals_waitDone;
+    END_IF
+
+ST110_e.HomeVerticals_waitDone:
+    IF fb_axis110_02Z.xOUT_DONE AND fb_axis110_03Z.xOUT_DONE THEN
+        fb_axis110_02Z.xIN_HomeExe := FALSE;
+        fb_axis110_03Z.xIN_HomeExe := FALSE;
+        iOUT_Step                  := ST110_e.MoveVerticalsUp_start;
+    END_IF
+
+st110_e.MoveVerticalsUp_start:
+    fb_axis110_02Z.xIN_Execute  := TRUE;
+    fb_axis110_02Z.rIN_Position := -5.0;
+    fb_axis110_03Z.xIN_Execute  := TRUE;
+    fb_axis110_03Z.rIN_Position := -5.0;
+    iOUT_Step                   := ST110_e.MoveVerticalsUp_waitDone;
+
+st110_e.MoveVerticalsUp_waitDone:
+    IF fb_axis110_02Z.xOUT_DONE AND fb_axis110_03Z.xOUT_DONE THEN
+        fb_axis110_02Z.xIN_Execute := FALSE;
+        fb_axis110_03Z.xIN_Execute := FALSE;
+        iOUT_Step                  := ST110_e.HomeHorizontals_start;
+    END_IF
+
+ST110_e.HomeHorizontals_start:
+    IF fb_axis110_01Y.xOUT_READY OR fb_axis110_01Y.xOUT_HOMED THEN
+        iOUT_Step := ST110_e.MoveHorizontalsToTrack_start;
+    ELSE
+        fb_axis110_01Y.xIN_Home := TRUE;
+        iOUT_Step               := ST110_e.HomeHorizontals_waitDone;
+    END_IF
+
+ST110_e.HomeHorizontals_waitDone:
+    IF fb_axis110_01Y.xOUT_HOMED THEN
+        fb_axis110_01Y.xIN_Home := FALSE;
+        iOUT_Step               := ST110_e.READY;
+    END_IF
+
+st110_e.MoveHorizontalsToTrack_start:
+    fb_axis110_01Y.xIN_Execute  := TRUE;
+    fb_axis110_01Y.rIN_Position := -5.0;
+    iOUT_Step                   := ST110_e.MoveHorizontalsToTrack_waitDone;
+
+st110_e.MoveHorizontalsToTrack_waitDone:
+    IF fb_axis110_01Y.xOUT_DONE THEN
+        fb_axis110_01Y.xIN_Execute := FALSE;
+        iOUT_Step                  := ST110_e.READY;
+    END_IF
 
 (***** READY / INIT DONE *****)
 ST110_e.READY:        (* Start AUTO,END,LEER,STEP *)

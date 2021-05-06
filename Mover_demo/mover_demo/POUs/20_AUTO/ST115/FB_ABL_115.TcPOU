@@ -134,13 +134,13 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 xOUT_Wait := (iOUT_Step = ST115_e.DONE);
 
 xOUT_MoverFree := iOUT_Step >= ST115_e.MOVER_FREE_OP AND iOUT_Step < ST115_e.MOVER_NEEDED_OP;
-
+(*
 iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                        ST115_e.PnP_Hor_ToRotTablePos,
                                        ST115_e.PnP_Hor_ToTrackPos,
                                        ST115_e.PnP_Ver_ShuttleDown,
                                        ST115_e.PnP_Ver_ShuttleUp);
-
+*)
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)

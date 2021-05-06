@@ -26,11 +26,6 @@ END_VAR
 VAR
     (* Bausteine *)
     _fb_abl_1 : FB_ABL_110;
-
-    fb_hor   : FB_AxisLM_V1_1;
-    fb_ver_1 : FB_AxisLIN_V1_1;
-    fb_ver_2 : FB_AxisLIN_V1_1;
-	
 	
 END_VAR
 ]]></Declaration>
@@ -72,6 +67,7 @@ _fb_abl_1(xIN_Reset       := xReset,
           xIN_NextStep    := xNextStep,
           xIN_AlarmAktiv  := xIN_AlarmAktiv,
           xIN_DryCycle    := xIN_DryCycle,
+          xIN_Reset       := HMI.btArMain[7].on,
           xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out
           enIN_State      := enIN_State,
           tIN_Timeout     := tIN_Timeout,

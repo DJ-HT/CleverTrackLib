@@ -35,7 +35,13 @@
     <Compile Include="DUTs\Helptec\Axis\AxisBeckhoff_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Helptec\Axis\AxisLinMotConst_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Helptec\Axis\AxisLinMot_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Helptec\Axis\AxisSMC_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Helptec\Axis\typeInputArea.TcDUT">
@@ -137,13 +143,13 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLIN_V1_1.TcPOU">
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLIN_V1_2_RS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLMturn_V1_1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLM_V1_1.TcPOU">
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLM_V1_2_RS.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisSMC_V1_1.TcPOU">
@@ -289,6 +295,10 @@
     </Compile>
     <Compile Include="POUs\20_AUTO\ST110\FB_AUT_110.TcPOU">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\ST110_Axis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST110\ST110_e.TcTLEO">
       <SubType>Code</SubType>

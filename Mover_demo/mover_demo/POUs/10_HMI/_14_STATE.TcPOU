@@ -88,7 +88,7 @@ _FB_btSTART(pbtIN := ADR(HMI.btArMain[9]),
 //****************************************************************************
 // 	STATE FB
 //****************************************************************************
-fb_State(xIN_AutoInit := TRUE,
+fb_State(xIN_AutoInit := FALSE,
          xIN_DoRef := FALSE,
          xIN_ENERGIE := TRUE,
          xIN_AIR := HMI.xAIRon,
@@ -100,7 +100,24 @@ fb_State(xIN_AutoInit := TRUE,
          xIN_INIT := HMI.btArMain[4].rtrig,
          xIN_STOP := HMI.btArMain[5].rtrig,
          xIN_LEER := HMI.btArMain[6].rtrig,
-         xIN_InitEND := (GVL._Process1.xOUT_InitDone OR NOT GVL._Process1.xIN_On),
+         xIN_InitEND := (GVL._Process1.xOUT_InitDone OR NOT GVL._Process1.xIN_On) AND 
+						(GVL._Process2.xOUT_InitDone OR NOT GVL._Process2.xIN_On) AND 
+						(GVL._Process3.xOUT_InitDone OR NOT GVL._Process3.xIN_On) AND 
+						(GVL._Process4.xOUT_InitDone OR NOT GVL._Process4.xIN_On) AND 
+						(GVL._Process5.xOUT_InitDone OR NOT GVL._Process5.xIN_On) AND 
+						(GVL._Process6.xOUT_InitDone OR NOT GVL._Process6.xIN_On) AND 
+						(GVL._Process7.xOUT_InitDone OR NOT GVL._Process7.xIN_On) AND 
+						(GVL._Process8.xOUT_InitDone OR NOT GVL._Process8.xIN_On) AND 
+						(GVL._Process9.xOUT_InitDone OR NOT GVL._Process9.xIN_On) AND 
+						(GVL._Process10.xOUT_InitDone OR NOT GVL._Process10.xIN_On) AND 
+						(GVL._Process11.xOUT_InitDone OR NOT GVL._Process11.xIN_On) AND 
+						(GVL._Process12.xOUT_InitDone OR NOT GVL._Process12.xIN_On) AND 
+						(GVL._Process13.xOUT_InitDone OR NOT GVL._Process13.xIN_On) AND 
+						(GVL._Process14.xOUT_InitDone OR NOT GVL._Process14.xIN_On) AND 
+						(GVL._Process15.xOUT_InitDone OR NOT GVL._Process15.xIN_On) AND 
+						(GVL._Process16.xOUT_InitDone OR NOT GVL._Process16.xIN_On) AND 
+						(GVL._Process17.xOUT_InitDone OR NOT GVL._Process17.xIN_On) AND 
+						(GVL._Process18.xOUT_InitDone OR NOT GVL._Process18.xIN_On),
          xIN_ALARM := (GVL._Process1.xOUT_AlarmST) AND
                       (GVL._Process1.xOUT_ErrFlag OR GVL._Process1.xOUT_Wait OR NOT GVL._Process1.xIN_On),
          xIN_LastDone := (GVL._Process1.xOUT_Done OR NOT GVL._Process1.xIN_On),
@@ -110,9 +127,5 @@ fb_State(xIN_AutoInit := TRUE,
 sStateDbg := TO_STRING(HMI.enState);
 ]]></ST>
     </Implementation>
-    <LineIds Name="_14_STATE">
-      <LineId Id="444" Count="79" />
-      <LineId Id="413" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

@@ -160,7 +160,11 @@ END_VAR
 //OUT.Q021_T2L_VERR := OUT.Q020_T1_VERR; 
 //OUT.Q022_T2R_VERR := OUT.Q020_T1_VERR;
 
-	]]></ST>
+xOUT_ESout     := TRUE;
+xOUT_ESdelOut  := TRUE;
+xOUT_MonOut    := TRUE;
+xOUT_MonDelOut := TRUE;
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

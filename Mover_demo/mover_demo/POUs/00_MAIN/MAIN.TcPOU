@@ -7,7 +7,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[_02_SAFETY();
 _05_FLAGS( xIN_AIR:=TRUE, xIN_btRES_TEMP:=HMI.btArMain[8]);
 
 //HMI
@@ -17,18 +17,7 @@ MoverMan();
 
 //AUTO
 _20_AUTO(xIN_Quit:= _14_STATE._FB_btQUIT.pbtIN^.rtrig , enIN_State:= HMI.enState);
-
 ]]></ST>
     </Implementation>
-    <LineIds Name="MAIN">
-      <LineId Id="8" Count="4" />
-      <LineId Id="25" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="6" Count="0" />
-      <LineId Id="2" Count="0" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="17" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

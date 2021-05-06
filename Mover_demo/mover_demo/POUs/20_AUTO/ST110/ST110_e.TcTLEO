@@ -8,9 +8,18 @@ TYPE
 ST110_e :
 (
     RESET := 0,         // Reset
+	ResetAxis_releaseSignal,
+	
     INIT := 100,        // Initialisieren 
-	InitPnP_up,
-	Init_caca,
+	HomeVerticals_start,
+	HomeVerticals_waitDone,
+	MoveVerticalsUp_start,
+	MoveVerticalsUp_waitDone,
+	HomeHorizontals_start,
+	HomeHorizontals_waitDone,
+	MoveHorizontalsToTrack_start,
+	MoveHorizontalsToTrack_waitDone,
+	
     READY := 999,       // READY to Start, Init Done 
     START := 1000,      // Start Zyklisch
     MOVER_FREE_OP,      // Ab here, operation without mover can be done
@@ -63,17 +72,52 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"ResetAxis_releaseSignal"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"INIT"</v>
               <v n="TextDefault">"100"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"InitPnP_up"</v>
+              <v n="TextID">"HomeVerticals_start"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_caca"</v>
+              <v n="TextID">"HomeVerticals_waitDone"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MoveVerticalsUp_start"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MoveVerticalsUp_waitDone"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"HomeHorizontals_start"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"HomeHorizontals_waitDone"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MoveHorizontalsToTrack_start"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MoveHorizontalsToTrack_waitDone"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
