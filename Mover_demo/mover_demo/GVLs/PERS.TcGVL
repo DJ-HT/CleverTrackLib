@@ -160,6 +160,8 @@ VAR_GLOBAL RETAIN
     (***********************************************************************************************)
     iStationTimeDef1 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
     iStationTimeDef2 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+	
+	recipeList : ARRAY [1..CONST.MAX_RECIPE_NUMBER] OF Recipe_21_101_t;
 
 END_VAR
 ]]></Declaration>

@@ -2859,6 +2859,94 @@ External Setpoint Generation:
 				<Elements>18</Elements>
 			</ArrayInfo>
 		</DataType>
+		<DataType>
+			<Name GUID="{BF734122-A18F-B566-9E65-99F78A8D13F4}" AutoDeleteType="true">RecipeAxisLinear2Pos_t</Name>
+			<BitSize>224</BitSize>
+			<SubItem>
+				<Name>rPosIn</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>rPosOut</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>rVeloToOut</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>64</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>rVeloToIn</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>96</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>rAccel</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>128</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>rDecel</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>160</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>rJerk</Name>
+				<Type GUID="{18071995-0000-0000-0000-00000000000D}">REAL</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>192</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{C02ED282-A434-54D5-5D55-C06F4AC187BB}" AutoDeleteType="true">ST110_Recipe_t</Name>
+			<BitSize>672</BitSize>
+			<SubItem>
+				<Name>ST110_01Y</Name>
+				<Type GUID="{BF734122-A18F-B566-9E65-99F78A8D13F4}">RecipeAxisLinear2Pos_t</Type>
+				<BitSize>224</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>ST110_02Z</Name>
+				<Type GUID="{BF734122-A18F-B566-9E65-99F78A8D13F4}">RecipeAxisLinear2Pos_t</Type>
+				<BitSize>224</BitSize>
+				<BitOffs>224</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>ST110_03Z</Name>
+				<Type GUID="{BF734122-A18F-B566-9E65-99F78A8D13F4}">RecipeAxisLinear2Pos_t</Type>
+				<BitSize>224</BitSize>
+				<BitOffs>448</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{E177912B-49FB-761D-8AEB-1E87A5A6A333}" AutoDeleteType="true">Recipe_21_101_t</Name>
+			<Comment><![CDATA[ Recipe for the 21.101 machine]]></Comment>
+			<BitSize>672</BitSize>
+			<SubItem>
+				<Name>st110</Name>
+				<Type GUID="{C02ED282-A434-54D5-5D55-C06F4AC187BB}">ST110_Recipe_t</Type>
+				<BitSize>672</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name IecBaseType="true">ARRAY [1..4] OF Recipe_21_101_t</Name>
+			<BitSize>2688</BitSize>
+			<BaseType GUID="{E177912B-49FB-761D-8AEB-1E87A5A6A333}">Recipe_21_101_t</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>4</Elements>
+			</ArrayInfo>
+		</DataType>
 	</DataTypes>
 	<ImageDatas>
 		<ImageData Id="1000">424dd6020000000000003600000028000000100000000e0000000100180000000000a0020000120b0000120b00000000000000000000c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1000000c1c1c1000000c1c1c1c1c1c1000000000000c1c1c10000000000000000000000ffc1c1c1c1c1c1c1c1c10000ff000000c1c1c1000000c1c1c1000000c1c1c1c1c1c1c1c1c1000000c1c1c1c1c1c1c1c1c10000ffc1c1c10000ffc1c1c1000000c1c1c1000000c1c1c1000000000000000000c1c1c1000000c1c1c1c1c1c1c1c1c1c1c1c10000ffc1c1c1c1c1c1000000c1c1c1000000c1c1c1000000c1c1c1000000c1c1c1000000c1c1c1c1c1c1c1c1c10000ffc1c1c10000ffc1c1c1c1c1c1000000c1c1c1c1c1c1c1c1c1000000c1c1c1c1c1c10000000000000000000000ffc1c1c1c1c1c1c1c1c10000ffc1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1000000c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1000000c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1</ImageData>
@@ -5070,6 +5158,11 @@ Axis190Z04									#194]]></Comment>
 						<Var>
 							<Name>PERS.iStationTimeDef2</Name>
 							<Type GUID="{5668CD8E-CF1C-B917-34BA-930C5970F76C}">ARRAY [1..18] OF DINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>PERS.recipeList</Name>
+							<Type GUID="{36F8F2ED-3D6B-D01D-E1B6-1AB39E564907}">ARRAY [1..4] OF Recipe_21_101_t</Type>
 							<InOut>7</InOut>
 						</Var>
 					</Vars>

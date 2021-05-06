@@ -56,6 +56,9 @@
     <Compile Include="DUTs\Helptec\enState.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Helptec\Recipe\RecipeAxisLinear2Pos_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Helptec\structAlarm.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -242,6 +245,9 @@
     <Compile Include="POUs\20_AUTO\Mover\StationName_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\Recipe_21_101_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST100\F_GetPercent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -303,6 +309,9 @@
     <Compile Include="POUs\20_AUTO\ST110\ST110_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\ST110_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST115\FB_ABL_115.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -355,6 +364,7 @@
     <Folder Include="DUTs" />
     <Folder Include="DUTs\Helptec" />
     <Folder Include="DUTs\Helptec\Axis" />
+    <Folder Include="DUTs\Helptec\Recipe" />
     <Folder Include="GVLs" />
     <Folder Include="POUs\00_MAIN\FB%27s" />
     <Folder Include="POUs\10_HMI\FB%27s" />
