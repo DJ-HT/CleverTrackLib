@@ -12,9 +12,10 @@ VAR_GLOBAL CONSTANT
     STATION_NUMBER        : INT   := 18;
     MAX_GROUP             : INT   := 6;
     MAX_STATION_PER_GROUP : INT   := 8;
-    RECIPE_NUMBER         : INT   := 4;
+    MAX_RECIPE_NUMBER     : INT   := 4;
     MAX_TRACK_LENGTH      : LREAL := 10000;
     MAX_MOVER_SIZE        : LREAL := 200.0;
+
 END_VAR
 ]]></Declaration>
   </GVL>

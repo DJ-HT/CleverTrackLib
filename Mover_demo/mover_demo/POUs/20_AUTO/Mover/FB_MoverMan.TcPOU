@@ -102,10 +102,10 @@ VAR
     _StationSet4 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, 0];
 
-    _SelWorkStationList : ARRAY[1..CONST.RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF BOOL
+    _SelWorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF BOOL
         := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4)];
 
-    _WorkStationList : ARRAY[1..CONST.RECIPE_NUMBER] OF FB_StationMan[
+    _WorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF FB_StationMan[
         (ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
         (ADR(_StationList), _SelWorkStationList[2], _PieceHolderList[1]),
         (ADR(_StationList), _SelWorkStationList[3], _PieceHolderList[2]),
