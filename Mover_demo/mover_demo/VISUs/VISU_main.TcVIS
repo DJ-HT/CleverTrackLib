@@ -7647,7 +7647,7 @@
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.MoverMan.bSaveData"</v>
+                          <v n="Value">"FileMan.bSaveData"</v>
                         </o>
                       </l>
                     </o>
@@ -19450,20 +19450,6 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                       <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
                         <o>
                           <v n="Id">1186196937L</v>
-                          <v n="Value">"MAIN.MoverMan.bSaveData"</v>
-                        </o>
-                      </l>
-                    </o>
-                    <v n="SignatureName">"Visu_TapInput"</v>
-                    <v n="Name">"Tap"</v>
-                    <v n="Description">"Configure the tapping of a Boolean variable"</v>
-                  </o>
-                  <o>
-                    <n n="DescriptionTree" />
-                    <o n="VisualElemMemberList" t="VisualElemMemberList">
-                      <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
-                        <o>
-                          <v n="Id">1186196937L</v>
                           <v n="Value">"MAIN.MoverMan.HMI_xStopMover"</v>
                         </o>
                       </l>
@@ -20272,10 +20258,10 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                                 <v>TL_ElementProperties.Points</v>
                                 <v>DescriptionUseFromParent</v>
                                 <v></v>
-                                <v>DefaultArraySize</v>
-                                <v>500</v>
                                 <v>''NORMAL__COMMENT</v>
                                 <v> There is no more information than the parent provides</v>
+                                <v>DefaultArraySize</v>
+                                <v>500</v>
                               </d>
                               <v n="ConvDone">true</v>
                             </o>
@@ -20328,8 +20314,6 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                         <o n="TypeNodeAttributes" t="TypeNodeAttributes2">
                           <v n="AttrFlags">81920UL</v>
                           <d n="TypeNodeAttributesData" t="CaseInsensitiveHashtable" ckt="String" cvt="String">
-                            <v>PolygonPoints</v>
-                            <v></v>
                             <v>DescriptionTextId</v>
                             <v>TL_ElementProperties.Desc_StaticLinePos</v>
                             <v>DisplayTextId</v>
@@ -20346,6 +20330,8 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                             <v>visu_elemdev</v>
                             <v>Storable</v>
                             <v>True</v>
+                            <v>PolygonPoints</v>
+                            <v></v>
                           </d>
                           <v n="ConvDone">true</v>
                         </o>
@@ -29768,10 +29754,10 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
               <d n="FbMethods" t="CaseInsensitiveHashtable_1" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>21b19dd6-083e-4577-8d31-b4c5e2f2919f</v>
-                <v>FB_Exit</v>
-                <v>09f87361-cb2b-479b-bca5-0b6db99d1a9a</v>
                 <v>FB_Reinit</v>
                 <v>9b1229dd-09af-4707-817d-be790e91437f</v>
+                <v>FB_Exit</v>
+                <v>09f87361-cb2b-479b-bca5-0b6db99d1a9a</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{44e86705-ae3f-4380-9862-2050baf0b80b}</v>

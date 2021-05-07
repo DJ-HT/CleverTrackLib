@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="SaveInMemory_Recipe" Id="{2eb867b7-281f-4918-a943-3695dc755aeb}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION SaveInMemory_Recipe : DINT
+VAR_INPUT
+    sData : REFERENCE TO STRING(10000);
+END_VAR
+VAR
+    fbJson     : FB_JsonSaxWriter;
+    i          : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fbJson.ResetDocument();
+//  global object
+fbJson.StartObject();
+
+fbJson.addKey('recipeList');
+fbJson.StartArray();
+FOR i := 1 TO CONST.MAX_RECIPE_NUMBER BY 1 DO
+fbJson.StartObject();
+fbJson.addKey('st110');
+fbJson.StartObject();
+fbJson.addKey('ST110_01Y');
+fbJson.StartObject();
+fbJson.AddKey('rPosIn');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rPosIn);
+fbJson.AddKey('rPosOut');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rPosOut);
+fbJson.AddKey('rVeloToOut');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rVeloToOut);
+fbJson.AddKey('rVeloToIn');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rVeloToIn);
+fbJson.AddKey('rAccel');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rAccel);
+fbJson.AddKey('rDecel');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rDecel);
+fbJson.AddKey('rJerk');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rJerk);
+fbJson.EndObject();
+fbJson.addKey('ST110_02Z');
+fbJson.StartObject();
+fbJson.AddKey('rPosIn');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rPosIn);
+fbJson.AddKey('rPosOut');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rPosOut);
+fbJson.AddKey('rVeloToOut');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rVeloToOut);
+fbJson.AddKey('rVeloToIn');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rVeloToIn);
+fbJson.AddKey('rAccel');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rAccel);
+fbJson.AddKey('rDecel');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rDecel);
+fbJson.AddKey('rJerk');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rJerk);
+fbJson.EndObject();
+fbJson.addKey('ST110_03Z');
+fbJson.StartObject();
+fbJson.AddKey('rPosIn');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rPosIn);
+fbJson.AddKey('rPosOut');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rPosOut);
+fbJson.AddKey('rVeloToOut');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rVeloToOut);
+fbJson.AddKey('rVeloToIn');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rVeloToIn);
+fbJson.AddKey('rAccel');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rAccel);
+fbJson.AddKey('rDecel');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rDecel);
+fbJson.AddKey('rJerk');
+fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rJerk);
+fbJson.EndObject();
+fbJson.EndObject();
+fbJson.EndObject();
+END_FOR
+fbJson.EndArray();
+fbJson.AddKey('caca');
+fbJson.StartArray();
+FOR i := 1 TO 3 BY 1 DO
+fbJson.AddDint(PERS.caca[i]);
+END_FOR
+fbJson.EndArray();
+
+
+// end global object
+fbJson.EndObject();
+// end of file
+SaveInMemory_Recipe := TO_DINT(fbJson.CopyDocument(sData, fbJson.GetDocumentLength()));
+fbJson.ResetDocument();
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

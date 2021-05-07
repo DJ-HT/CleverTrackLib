@@ -188,10 +188,16 @@
     <Compile Include="POUs\20_AUTO\FileMan\FB_ReadJSON.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\FileMan\FileMan.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\FileMan\LoadFromMemory.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FileMan\SaveInMemory.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FileMan\SaveInMemory_Recipe.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\ApproachScenario_e.TcTLEO">
@@ -340,6 +346,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\_20_AUTO.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Task_fileMan.TcTTO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Visualization Manager.TcVMO">
