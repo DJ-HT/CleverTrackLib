@@ -31,7 +31,8 @@ ELSIF fb_fileMan.currentState = 5 THEN
     fb_fileMan.uiStringLen := 2000;
 
 ELSIF fb_fileMan.currentState = 9 THEN
-    LoadFromMemory(json_data);
+    //LoadFromMemory(json_data);
+	ReadJsonDom(json_data);
 
 ELSIF fb_fileMan.currentState = 10 THEN
     bSaveData := FALSE;

@@ -188,10 +188,16 @@
     <Compile Include="POUs\20_AUTO\FileMan\FB_ReadJSON.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\FileMan\FB_ReadRecipeJson.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\FileMan\FileMan.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FileMan\LoadFromMemory.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FileMan\ReadJsonDom.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FileMan\SaveInMemory.TcPOU">

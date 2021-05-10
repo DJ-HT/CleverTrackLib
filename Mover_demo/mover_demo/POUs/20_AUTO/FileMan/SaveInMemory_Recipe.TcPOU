@@ -17,72 +17,75 @@ fbJson.StartObject();
 
 fbJson.addKey('recipeList');
 fbJson.StartArray();
+
 FOR i := 1 TO CONST.MAX_RECIPE_NUMBER BY 1 DO
-fbJson.StartObject();
-fbJson.addKey('st110');
-fbJson.StartObject();
-fbJson.addKey('ST110_01Y');
-fbJson.StartObject();
-fbJson.AddKey('rPosIn');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rPosIn);
-fbJson.AddKey('rPosOut');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rPosOut);
-fbJson.AddKey('rVeloToOut');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rVeloToOut);
-fbJson.AddKey('rVeloToIn');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rVeloToIn);
-fbJson.AddKey('rAccel');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rAccel);
-fbJson.AddKey('rDecel');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rDecel);
-fbJson.AddKey('rJerk');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rJerk);
-fbJson.EndObject();
-fbJson.addKey('ST110_02Z');
-fbJson.StartObject();
-fbJson.AddKey('rPosIn');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rPosIn);
-fbJson.AddKey('rPosOut');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rPosOut);
-fbJson.AddKey('rVeloToOut');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rVeloToOut);
-fbJson.AddKey('rVeloToIn');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rVeloToIn);
-fbJson.AddKey('rAccel');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rAccel);
-fbJson.AddKey('rDecel');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rDecel);
-fbJson.AddKey('rJerk');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rJerk);
-fbJson.EndObject();
-fbJson.addKey('ST110_03Z');
-fbJson.StartObject();
-fbJson.AddKey('rPosIn');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rPosIn);
-fbJson.AddKey('rPosOut');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rPosOut);
-fbJson.AddKey('rVeloToOut');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rVeloToOut);
-fbJson.AddKey('rVeloToIn');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rVeloToIn);
-fbJson.AddKey('rAccel');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rAccel);
-fbJson.AddKey('rDecel');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rDecel);
-fbJson.AddKey('rJerk');
-fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rJerk);
-fbJson.EndObject();
-fbJson.EndObject();
-fbJson.EndObject();
+    fbJson.StartObject();
+    fbJson.addKey('st110');
+    fbJson.StartObject();
+    fbJson.addKey('ST110_01Y');
+    fbJson.StartObject();
+    fbJson.AddKey('rPosIn');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rPosIn);
+    fbJson.AddKey('rPosOut');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rPosOut);
+    fbJson.AddKey('rVeloToOut');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rVeloToOut);
+    fbJson.AddKey('rVeloToIn');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rVeloToIn);
+    fbJson.AddKey('rAccel');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rAccel);
+    fbJson.AddKey('rDecel');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rDecel);
+    fbJson.AddKey('rJerk');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_01Y.rJerk);
+    fbJson.EndObject();
+    fbJson.addKey('ST110_02Z');
+    fbJson.StartObject();
+    fbJson.AddKey('rPosIn');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rPosIn);
+    fbJson.AddKey('rPosOut');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rPosOut);
+    fbJson.AddKey('rVeloToOut');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rVeloToOut);
+    fbJson.AddKey('rVeloToIn');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rVeloToIn);
+    fbJson.AddKey('rAccel');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rAccel);
+    fbJson.AddKey('rDecel');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rDecel);
+    fbJson.AddKey('rJerk');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_02Z.rJerk);
+    fbJson.EndObject();
+    fbJson.addKey('ST110_03Z');
+    fbJson.StartObject();
+    fbJson.AddKey('rPosIn');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rPosIn);
+    fbJson.AddKey('rPosOut');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rPosOut);
+    fbJson.AddKey('rVeloToOut');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rVeloToOut);
+    fbJson.AddKey('rVeloToIn');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rVeloToIn);
+    fbJson.AddKey('rAccel');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rAccel);
+    fbJson.AddKey('rDecel');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rDecel);
+    fbJson.AddKey('rJerk');
+    fbJson.AddLreal(PERS.recipeList[i].st110.ST110_03Z.rJerk);
+    fbJson.EndObject();
+    fbJson.EndObject();
+    fbJson.EndObject();
 END_FOR
+
 fbJson.EndArray();
 fbJson.AddKey('caca');
 fbJson.StartArray();
-FOR i := 1 TO 3 BY 1 DO
-fbJson.AddDint(PERS.caca[i]);
-END_FOR
-fbJson.EndArray();
 
+FOR i := 1 TO 3 BY 1 DO
+    fbJson.AddDint(PERS.caca[i]);
+END_FOR
+
+fbJson.EndArray();
 
 // end global object
 fbJson.EndObject();
