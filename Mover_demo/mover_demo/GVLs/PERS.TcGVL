@@ -158,7 +158,10 @@ VAR_GLOBAL PERSISTENT
     (***********************************************************************************************)
     (* Application *)
     (***********************************************************************************************)
+	
+    {attribute 'to_json'}	
     iStationTimeDef1 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+    {attribute 'to_json'}	
     iStationTimeDef2 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
 
     {attribute 'to_json'}	
