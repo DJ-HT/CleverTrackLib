@@ -164,8 +164,13 @@ fb_axis110_02Z(enIN_State       := enIN_State,
                rIN_Deceleration :=,
                rIN_Jerk         :=,
                xIN_Reset        := xIN_Reset,
-               xIN_ESout        := _02_SAFETY.xOUT_ESout,
-               xIN_MonOut       := _02_SAFETY.xOUT_MonOut,
+			   // safety
+				xIN_ESout		:=_02_SAFETY.xOUT_ESout,
+				xIN_MonOut		:=_02_SAFETY.xOUT_MonOut,
+				xIN_Einrichten	:=_02_SAFETY.xOUT_Einrichten,
+				xIN_ESdelOut	:=_02_SAFETY.xOUT_ESdelOut,
+				xIN_MonDelOut	:=_02_SAFETY.xOUT_MonDelOut,
+	
                // output
                xOUT_ErrFlag =>,
                xOUT_READY   =>,
@@ -196,8 +201,12 @@ fb_axis110_03Z(enIN_State       := enIN_State,
                axisIN_REF       := ST110_Axis.axis110_03Z.axis,
                xIN_AX5000       := FALSE,
                xIN_ENC_ABS      := TRUE, // TODO set accordingly
-               xIN_ESout        := _02_SAFETY.xOUT_ESout,
-               xIN_MonOut       := _02_SAFETY.xOUT_MonOut);
+			   // safety
+				xIN_ESout		:=_02_SAFETY.xOUT_ESout,
+				xIN_MonOut		:=_02_SAFETY.xOUT_MonOut,
+				xIN_Einrichten	:=_02_SAFETY.xOUT_Einrichten,
+				xIN_ESdelOut	:=_02_SAFETY.xOUT_ESdelOut,
+				xIN_MonDelOut	:=_02_SAFETY.xOUT_MonDelOut);
 
 (*******************************************************************)
 (* OUTPUTS *)

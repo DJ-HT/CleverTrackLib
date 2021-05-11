@@ -64,6 +64,9 @@ VAR_INPUT
 	
 	xIN_ESout		: BOOL := FALSE;	// ESout signal from the safety program
 	xIN_MonOut		: BOOL := FALSE;	// MonOut signal from the safety program
+	xIN_Einrichten	: BOOL := FALSE;	// Einrichten signal from the safety program
+	xIN_ESdelOut	: BOOL := FALSE;	// ESdelOut signal from the safety program
+	xIN_MonDelOut	: BOOL := FALSE;	// MonDelOut signal from the safety program
 END_VAR
 VAR_OUTPUT
 	//ALLGEMEIN
@@ -195,7 +198,7 @@ END_VAR
 //***************************** Velocity / ACC-DEC-JERK *******************
 	(* Velocity *)
 	iIN_Velocity := LIMIT(1,iIN_Velocity,100);
-	IF (_02_SAFETY.xOUT_Einrichten) THEN
+	IF (xIN_Einrichten) THEN
 		_MC_MoveAbs.Velocity := iIN_Velocity * rIN_VELOOPEN / 100;
 	ELSIF (enIN_State<StateREADY) THEN
 		_MC_MoveAbs.Velocity := iIN_Velocity * rIN_VELOMANU / 100;
@@ -291,7 +294,7 @@ END_VAR
 					NOT _FB_btJOGneg.pbtIN^.press AND NOT _FB_btJOGneg.pbtIN^.press ) OR
 			(	NOT xIN_Free AND ((enIN_State>StateINIT) OR	(bJogMode>2)) ) 		//FREE
 		);
-	_MC_Power.Enable := _02_SAFETY.xOUT_ESdelOut AND _02_SAFETY.xOUT_MonDelOut AND TOF_PowSafety.Q AND 
+	_MC_Power.Enable := xIN_ESdelOut AND xIN_MonDelOut AND TOF_PowSafety.Q AND 
 						xIN_PARAMok;
 
 
