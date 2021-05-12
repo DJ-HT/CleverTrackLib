@@ -95,14 +95,6 @@ FOR i := 1 TO CONST.MAX_RECIPE_NUMBER BY 1 DO
 END_FOR
 
 fbJson.EndArray();
-fbJson.AddKey('caca');
-fbJson.StartArray();
-
-FOR i := 1 TO 3 BY 1 DO
-    fbJson.AddDint(PERS.caca[i]);
-END_FOR
-
-fbJson.EndArray();
 
 // end global object
 fbJson.EndObject();
