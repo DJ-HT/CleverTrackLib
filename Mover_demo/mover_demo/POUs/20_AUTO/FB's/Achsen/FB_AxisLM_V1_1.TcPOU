@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <POU Name="FB_AxisLM_V1_2_RS" Id="{783284d2-e596-4441-959f-809a2b447035}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisLM_V1_2_RS
+  <POU Name="FB_AxisLM_V1_1" Id="{783284d2-e596-4441-959f-809a2b447035}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisLM_V1_1
 (****************************************************************************)
 (*	FB_AxisLM			FB für Linear-Achse	LinMot							*)
 (*	Status				ungetestet											*)
@@ -69,8 +69,6 @@ VAR_INPUT
 	xIN_Reset: BOOL := FALSE;
 	///Statuswort
 	wAxisState: WORD;
-	//Auto-home when in simu
-	xIN_Simu : BOOL;
 END_VAR
 VAR_OUTPUT
 	///Axis Controlword
@@ -247,7 +245,7 @@ END_VAR
 	rIN_Velocity := LIMIT(1,rIN_Velocity,100);
 	IF (_02_SAFETY.xOUT_Einrichten) THEN
 		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOOPEN / 100;
-	ELSIF (enIN_State<StateREADY) THEN
+	ELSIF (enIN_State=StateMANU) THEN
 		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOMANU / 100;
 	ELSE
 		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOMAX / 100;
@@ -286,9 +284,7 @@ END_VAR
 		
 	0:	//Start Homing
 		bOUT_AxisCntr.3 := FALSE;
-		IF xIN_Simu THEN
-			xOUT_HOMED := TRUE;
-		ELSIF axisIN_REF.Status.Operational AND NOT axisIN_REF.Status.Error  AND
+		IF axisIN_REF.Status.Operational AND NOT axisIN_REF.Status.Error  AND
 			xIN_FREE_HOME AND xIN_PARAMok AND NOT xOUT_ErrFlag THEN
 			IF _FB_btHOME.pbtIN^.rtrig OR xIN_Home THEN
 				xOUT_HOMED := FALSE;

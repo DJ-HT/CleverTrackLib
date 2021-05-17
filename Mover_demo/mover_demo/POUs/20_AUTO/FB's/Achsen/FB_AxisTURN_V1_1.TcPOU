@@ -160,13 +160,13 @@ END_VAR
 						
 //***************************** Velocity / ACC-DEC-JERK *******************
 	(* Velocity *)
-	iIN_Velocity := LIMIT(1,iIN_Velocity,100);
+	rIN_Velocity := LIMIT(1,rIN_Velocity,100);
 	IF (_02_SAFETY.xOUT_Einrichten) THEN
-		_MC_Move.Velocity := iIN_Velocity * rIN_VELOOPEN / 100;
+		_MC_Move.Velocity := rIN_Velocity * rIN_VELOOPEN / 100;
 	ELSIF (enIN_State<StateREADY) THEN
-		_MC_Move.Velocity := iIN_Velocity * rIN_VELOMANU / 100;
+		_MC_Move.Velocity := rIN_Velocity * rIN_VELOMANU / 100;
 	ELSE
-		_MC_Move.Velocity := iIN_Velocity * rIN_VELOMAX / 100;
+		_MC_Move.Velocity := rIN_Velocity * rIN_VELOMAX / 100;
 	END_IF
 	(* Acceleration *)
 	IF (rIN_Acceleration>0) THEN
@@ -324,10 +324,9 @@ END_VAR
 	rOUT_ActPos := LREAL_TO_REAL(axisIN_REF.NcToPlc.ActPos);
 	xOUT_READY 	:= 	axisIN_REF.Status.Operational AND 
 					NOT axisIN_REF.Status.Error  AND
-					(axisIN_REF.Status.Homed OR xIN_ENC_ABS) AND 
-					xIN_Free AND xIN_PARAMok AND NOT xOUT_ErrFlag ;
-	xOUT_DONE 	:= 	(NOT xIN_Relative AND _MC_MoveAbs.Done) OR
-					(xIN_Relative AND _MC_MoveRel.Done);]]></ST>
+					axisIN_REF.Status.Homed AND 
+					xIN_Free  AND NOT xOUT_ErrFlag ;
+	xOUT_DONE 	:= 	_MC_Move.InVelocity;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -48,8 +48,8 @@ VAR_INPUT
 	xIN_Relative	: BOOL :=FALSE;		//Move Relative
 	rIN_Position    : REAL :=10;		//Position / Distance
 	rIN_Velocity    : REAL :=1;			//Velocity in %
-	rIN_Acceleration: REAL :=0;			//Acc
-	rIN_Deceleration: REAL :=0;			//Dec
+	rIN_Acceleration: REAL :=100;			//Acc
+	rIN_Deceleration: REAL :=100;			//Dec
 	//RESET
 	xIN_Reset		: BOOL := FALSE;	//Reset von Extern
 	//SMC
@@ -119,16 +119,16 @@ END_VAR
 		RESET:= , 
 		SPEED:= , 
 		MOVEMENT_MODE:= , 
-		POS:= , 
+		POS:= 1400, // REAL_TO_DINT(rIN_Position*100), 
 		ACC:= , 
 		DEC:= , 
-		PUSH_FOR:= , 
-		TRIG_LV:= , 
-		PUSH_SPE:= , 
-		MOV_FOR:= , 
-		AREA_1:= , 
-		AREA_2:= , 
-		IN_POS:= , 
+		PUSH_FOR:= 0, 
+		TRIG_LV:= 0, 
+		PUSH_SPE:= 0, 
+		MOV_FOR:= 100, 
+		AREA_1:= 0, 
+		AREA_2:= 0, 
+		IN_POS:= 1, 
 		INPUT_AREA:= typeIN_AREA, 
 		READY=> , 
 		ORIG_SET=> , 
@@ -145,7 +145,8 @@ END_VAR
 		ALARM_3=> , 
 		ALARM_4=> , 
 		OUTPUT_AREA=> typeOUT_AREA);
-						
+		
+
 //***************************** Buttons ************************************
 	//	Jog Mode OFF 
 	_FB_btOFF(pbtIN:= ADR(parIN_Buttons^[0]),
@@ -191,13 +192,13 @@ END_VAR
 						
 //***************************** Velocity / ACC-DEC-JERK *******************
 	(* Velocity *)
-	iIN_Velocity := LIMIT(1,iIN_Velocity,100);
+	rIN_Velocity := LIMIT(1,rIN_Velocity,100);
 	IF (_02_SAFETY.xOUT_Einrichten) THEN
-		_FB_JXCE1.SPEED := REAL_TO_UINT(iIN_Velocity * rIN_VELOOPEN / 100);
+		_FB_JXCE1.SPEED := REAL_TO_UINT(rIN_Velocity * rIN_VELOOPEN / 100)*100;
 	ELSIF (enIN_State<StateREADY) THEN
-		_FB_JXCE1.SPEED := REAL_TO_UINT(iIN_Velocity * rIN_VELOMANU / 100);
+		_FB_JXCE1.SPEED := REAL_TO_UINT(rIN_Velocity * rIN_VELOMANU / 100)*100;
 	ELSE
-		_FB_JXCE1.SPEED := REAL_TO_UINT(iIN_Velocity * rIN_VELOMAX / 100);
+		_FB_JXCE1.SPEED := REAL_TO_UINT(rIN_Velocity * rIN_VELOMAX / 100)*100;
 	END_IF
 	(* Acceleration *)
 	IF (rIN_Acceleration>0) THEN
@@ -220,12 +221,12 @@ END_VAR
 		END_IF;
 	END_IF;
 //***************************** MOVE *************************************
-	IF xOUT_READY THEN
+	//IF xOUT_READY THEN
 		//ABS-REL
 		IF xIN_Relative THEN
-			_FB_JXCE1.MOVEMENT_MODE := 1;
-		ELSE
 			_FB_JXCE1.MOVEMENT_MODE := 2;
+		ELSE
+			_FB_JXCE1.MOVEMENT_MODE := 1;
 		END_IF
 		//AUTO
 		IF (enIN_State>StateALARM) OR (enIN_State=StateINIT) OR (enIN_State=StateREF) THEN
@@ -262,10 +263,11 @@ END_VAR
 				_FB_JXCE1.JOG_FORWARD := _FB_btJOGpos.pbtIN^.press;
 			END_IF;
 		END_IF;
-	END_IF;
+	//END_IF;
 //*********************** STOP - STO - POWER ******************************	
 	xOFF := ((enIN_State<StateENGIZED) AND NOT (enIN_State=StateREF)) OR ((enIN_State=StateMANU) AND (bJogMode=0));
 	TOF_PowSafety(IN:= NOT xOFF, PT:=T#50MS);
+	(*djtodo
 	_FB_JXCE1.HOLD := _FB_JXCE1.READY AND 
 		(	NOT _02_SAFETY.xOUT_ESout OR NOT _02_SAFETY.xOUT_MonOut OR 				//SAFETY
 			(enIN_State<StateREF) OR (enIN_State=StateREADY) OR						//STATE
@@ -274,6 +276,7 @@ END_VAR
 					NOT _FB_btJOGneg.pbtIN^.press AND NOT _FB_btJOGneg.pbtIN^.press ) OR
 			(	NOT xIN_Free AND ((enIN_State>StateINIT) OR	(bJogMode>2)) ) 		//FREE
 		);
+		*)
 	_FB_JXCE1.MOTOR_ON := _02_SAFETY.xOUT_ESdelOut AND _02_SAFETY.xOUT_MonDelOut AND TOF_PowSafety.Q AND 
 						xIN_PARAMok;
 
@@ -285,7 +288,7 @@ END_VAR
 	IF TON_ToutReset.Q THEN
 		iStepAxisReset:=0;
 	END_IF
-
+(*
 	CASE iStepAxisReset OF
 	0:	(* Alles OK *)
 		IF  _FB_JXCE1.ALARM AND 
@@ -328,7 +331,7 @@ END_VAR
 			iStepAxisReset	:= 0;
 		END_IF;
 	END_CASE;
-		
+		*)
 //*********************** ERRORS *******************************
 	//QUIT
 	IF xOUT_ErrFlag AND xIN_Quit THEN

@@ -3,23 +3,13 @@
   <POU Name="FB_ABL_110" Id="{de37258f-ffab-4124-a1ed-e35be9345f92}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_ABL_110
 (****************************************************************************************)
-(*	TITEL				Bezeichnung Ablauf	    										*)
+(*	TITEL				RFID-Ring laden		    										*)
 (*	Status				ungetestet                         								*)
-(*  Version:			1.0																*)
 (*	Beschrieb:			Ablaufbeschreibung												*)
 (*																						*)
-(*	Steps:																				*)
-(*		RESET:=0		Reset der Station												*)
-(* 		INIT:=100		Initialisieren													*)
-(*		... 			...																*)
-(*		READY:=999		Initialisiert, Bereit für Start									*)
-(*		START:=1000		Start Zyklisch 													*)
-(*		... 			...																*)
-(*		DONE:=8000		Letzer Schritt													*)
-(*		ERROR:=9000		ALARM/Fehler													*)
-(* 	09.09.2019/Dj																		*)
+(*	Steps:	self-explained using enum													*)
 (***********************************Revisionen*******************************************)
-(*	dd.mm.yyyy   KZ    x.y			Beschrieb											*)
+(*	see github blames																	*)
 (****************************************************************************************)
 
 VAR_INPUT
@@ -164,13 +154,13 @@ fb_axis110_02Z(enIN_State       := enIN_State,
                rIN_Deceleration :=,
                rIN_Jerk         :=,
                xIN_Reset        := xIN_Reset,
-			   // safety
-				xIN_ESout		:=_02_SAFETY.xOUT_ESout,
-				xIN_MonOut		:=_02_SAFETY.xOUT_MonOut,
-				xIN_Einrichten	:=_02_SAFETY.xOUT_Einrichten,
-				xIN_ESdelOut	:=_02_SAFETY.xOUT_ESdelOut,
-				xIN_MonDelOut	:=_02_SAFETY.xOUT_MonDelOut,
-	
+               // safety
+               xIN_ESout      := _02_SAFETY.xOUT_ESout,
+               xIN_MonOut     := _02_SAFETY.xOUT_MonOut,
+               xIN_Einrichten := _02_SAFETY.xOUT_Einrichten,
+               xIN_ESdelOut   := _02_SAFETY.xOUT_ESdelOut,
+               xIN_MonDelOut  := _02_SAFETY.xOUT_MonDelOut,
+
                // output
                xOUT_ErrFlag =>,
                xOUT_READY   =>,
@@ -201,12 +191,12 @@ fb_axis110_03Z(enIN_State       := enIN_State,
                axisIN_REF       := ST110_Axis.axis110_03Z.axis,
                xIN_AX5000       := FALSE,
                xIN_ENC_ABS      := TRUE, // TODO set accordingly
-			   // safety
-				xIN_ESout		:=_02_SAFETY.xOUT_ESout,
-				xIN_MonOut		:=_02_SAFETY.xOUT_MonOut,
-				xIN_Einrichten	:=_02_SAFETY.xOUT_Einrichten,
-				xIN_ESdelOut	:=_02_SAFETY.xOUT_ESdelOut,
-				xIN_MonDelOut	:=_02_SAFETY.xOUT_MonDelOut);
+               // safety
+               xIN_ESout      := _02_SAFETY.xOUT_ESout,
+               xIN_MonOut     := _02_SAFETY.xOUT_MonOut,
+               xIN_Einrichten := _02_SAFETY.xOUT_Einrichten,
+               xIN_ESdelOut   := _02_SAFETY.xOUT_ESdelOut,
+               xIN_MonDelOut  := _02_SAFETY.xOUT_MonDelOut);
 
 (*******************************************************************)
 (* OUTPUTS *)

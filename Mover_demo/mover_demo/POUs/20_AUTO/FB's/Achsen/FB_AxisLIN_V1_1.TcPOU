@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <POU Name="FB_AxisLIN_V1_2_RS" Id="{e37dd4cf-6d17-40e3-8bb9-3db5d60a7f94}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisLIN_V1_2_RS
+  <POU Name="FB_AxisLIN_V1_1" Id="{e37dd4cf-6d17-40e3-8bb9-3db5d60a7f94}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisLIN_V1_1
 (****************************************************************************)
 (*	FB_AxisLIN			FB für Linear-Achse									*)
 (*	Status				ungetestet											*)
@@ -33,7 +33,6 @@ VAR_INPUT
 	xIN_DisButtons : BOOL;
 	xIN_Quit		: BOOL;				//Error quitieren
 	//ALLGEMEIN ACHSE
-	axisIN_REF		: REFERENCE TO AXIS_REF;			//Achsreferenz
 	xIN_AX5000		: BOOL := TRUE;		//Drive ist AX5000
 	xIN_ENC_ABS		: BOOL := TRUE;		//ENCODER Absolut (muss nicht Referenziert werden) 
 	xIN_PARAMok		: BOOL := TRUE;		//HMI Parameter validiert
@@ -61,12 +60,6 @@ VAR_INPUT
 	rIN_Jerk        : REAL :=0;			//Jerk
 	//RESET
 	xIN_Reset		: BOOL := FALSE;	//Reset von Extern
-	
-	xIN_ESout		: BOOL := FALSE;	// ESout signal from the safety program
-	xIN_MonOut		: BOOL := FALSE;	// MonOut signal from the safety program
-	xIN_Einrichten	: BOOL := FALSE;	// Einrichten signal from the safety program
-	xIN_ESdelOut	: BOOL := FALSE;	// ESdelOut signal from the safety program
-	xIN_MonDelOut	: BOOL := FALSE;	// MonDelOut signal from the safety program
 END_VAR
 VAR_OUTPUT
 	//ALLGEMEIN
@@ -88,6 +81,10 @@ VAR_OUTPUT
 								*)
 	
 	rOUT_ActPos		:	REAL;	//Aktuelle Position
+END_VAR
+VAR_IN_OUT
+	///Achsreferenz
+	axisIN_REF: AXIS_REF;
 END_VAR
 VAR
 	//Motion Bausteine
@@ -122,8 +119,6 @@ VAR
 	TON_WaitReset	: TON;				//Warte nach Reset
 	TON_ToutReset	: TON;				//Reset-Ablauf Timeout
 	TOF_PowSafety	: TOF;				//Achse PowerOFF über Safety
-	
-	iIN_Velocity : INT := 100;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -139,7 +134,7 @@ END_VAR
 
 	_MC_Stop( Axis:= axisIN_REF );
 
-	_MC_MoveAbs( Axis:= axisIN_REF, Position := rIN_Position );
+	_MC_MoveAbs( Axis:= axisIN_REF );
 	_MC_MoveRel( Axis:= axisIN_REF );
 
 	_MC_Jog (	Position := rIN_JogInc,
@@ -197,13 +192,13 @@ END_VAR
 						
 //***************************** Velocity / ACC-DEC-JERK *******************
 	(* Velocity *)
-	iIN_Velocity := LIMIT(1,iIN_Velocity,100);
-	IF (xIN_Einrichten) THEN
-		_MC_MoveAbs.Velocity := iIN_Velocity * rIN_VELOOPEN / 100;
+	rIN_Velocity := LIMIT(1,rIN_Velocity,100);
+	IF (_02_SAFETY.xOUT_Einrichten) THEN
+		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOOPEN / 100;
 	ELSIF (enIN_State<StateREADY) THEN
-		_MC_MoveAbs.Velocity := iIN_Velocity * rIN_VELOMANU / 100;
+		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOMANU / 100;
 	ELSE
-		_MC_MoveAbs.Velocity := iIN_Velocity * rIN_VELOMAX / 100;
+		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOMAX / 100;
 	END_IF
 	_MC_MoveRel.Velocity := _MC_MoveAbs.Velocity;
 	(* Acceleration *)
@@ -235,6 +230,8 @@ END_VAR
 	END_IF;
 //***************************** MOVE *************************************
 	IF xOUT_READY THEN
+			_MC_MoveAbs.Position:= rIN_Position;
+			_MC_MoveRel.Distance:= rIN_Position;
 		//AUTO
 		IF (enIN_State>StateALARM) OR (enIN_State=StateINIT) OR (enIN_State=StateREF) THEN
 			//Mode
@@ -287,14 +284,14 @@ END_VAR
 	xOFF := ((enIN_State<StateENGIZED) AND NOT (enIN_State=StateREF)) OR ((enIN_State=StateMANU) AND (bJogMode=0));
 	TOF_PowSafety(IN:= NOT xOFF, PT:=T#50MS);
 	_MC_Stop.Execute := _MC_Power.Enable AND 
-		(	NOT xIN_ESout OR NOT xIN_MonOut OR 				//SAFETY
+		(	NOT _02_SAFETY.xOUT_ESout OR NOT _02_SAFETY.xOUT_MonOut OR 				//SAFETY
 			(enIN_State<StateREF) OR (enIN_State=StateREADY) OR						//STATE
 			(enIN_State=StateSTOP) OR (enIN_State=StateALARM) OR	
 			(	(enIN_State=StateMANU) AND (bJogMode=4) AND							//MANU MOVE
 					NOT _FB_btJOGneg.pbtIN^.press AND NOT _FB_btJOGneg.pbtIN^.press ) OR
 			(	NOT xIN_Free AND ((enIN_State>StateINIT) OR	(bJogMode>2)) ) 		//FREE
 		);
-	_MC_Power.Enable := xIN_ESdelOut AND xIN_MonDelOut AND TOF_PowSafety.Q AND 
+	_MC_Power.Enable := _02_SAFETY.xOUT_ESdelOut AND _02_SAFETY.xOUT_MonDelOut AND TOF_PowSafety.Q AND 
 						xIN_PARAMok;
 
 
@@ -308,7 +305,7 @@ END_VAR
 
 	CASE iStepAxisReset OF
 	0:	(* Alles OK *)
-		IF  axisIN_REF.Status.Error AND 
+		IF  (axisIN_REF.Status.Error OR xOUT_ErrFlag) AND 
 			(	(enIN_State=StateENGIZED) OR  xIN_Quit OR xIN_Reset)  THEN
 			iCountTryReset := 0;
 			iStepAxisReset	:= 10;
