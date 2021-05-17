@@ -128,8 +128,9 @@ fb_axis110_01Y(enIN_State       := enIN_State,
                xIN_Reset        := xIN_Reset,
                axisIN_REF       := ST110_Axis.axis110_01Y.axis);
 
-fb_simu_axis110_01Y(bIN_AxisCntr   := fb_axis110_01Y.bOUT_AxisCntr,
-                    wOUT_AxisState => fb_axis110_01Y.wAxisState);
+fb_simu_axis110_01Y(bIN_AxisCntr        := fb_axis110_01Y.bOUT_AxisCntr,
+                    udiIN_HomingTime_ms := 2000,
+                    wOUT_AxisState      => fb_axis110_01Y.wAxisState);
 
 fb_axis110_02Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
@@ -442,9 +443,10 @@ ST110_e.DONE: (* Letzter Schritt  *)
 ST110_e.ERROR: (* ERROR *) ;
 
 END_CASE;
-
+(*
 fb_axis110_01Y.xIN_Execute := iOUT_Step = ST110_e.HomeHorizontals OR
                               iOUT_Step = ST110_e.MoveHorizontalsToTrack;
+							  *)
 ]]></ST>
     </Implementation>
   </POU>
