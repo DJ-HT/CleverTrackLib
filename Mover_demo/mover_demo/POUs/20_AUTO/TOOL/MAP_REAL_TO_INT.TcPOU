@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="MAP_REAL_TO_INT" Id="{f7427443-5f5e-4343-b714-61ab215f230a}" SpecialFunc="None">
+    <Declaration><![CDATA[// Map a value from a given range in REAL inside a given range in INT format
+// more about the MAP function here :
+// https://www.arduino.cc/reference/en/language/functions/math/map/
+FUNCTION MAP_REAL_TO_INT : INT
+VAR_INPUT
+    rValue    : REAL;
+    rFromLow  : REAL;
+    rFromHigh : REAL;
+    rToLow    : INT;
+    rToHigh   : INT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[MAP_REAL_TO_INT := rToLow;
+
+// equality test made here is to prevent division by 0
+IF rFromHigh <> rFromLow THEN
+   MAP_REAL_TO_INT := TO_INT((rValue - rFromLow) * (rToHigh - rToLow) / (rFromHigh - rFromLow) + rToLow + 0.5);
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -5,9 +5,16 @@
 VAR_INPUT
     bIN_AxisCntr        : BYTE;          ///Axis Controlword
     udiIN_HomingTime_ms : UDINT := 2000; // homing time, expressed as millisecond
+
+    rIN_PosActual : REAL;
+    rIN_PosMax    : REAL;
+    rIN_PosMin    : REAL;
+    rIN_PixMax    : INT;
+    rIN_PixMin    : INT;
 END_VAR
 VAR_OUTPUT
     wOUT_AxisState : WORD; //Statuswort
+    rOUT_PixActual : INT;  // actual position of the axis in pixel
 END_VAR
 VAR
     _iStep                 : INT;   // current step
@@ -51,6 +58,12 @@ END_VAR
     END_IF
 
 END_CASE
+
+rOUT_PixActual := MAP_REAL_TO_INT(rValue    := rIN_PosActual,
+                                  rFromHigh := rIN_PosMax,
+                                  rFromLow  := rIN_PosMin,
+                                  rToHigh   := rIN_PixMax,
+                                  rToLow    := rIN_PixMin);
 ]]></ST>
     </Implementation>
   </POU>
