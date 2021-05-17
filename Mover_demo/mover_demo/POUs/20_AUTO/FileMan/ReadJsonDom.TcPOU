@@ -31,29 +31,30 @@ IF fb_json.HasMember(json_head, 'iStationTimeDef1') THEN
     json_iStationTimeDef1 := fb_json.FindMember(json_head, 'iStationTimeDef1');
 
     IF fb_json.IsArray(json_iStationTimeDef1) THEN
-        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef1)), CONST.STATION_NUMBER - 1 + 1) BY 1 DO
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef1) - 1), CONST.STATION_NUMBER - 1) BY 1 DO
             json_i                       := fb_json.GetArrayValueByIdx(json_iStationTimeDef1, TO_UDINT(i));
             PERS.iStationTimeDef1[i + 1] := TO_DINT(fb_json.GetInt(json_i));
         END_FOR
     END_IF
 END_IF
 
-IF fb_json.HasMember(json_i, 'iStationTimeDef2') THEN
-    json_iStationTimeDef2 := fb_json.FindMember(json_i, 'iStationTimeDef2');
+IF fb_json.HasMember(json_head, 'iStationTimeDef2') THEN
+    json_iStationTimeDef2 := fb_json.FindMember(json_head, 'iStationTimeDef2');
 
     IF fb_json.IsArray(json_iStationTimeDef2) THEN
-        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef2)), CONST.STATION_NUMBER - 1 + 1) BY 1 DO
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef2)), CONST.STATION_NUMBER - 1) BY 1 DO
             json_i                       := fb_json.GetArrayValueByIdx(json_iStationTimeDef2, TO_UDINT(i));
             PERS.iStationTimeDef2[i + 1] := TO_DINT(fb_json.GetInt(json_i));
         END_FOR
     END_IF
 END_IF
 
-IF fb_json.HasMember(json_i, 'recipeList') THEN
-    json_recipeList := fb_json.FindMember(json_i, 'recipeList');
+IF fb_json.HasMember(json_head, 'recipeList') THEN
+    json_recipeList := fb_json.FindMember(json_head, 'recipeList');
 
     IF fb_json.IsArray(json_recipeList) THEN
-        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_recipeList)), CONST.MAX_RECIPE_NUMBER - 1 + 1) BY 1 DO
+		i := 4000;
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_recipeList)), CONST.MAX_RECIPE_NUMBER - 1) BY 1 DO
             json_i := fb_json.GetArrayValueByIdx(json_recipeList, TO_UDINT(i));
 
             IF fb_json.HasMember(json_i, 'st110') THEN
