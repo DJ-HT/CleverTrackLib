@@ -146,13 +146,13 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLIN_V1_2_RS.TcPOU">
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLIN_V1_1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLMturn_V1_1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLM_V1_2_RS.TcPOU">
+    <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLM_V1_1.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisSMC_V1_1.TcPOU">
@@ -162,9 +162,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Achsen\JXCE1_Baustein.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\FB%27s\GetTick.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\getPercent.TcPOU">
@@ -254,6 +251,9 @@
     <Compile Include="POUs\20_AUTO\Recipe_21_101_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\Simu\FB_Simu_AxisLM_V1_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST100\F_GetPercent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -337,6 +337,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\TOOL\EqualEssentially.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\TOOL\GetTick.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\TOOL\IObject.TcIO">

@@ -94,7 +94,7 @@ VAR
         (_PosList[18], GVL._Process18, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
 
     _StationSet1 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, 0, 0, 0, 0, 1, 1, 0, 0, 2, 2, 3, 3, 0, 0, 0, 0, 0];
+        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, 0, 0, 0, 0, 1, 1, 0, 0, 2, 2, 3, 3, 0, 4, 4, 0, 0];
     _StationSet2 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1];
     _StationSet3 :
