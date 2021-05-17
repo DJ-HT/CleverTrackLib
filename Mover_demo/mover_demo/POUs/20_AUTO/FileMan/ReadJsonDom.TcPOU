@@ -31,7 +31,7 @@ IF fb_json.HasMember(json_head, 'iStationTimeDef1') THEN
     json_iStationTimeDef1 := fb_json.FindMember(json_head, 'iStationTimeDef1');
 
     IF fb_json.IsArray(json_iStationTimeDef1) THEN
-        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef1) - 1), CONST.STATION_NUMBER - 1) BY 1 DO
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef1)) - 1, CONST.STATION_NUMBER - 1) BY 1 DO
             json_i                       := fb_json.GetArrayValueByIdx(json_iStationTimeDef1, TO_UDINT(i));
             PERS.iStationTimeDef1[i + 1] := TO_DINT(fb_json.GetInt(json_i));
         END_FOR
@@ -42,7 +42,7 @@ IF fb_json.HasMember(json_head, 'iStationTimeDef2') THEN
     json_iStationTimeDef2 := fb_json.FindMember(json_head, 'iStationTimeDef2');
 
     IF fb_json.IsArray(json_iStationTimeDef2) THEN
-        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef2)), CONST.STATION_NUMBER - 1) BY 1 DO
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef2)) - 1, CONST.STATION_NUMBER - 1) BY 1 DO
             json_i                       := fb_json.GetArrayValueByIdx(json_iStationTimeDef2, TO_UDINT(i));
             PERS.iStationTimeDef2[i + 1] := TO_DINT(fb_json.GetInt(json_i));
         END_FOR
@@ -53,8 +53,7 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
     json_recipeList := fb_json.FindMember(json_head, 'recipeList');
 
     IF fb_json.IsArray(json_recipeList) THEN
-		i := 4000;
-        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_recipeList)), CONST.MAX_RECIPE_NUMBER - 1) BY 1 DO
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_recipeList)) - 1, CONST.MAX_RECIPE_NUMBER - 1) BY 1 DO
             json_i := fb_json.GetArrayValueByIdx(json_recipeList, TO_UDINT(i));
 
             IF fb_json.HasMember(json_i, 'st110') THEN
@@ -63,26 +62,25 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                 IF fb_json.HasMember(json_st110, 'ST110_01Y') THEN
                     json_ST110_01Y := fb_json.FindMember(json_st110, 'ST110_01Y');
 
-                    IF fb_json.HasMember(json_ST110_01Y, 'rPosIn') THEN
-                        json_value                                    := fb_json.FindMember(json_ST110_01Y, 'rPosIn');
-                        PERS.recipeList[i + 1].st110.ST110_01Y.rPosIn := TO_REAL(fb_json.GetDouble(json_value));
+                    IF fb_json.HasMember(json_ST110_01Y, 'rPosGS') THEN
+                        json_value                                    := fb_json.FindMember(json_ST110_01Y, 'rPosGS');
+                        PERS.recipeList[i + 1].st110.ST110_01Y.rPosGS := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
-                    IF fb_json.HasMember(json_ST110_01Y, 'rPosOut') THEN
-                        json_value := fb_json.FindMember(json_ST110_01Y, 'rPosOut');
-                        PERS.recipeList[i + 1].st110.ST110_01Y.rPosOut
+                    IF fb_json.HasMember(json_ST110_01Y, 'rPosAS') THEN
+                        json_value                                    := fb_json.FindMember(json_ST110_01Y, 'rPosAS');
+                        PERS.recipeList[i + 1].st110.ST110_01Y.rPosAS := TO_REAL(fb_json.GetDouble(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_ST110_01Y, 'rVeloToAS') THEN
+                        json_value := fb_json.FindMember(json_ST110_01Y, 'rVeloToAS');
+                        PERS.recipeList[i + 1].st110.ST110_01Y.rVeloToAS
                             := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
-                    IF fb_json.HasMember(json_ST110_01Y, 'rVeloToOut') THEN
-                        json_value := fb_json.FindMember(json_ST110_01Y, 'rVeloToOut');
-                        PERS.recipeList[i + 1].st110.ST110_01Y.rVeloToOut
-                            := TO_REAL(fb_json.GetDouble(json_value));
-                    END_IF
-
-                    IF fb_json.HasMember(json_ST110_01Y, 'rVeloToIn') THEN
-                        json_value := fb_json.FindMember(json_ST110_01Y, 'rVeloToIn');
-                        PERS.recipeList[i + 1].st110.ST110_01Y.rVeloToIn
+                    IF fb_json.HasMember(json_ST110_01Y, 'rVeloToGS') THEN
+                        json_value := fb_json.FindMember(json_ST110_01Y, 'rVeloToGS');
+                        PERS.recipeList[i + 1].st110.ST110_01Y.rVeloToGS
                             := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
@@ -105,26 +103,25 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                 IF fb_json.HasMember(json_st110, 'ST110_02Z') THEN
                     json_ST110_02Z := fb_json.FindMember(json_st110, 'ST110_02Z');
 
-                    IF fb_json.HasMember(json_ST110_02Z, 'rPosIn') THEN
-                        json_value                                    := fb_json.FindMember(json_ST110_02Z, 'rPosIn');
-                        PERS.recipeList[i + 1].st110.ST110_02Z.rPosIn := TO_REAL(fb_json.GetDouble(json_value));
+                    IF fb_json.HasMember(json_ST110_02Z, 'rPosGS') THEN
+                        json_value                                    := fb_json.FindMember(json_ST110_02Z, 'rPosGS');
+                        PERS.recipeList[i + 1].st110.ST110_02Z.rPosGS := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
-                    IF fb_json.HasMember(json_ST110_02Z, 'rPosOut') THEN
-                        json_value := fb_json.FindMember(json_ST110_02Z, 'rPosOut');
-                        PERS.recipeList[i + 1].st110.ST110_02Z.rPosOut
+                    IF fb_json.HasMember(json_ST110_02Z, 'rPosAS') THEN
+                        json_value                                    := fb_json.FindMember(json_ST110_02Z, 'rPosAS');
+                        PERS.recipeList[i + 1].st110.ST110_02Z.rPosAS := TO_REAL(fb_json.GetDouble(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_ST110_02Z, 'rVeloToAS') THEN
+                        json_value := fb_json.FindMember(json_ST110_02Z, 'rVeloToAS');
+                        PERS.recipeList[i + 1].st110.ST110_02Z.rVeloToAS
                             := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
-                    IF fb_json.HasMember(json_ST110_02Z, 'rVeloToOut') THEN
-                        json_value := fb_json.FindMember(json_ST110_02Z, 'rVeloToOut');
-                        PERS.recipeList[i + 1].st110.ST110_02Z.rVeloToOut
-                            := TO_REAL(fb_json.GetDouble(json_value));
-                    END_IF
-
-                    IF fb_json.HasMember(json_ST110_02Z, 'rVeloToIn') THEN
-                        json_value := fb_json.FindMember(json_ST110_02Z, 'rVeloToIn');
-                        PERS.recipeList[i + 1].st110.ST110_02Z.rVeloToIn
+                    IF fb_json.HasMember(json_ST110_02Z, 'rVeloToGS') THEN
+                        json_value := fb_json.FindMember(json_ST110_02Z, 'rVeloToGS');
+                        PERS.recipeList[i + 1].st110.ST110_02Z.rVeloToGS
                             := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
@@ -147,26 +144,25 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                 IF fb_json.HasMember(json_st110, 'ST110_03Z') THEN
                     json_ST110_03Z := fb_json.FindMember(json_st110, 'ST110_03Z');
 
-                    IF fb_json.HasMember(json_ST110_03Z, 'rPosIn') THEN
-                        json_value                                    := fb_json.FindMember(json_ST110_03Z, 'rPosIn');
-                        PERS.recipeList[i + 1].st110.ST110_03Z.rPosIn := TO_REAL(fb_json.GetDouble(json_value));
+                    IF fb_json.HasMember(json_ST110_03Z, 'rPosGS') THEN
+                        json_value                                    := fb_json.FindMember(json_ST110_03Z, 'rPosGS');
+                        PERS.recipeList[i + 1].st110.ST110_03Z.rPosGS := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
-                    IF fb_json.HasMember(json_ST110_03Z, 'rPosOut') THEN
-                        json_value := fb_json.FindMember(json_ST110_03Z, 'rPosOut');
-                        PERS.recipeList[i + 1].st110.ST110_03Z.rPosOut
+                    IF fb_json.HasMember(json_ST110_03Z, 'rPosAS') THEN
+                        json_value                                    := fb_json.FindMember(json_ST110_03Z, 'rPosAS');
+                        PERS.recipeList[i + 1].st110.ST110_03Z.rPosAS := TO_REAL(fb_json.GetDouble(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_ST110_03Z, 'rVeloToAS') THEN
+                        json_value := fb_json.FindMember(json_ST110_03Z, 'rVeloToAS');
+                        PERS.recipeList[i + 1].st110.ST110_03Z.rVeloToAS
                             := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
-                    IF fb_json.HasMember(json_ST110_03Z, 'rVeloToOut') THEN
-                        json_value := fb_json.FindMember(json_ST110_03Z, 'rVeloToOut');
-                        PERS.recipeList[i + 1].st110.ST110_03Z.rVeloToOut
-                            := TO_REAL(fb_json.GetDouble(json_value));
-                    END_IF
-
-                    IF fb_json.HasMember(json_ST110_03Z, 'rVeloToIn') THEN
-                        json_value := fb_json.FindMember(json_ST110_03Z, 'rVeloToIn');
-                        PERS.recipeList[i + 1].st110.ST110_03Z.rVeloToIn
+                    IF fb_json.HasMember(json_ST110_03Z, 'rVeloToGS') THEN
+                        json_value := fb_json.FindMember(json_ST110_03Z, 'rVeloToGS');
+                        PERS.recipeList[i + 1].st110.ST110_03Z.rVeloToGS
                             := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
 
@@ -184,6 +180,18 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                         json_value                                   := fb_json.FindMember(json_ST110_03Z, 'rJerk');
                         PERS.recipeList[i + 1].st110.ST110_03Z.rJerk := TO_REAL(fb_json.GetDouble(json_value));
                     END_IF
+                END_IF
+
+                IF fb_json.HasMember(json_st110, 'xUseVerticalLeft') THEN
+                    json_value := fb_json.FindMember(json_st110, 'xUseVerticalLeft');
+                    PERS.recipeList[i + 1].st110.xUseVerticalLeft
+                        := TO_BOOL(fb_json.GetBool(json_value));
+                END_IF
+
+                IF fb_json.HasMember(json_st110, 'xUseVerticalRight') THEN
+                    json_value := fb_json.FindMember(json_st110, 'xUseVerticalRight');
+                    PERS.recipeList[i + 1].st110.xUseVerticalRight
+                        := TO_BOOL(fb_json.GetBool(json_value));
                 END_IF
             END_IF
         END_FOR

@@ -3,13 +3,13 @@
   <DUT Name="RecipeAxisLinear2Pos_t" Id="{d2ed1bb6-1652-4dc7-ab10-3b29c78e467b}">
     <Declaration><![CDATA[TYPE RecipeAxisLinear2Pos_t :
 STRUCT
-    rPosIn     : REAL;
-    rPosOut    : REAL;
-    rVeloToOut : REAL;
-    rVeloToIn  : REAL;
-    rAccel     : REAL;
-    rDecel     : REAL;
-    rJerk      : REAL;
+    rPosGS    : REAL;
+    rPosAS    : REAL;
+    rVeloToAS : REAL;
+    rVeloToGS : REAL;
+    rAccel    : REAL;
+    rDecel    : REAL;
+    rJerk     : REAL;
 END_STRUCT
 END_TYPE
 ]]></Declaration>
