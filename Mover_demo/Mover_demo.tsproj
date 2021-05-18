@@ -3395,9 +3395,24 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>_02_SAFETY.xIN_ESout</Name>
+							<Comment><![CDATA[EStop	Out]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>_02_SAFETY.uiArOUT_State</Name>
 							<Comment><![CDATA[Module State ]]></Comment>
 							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.xIN_MonDelOut</Name>
+							<Comment><![CDATA[Mon del Out Türen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.xIN_MonOut</Name>
+							<Comment><![CDATA[Mon Out Türen]]></Comment>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.uiArIN_State</Name>
@@ -3438,21 +3453,6 @@ External Setpoint Generation:
 							<Name>_02_SAFETY.xArIN_Input7</Name>
 							<Comment><![CDATA[Mapping Inputs ]]></Comment>
 							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}">ARRAY [0..7] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_ESout</Name>
-							<Comment><![CDATA[EStop	Out]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_MonDelOut</Name>
-							<Comment><![CDATA[Mon del Out Türen]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_MonOut</Name>
-							<Comment><![CDATA[Mon Out Türen]]></Comment>
-							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY._FB_Gr001Input.xIN_ComErr</Name>
@@ -3787,16 +3787,11 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>AXIS.bAxisCtrHi101X05</Name>
-							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
 							<Name>AXIS.Axis101X05.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>AXIS.bAxisCtrHi101Z06</Name>
+							<Name>AXIS.bAxisCtrHi101X05</Name>
 							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
@@ -3805,13 +3800,18 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>AXIS.bAxisCtrHi101D07</Name>
+							<Name>AXIS.bAxisCtrHi101Z06</Name>
 							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
 							<Name>AXIS.Axis101D07.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>AXIS.bAxisCtrHi101D07</Name>
+							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
 							<Name>AXIS.Axis102Y10.PlcToNc</Name>
@@ -3868,17 +3868,17 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
+							<Name>AXIS.bAxisCtrHi102Y44</Name>
+							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
 							<Name>AXIS.Axis102D41.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
 							<Name>AXIS.Axis102Y44.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
-						</Var>
-						<Var>
-							<Name>AXIS.bAxisCtrHi102Y44</Name>
-							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
-							<Type>BYTE</Type>
 						</Var>
 						<Var>
 							<Name>AXIS.Axis102Z45.PlcToNc</Name>
@@ -3919,16 +3919,11 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>AXIS.bAxisCtrHi106D11</Name>
-							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
 							<Name>AXIS.Axis106D11.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>AXIS.bAxisCtrHi108Y05</Name>
+							<Name>AXIS.bAxisCtrHi106D11</Name>
 							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
@@ -3937,13 +3932,18 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>AXIS.bAxisCtrHi108Z06</Name>
+							<Name>AXIS.bAxisCtrHi108Y05</Name>
 							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
 							<Name>AXIS.Axis108Z06.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>AXIS.bAxisCtrHi108Z06</Name>
+							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
 							<Name>AXIS.bAxisCtrHi108D07</Name>
@@ -3964,13 +3964,13 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>AXIS.Axis109Z11.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
-						</Var>
-						<Var>
 							<Name>AXIS.bAxisCtrHi109Z11</Name>
 							<Comment><![CDATA[ Achse Controlwort Hi-Byte]]></Comment>
 							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>AXIS.Axis109Z11.PlcToNc</Name>
+							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
 							<Name>AXIS.Axis120Z10.PlcToNc</Name>
@@ -3988,24 +3988,6 @@ External Setpoint Generation:
 					</Vars>
 					<Vars VarGrpType="8" ContextId="2" AreaNo="36">
 						<Name>Task_fileMan Retains</Name>
-						<Var>
-							<Name>AXIS.bInPos190Z01</Name>
-							<Comment><![CDATA[ Achse in Position  (99= nicht in Pos)]]></Comment>
-							<Type>BYTE</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
-							<Name>AXIS.bInPos190Z02</Name>
-							<Comment><![CDATA[ Achse in Position  (99= nicht in Pos)]]></Comment>
-							<Type>BYTE</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
-							<Name>AXIS.bInPos190Z03</Name>
-							<Comment><![CDATA[ Achse in Position  (99= nicht in Pos)]]></Comment>
-							<Type>BYTE</Type>
-							<InOut>7</InOut>
-						</Var>
 						<Var>
 							<Name>AXIS.rArAxisPos101X05</Name>
 							<Comment><![CDATA[	0: REFERENZ
@@ -4521,6 +4503,30 @@ Axis190Z01									#191]]></Comment>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
+							<Name>AXIS.bInPos190Z01</Name>
+							<Comment><![CDATA[ Achse in Position  (99= nicht in Pos)]]></Comment>
+							<Type>BYTE</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AXIS.bInPos190Z02</Name>
+							<Comment><![CDATA[ Achse in Position  (99= nicht in Pos)]]></Comment>
+							<Type>BYTE</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AXIS.bInPos190Z03</Name>
+							<Comment><![CDATA[ Achse in Position  (99= nicht in Pos)]]></Comment>
+							<Type>BYTE</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AXIS.bInPos190Z04</Name>
+							<Comment><![CDATA[ Achse in Position  (99= nicht in Pos)]]></Comment>
+							<Type>BYTE</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
 							<Name>AXIS.rArAxisPos190Z01</Name>
 							<Comment><![CDATA[	0: REFERENZ
 													1: OBEN
@@ -4558,15 +4564,15 @@ Axis190Z02									#192]]></Comment>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
-							<Name>AXIS.Axis190Z02</Name>
-							<Comment><![CDATA[ Referenz Axis ]]></Comment>
-							<Type GUID="{09B6A741-F919-6DFA-3280-820668B6768A}" Namespace="Tc2_MC2">AXIS_REF</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
 							<Name>AXIS.rActPos190Z02</Name>
 							<Comment><![CDATA[ Aktuelle Position]]></Comment>
 							<Type>REAL</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AXIS.Axis190Z02</Name>
+							<Comment><![CDATA[ Referenz Axis ]]></Comment>
+							<Type GUID="{09B6A741-F919-6DFA-3280-820668B6768A}" Namespace="Tc2_MC2">AXIS_REF</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
@@ -4607,15 +4613,15 @@ Axis190Z03									#193]]></Comment>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
-							<Name>AXIS.rActPos190Z03</Name>
-							<Comment><![CDATA[ Aktuelle Position]]></Comment>
-							<Type>REAL</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
 							<Name>AXIS.Axis190Z03</Name>
 							<Comment><![CDATA[ Referenz Axis ]]></Comment>
 							<Type GUID="{09B6A741-F919-6DFA-3280-820668B6768A}" Namespace="Tc2_MC2">AXIS_REF</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>AXIS.rActPos190Z03</Name>
+							<Comment><![CDATA[ Aktuelle Position]]></Comment>
+							<Type>REAL</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
@@ -4656,21 +4662,15 @@ Axis190Z04									#194]]></Comment>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
-							<Name>AXIS.Axis190Z04</Name>
-							<Comment><![CDATA[ Referenz Axis ]]></Comment>
-							<Type GUID="{09B6A741-F919-6DFA-3280-820668B6768A}" Namespace="Tc2_MC2">AXIS_REF</Type>
-							<InOut>7</InOut>
-						</Var>
-						<Var>
 							<Name>AXIS.rActPos190Z04</Name>
 							<Comment><![CDATA[ Aktuelle Position]]></Comment>
 							<Type>REAL</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
-							<Name>AXIS.bInPos190Z04</Name>
-							<Comment><![CDATA[ Achse in Position  (99= nicht in Pos)]]></Comment>
-							<Type>BYTE</Type>
+							<Name>AXIS.Axis190Z04</Name>
+							<Comment><![CDATA[ Referenz Axis ]]></Comment>
+							<Type GUID="{09B6A741-F919-6DFA-3280-820668B6768A}" Namespace="Tc2_MC2">AXIS_REF</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
