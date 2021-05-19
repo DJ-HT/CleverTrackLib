@@ -174,7 +174,7 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                rIN_JogVelo    :=,
                xIN_HomeExe    :=,
                xIN_HomeCalib  :=,
-               xIN_Execute    := PERS.recipeList[1].st110.xUseVerLeft AND
+               xIN_Execute    := (PERS.recipeList[1].st110.xUseVerLeft OR (iOUT_Step < ST110_e.READY)) AND
                                  (fb_PnpVerAxisL.xOUT_Execute),
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrPosition),
@@ -216,7 +216,7 @@ fb_axis110_03Z(enIN_State     := enIN_State,
                rIN_VELOMANU   := ST110_Axis.const110_03Z.VELO_MANU,
                rIN_VELOOPEN   := ST110_Axis.const110_03Z.VELO_MANU / 4,
                rIN_JogInc     := AXIS.rTeachIncAxis,
-               xIN_Execute    := PERS.recipeList[1].st110.xUseVerRight AND
+               xIN_Execute    := (PERS.recipeList[1].st110.xUseVerRight OR (iOUT_Step < ST110_e.READY)) AND
                                  (fb_PnpVerAxisR.xOUT_Execute),
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrPosition),
@@ -336,7 +336,7 @@ ST110_e.Init_HomeVerticals:
 
 st110_e.Init_VerticalsUp:
     IF fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.UpEmpty).xOUT_InPos AND
-       fb_PnpVerAxisR.MoveTo(0).xOUT_InPos THEN
+       fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
         IF fb_axis110_01Y.xOUT_READY OR fb_axis110_01Y.xOUT_HOMED THEN
             iOUT_Step := ST110_e.Init_HorizontalsToTrack;
         ELSE
