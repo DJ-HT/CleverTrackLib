@@ -73,6 +73,10 @@ VAR
     fb_axis110_02Z : FB_AxisLIN_V1_1;
     fb_axis110_03Z : FB_AxisLIN_V1_1;
 
+    fb_HorPnpAxis      : FB_LinearMotionMan;
+    fb_VerPnpAxisLeft  : FB_LinearMotionMan;
+    fb_VerPnpAxisRight : FB_LinearMotionMan;
+
     fb_simu_axis110_01Y : FB_Simu_AxisLM_V1_1;
     fb_simu_axis110_02Z : FB_Simu_AxisLIN_V1_1;
     fb_simu_axis110_03Z : FB_Simu_AxisLIN_V1_1;
@@ -107,6 +111,10 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
+fb_HorPnpAxis(config        := PERS.recipeList[1].st110.HorPnpAxis_config,
+              lrIN_CurrPos  := fb_axis110_01Y.rOUT_ActPos,
+              lrIN_Delta_mm := 0.01);
+
 fb_axis110_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons   := FALSE,
@@ -138,6 +146,10 @@ fb_simu_axis110_01Y(bIN_AxisCntr        := fb_axis110_01Y.bOUT_AxisCntr,
                     rIN_PixMax          := 100,
                     rIN_PixMin          := 0,
                     wOUT_AxisState      => fb_axis110_01Y.wAxisState);
+
+fb_VerPnpAxisLeft(config        := PERS.recipeList[1].st110.VerPnpAxisLeft_config,
+                  lrIN_CurrPos  := fb_axis110_02Z.rOUT_ActPos,
+                  lrIN_Delta_mm := 0.01);
 
 fb_axis110_02Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
@@ -179,6 +191,10 @@ fb_simu_axis110_02Z(rIN_PosActual := fb_axis110_02Z.rOUT_ActPos,
                     rIN_PosMin    := ST110_Axis.const110_02Z.POS_MIN,
                     rIN_PixMax    := 80,
                     rIN_PixMin    := 0);
+
+fb_VerPnpAxisRight(config        := PERS.recipeList[1].st110.VerPnpAxisRight_config,
+                   lrIN_CurrPos  := fb_axis110_03Z.rOUT_ActPos,
+                   lrIN_Delta_mm := 0.01);
 
 fb_axis110_03Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
@@ -325,6 +341,7 @@ ST110_e.INIT: (* Grundstellung ? *)
 ST110_e.Init_HomeVerticals:
     fb_axis110_02Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_02Z.rVeloToGS;
     fb_axis110_03Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_03Z.rVeloToGS;
+
     IF fb_axis110_02Z.xOUT_DONE AND fb_axis110_03Z.xOUT_DONE THEN
         iOUT_Step := ST110_e.Init_VerticalsUp;
     END_IF
@@ -345,6 +362,7 @@ st110_e.Init_VerticalsUp:
 
 ST110_e.Init_HomeHorizontals:
     fb_axis110_01Y.rIN_Velocity := PERS.recipeList[1].st110.ST110_01Y.rVeloToGS;
+
     IF fb_axis110_01Y.xOUT_HOMED THEN
         iOUT_Step := ST110_e.Init_HorizontalsToTrack;
     END_IF
@@ -372,6 +390,11 @@ ST110_e.START: (*  *)
 ST110_e.PnP_Hor_ToRotTablePos:
     fb_axis110_01Y.rIN_Position := PERS.recipeList[1].st110.ST110_01Y.rPosAS;
     fb_axis110_01Y.rIN_Velocity := PERS.recipeList[1].st110.ST110_01Y.rVeloToAS;
+
+    IF fb_HorPnpAxis.MoveTo(1).xOUT_InPos THEN
+        iOUT_Step := iOUT_Step;
+    END_IF
+
     IF xIN_NextStep AND fb_axis110_01Y.xOUT_DONE THEN
         iOUT_Step := ST110_e.PnP_Ver_RotTableDown;
     END_IF;

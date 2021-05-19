@@ -3,11 +3,14 @@
   <DUT Name="ST110_Recipe_t" Id="{67830e86-a656-410c-b77d-77ee05a4605e}">
     <Declaration><![CDATA[TYPE ST110_Recipe_t :
 STRUCT
-    ST110_01Y         : RecipeAxisLinear2Pos_t;
-    ST110_02Z         : RecipeAxisLinear2Pos_t;
-    ST110_03Z         : RecipeAxisLinear2Pos_t;
-    xUseVerticalLeft  : BOOL; // Is the left vertical picker element is used
-    xUseVerticalRight : BOOL; // Is the right vertical picker element is used
+    ST110_01Y              : RecipeAxisLinear2Pos_t;
+    ST110_02Z              : RecipeAxisLinear2Pos_t;
+    ST110_03Z              : RecipeAxisLinear2Pos_t;
+    xUseVerticalLeft       : BOOL; // Is the left vertical picker element is used
+    xUseVerticalRight      : BOOL; // Is the right vertical picker element is used
+    HorPnpAxis_config      : LinearMotionMan_Config_t;
+    VerPnpAxisLeft_config  : LinearMotionMan_Config_t;
+    VerPnpAxisRight_config : LinearMotionMan_Config_t;
 
 END_STRUCT
 END_TYPE

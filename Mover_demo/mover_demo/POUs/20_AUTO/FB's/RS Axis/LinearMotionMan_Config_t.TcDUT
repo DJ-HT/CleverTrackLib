@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="LinearMotionMan_Config_t" Id="{e409a335-aab8-4497-8093-12e2cf43ffc0}">
+    <Declaration><![CDATA[TYPE LinearMotionMan_Config_t :
+STRUCT
+    defProfile : MoveProfile_t; // default move profile, used when 0 values are given
+    moveNumber : INT;           // number of moves for this linear motion
+    movesList  : ARRAY[0..CONST.MAX_VECTOR_LIST] OF VectorMove1D_t;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -59,6 +59,18 @@
     <Compile Include="DUTs\Helptec\Recipe\RecipeAxisLinear2Pos_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Helptec\RS_Axis\MoveProfile1D_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Helptec\RS_Axis\MoveProfile_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Helptec\RS_Axis\TriggerType_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Helptec\RS_Axis\VectorMove1D_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Helptec\structAlarm.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -165,6 +177,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\getPercent.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\RS Axis\FB_LinearMotionMan.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\RS Axis\LinearMotionMan_Config_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Vorlagen\FB_ABL_VORLAGE.TcPOU">
@@ -382,12 +400,14 @@
     <Folder Include="DUTs" />
     <Folder Include="DUTs\Helptec" />
     <Folder Include="DUTs\Helptec\Axis" />
+    <Folder Include="DUTs\Helptec\RS_Axis" />
     <Folder Include="DUTs\Helptec\Recipe" />
     <Folder Include="GVLs" />
     <Folder Include="POUs\00_MAIN\FB%27s" />
     <Folder Include="POUs\10_HMI\FB%27s" />
     <Folder Include="POUs\20_AUTO\FB%27s" />
     <Folder Include="POUs\20_AUTO\FB%27s\Achsen" />
+    <Folder Include="POUs\20_AUTO\FB%27s\RS Axis" />
     <Folder Include="POUs\20_AUTO\FB%27s\Vorlagen" />
     <Folder Include="POUs\10_HMI" />
     <Folder Include="POUs\20_AUTO" />
