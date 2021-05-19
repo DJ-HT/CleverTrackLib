@@ -2861,6 +2861,7 @@ External Setpoint Generation:
 				<Axis Id="1" CreateSymbols="true" AxisType="1">
 					<Name>ST110_01Y</Name>
 					<AxisPara>
+						<Dynamic AccelerationMaximum="100000" DecelerationMaximum="100000" Acceleration="15000" Deceleration="15000" Jerk="10000000"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="1">
@@ -3022,6 +3023,7 @@ External Setpoint Generation:
 				<Axis Id="2" CreateSymbols="true" AxisType="1">
 					<Name>ST110_02Z</Name>
 					<AxisPara>
+						<Dynamic AccelerationMaximum="100000" DecelerationMaximum="100000" Acceleration="15000" Deceleration="15000" Jerk="10000000"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="1">
@@ -3185,6 +3187,7 @@ External Setpoint Generation:
 				<Axis Id="3" CreateSymbols="true" AxisType="1">
 					<Name>ST110_03Z</Name>
 					<AxisPara>
+						<Dynamic AccelerationMaximum="100000" DecelerationMaximum="100000" Acceleration="15000" Deceleration="15000" Jerk="10000000"/>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
 					<Encoder Name="Enc" EncType="1">
