@@ -19,9 +19,8 @@ VAR
     json_HorPnpAxis_config      : SJsonValue;
     json_defProfile             : SJsonValue;
     json_movesList              : SJsonValue;
-    json_TriggerType            : SJsonValue;
-    json_VerPnpAxisLeft_config  : SJsonValue;
-    json_VerPnpAxisRight_config : SJsonValue;
+    json_PnpVerAxisLeft_config  : SJsonValue;
+    json_PnpVerAxisRight_config : SJsonValue;
     json_i                      : SJsonValue;
     json_ii                     : SJsonValue;
 
@@ -191,16 +190,14 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                     END_IF
                 END_IF
 
-                IF fb_json.HasMember(json_st110, 'xUseVerticalLeft') THEN
-                    json_value := fb_json.FindMember(json_st110, 'xUseVerticalLeft');
-                    PERS.recipeList[i + 1].st110.xUseVerticalLeft
-                        := TO_BOOL(fb_json.GetBool(json_value));
+                IF fb_json.HasMember(json_st110, 'xUseVerLeft') THEN
+                    json_value                               := fb_json.FindMember(json_st110, 'xUseVerLeft');
+                    PERS.recipeList[i + 1].st110.xUseVerLeft := TO_BOOL(fb_json.GetBool(json_value));
                 END_IF
 
-                IF fb_json.HasMember(json_st110, 'xUseVerticalRight') THEN
-                    json_value := fb_json.FindMember(json_st110, 'xUseVerticalRight');
-                    PERS.recipeList[i + 1].st110.xUseVerticalRight
-                        := TO_BOOL(fb_json.GetBool(json_value));
+                IF fb_json.HasMember(json_st110, 'xUseVerRight') THEN
+                    json_value                                := fb_json.FindMember(json_st110, 'xUseVerRight');
+                    PERS.recipeList[i + 1].st110.xUseVerRight := TO_BOOL(fb_json.GetBool(json_value));
                 END_IF
 
                 IF fb_json.HasMember(json_st110, 'HorPnpAxis_config') THEN
@@ -234,12 +231,6 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                         END_IF
                     END_IF
 
-                    IF fb_json.HasMember(json_HorPnpAxis_config, 'moveNumber') THEN
-                        json_value := fb_json.FindMember(json_HorPnpAxis_config, 'moveNumber');
-                        PERS.recipeList[i + 1].st110.HorPnpAxis_config.moveNumber
-                            := TO_INT(fb_json.GetInt(json_value));
-                    END_IF
-
                     IF fb_json.HasMember(json_HorPnpAxis_config, 'movesList') THEN
                         json_movesList := fb_json.FindMember(json_HorPnpAxis_config, 'movesList');
 
@@ -271,45 +262,39 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                     END_IF
                 END_IF
 
-                IF fb_json.HasMember(json_st110, 'VerPnpAxisLeft_config') THEN
-                    json_VerPnpAxisLeft_config := fb_json.FindMember(json_st110, 'VerPnpAxisLeft_config');
+                IF fb_json.HasMember(json_st110, 'PnpVerAxisLeft_config') THEN
+                    json_PnpVerAxisLeft_config := fb_json.FindMember(json_st110, 'PnpVerAxisLeft_config');
 
-                    IF fb_json.HasMember(json_VerPnpAxisLeft_config, 'defProfile') THEN
-                        json_defProfile := fb_json.FindMember(json_VerPnpAxisLeft_config, 'defProfile');
+                    IF fb_json.HasMember(json_PnpVerAxisLeft_config, 'defProfile') THEN
+                        json_defProfile := fb_json.FindMember(json_PnpVerAxisLeft_config, 'defProfile');
 
                         IF fb_json.HasMember(json_defProfile, 'lrVelocity') THEN
                             json_value := fb_json.FindMember(json_defProfile, 'lrVelocity');
-                            PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.defProfile.lrVelocity
+                            PERS.recipeList[i + 1].st110.PnpVerAxisLeft_config.defProfile.lrVelocity
                                 := TO_LREAL(fb_json.GetDouble(json_value));
                         END_IF
 
                         IF fb_json.HasMember(json_defProfile, 'lrAccel') THEN
                             json_value := fb_json.FindMember(json_defProfile, 'lrAccel');
-                            PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.defProfile.lrAccel
+                            PERS.recipeList[i + 1].st110.PnpVerAxisLeft_config.defProfile.lrAccel
                                 := TO_LREAL(fb_json.GetDouble(json_value));
                         END_IF
 
                         IF fb_json.HasMember(json_defProfile, 'lrDecel') THEN
                             json_value := fb_json.FindMember(json_defProfile, 'lrDecel');
-                            PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.defProfile.lrDecel
+                            PERS.recipeList[i + 1].st110.PnpVerAxisLeft_config.defProfile.lrDecel
                                 := TO_LREAL(fb_json.GetDouble(json_value));
                         END_IF
 
                         IF fb_json.HasMember(json_defProfile, 'lrJerk') THEN
                             json_value := fb_json.FindMember(json_defProfile, 'lrJerk');
-                            PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.defProfile.lrJerk
+                            PERS.recipeList[i + 1].st110.PnpVerAxisLeft_config.defProfile.lrJerk
                                 := TO_LREAL(fb_json.GetDouble(json_value));
                         END_IF
                     END_IF
 
-                    IF fb_json.HasMember(json_VerPnpAxisLeft_config, 'moveNumber') THEN
-                        json_value := fb_json.FindMember(json_VerPnpAxisLeft_config, 'moveNumber');
-                        PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.moveNumber
-                            := TO_INT(fb_json.GetInt(json_value));
-                    END_IF
-
-                    IF fb_json.HasMember(json_VerPnpAxisLeft_config, 'movesList') THEN
-                        json_movesList := fb_json.FindMember(json_VerPnpAxisLeft_config, 'movesList');
+                    IF fb_json.HasMember(json_PnpVerAxisLeft_config, 'movesList') THEN
+                        json_movesList := fb_json.FindMember(json_PnpVerAxisLeft_config, 'movesList');
 
                         IF fb_json.IsArray(json_movesList) THEN
                             FOR ii := 0 TO
@@ -319,19 +304,19 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
 
                                 IF fb_json.HasMember(json_ii, 'TriggerType') THEN
                                     json_value := fb_json.FindMember(json_ii, 'TriggerType');
-                                    PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.movesList[ii + 0].TriggerType
+                                    PERS.recipeList[i + 1].st110.PnpVerAxisLeft_config.movesList[ii + 0].TriggerType
                                         := TO_INT(fb_json.GetInt(json_value));
                                 END_IF
 
                                 IF fb_json.HasMember(json_ii, 'TriggerPos') THEN
                                     json_value := fb_json.FindMember(json_ii, 'TriggerPos');
-                                    PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.movesList[ii + 0].TriggerPos
+                                    PERS.recipeList[i + 1].st110.PnpVerAxisLeft_config.movesList[ii + 0].TriggerPos
                                         := TO_LREAL(fb_json.GetDouble(json_value));
                                 END_IF
 
                                 IF fb_json.HasMember(json_ii, 'Timeout_ms') THEN
                                     json_value := fb_json.FindMember(json_ii, 'Timeout_ms');
-                                    PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.movesList[ii + 0].Timeout_ms
+                                    PERS.recipeList[i + 1].st110.PnpVerAxisLeft_config.movesList[ii + 0].Timeout_ms
                                         := TO_DINT(fb_json.GetInt(json_value));
                                 END_IF
                             END_FOR
@@ -339,45 +324,39 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                     END_IF
                 END_IF
 
-                IF fb_json.HasMember(json_st110, 'VerPnpAxisRight_config') THEN
-                    json_VerPnpAxisRight_config := fb_json.FindMember(json_st110, 'VerPnpAxisRight_config');
+                IF fb_json.HasMember(json_st110, 'PnpVerAxisRight_config') THEN
+                    json_PnpVerAxisRight_config := fb_json.FindMember(json_st110, 'PnpVerAxisRight_config');
 
-                    IF fb_json.HasMember(json_VerPnpAxisRight_config, 'defProfile') THEN
-                        json_defProfile := fb_json.FindMember(json_VerPnpAxisRight_config, 'defProfile');
+                    IF fb_json.HasMember(json_PnpVerAxisRight_config, 'defProfile') THEN
+                        json_defProfile := fb_json.FindMember(json_PnpVerAxisRight_config, 'defProfile');
 
                         IF fb_json.HasMember(json_defProfile, 'lrVelocity') THEN
                             json_value := fb_json.FindMember(json_defProfile, 'lrVelocity');
-                            PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.defProfile.lrVelocity
+                            PERS.recipeList[i + 1].st110.PnpVerAxisRight_config.defProfile.lrVelocity
                                 := TO_LREAL(fb_json.GetDouble(json_value));
                         END_IF
 
                         IF fb_json.HasMember(json_defProfile, 'lrAccel') THEN
                             json_value := fb_json.FindMember(json_defProfile, 'lrAccel');
-                            PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.defProfile.lrAccel
+                            PERS.recipeList[i + 1].st110.PnpVerAxisRight_config.defProfile.lrAccel
                                 := TO_LREAL(fb_json.GetDouble(json_value));
                         END_IF
 
                         IF fb_json.HasMember(json_defProfile, 'lrDecel') THEN
                             json_value := fb_json.FindMember(json_defProfile, 'lrDecel');
-                            PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.defProfile.lrDecel
+                            PERS.recipeList[i + 1].st110.PnpVerAxisRight_config.defProfile.lrDecel
                                 := TO_LREAL(fb_json.GetDouble(json_value));
                         END_IF
 
                         IF fb_json.HasMember(json_defProfile, 'lrJerk') THEN
                             json_value := fb_json.FindMember(json_defProfile, 'lrJerk');
-                            PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.defProfile.lrJerk
+                            PERS.recipeList[i + 1].st110.PnpVerAxisRight_config.defProfile.lrJerk
                                 := TO_LREAL(fb_json.GetDouble(json_value));
                         END_IF
                     END_IF
 
-                    IF fb_json.HasMember(json_VerPnpAxisRight_config, 'moveNumber') THEN
-                        json_value := fb_json.FindMember(json_VerPnpAxisRight_config, 'moveNumber');
-                        PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.moveNumber
-                            := TO_INT(fb_json.GetInt(json_value));
-                    END_IF
-
-                    IF fb_json.HasMember(json_VerPnpAxisRight_config, 'movesList') THEN
-                        json_movesList := fb_json.FindMember(json_VerPnpAxisRight_config, 'movesList');
+                    IF fb_json.HasMember(json_PnpVerAxisRight_config, 'movesList') THEN
+                        json_movesList := fb_json.FindMember(json_PnpVerAxisRight_config, 'movesList');
 
                         IF fb_json.IsArray(json_movesList) THEN
                             FOR ii := 0 TO
@@ -387,19 +366,19 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
 
                                 IF fb_json.HasMember(json_ii, 'TriggerType') THEN
                                     json_value := fb_json.FindMember(json_ii, 'TriggerType');
-                                    PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.movesList[ii + 0].TriggerType
+                                    PERS.recipeList[i + 1].st110.PnpVerAxisRight_config.movesList[ii + 0].TriggerType
                                         := TO_INT(fb_json.GetInt(json_value));
                                 END_IF
 
                                 IF fb_json.HasMember(json_ii, 'TriggerPos') THEN
                                     json_value := fb_json.FindMember(json_ii, 'TriggerPos');
-                                    PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.movesList[ii + 0].TriggerPos
+                                    PERS.recipeList[i + 1].st110.PnpVerAxisRight_config.movesList[ii + 0].TriggerPos
                                         := TO_LREAL(fb_json.GetDouble(json_value));
                                 END_IF
 
                                 IF fb_json.HasMember(json_ii, 'Timeout_ms') THEN
                                     json_value := fb_json.FindMember(json_ii, 'Timeout_ms');
-                                    PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.movesList[ii + 0].Timeout_ms
+                                    PERS.recipeList[i + 1].st110.PnpVerAxisRight_config.movesList[ii + 0].Timeout_ms
                                         := TO_DINT(fb_json.GetInt(json_value));
                                 END_IF
                             END_FOR

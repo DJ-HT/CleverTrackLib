@@ -4,7 +4,6 @@
     <Declaration><![CDATA[TYPE LinearMotionMan_Config_t :
 STRUCT
     defProfile : MoveProfile_t; // default move profile, used when 0 values are given
-    moveNumber : INT;           // number of moves for this linear motion
     movesList  : ARRAY[0..CONST.MAX_VECTOR_LIST] OF VectorMove1D_t;
 END_STRUCT
 END_TYPE
