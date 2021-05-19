@@ -1,7 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_LinearMotionMan" Id="{f6e50161-1430-4a9c-90aa-4c003b101eb2}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_LinearMotionMan
+    <Declaration><![CDATA[// (!) This FB needs to be used inside a process with a step machine           (!)
+// (!) This FB dosen't manage the manual mode, this should be done             (!)
+// (!) in the axis fb directly                                                 (!)
+//
+// This fb helps you to manage a list of 1D position for a linear axis
+// This fb must be dedicated to a specific linear axis
+// The goal is to have all the positions, velocities, accel, etc. 
+// mangable from the recipe
+// 
+// 1) put a LinearMotionMan_Config_t entry where your recipe are
+// 2) call this fb inside the process, just before you call the
+//    associated axis
+// 3) affect ALL the inputs. The 'iIN_CurrentStep' must be set to
+//    the actal step of your process
+// 4) set all the position inside the recipe, see the config doc
+// 5) set the vector 0 to the starting/reset position
+// 6) now you can call fb_linAxis1.MoveTo(pos_index) to move somewhere
+// 7) test fb_linAxis1.xOUT_InPos to know when you can go to the
+//    next step
+// 7b) you can also move and test at the same time:
+//       IF fb_linAxis1.MoveTo(pos_index).xOUT_InPos THEN ...
+// 8) You can also call fb_linAxis1.MoveNext() if you don't want to deal
+//    with the current position. Always prefer MoveTo since it is more robust
+//
+FUNCTION_BLOCK FB_LinearMotionMan
 VAR_INPUT
     config          : LinearMotionMan_Config_t;
     lrIN_CurrPos    : REAL;         // current position of the axis
@@ -27,28 +51,40 @@ END_VAR
               THIS^.IsTriggerFired());
 
 // OUT_MoveProfile is set when the method MoveNext() or MoveTo() is called
-IF 0.0 = OUT_MoveProfile.lrVelocity THEN
-    OUT_MoveProfile.lrVelocity := config.defProfile.lrVelocity;
-END_IF
+THIS^.AdjustMoveValues();
 
-IF 0.0 = OUT_MoveProfile.lrAccel THEN
-    OUT_MoveProfile.lrVelocity := config.defProfile.lrAccel;
-END_IF
+xOUT_Execute := NOT xOUT_InPos AND _IsMoving AND (iIN_CurrentStep = _LastMovingStep);
 
-IF 0.0 = OUT_MoveProfile.lrDecel THEN
-    OUT_MoveProfile.lrVelocity := config.defProfile.lrDecel;
-END_IF
-
-IF 0.0 = OUT_MoveProfile.lrJerk THEN
-    OUT_MoveProfile.lrVelocity := config.defProfile.lrJerk;
-END_IF
-
-xOUT_Execute := NOT xOUT_InPos AND _IsMoving;
 // keep _IsMoving below xOUT_Execute so we ensure that xOUT_Execute is at 1 for at least 1 cycle
 IF _IsMoving THEN
-	_IsMoving := NOT xOUT_InPos;
-END_IF]]></ST>
+    _IsMoving := NOT xOUT_InPos;
+END_IF
+]]></ST>
     </Implementation>
+    <Method Name="AdjustMoveValues" Id="{64b3c058-b187-4b4f-bb24-d5e60d9198a1}">
+      <Declaration><![CDATA[METHOD PRIVATE AdjustMoveValues : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF 0.0 = THIS^.OUT_MoveProfile.lrVelocity THEN
+    THIS^.OUT_MoveProfile.lrVelocity := THIS^.config.defProfile.lrVelocity;
+END_IF
+
+IF 0.0 = THIS^.OUT_MoveProfile.lrAccel THEN
+    THIS^.OUT_MoveProfile.lrAccel := THIS^.config.defProfile.lrAccel;
+END_IF
+
+IF 0.0 = THIS^.OUT_MoveProfile.lrDecel THEN
+    THIS^.OUT_MoveProfile.lrDecel := THIS^.config.defProfile.lrDecel;
+END_IF
+
+IF 0.0 = THIS^.OUT_MoveProfile.lrJerk THEN
+    THIS^.OUT_MoveProfile.lrJerk := THIS^.config.defProfile.lrJerk;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="GetNext" Id="{d7a259dc-a48f-41d1-b497-57f2282cb347}">
       <Declaration><![CDATA[METHOD PRIVATE GetNext : INT
 VAR_INPUT
@@ -135,16 +171,18 @@ END_IF
       </Implementation>
     </Method>
     <Method Name="MoveNext" Id="{6323ebd6-05dc-47d1-b2d2-bbb6fba16db1}">
-      <Declaration><![CDATA[METHOD MoveNext : REFERENCE TO FB_LinearMotionMan
+      <Declaration><![CDATA[// Move to the next point
+METHOD MoveNext : REFERENCE TO FB_LinearMotionMan
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.iOUT_CurrPosNumber := THIS^.GetNext();
-THIS^.OUT_MoveProfile    := THIS^.config.movesList[THIS^.iOUT_CurrPosNumber];
-
-IF THIS^.iIN_CurrentStep <> THIS^._LastMovingStep THEN
+        <ST><![CDATA[IF THIS^.iIN_CurrentStep <> THIS^._LastMovingStep THEN
+    THIS^.iOUT_CurrPosNumber := THIS^.GetNext();
+    THIS^.OUT_MoveProfile    := THIS^.config.movesList[THIS^.iOUT_CurrPosNumber];
+    THIS^.AdjustMoveValues();
     THIS^._IsMoving       := TRUE;
+    THIS^.xOUT_InPos      := FALSE;
     THIS^._LastMovingStep := THIS^.iIN_CurrentStep;
 END_IF
 
@@ -153,18 +191,20 @@ MoveNext REF= THIS^;
       </Implementation>
     </Method>
     <Method Name="MoveTo" Id="{9e34e3fe-6f8c-4da8-ba65-389776e0532b}">
-      <Declaration><![CDATA[METHOD MoveTo : REFERENCE TO FB_LinearMotionMan
+      <Declaration><![CDATA[// Move to the given point
+METHOD MoveTo : REFERENCE TO FB_LinearMotionMan
 VAR_INPUT
 	positionNumber : INT;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF (positionNumber > 0) AND (positionNumber < (THIS^.config.moveNumber)) THEN
-    iOUT_CurrPosNumber    := positionNumber;
-    THIS^.OUT_MoveProfile := THIS^.config.movesList[iOUT_CurrPosNumber];
-
+        <ST><![CDATA[IF (positionNumber >= 0) AND (positionNumber < (THIS^.config.moveNumber)) THEN
     IF THIS^.iIN_CurrentStep <> THIS^._LastMovingStep THEN
+        iOUT_CurrPosNumber    := positionNumber;
+        THIS^.OUT_MoveProfile := THIS^.config.movesList[iOUT_CurrPosNumber];
+        THIS^.AdjustMoveValues();
         THIS^._IsMoving       := TRUE;
+        THIS^.xOUT_InPos      := FALSE;
         THIS^._LastMovingStep := THIS^.iIN_CurrentStep;
     END_IF
 

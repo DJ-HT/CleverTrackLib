@@ -129,13 +129,13 @@ fb_axis110_01Y(enIN_State       := enIN_State,
                rIN_VELOMANU     := ST110_Axis.const110_01Y.VELO_MANU,
                rIN_VELOOPEN     := ST110_Axis.const110_01Y.VELO_MANU / 4,
                rIN_JogInc       := AXIS.rTeachIncAxis,
-               xIN_Execute      :=,
+               xIN_Execute      := fb_HorPnpAxis.xOUT_Execute,
                xIN_Relative     :=,
-               rIN_Position     :=,
-               rIN_Velocity     :=,
-               rIN_Acceleration := PERS.recipeList[1].st110.ST110_01Y.rAccel,
-               rIN_Deceleration := PERS.recipeList[1].st110.ST110_01Y.rDecel,
-               rIN_Jerk         := PERS.recipeList[1].st110.ST110_01Y.rJerk,
+               rIN_Position     := fb_HorPnpAxis.OUT_MoveProfile.lrPosition,
+               rIN_Velocity     := fb_HorPnpAxis.OUT_MoveProfile.lrVelocity,
+               rIN_Acceleration := fb_HorPnpAxis.OUT_MoveProfile.lrAccel,
+               rIN_Deceleration := fb_HorPnpAxis.OUT_MoveProfile.lrDecel,
+               rIN_Jerk         := fb_HorPnpAxis.OUT_MoveProfile.lrJerk,
                xIN_Reset        := xIN_Reset,
                axisIN_REF       := ST110_Axis.axis110_01Y.axis);
 
@@ -153,32 +153,33 @@ fb_VerPnpAxisLeft(config          := PERS.recipeList[1].st110.VerPnpAxisLeft_con
                   lrIN_Delta_mm   := 0.01,
                   iIN_CurrentStep := iOUT_Step);
 
-fb_axis110_02Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := FALSE,
-               xIN_Quit         := xIN_Quit,
-               axisIN_REF       := ST110_Axis.axis110_02Z.axis,
-               xIN_AX5000       := FALSE,
-               xIN_ENC_ABS      := TRUE, // TODO set accordingly
-               xIN_PARAMok      := TRUE,
-               xIN_FREE         := TRUE,
-               xIN_FREE_HOME    := TRUE,
-               rIN_POSMIN       := ST110_Axis.const110_02Z.POS_MIN,
-               rIN_POSMAX       := ST110_Axis.const110_02Z.POS_MAX,
-               rIN_VELOMAX      := ST110_Axis.const110_02Z.VELO_MAX,
-               rIN_VELOMANU     := ST110_Axis.const110_02Z.VELO_MANU,
-               rIN_VELOOPEN     := ST110_Axis.const110_02Z.POS_MAX / 4,
-               rIN_JogInc       := AXIS.rTeachIncAxis,
-               rIN_JogVelo      :=,
-               xIN_HomeExe      :=,
-               xIN_HomeCalib    :=,
-               xIN_Execute      :=,
+fb_axis110_02Z(enIN_State     := enIN_State,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons := FALSE,
+               xIN_Quit       := xIN_Quit,
+               axisIN_REF     := ST110_Axis.axis110_02Z.axis,
+               xIN_AX5000     := FALSE,
+               xIN_ENC_ABS    := TRUE, // TODO set accordingly
+               xIN_PARAMok    := TRUE,
+               xIN_FREE       := TRUE,
+               xIN_FREE_HOME  := TRUE,
+               rIN_POSMIN     := ST110_Axis.const110_02Z.POS_MIN,
+               rIN_POSMAX     := ST110_Axis.const110_02Z.POS_MAX,
+               rIN_VELOMAX    := ST110_Axis.const110_02Z.VELO_MAX,
+               rIN_VELOMANU   := ST110_Axis.const110_02Z.VELO_MANU,
+               rIN_VELOOPEN   := ST110_Axis.const110_02Z.POS_MAX / 4,
+               rIN_JogInc     := AXIS.rTeachIncAxis,
+               rIN_JogVelo    :=,
+               xIN_HomeExe    :=,
+               xIN_HomeCalib  :=,
+               xIN_Execute    := PERS.recipeList[1].st110.xUseVerticalLeft AND
+                                 (fb_VerPnpAxisLeft.xOUT_Execute),
                xIN_Relative     :=,
-               rIN_Position     :=,
-               rIN_Velocity     :=, // always move at 100%
-               rIN_Acceleration := PERS.recipeList[1].st110.ST110_02Z.rAccel,
-               rIN_Deceleration := PERS.recipeList[1].st110.ST110_02Z.rDecel,
-               rIN_Jerk         := PERS.recipeList[1].st110.ST110_02Z.rJerk,
+               rIN_Position     := fb_VerPnpAxisLeft.OUT_MoveProfile.lrPosition,
+               rIN_Velocity     := fb_VerPnpAxisLeft.OUT_MoveProfile.lrVelocity,
+               rIN_Acceleration := fb_VerPnpAxisLeft.OUT_MoveProfile.lrAccel,
+               rIN_Deceleration := fb_VerPnpAxisLeft.OUT_MoveProfile.lrDecel,
+               rIN_Jerk         := fb_VerPnpAxisLeft.OUT_MoveProfile.lrJerk,
                xIN_Reset        := xIN_Reset,
 
                // output
@@ -199,26 +200,27 @@ fb_VerPnpAxisRight(config          := PERS.recipeList[1].st110.VerPnpAxisRight_c
                    lrIN_Delta_mm   := 0.01,
                    iIN_CurrentStep := iOUT_Step);
 
-fb_axis110_03Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := FALSE,
-               xIN_Quit         := xIN_Quit,
-               xIN_PARAMok      := TRUE, (*TODO*)
-               xIN_FREE         := TRUE,
-               xIN_FREE_HOME    := TRUE,
-               rIN_POSMIN       := ST110_Axis.const110_03Z.POS_MIN,
-               rIN_POSMAX       := ST110_Axis.const110_03Z.POS_MAX,
-               rIN_VELOMAX      := ST110_Axis.const110_03Z.VELO_MAX,
-               rIN_VELOMANU     := ST110_Axis.const110_03Z.VELO_MANU,
-               rIN_VELOOPEN     := ST110_Axis.const110_03Z.VELO_MANU / 4,
-               rIN_JogInc       := AXIS.rTeachIncAxis,
-               xIN_Execute      :=,
+fb_axis110_03Z(enIN_State     := enIN_State,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_PARAMok    := TRUE, (*TODO*)
+               xIN_FREE       := TRUE,
+               xIN_FREE_HOME  := TRUE,
+               rIN_POSMIN     := ST110_Axis.const110_03Z.POS_MIN,
+               rIN_POSMAX     := ST110_Axis.const110_03Z.POS_MAX,
+               rIN_VELOMAX    := ST110_Axis.const110_03Z.VELO_MAX,
+               rIN_VELOMANU   := ST110_Axis.const110_03Z.VELO_MANU,
+               rIN_VELOOPEN   := ST110_Axis.const110_03Z.VELO_MANU / 4,
+               rIN_JogInc     := AXIS.rTeachIncAxis,
+               xIN_Execute    := PERS.recipeList[1].st110.xUseVerticalRight AND
+                                 (fb_VerPnpAxisRight.xOUT_Execute),
                xIN_Relative     :=,
-               rIN_Position     :=,
-               rIN_Velocity     :=,
-               rIN_Acceleration := PERS.recipeList[1].st110.ST110_03Z.rAccel,
-               rIN_Deceleration := PERS.recipeList[1].st110.ST110_03Z.rDecel,
-               rIN_Jerk         := PERS.recipeList[1].st110.ST110_03Z.rJerk,
+               rIN_Position     := fb_VerPnpAxisRight.OUT_MoveProfile.lrPosition,
+               rIN_Velocity     := fb_VerPnpAxisRight.OUT_MoveProfile.lrVelocity,
+               rIN_Acceleration := fb_VerPnpAxisRight.OUT_MoveProfile.lrAccel,
+               rIN_Deceleration := fb_VerPnpAxisRight.OUT_MoveProfile.lrDecel,
+               rIN_Jerk         := fb_VerPnpAxisRight.OUT_MoveProfile.lrJerk,
                xIN_Reset        := xIN_Reset,
                axisIN_REF       := ST110_Axis.axis110_03Z.axis,
                xIN_AX5000       := FALSE,
@@ -245,26 +247,6 @@ IF NOT CONST.USE_SIMULATION THEN
     fb_axis110_02Z.xIN_HomeExe := ST110_e.Init_HomeVerticals = iAktStep;
     fb_axis110_03Z.xIN_HomeExe := ST110_e.Init_HomeVerticals = iAktStep;
 END_IF
-
-fb_axis110_01Y.xIN_Execute := ST110_e.Init_HorizontalsToTrack = iAktStep OR
-                              ST110_e.PnP_Hor_ToRotTablePos = iAktStep OR
-                              ST110_e.PnP_Hor_ToTrackPos = iAktStep;
-
-fb_axis110_02Z.xIN_Execute := ST110_e.Init_VerticalsUp = iAktStep OR
-                              PERS.recipeList[1].st110.xUseVerticalLeft AND
-                              (
-                              ST110_e.PnP_Ver_RotTableDown = iAktStep OR
-                              ST110_e.PnP_Ver_RotTableUp = iAktStep OR
-                              ST110_e.PnP_Ver_ShuttleDown = iAktStep OR
-                              ST110_e.PnP_Ver_ShuttleUp = iAktStep);
-
-fb_axis110_03Z.xIN_Execute := ST110_e.Init_VerticalsUp = iAktStep OR
-                              PERS.recipeList[1].st110.xUseVerticalRight AND
-                              (
-                              ST110_e.PnP_Ver_RotTableDown = iAktStep OR
-                              ST110_e.PnP_Ver_RotTableUp = iAktStep OR
-                              ST110_e.PnP_Ver_ShuttleDown = iAktStep OR
-                              ST110_e.PnP_Ver_ShuttleUp = iAktStep);
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -350,12 +332,7 @@ ST110_e.Init_HomeVerticals:
     END_IF
 
 st110_e.Init_VerticalsUp:
-    fb_axis110_02Z.rIN_Position := -5.0;
-    fb_axis110_02Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_02Z.rVeloToGS;
-    fb_axis110_03Z.rIN_Position := -5.0;
-    fb_axis110_03Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_03Z.rVeloToGS;
-
-    IF fb_axis110_02Z.xOUT_DONE AND fb_axis110_03Z.xOUT_DONE THEN
+    IF fb_VerPnpAxisLeft.MoveTo(0).xOUT_InPos AND fb_VerPnpAxisRight.MoveTo(0).xOUT_InPos THEN
         IF fb_axis110_01Y.xOUT_READY OR fb_axis110_01Y.xOUT_HOMED THEN
             iOUT_Step := ST110_e.Init_HorizontalsToTrack;
         ELSE
@@ -371,10 +348,7 @@ ST110_e.Init_HomeHorizontals:
     END_IF
 
 st110_e.Init_HorizontalsToTrack:
-    fb_axis110_01Y.rIN_Position := -5.0;
-    fb_axis110_01Y.rIN_Velocity := PERS.recipeList[1].st110.ST110_01Y.rVeloToGS;
-
-    IF fb_axis110_01Y.xOUT_DONE THEN
+    IF fb_HorPnpAxis.MoveTo(0).xOUT_InPos THEN
         iOUT_Step := ST110_e.READY;
     END_IF
 
@@ -391,26 +365,14 @@ ST110_e.START: (*  *)
     END_IF;
 
 ST110_e.PnP_Hor_ToRotTablePos:
-    fb_axis110_01Y.rIN_Position := PERS.recipeList[1].st110.ST110_01Y.rPosAS;
-    fb_axis110_01Y.rIN_Velocity := PERS.recipeList[1].st110.ST110_01Y.rVeloToAS;
-(*
-    IF fb_HorPnpAxis.MoveTo(1).xOUT_InPos THEN
-        iOUT_Step := iOUT_Step;
-    END_IF
-*)
-    IF xIN_NextStep AND fb_axis110_01Y.xOUT_DONE THEN
+    IF xIN_NextStep AND fb_HorPnpAxis.MoveNext().xOUT_InPos THEN
         iOUT_Step := ST110_e.PnP_Ver_RotTableDown;
-    END_IF;
-	
+    END_IF
 
 ST110_e.PnP_Ver_RotTableDown:
-    fb_axis110_02Z.rIN_Position := PERS.recipeList[1].st110.ST110_02Z.rPosAS;
-    fb_axis110_02Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_02Z.rVeloToAS;
-    fb_axis110_03Z.rIN_Position := PERS.recipeList[1].st110.ST110_03Z.rPosAS;
-    fb_axis110_03Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_03Z.rVeloToAS;
     IF xIN_NextStep AND
-       (fb_axis110_02Z.xOUT_DONE OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
-       (fb_axis110_03Z.xOUT_DONE OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
+       (fb_VerPnpAxisLeft.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
+       (fb_VerPnpAxisRight.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
         iOUT_Step := ST110_e.Vacum_on;
     END_IF;
 
@@ -420,22 +382,16 @@ ST110_e.Vacum_on:
     END_IF;
 
 ST110_e.PnP_Ver_RotTableUp:
-    fb_axis110_02Z.rIN_Position := PERS.recipeList[1].st110.ST110_02Z.rPosGS;
-    fb_axis110_02Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_02Z.rVeloToGS;
-    fb_axis110_03Z.rIN_Position := PERS.recipeList[1].st110.ST110_03Z.rPosGS;
-    fb_axis110_03Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_03Z.rVeloToGS;
-
     IF xIN_NextStep AND
-       (fb_axis110_02Z.xOUT_DONE OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
-       (fb_axis110_03Z.xOUT_DONE OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
+       (fb_VerPnpAxisLeft.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
+       (fb_VerPnpAxisRight.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
         iOUT_Step := ST110_e.PnP_Hor_ToTrackPos;
     END_IF;
 
 ST110_e.PnP_Hor_ToTrackPos:
-    fb_axis110_01Y.rIN_Position := PERS.recipeList[1].st110.ST110_01Y.rPosGS;
-    IF xIN_NextStep AND fb_axis110_01Y.xOUT_DONE THEN
+    IF xIN_NextStep AND fb_HorPnpAxis.MoveNext().xOUT_InPos THEN
         iOUT_Step := ST110_e.waitOnMover;
-    END_IF;
+    END_IF
 
 ST110_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
@@ -443,36 +399,29 @@ ST110_e.waitOnMover: (*  *)
     END_IF;
 
 ST110_e.PnP_Ver_ShuttleDown:
-    fb_axis110_02Z.rIN_Position := PERS.recipeList[1].st110.ST110_02Z.rPosAS;
-    fb_axis110_02Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_02Z.rVeloToAS;
-    fb_axis110_03Z.rIN_Position := PERS.recipeList[1].st110.ST110_03Z.rPosAS;
-    fb_axis110_03Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_03Z.rVeloToAS;
     IF xIN_NextStep AND
-       (fb_axis110_02Z.xOUT_DONE OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
-       (fb_axis110_03Z.xOUT_DONE OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
-        iOUT_Step              := ST110_e.PnP_Ver_ShuttleTorqueControl;
-        udiWaitTimeBetweenStep := 500; // wait 500 ms to simulate the torque control phase
+       (fb_VerPnpAxisLeft.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
+       (fb_VerPnpAxisRight.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
+        iOUT_Step := ST110_e.PnP_Ver_ShuttleTorqueControl;
     END_IF;
 
 // We need a fb that enables for us torque control. Here we just go a bit further
 ST110_e.PnP_Ver_ShuttleTorqueControl:
-    IF xIN_NextStep AND (GetTick() - udiStartProcessTimeMili) >= (udiWaitTimeBetweenStep) THEN
+    IF xIN_NextStep AND
+       (fb_VerPnpAxisLeft.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
+       (fb_VerPnpAxisRight.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
         iOUT_Step := ST110_e.Vacum_off;
     END_IF;
 
 ST110_e.Vacum_off:
-    IF xIN_NextStep AND NOT fb_axis110_02Z.xOUT_DONE AND NOT fb_axis110_03Z.xOUT_DONE THEN
+    IF xIN_NextStep THEN
         iOUT_Step := ST110_e.PnP_Ver_ShuttleUp;
     END_IF;
 
 ST110_e.PnP_Ver_ShuttleUp:
-    fb_axis110_02Z.rIN_Position := PERS.recipeList[1].st110.ST110_02Z.rPosGS;
-    fb_axis110_02Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_02Z.rVeloToGS;
-    fb_axis110_03Z.rIN_Position := PERS.recipeList[1].st110.ST110_03Z.rPosGS;
-    fb_axis110_03Z.rIN_Velocity := PERS.recipeList[1].st110.ST110_03Z.rVeloToGS;
     IF xIN_NextStep AND
-       (fb_axis110_02Z.xOUT_DONE OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
-       (fb_axis110_03Z.xOUT_DONE OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
+       (fb_VerPnpAxisLeft.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalLeft) AND
+       (fb_VerPnpAxisRight.MoveNext().xOUT_InPos OR NOT PERS.recipeList[1].st110.xUseVerticalRight) THEN
         iOUT_Step := ST110_e.SYNC_MOVER_LEAVE;
     END_IF;
 
