@@ -250,7 +250,9 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                                 json_ii := fb_json.GetArrayValueByIdx(json_movesList, TO_UDINT(ii));
 
                                 IF fb_json.HasMember(json_ii, 'TriggerType') THEN
-                                    json_TriggerType := fb_json.FindMember(json_ii, 'TriggerType');
+                                    json_value := fb_json.FindMember(json_ii, 'TriggerType');
+                                    PERS.recipeList[i + 1].st110.HorPnpAxis_config.movesList[ii + 0].TriggerType
+                                        := TO_INT(fb_json.GetInt(json_value));
                                 END_IF
 
                                 IF fb_json.HasMember(json_ii, 'TriggerPos') THEN
@@ -316,7 +318,9 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                                 json_ii := fb_json.GetArrayValueByIdx(json_movesList, TO_UDINT(ii));
 
                                 IF fb_json.HasMember(json_ii, 'TriggerType') THEN
-                                    json_TriggerType := fb_json.FindMember(json_ii, 'TriggerType');
+                                    json_value := fb_json.FindMember(json_ii, 'TriggerType');
+                                    PERS.recipeList[i + 1].st110.VerPnpAxisLeft_config.movesList[ii + 0].TriggerType
+                                        := TO_INT(fb_json.GetInt(json_value));
                                 END_IF
 
                                 IF fb_json.HasMember(json_ii, 'TriggerPos') THEN
@@ -382,7 +386,9 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                                 json_ii := fb_json.GetArrayValueByIdx(json_movesList, TO_UDINT(ii));
 
                                 IF fb_json.HasMember(json_ii, 'TriggerType') THEN
-                                    json_TriggerType := fb_json.FindMember(json_ii, 'TriggerType');
+                                    json_value := fb_json.FindMember(json_ii, 'TriggerType');
+                                    PERS.recipeList[i + 1].st110.VerPnpAxisRight_config.movesList[ii + 0].TriggerType
+                                        := TO_INT(fb_json.GetInt(json_value));
                                 END_IF
 
                                 IF fb_json.HasMember(json_ii, 'TriggerPos') THEN

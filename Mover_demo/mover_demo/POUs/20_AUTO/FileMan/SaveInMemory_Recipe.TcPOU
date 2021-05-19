@@ -116,9 +116,8 @@ FOR i := 1 TO CONST.MAX_RECIPE_NUMBER BY 1 DO
 
     FOR ii := 0 TO CONST.MAX_VECTOR_LIST BY 1 DO
         fbJson.StartObject();
-        fbJson.addKey('TriggerType');
-        fbJson.StartObject();
-        fbJson.EndObject();
+        fbJson.AddKey('TriggerType');
+        fbJson.AddDint(PERS.recipeList[i].st110.HorPnpAxis_config.movesList[ii].TriggerType);
         fbJson.AddKey('TriggerPos');
         fbJson.AddLreal(PERS.recipeList[i].st110.HorPnpAxis_config.movesList[ii].TriggerPos);
         fbJson.AddKey('Timeout_ms');
@@ -148,9 +147,8 @@ FOR i := 1 TO CONST.MAX_RECIPE_NUMBER BY 1 DO
 
     FOR ii := 0 TO CONST.MAX_VECTOR_LIST BY 1 DO
         fbJson.StartObject();
-        fbJson.addKey('TriggerType');
-        fbJson.StartObject();
-        fbJson.EndObject();
+        fbJson.AddKey('TriggerType');
+        fbJson.AddDint(PERS.recipeList[i].st110.VerPnpAxisLeft_config.movesList[ii].TriggerType);
         fbJson.AddKey('TriggerPos');
         fbJson.AddLreal(PERS.recipeList[i].st110.VerPnpAxisLeft_config.movesList[ii].TriggerPos);
         fbJson.AddKey('Timeout_ms');
@@ -180,9 +178,8 @@ FOR i := 1 TO CONST.MAX_RECIPE_NUMBER BY 1 DO
 
     FOR ii := 0 TO CONST.MAX_VECTOR_LIST BY 1 DO
         fbJson.StartObject();
-        fbJson.addKey('TriggerType');
-        fbJson.StartObject();
-        fbJson.EndObject();
+        fbJson.AddKey('TriggerType');
+        fbJson.AddDint(PERS.recipeList[i].st110.VerPnpAxisRight_config.movesList[ii].TriggerType);
         fbJson.AddKey('TriggerPos');
         fbJson.AddLreal(PERS.recipeList[i].st110.VerPnpAxisRight_config.movesList[ii].TriggerPos);
         fbJson.AddKey('Timeout_ms');

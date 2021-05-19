@@ -3,11 +3,11 @@
   <DUT Name="VectorMove1D_t" Id="{f3cd3875-da19-466e-896d-89a00c6cff0b}">
     <Declaration><![CDATA[// Configuration structure for a VectorMove1D
 // This configuration is typically stored inside a ricipies
-TYPE VectorMove1D_t EXTENDS MoveProfile1D_t:
+TYPE VectorMove1D_t EXTENDS MoveProfile1D_t :
 STRUCT
-    TriggerType : TriggerType_e; // the kind of trigger used
-    TriggerPos  : LREAL;         // trigger position, ignore if TriggerType is None
-    Timeout_ms  : DINT;          // timeout value for this movement vector expressed in milisecond
+    TriggerType : INT;   // the kind of trigger used
+    TriggerPos  : LREAL; // trigger position, ignore if TriggerType is None
+    Timeout_ms  : DINT;  // timeout value for this movement vector expressed in milisecond
 END_STRUCT
 END_TYPE
 ]]></Declaration>
