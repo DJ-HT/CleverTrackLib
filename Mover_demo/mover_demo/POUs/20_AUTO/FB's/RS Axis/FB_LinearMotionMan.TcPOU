@@ -3,9 +3,10 @@
   <POU Name="FB_LinearMotionMan" Id="{f6e50161-1430-4a9c-90aa-4c003b101eb2}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_LinearMotionMan
 VAR_INPUT
-    config        : LinearMotionMan_Config_t;
-    lrIN_CurrPos  : REAL;         // current position of the axis
-    lrIN_Delta_mm : REAL := 0.01; // the accuracy of our position. Used to rise the xOUT_InPos flag
+    config          : LinearMotionMan_Config_t;
+    lrIN_CurrPos    : REAL;         // current position of the axis
+    lrIN_Delta_mm   : REAL := 0.01; // the accuracy of our position. Used to rise the xOUT_InPos flag
+    iIN_CurrentStep : INT  := 0;    // current step from the step machine. This flag is used to prevent multiple move inside the same step
 
 END_VAR
 VAR_OUTPUT
@@ -15,31 +16,38 @@ VAR_OUTPUT
     xOUT_InPos         : BOOL;            // Is on when 'lrIN_CurrPos' passed the trigger or correspond 
 END_VAR
 VAR
-	_IsMoving : BOOL; // This flag is used so xOUT_Execute is true for at least one cycle
+    _IsMoving       : BOOL; // This flag is used so xOUT_Execute is true for at least one cycle
+    _LastMovingStep : INT;  // This is used to prevent multiple move inside the same step
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[xOUT_InPos := ((lrIN_CurrPos >= (config.movesList[iOUT_CurrPosNumber].lrPosition - lrIN_Delta_mm)) AND
+      <ST><![CDATA[xOUT_InPos := THIS^.IsPosValid(iOUT_CurrPosNumber) AND
+              (((lrIN_CurrPos >= (config.movesList[iOUT_CurrPosNumber].lrPosition - lrIN_Delta_mm)) AND
               (lrIN_CurrPos <= (config.movesList[iOUT_CurrPosNumber].lrPosition + lrIN_Delta_mm))) OR
-              THIS^.IsTriggerFired();
+              THIS^.IsTriggerFired());
 
 // OUT_MoveProfile is set when the method MoveNext() or MoveTo() is called
 IF 0.0 = OUT_MoveProfile.lrVelocity THEN
-	OUT_MoveProfile.lrVelocity := config.defProfile.lrVelocity;
+    OUT_MoveProfile.lrVelocity := config.defProfile.lrVelocity;
 END_IF
+
 IF 0.0 = OUT_MoveProfile.lrAccel THEN
-	OUT_MoveProfile.lrVelocity := config.defProfile.lrAccel;
+    OUT_MoveProfile.lrVelocity := config.defProfile.lrAccel;
 END_IF
+
 IF 0.0 = OUT_MoveProfile.lrDecel THEN
-	OUT_MoveProfile.lrVelocity := config.defProfile.lrDecel;
+    OUT_MoveProfile.lrVelocity := config.defProfile.lrDecel;
 END_IF
+
 IF 0.0 = OUT_MoveProfile.lrJerk THEN
-	OUT_MoveProfile.lrVelocity := config.defProfile.lrJerk;
+    OUT_MoveProfile.lrVelocity := config.defProfile.lrJerk;
 END_IF
 
 xOUT_Execute := NOT xOUT_InPos AND _IsMoving;
 // keep _IsMoving below xOUT_Execute so we ensure that xOUT_Execute is at 1 for at least 1 cycle
-_IsMoving := NOT xOUT_InPos;]]></ST>
+IF _IsMoving THEN
+	_IsMoving := NOT xOUT_InPos;
+END_IF]]></ST>
     </Implementation>
     <Method Name="GetNext" Id="{d7a259dc-a48f-41d1-b497-57f2282cb347}">
       <Declaration><![CDATA[METHOD PRIVATE GetNext : INT
@@ -66,17 +74,28 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF (iOUT_CurrPosNumber <= 0) THEN
-    IF THIS^.config.moveNumber > 0 THEN
+        <ST><![CDATA[IF THIS^.config.moveNumber > 0 THEN
+    IF (iOUT_CurrPosNumber <= 0) THEN
         GetPrevious := THIS^.config.moveNumber - 1;
     ELSE
-        GetPrevious := 0;
-        ASSERT(0); // you should not call a move command when the axis has no mouvement
+        GetPrevious := iOUT_CurrPosNumber - 1;
     END_IF
 ELSE
-    GetPrevious := iOUT_CurrPosNumber - 1;
+    GetPrevious := 0;
+    ASSERT(0); // you should not call a move command when the axis has no mouvement
 END_IF
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsPosValid" Id="{66ccb853-aacd-41d4-bd85-b9b989f1037d}">
+      <Declaration><![CDATA[// test if the given position number is possible
+METHOD PRIVATE IsPosValid : BOOL
+VAR_INPUT
+    position : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPosValid := (position >= 0) AND (position < this^.config.moveNumber);]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsTriggerFired" Id="{75eeb8c8-ad91-4e2d-9030-06b3af742aba}">
@@ -108,8 +127,8 @@ ELSE
     triggerPos := my_move.lrPosition;
 END_CASE
 
-IF (my_move.TriggerPos <= THIS^.lrIN_CurrPos) AND (THIS^.lrIN_CurrPos <= my_move.lrPosition) OR
-   (my_move.TriggerPos >= THIS^.lrIN_CurrPos) AND (THIS^.lrIN_CurrPos >= my_move.lrPosition) THEN
+IF (triggerPos <= THIS^.lrIN_CurrPos) AND (THIS^.lrIN_CurrPos <= my_move.lrPosition) OR
+   (triggerPos >= THIS^.lrIN_CurrPos) AND (THIS^.lrIN_CurrPos >= my_move.lrPosition) THEN
     IsTriggerFired := TRUE;
 END_IF
 ]]></ST>
@@ -119,18 +138,15 @@ END_IF
       <Declaration><![CDATA[METHOD MoveNext : REFERENCE TO FB_LinearMotionMan
 VAR_INPUT
 END_VAR
-VAR_INST
-    _IsMoveExecuted : BOOL; // flag
-END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF NOT _IsMoveExecuted THEN
-    THIS^.iOUT_CurrPosNumber := THIS^.GetNext();
-    THIS^.OUT_MoveProfile    := THIS^.config.movesList[THIS^.iOUT_CurrPosNumber];
-    THIS^._IsMoving          := TRUE;
-END_IF
+        <ST><![CDATA[THIS^.iOUT_CurrPosNumber := THIS^.GetNext();
+THIS^.OUT_MoveProfile    := THIS^.config.movesList[THIS^.iOUT_CurrPosNumber];
 
-_IsMoveExecuted := NOT THIS^._IsMoving;
+IF THIS^.iIN_CurrentStep <> THIS^._LastMovingStep THEN
+    THIS^._IsMoving       := TRUE;
+    THIS^._LastMovingStep := THIS^.iIN_CurrentStep;
+END_IF
 
 MoveNext REF= THIS^;
 ]]></ST>
@@ -143,14 +159,18 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF (positionNumber > 0) AND (positionNumber < (THIS^.config.moveNumber - 1)) THEN
-    iOUT_CurrPosNumber := positionNumber;
-	THIS^._IsMoving := TRUE;
-	THIS^.OUT_MoveProfile := THIS^.config.movesList[iOUT_CurrPosNumber];
+        <ST><![CDATA[IF (positionNumber > 0) AND (positionNumber < (THIS^.config.moveNumber)) THEN
+    iOUT_CurrPosNumber    := positionNumber;
+    THIS^.OUT_MoveProfile := THIS^.config.movesList[iOUT_CurrPosNumber];
+
+    IF THIS^.iIN_CurrentStep <> THIS^._LastMovingStep THEN
+        THIS^._IsMoving       := TRUE;
+        THIS^._LastMovingStep := THIS^.iIN_CurrentStep;
+    END_IF
 
 ELSE
     ASSERT(0);
-	
+
 END_IF
 
 MoveTo REF= THIS^;
