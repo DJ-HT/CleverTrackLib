@@ -131,13 +131,14 @@ fb_axis110_01Y(enIN_State       := enIN_State,
                rIN_VELOOPEN     := ST110_Axis.const110_01Y.VELO_MANU / 4,
                rIN_JogInc       := AXIS.rTeachIncAxis,
                xIN_Execute      := fb_PnpHorAxis.xOUT_Execute,
+               xIN_Home         := ST110_Pnp_e.Init_HomeHorizontals = iAktStep,
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrPosition),
                rIN_Velocity     := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrVelocity),
                rIN_Acceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
-               xIN_Reset        := xIN_Reset,
+               xIN_Reset        := (ST110_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                axisIN_REF       := ST110_Axis.axis110_01Y.axis);
 
 fb_simu_axis110_01Y(bIN_AxisCntr        := fb_axis110_01Y.bOUT_AxisCntr,
@@ -176,13 +177,14 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                xIN_HomeCalib  :=,
                xIN_Execute    := (PERS.recipeList[1].st110.xUseVerLeft OR (iOUT_Step < ST110_Pnp_e.READY)) AND
                                  (fb_PnpVerAxisL.xOUT_Execute),
+               xIN_HomeExe      := NOT CONST.USE_SIMULATION AND (ST110_Pnp_e.Init_HomeVerticals = iAktStep),
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrPosition),
                rIN_Velocity     := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrVelocity),
                rIN_Acceleration := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrJerk),
-               xIN_Reset        := xIN_Reset,
+               xIN_Reset        := (ST110_Pnp_e.RESET = iAktStep) OR xIN_Reset,
 
                // output
                xOUT_ErrFlag =>,
@@ -218,13 +220,14 @@ fb_axis110_03Z(enIN_State     := enIN_State,
                rIN_JogInc     := AXIS.rTeachIncAxis,
                xIN_Execute    := (PERS.recipeList[1].st110.xUseVerRight OR (iOUT_Step < ST110_Pnp_e.READY)) AND
                                  (fb_PnpVerAxisR.xOUT_Execute),
+               xIN_HomeExe      := NOT CONST.USE_SIMULATION AND (ST110_Pnp_e.Init_HomeVerticals = iAktStep),
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrPosition),
                rIN_Velocity     := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrVelocity),
                rIN_Acceleration := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrJerk),
-               xIN_Reset        := xIN_Reset,
+               xIN_Reset        := (ST110_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                axisIN_REF       := ST110_Axis.axis110_03Z.axis,
                xIN_AX5000       := FALSE,
                xIN_ENC_ABS      := TRUE); // TODO set accordingly
@@ -234,22 +237,6 @@ fb_simu_axis110_03Z(rIN_PosActual := fb_axis110_03Z.rOUT_ActPos,
                     rIN_PosMin    := ST110_Axis.const110_03Z.POS_MIN,
                     rIN_PixMax    := 80,
                     rIN_PixMin    := 0);
-
-(*******************************************************************)
-(* AXIS INPUTS *)
-(* We use iAktStep instead of xOUT_step to make sure all the values *)
-(* for the axis are set before the fb is executed                   *)
-(*******************************************************************)
-fb_axis110_01Y.xIN_Reset := ST110_Pnp_e.RESET = iAktStep;
-fb_axis110_02Z.xIN_Reset := ST110_Pnp_e.RESET = iAktStep;
-fb_axis110_03Z.xIN_Reset := ST110_Pnp_e.RESET = iAktStep;
-
-fb_axis110_01Y.xIN_Home := ST110_Pnp_e.Init_HomeHorizontals = iAktStep;
-
-IF NOT CONST.USE_SIMULATION THEN
-    fb_axis110_02Z.xIN_HomeExe := ST110_Pnp_e.Init_HomeVerticals = iAktStep;
-    fb_axis110_03Z.xIN_HomeExe := ST110_Pnp_e.Init_HomeVerticals = iAktStep;
-END_IF
 
 (*******************************************************************)
 (* OUTPUTS *)
