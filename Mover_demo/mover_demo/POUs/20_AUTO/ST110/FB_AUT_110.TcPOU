@@ -26,6 +26,7 @@ END_VAR
 VAR
     (* Bausteine *)
     fb_Pnp : FB_ABL_110_Pnp;
+    fb_Feeder : FB_ABL_110_Feeder;
 	
 END_VAR
 ]]></Declaration>
@@ -73,15 +74,21 @@ fb_Pnp(xIN_Reset          := xReset,
        tIN_Timeout        := tIN_Timeout,
        pxFG_Freigabe      := ADR(xDummy),
        Mover              := THIS^.Mover,
-       xIN_PceReadyToPick :=,
-       xOUT_ErrFlag       =>,
-       xOUT_Busy          =>,
-       xOUT_Done          =>,
-       xOUT_Timeout       =>,
-       xOUT_InitDone      =>,
-       xOUT_Wait          =>,
-       iOUT_Step          =>,
-       bOUT_Error         =>);
+       xIN_PceReadyToPick := fb_Feeder.xOUT_Done);
+
+fb_Feeder(xIN_Reset       := xReset OR HMI.btArMain[7].on,
+          xIN_Init        := xIN_Init,
+          xIN_Quit        := xIN_Quit,
+          xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
+          xIN_Sperre      := NOT xIN_On,
+          xIN_NextStep    := xNextStep,
+          xIN_AlarmAktiv  := xIN_AlarmAktiv,
+          xIN_DryCycle    := xIN_DryCycle,
+          xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out
+          enIN_State      := enIN_State,
+          tIN_Timeout     := tIN_Timeout,
+          pxFG_Freigabe   := ADR(xDummy),
+          xIN_PickPiece   := fb_Pnp.xOUT_PickPiece);
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -90,7 +97,7 @@ fb_Pnp(xIN_Reset          := xReset,
 (*******************************************************************)
 (* OUTPUT *)
 (*******************************************************************)
-xOUT_InitDone := fb_Pnp.xOUT_InitDone;
+xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
 xOUT_Ready    := xOUT_InitDone;
 xOUT_Done     := fb_Pnp.xOUT_Done;
 xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag;

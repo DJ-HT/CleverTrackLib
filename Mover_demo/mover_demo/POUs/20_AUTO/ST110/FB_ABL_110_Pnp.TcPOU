@@ -48,7 +48,8 @@ VAR_OUTPUT
 
     iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
     xOUT_MoverFree         : BOOL; // The mover is free to move
-    //xOUT_MoverNeeded : BOOL;   // A mover is needed by this station to continue its process
+    xOUT_PickPiece         : BOOL; // Set to true when a piece is picked
+
 END_VAR
 VAR
     (* Standard *)
@@ -268,6 +269,8 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          ST110_Pnp_e.PnP_Hor_ToTrackPos,
                                          ST110_Pnp_e.PnP_Ver_ShuttleDown,
                                          ST110_Pnp_e.PnP_Ver_ShuttleUp);
+
+xOUT_PickPiece := iOUT_Step = ST110_Pnp_e.Vacum_on;
 
 (*******************************************************************)
 (* Ablauf *)
