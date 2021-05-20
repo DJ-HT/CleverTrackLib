@@ -25,7 +25,7 @@ VAR_OUTPUT
 END_VAR
 VAR
     (* Bausteine *)
-    _fb_abl_1 : FB_ABL_110_Pnp;
+    fb_Pnp : FB_ABL_110_Pnp;
 	
 END_VAR
 ]]></Declaration>
@@ -59,28 +59,29 @@ xReset := ((enIN_State < StateREADY) AND (enIN_State <> StateINIT)) OR
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
-_fb_abl_1(xIN_Reset       := xReset,
-          xIN_Init        := xIN_Init,
-          xIN_Quit        := xIN_Quit,
-          xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
-          xIN_Sperre      := NOT xIN_On,
-          xIN_NextStep    := xNextStep,
-          xIN_AlarmAktiv  := xIN_AlarmAktiv,
-          xIN_DryCycle    := xIN_DryCycle,
-          xIN_Reset       := HMI.btArMain[7].on,
-          xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out
-          enIN_State      := enIN_State,
-          tIN_Timeout     := tIN_Timeout,
-          pxFG_Freigabe   := ADR(xDummy),
-          Mover           := THIS^.Mover,
-          xOUT_ErrFlag    =>,
-          xOUT_Busy       =>,
-          xOUT_Done       =>,
-          xOUT_Timeout    =>,
-          xOUT_InitDone   =>,
-          xOUT_Wait       =>,
-          iOUT_Step       =>,
-          bOUT_Error      =>);
+fb_Pnp(xIN_Reset          := xReset,
+       xIN_Init           := xIN_Init,
+       xIN_Quit           := xIN_Quit,
+       xIN_Start          := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+       xIN_Sperre         := NOT xIN_On,
+       xIN_NextStep       := xNextStep,
+       xIN_AlarmAktiv     := xIN_AlarmAktiv,
+       xIN_DryCycle       := xIN_DryCycle,
+       xIN_Reset          := HMI.btArMain[7].on,
+       xIN_RestartCYCL    := enIN_State = enState.StateAUTO, // only restart when the mover has move out
+       enIN_State         := enIN_State,
+       tIN_Timeout        := tIN_Timeout,
+       pxFG_Freigabe      := ADR(xDummy),
+       Mover              := THIS^.Mover,
+       xIN_PceReadyToPick :=,
+       xOUT_ErrFlag       =>,
+       xOUT_Busy          =>,
+       xOUT_Done          =>,
+       xOUT_Timeout       =>,
+       xOUT_InitDone      =>,
+       xOUT_Wait          =>,
+       iOUT_Step          =>,
+       bOUT_Error         =>);
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -89,11 +90,11 @@ _fb_abl_1(xIN_Reset       := xReset,
 (*******************************************************************)
 (* OUTPUT *)
 (*******************************************************************)
-xOUT_InitDone := _fb_abl_1.xOUT_InitDone;
+xOUT_InitDone := fb_Pnp.xOUT_InitDone;
 xOUT_Ready    := xOUT_InitDone;
-xOUT_Done     := _fb_abl_1.xOUT_Done;
-xOUT_ErrFlag  := _fb_abl_1.xOUT_ErrFlag;
-xOUT_Wait     := _fb_abl_1.xOUT_Wait;
+xOUT_Done     := fb_Pnp.xOUT_Done;
+xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag;
+xOUT_Wait     := fb_Pnp.xOUT_Wait;
 xOUT_AlarmST  := xOUT_ErrFlag;
 
 (*******************************************************************)
@@ -123,7 +124,7 @@ PROPERTY iCompletionPC : INT
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[iCompletionPC := THIS^._fb_abl_1.iOUT_ProcessCompletion;]]></ST>
+          <ST><![CDATA[iCompletionPC := THIS^.fb_Pnp.iOUT_ProcessCompletion;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -136,7 +137,7 @@ PROPERTY iProcessTimeMili_1 : DINT
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[iProcessTimeMili_1 := TO_DINT(THIS^._fb_abl_1.iProcessTimeMili1);
+          <ST><![CDATA[iProcessTimeMili_1 := TO_DINT(THIS^.fb_Pnp.iProcessTimeMili1);
 ]]></ST>
         </Implementation>
       </Get>
@@ -145,7 +146,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[THIS^._fb_abl_1.iProcessTimeMili1 := TO_UDINT(iProcessTimeMili_1);
+          <ST><![CDATA[THIS^.fb_Pnp.iProcessTimeMili1 := TO_UDINT(iProcessTimeMili_1);
 ]]></ST>
         </Implementation>
       </Set>
@@ -159,7 +160,7 @@ PROPERTY iProcessTimeMili_2 : DINT
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[iProcessTimeMili_2 := TO_DINT(THIS^._fb_abl_1.iProcessTimeMili2);
+          <ST><![CDATA[iProcessTimeMili_2 := TO_DINT(THIS^.fb_Pnp.iProcessTimeMili2);
 ]]></ST>
         </Implementation>
       </Get>
@@ -168,7 +169,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[THIS^._fb_abl_1.iProcessTimeMili2 := TO_UDINT(iProcessTimeMili_2);
+          <ST><![CDATA[THIS^.fb_Pnp.iProcessTimeMili2 := TO_UDINT(iProcessTimeMili_2);
 ]]></ST>
         </Implementation>
       </Set>
@@ -211,7 +212,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xBusy := THIS^._fb_abl_1.xOUT_Busy;
+          <ST><![CDATA[xBusy := THIS^.fb_Pnp.xOUT_Busy;
 ]]></ST>
         </Implementation>
       </Get>
@@ -231,7 +232,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xDone := THIS^._fb_abl_1.xOUT_Ready OR THIS^._fb_abl_1.xOUT_Done;
+          <ST><![CDATA[xDone := THIS^.fb_Pnp.xOUT_Ready OR THIS^.fb_Pnp.xOUT_Done;
 ]]></ST>
         </Implementation>
       </Get>
@@ -243,7 +244,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverPathFree := THIS^._fb_abl_1.xOUT_MoverFree OR THIS^._fb_abl_1.xOUT_Ready OR THIS^._fb_abl_1.xOUT_Done;
+          <ST><![CDATA[xMoverPathFree := THIS^.fb_Pnp.xOUT_MoverFree OR THIS^.fb_Pnp.xOUT_Ready OR THIS^.fb_Pnp.xOUT_Done;
 ]]></ST>
         </Implementation>
       </Get>
@@ -255,7 +256,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^._fb_abl_1.iOUT_Step = ST110_Pnp_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Pnp.iOUT_Step = ST110_Pnp_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>

@@ -28,23 +28,23 @@ VAR_INPUT
     pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
 
     // Application specific
-    iProcessTimeMili1 : UDINT := 5000; // user defined station duration, in milisecond
-    iProcessTimeMili2 : UDINT := 5000; // user defined station duration, in milisecond
-    Mover             : REFERENCE TO FB_Mover;
-    //xIN_MoverInPos  : BOOL;          // Set this flag when a mover is in position and ready to be handled
+    iProcessTimeMili1  : UDINT := 5000; // user defined station duration, in milisecond
+    iProcessTimeMili2  : UDINT := 5000; // user defined station duration, in milisecond
+    Mover              : REFERENCE TO FB_Mover;
+    xIN_PceReadyToPick : BOOL; // the piece(s) is/are ready to picked
 END_VAR
 VAR_OUTPUT
     (* standart Ausgänge *)
-    xOUT_ErrFlag  : BOOL;    // Error Flag 
-    xOUT_Busy     : BOOL;    // Baustein befindet sich im Ablauf 
-    xOUT_Done     : BOOL;    // Baustein hat den Ablauf beendet 		
-    xOUT_Ready    : BOOL;    // Ready to begin, should be the same state as done	
-    xOUT_Timeout  : BOOL;    // Timeout FB 
-    xOUT_InitDone : BOOL;    // initialisierung fertig
-    xOUT_Wait     : BOOL;    // Wartet auf Bedingung
+    xOUT_ErrFlag  : BOOL;        // Error Flag 
+    xOUT_Busy     : BOOL;        // Baustein befindet sich im Ablauf 
+    xOUT_Done     : BOOL;        // Baustein hat den Ablauf beendet 		
+    xOUT_Ready    : BOOL;        // Ready to begin, should be the same state as done	
+    xOUT_Timeout  : BOOL;        // Timeout FB 
+    xOUT_InitDone : BOOL;        // initialisierung fertig
+    xOUT_Wait     : BOOL;        // Wartet auf Bedingung
     iOUT_Step     : ST110_Pnp_e; // Aktueller Schritt 
-    sOUT_Step     : STRING;  // Aktueller Schritt but in string format
-    bOUT_Error    : BYTE;    // Fehlernummer
+    sOUT_Step     : STRING;      // Aktueller Schritt but in string format
+    bOUT_Error    : BYTE;        // Fehlernummer
 
     iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
     xOUT_MoverFree         : BOOL; // The mover is free to move
@@ -357,7 +357,7 @@ ST110_Pnp_e.Init_HorizontalsToTrack:
     END_IF
 
 (***** READY / INIT DONE *****)
-ST110_Pnp_e.READY:        (* Start AUTO,END,LEER,STEP *)
+ST110_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
     IF xIN_Start THEN //IF rtSTART.Q THEN
         iOUT_Step := ST110_Pnp_e.START;
     END_IF
@@ -390,8 +390,7 @@ ST110_Pnp_e.Vacum_on:
 ST110_Pnp_e.PnP_Ver_RotTableUp:
     IF xIN_NextStep AND
        (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.UpFull).xOUT_InPos OR
-       NOT PERS.recipeList[1].st110.xUseVerLeft
-           ) AND
+       NOT PERS.recipeList[1].st110.xUseVerLeft) AND
        (
        fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.UpFull).xOUT_InPos OR
        NOT PERS.recipeList[1].st110.xUseVerRight
