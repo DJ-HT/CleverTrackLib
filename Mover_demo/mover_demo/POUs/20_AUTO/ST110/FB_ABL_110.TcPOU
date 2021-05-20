@@ -421,9 +421,9 @@ ST110_e.PnP_Ver_ShuttleDown:
 // We need a fb that enables for us torque control. Here we just go a bit further
 ST110_e.PnP_Ver_ShuttleTorqueControl:
     IF xIN_NextStep AND
-       (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_InPos OR
+       (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT PERS.recipeList[1].st110.xUseVerLeft) AND
-       (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_InPos OR
+       (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT PERS.recipeList[1].st110.xUseVerRight) THEN
         iOUT_Step := ST110_e.Vacum_off;
     END_IF;
