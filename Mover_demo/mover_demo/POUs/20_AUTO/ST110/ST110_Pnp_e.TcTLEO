@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <EnumerationTextList Name="ST110_e" Id="{34b51b03-fbba-42bb-849f-dbe203112bec}">
+  <EnumerationTextList Name="ST110_Pnp_e" Id="{34b51b03-fbba-42bb-849f-dbe203112bec}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 {attribute 'strict'}
 {attribute 'to_string'}
 TYPE
-ST110_e :
+ST110_Pnp_e :
 (
     RESET := 0,         // Reset
 	
