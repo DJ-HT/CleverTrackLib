@@ -5,17 +5,10 @@
 VAR_INPUT
 END_VAR
 VAR
-	getTaskTime : GETTASKTIME;		// allow to get time based value, 
-	//w1 : WORD;
-	//w2 : WORD; 
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[getTaskTime();
-//w1 := UDINT_TO_WORD(SHR(getTaskTime.timeLoDW, 16));
-//w2 := UDINT_TO_WORD(getTaskTime.timeLoDW AND 16#FFFF);
-//GetTick := SHL(WORD_TO_UDINT(w2), 16) OR w1;
-GetTick := getTaskTime.timeLoDW/10000;
+      <ST><![CDATA[GetTick := TO_UDINT(F_GetTaskTime()/10000);
 ]]></ST>
     </Implementation>
   </POU>
