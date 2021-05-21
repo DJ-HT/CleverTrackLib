@@ -73,6 +73,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
+	MAX_SEARCH_TURN : INT := 3; // maximum search number
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -103,13 +104,6 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
-(*
-fb_PnpHorAxis(config          := PERS.recipeList[1].st110.HorPnpAxis_config,
-              lrIN_CurrPos    := fb_axis110_01Y.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.01,
-              iIN_CurrentStep := iOUT_Step,
-              iIN_moveNumber  := ST110_PnpHorPos_e._max);
-			  *)
 
 fb_axis110_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
@@ -145,16 +139,6 @@ fb_axis110_10W(enIN_State     := enIN_State,
                rOUT_ActPos      =>,
                axisIN_REF       := ST110_Axis.axis110_10W.axis);
 
-(*
-fb_simu_axis110_01Y(bIN_AxisCntr        := fb_axis110_01Y.bOUT_AxisCntr,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis110_01Y.rOUT_ActPos,
-                    rIN_PosMax          := ST110_Axis.const110_01Y.POS_MAX,
-                    rIN_PosMin          := ST110_Axis.const110_01Y.POS_MIN,
-                    rIN_PixMax          := 100,
-                    rIN_PixMin          := 0,
-                    wOUT_AxisState      => fb_axis110_01Y.wAxisState);
-*)
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -246,7 +230,7 @@ ST110_Feeder_e.Init_see_if_piece_there:
         fifo.Put(1);
     END_IF
 
-    IF iSearchIndex < 3 THEN
+    IF iSearchIndex < MAX_SEARCH_TURN THEN
         iOUT_Step    := ST110_Feeder_e.Init_set_table_pos;
         iSearchIndex := iSearchIndex + 1;
     ELSE
