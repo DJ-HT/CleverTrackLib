@@ -63,7 +63,11 @@ VAR
 
     // Application specific
     fb_axis110_10W : FB_AxisRotTable_V1_1;
+    fb_feeder      : FB_Feeder2Sensors;
     fifo           : FB_Fifo(2);
+    simu_feeder    : FB_Simu_Feeder; // simulation of a feeder
+    simu_fifo      : FB_Fifo(20);    // fifo to hold a piece
+    rtPutPiece     : R_TRIG;         // trigger to add a piece
 
     rtPick : R_TRIG; // r_trig signal from the pick and place machine
 
@@ -73,7 +77,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-	MAX_SEARCH_TURN : INT := 3; // maximum search number
+    MAX_SEARCH_TURN : INT := 3; // maximum search number
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -104,6 +108,23 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
+
+fb_feeder(xIN_Enable          := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+          xIN_PieceInEnd      := NOT simu_fifo.IsEmpty(),
+          xIN_PieceMax        := (simu_fifo.GetLen() > 10),
+          diIN_SignlFilter_ms := PERS.recipeList[1].st110.FeederConfig.InFilterDelay,
+          diIN_StartDelay_ms  := PERS.recipeList[1].st110.FeederConfig.StartDelay,
+          diIN_StopDelay_ms   := PERS.recipeList[1].st110.FeederConfig.StopDelay,
+          diIN_EmptyDelay     := PERS.recipeList[1].st110.FeederConfig.EmptyDelay);
+
+simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder,
+            tIN_NewPieceTime   := 500,
+            iIN_WaitTimeMin_ms := 500,
+            iIN_WaitTimeMax_ms := 1000);
+
+IF rtPutPiece.Q AND NOT simu_fifo.IsFull() THEN
+    simu_fifo.Put(1);
+END_IF
 
 fb_axis110_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
@@ -138,7 +159,6 @@ fb_axis110_10W(enIN_State     := enIN_State,
                bOUT_Error       =>,
                rOUT_ActPos      =>,
                axisIN_REF       := ST110_Axis.axis110_10W.axis);
-
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -183,6 +203,7 @@ END_IF
 (* START *)
 rtSTART(CLK := xIN_Start);
 rtPick(CLK := xIN_PickPiece);
+rtPutPiece(CLK := simu_feeder.xOUT_NewPiece);
 
 (*******************************************************************)
 (* Schrittkette  *)
@@ -226,7 +247,7 @@ ST110_Feeder_e.Init_set_table_pos:
     END_IF
 
 ST110_Feeder_e.Init_see_if_piece_there:
-    IF TRUE THEN
+    IF simu_feeder.xOUT_NewPiece THEN
         fifo.Put(1);
     END_IF
 
@@ -258,14 +279,15 @@ ST110_Feeder_e.check_if_feeding_necessary:
 
 ST110_Feeder_e.wait_on_a_piece:
     // TODO implement simu feeder
-    IF TRUE THEN
+    IF NOT simu_fifo.IsEmpty() THEN
         iOUT_Step := ST110_Feeder_e.load_piece;
+        simu_fifo.Pop(1);
     END_IF
 
 ST110_Feeder_e.load_piece:
     // TODO implement simu feeder
     IF fb_axis110_10W.xOUT_DONE THEN
-		fifo.Put(1);
+        fifo.Put(1);
         iOUT_Step := ST110_Feeder_e.check_if_feeding_necessary;
     END_IF
 

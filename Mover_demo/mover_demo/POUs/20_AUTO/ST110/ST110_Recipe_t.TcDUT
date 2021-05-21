@@ -11,7 +11,7 @@ STRUCT
     HorPnpAxis_config      : LinearMotionMan_Config_t;
     PnpVerAxisLeft_config  : LinearMotionMan_Config_t;
     PnpVerAxisRight_config : LinearMotionMan_Config_t;
-
+    FeederConfig           : FeederDelays_t;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

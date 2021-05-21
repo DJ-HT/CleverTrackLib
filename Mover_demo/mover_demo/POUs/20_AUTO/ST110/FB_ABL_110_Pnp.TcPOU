@@ -360,6 +360,11 @@ ST110_Pnp_e.START: (*  *)
 
 ST110_Pnp_e.PnP_Hor_ToRotTablePos:
     IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST110_PnpHorPos_e.AS).xOUT_InPos THEN
+        iOUT_Step := ST110_Pnp_e.PnP_WaitOnFeeder;
+    END_IF
+
+ST110_Pnp_e.PnP_WaitOnFeeder:
+    IF xIN_PceReadyToPick THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_RotTableDown;
     END_IF
 

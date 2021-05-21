@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Feeder2Sensors" Id="{4e462dd1-0865-4a0a-afe6-c20d623e844f}" SpecialFunc="None">
+    <Declaration><![CDATA[// Manage a vibrator feeder with 2 sensors and 2 TON and a TOF
+// The feeder will works:
+//     - when 'xIN_PieceInEnd' is FALSE, or
+//     - when 'xIN_PieceMax' is FALSE and a start delay occurs, or
+//     - when the stop timer is not elapsed
+//
+// If a timer is not needed you can set its value to 0
+//
+FUNCTION_BLOCK FB_Feeder2Sensors
+VAR_INPUT
+    xIN_Enable     : BOOL;
+    xIN_PieceInEnd : BOOL;
+    xIN_PieceMax   : BOOL; // TRUE when maximum is reached
+
+    diIN_SignlFilter_ms : DINT; // Increase signal pulses by at least the given amount of time
+    diIN_StartDelay_ms  : DINT; // How many ms do we need to wait before starting the feeder
+    diIN_StopDelay_ms   : DINT; // If xIN_PieceMax and xIN_PieceInEnd are TRUE, the feeder continues for this amount before stopping
+    diIN_EmptyDelay     : DINT; // If xIN_PieceMax is False for this amount of time, the xOUT_Empty becomes TRUE
+END_VAR
+VAR_OUTPUT
+    xOUT_EnableFeeder : BOOL; // Connect this output to your feeder
+    xOUT_Empty        : BOOL; // The feeders seems empty
+END_VAR
+VAR
+    filterTof : TOF;
+    startTon  : TON;
+    stopTof   : TOF;
+    emptyTon  : TON;
+	
+	xRun : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+// update the filter TON
+filterTof(IN := NOT xIN_PieceInEnd OR NOT xIN_PieceMax, PT := TO_TIME(diIN_SignlFilter_ms));
+
+xRun := filterTof.Q;
+
+// Here we start startTon when xIN_Enable is missing so we the feeder
+// will start immediately at startup
+startTon(IN := NOT xIN_Enable OR (xIN_Enable AND xRun),
+         PT := TO_TIME(diIN_StartDelay_ms));
+
+// If xIN_Enable is False, we set PT to 0 to disable the stopTof
+stopTof(IN := startTon.Q, PT := TO_TIME(diIN_StopDelay_ms * TO_DINT(xIN_Enable)));
+
+emptyTon(IN := NOT xIN_PieceMax, PT := TO_TIME(diIN_EmptyDelay));
+
+xOUT_EnableFeeder := xIN_Enable AND stopTof.Q;
+xOUT_Empty        := emptyTon.Q;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

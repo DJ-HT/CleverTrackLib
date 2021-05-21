@@ -21,6 +21,7 @@ ST110_Pnp_e :
 
 //110.01Y	P+P handl. horiz.
 	PnP_Hor_ToRotTablePos,
+	PnP_WaitOnFeeder,
 //110.02Z	P+P handl. vertic.
 	PnP_Ver_RotTableDown,
 //110,05	Vacuum gripper
@@ -108,6 +109,11 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"PnP_Hor_ToRotTablePos"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"PnP_WaitOnFeeder"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

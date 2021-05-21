@@ -59,6 +59,9 @@
     <Compile Include="DUTs\Helptec\Recipe\RecipeAxisLinear2Pos_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Helptec\RS_Axis\FeederDelays_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Helptec\RS_Axis\MoveProfile1D_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -182,6 +185,9 @@
     <Compile Include="POUs\20_AUTO\FB%27s\getPercent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\RS Axis\FB_Feeder2Sensors.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\RS Axis\FB_Fifo.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -279,6 +285,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\Simu\FB_Simu_AxisLM_V1_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Simu\FB_Simu_Feeder.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST100\F_GetPercent.TcPOU">
