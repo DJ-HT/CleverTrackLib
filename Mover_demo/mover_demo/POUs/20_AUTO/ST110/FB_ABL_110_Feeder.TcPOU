@@ -278,14 +278,12 @@ ST110_Feeder_e.check_if_feeding_necessary:
     END_IF
 
 ST110_Feeder_e.wait_on_a_piece:
-    // TODO implement simu feeder
     IF NOT simu_fifo.IsEmpty() THEN
         iOUT_Step := ST110_Feeder_e.load_piece;
         simu_fifo.Pop(1);
     END_IF
 
 ST110_Feeder_e.load_piece:
-    // TODO implement simu feeder
     IF fb_axis110_10W.xOUT_DONE THEN
         fifo.Put(1);
         iOUT_Step := ST110_Feeder_e.check_if_feeding_necessary;
