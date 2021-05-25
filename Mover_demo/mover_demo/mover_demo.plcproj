@@ -369,14 +369,41 @@
     <Compile Include="POUs\20_AUTO\ST110\ST110_Recipe_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST115\FB_ABL_115.TcPOU">
+    <Compile Include="POUs\20_AUTO\ST110\VISU_ST110.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\FB_ABL_115_Feeder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\FB_ABL_115_Pnp.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST115\FB_AUT_115.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST115\ST115_e.TcTLEO">
+    <Compile Include="POUs\20_AUTO\ST115\ST115_Recipe_t.TcDUT">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\ST115_Axis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\ST115_Feeder_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\ST115_PnpHorPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\ST115_PnpVerPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\ST115_Pnp_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\VISU_ST115.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="POUs\20_AUTO\TOOL\ASSERT.TcPOU">
       <SubType>Code</SubType>
@@ -415,10 +442,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VISUs\VISU_main.TcVIS">
-      <SubType>Code</SubType>
-      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
-    </Compile>
-    <Compile Include="VISUs\VISU_ST110.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>

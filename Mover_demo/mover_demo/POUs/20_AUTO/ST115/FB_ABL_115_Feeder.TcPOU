@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ABL_115_Feeder" Id="{420f041f-9447-49a8-9137-fcebd4e54f4a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ABL_115_Feeder
+(****************************************************************************************)
+(*	TITEL				laden Kristall modul, Feeder and rotary table                   *)
+(*	Status				ungetestet                         								*)
+(*	Beschrieb:			Ablaufbeschreibung												*)
+(*																						*)
+(*	Steps:	self-explained using enum													*)
+(***********************************Revisionen*******************************************)
+(*	see github blames																	*)
+(****************************************************************************************)
+
+VAR_INPUT
+    xIN_Reset       : BOOL;          // Schrittkette zurücksetzen 
+    xIN_Init        : BOOL;          // Initialisieren
+    xIN_Quit        : BOOL;          // Fehler quittieren 
+    xIN_Start       : BOOL;          // Startbefehl
+    xIN_Sperre      : BOOL;          // FB Sperren 
+    xIN_NextStep    : BOOL;          // Nächsten Schritt ausführen 
+    xIN_AlarmAktiv  : BOOL;          // Anlage hat Alarm
+    xIN_DryCycle    : BOOL;          // Fahren ohne Teile
+    xIN_RestartCYCL : BOOL;          // Zyklus erneut starten im STEP, END, LEERFAHREN
+    enIN_State      : enState;       // Status Anlage
+    tIN_Timeout     : TIME := T#10s; // Timout
+
+    pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
+
+    // Application specific
+    xIN_PickPiece : BOOL; (* signal from the pick and place element
+                             the number of picked signal depend on the recipe *)
+END_VAR
+VAR_OUTPUT
+    (* standart Ausgänge *)
+    xOUT_ErrFlag  : BOOL;           // Error Flag 
+    xOUT_Busy     : BOOL;           // Baustein befindet sich im Ablauf 
+    xOUT_Done     : BOOL;           // Baustein hat den Ablauf beendet 		
+    xOUT_Ready    : BOOL;           // Ready to begin, should be the same state as done	
+    xOUT_Timeout  : BOOL;           // Timeout FB 
+    xOUT_InitDone : BOOL;           // initialisierung fertig
+    xOUT_Wait     : BOOL;           // Wartet auf Bedingung
+    iOUT_Step     : ST115_Feeder_e; // Aktueller Schritt 
+    sOUT_Step     : STRING;         // Aktueller Schritt but in string format
+    bOUT_Error    : BYTE;           // Fehlernummer
+
+    // Application specific
+    xOUT_PceReadyToPick : BOOL; // the piece(s) is/are ready to picked
+END_VAR
+VAR
+    (* Standard *)
+    (* Schritt *)
+    iLastStep : ST115_Feeder_e; // Merker letzter Schritt 
+    iPreStep  : ST115_Feeder_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST115_Feeder_e; // aktueller Schritt
+
+    // Trigger Starten 
+    rtSTART : R_TRIG;
+    // Timer TimeOut 
+    TON_Timeout : TON;
+
+    (* Bausteine *)
+
+    // Application specific
+    fb_axis115_10W : FB_AxisRotTable_V1_1;
+    fb_feeder      : FB_Feeder2Sensors;
+    fifo           : FB_Fifo(2);
+    simu_feeder    : FB_Simu_Feeder; // simulation of a feeder
+    simu_fifo      : FB_Fifo(20);    // fifo to hold a piece
+    rtPutPiece     : R_TRIG;         // trigger to add a piece
+
+    rtPick : R_TRIG; // r_trig signal from the pick and place machine
+
+    iCurrentTableIndex : INT; // current table index
+    iSearchIndex       : INT; (* Initialization index TO see how many element we have AT startup
+                                 or after an alarm *)
+
+END_VAR
+VAR CONSTANT
+    MAX_SEARCH_TURN : INT := 3; // maximum search number
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Trigger  *)
+(*******************************************************************)
+(* Zurücksetzen *)
+IF xIN_RESET THEN
+    iPreStep  := ST115_Feeder_e.RESET;
+    iOUT_Step := ST115_Feeder_e.RESET;
+END_IF;
+
+(* Error Quittieren *)
+IF (bOUT_Error <> 0) AND xIN_Quit THEN
+    xOUT_ErrFlag := FALSE;
+    bOUT_Error   := 0;
+    iOUT_Step    := iPreStep;
+END_IF;
+
+iCurrentTableIndex := iCurrentTableIndex MOD 3;
+
+(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
+            PT := tIN_Timeout);
+
+(*******************************************************************)
+(* Bausteine *)
+(*******************************************************************)
+
+fb_feeder(xIN_Enable          := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+          xIN_PieceInEnd      := NOT simu_fifo.IsEmpty(),
+          xIN_PieceMax        := (simu_fifo.GetLen() > 10),
+          diIN_SignlFilter_ms := PERS.recipeList[1].st110.FeederConfig.InFilterDelay,
+          diIN_StartDelay_ms  := PERS.recipeList[1].st110.FeederConfig.StartDelay,
+          diIN_StopDelay_ms   := PERS.recipeList[1].st110.FeederConfig.StopDelay,
+          diIN_EmptyDelay     := PERS.recipeList[1].st110.FeederConfig.EmptyDelay);
+
+simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder,
+            tIN_NewPieceTime   := 500,
+            iIN_WaitTimeMin_ms := 500,
+            iIN_WaitTimeMax_ms := 1000);
+
+IF rtPutPiece.Q AND NOT simu_fifo.IsFull() THEN
+    simu_fifo.Put(1);
+END_IF
+
+fb_axis115_10W(enIN_State     := enIN_State,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_AX5000     := TRUE,
+               xIN_ENC_ABS    := TRUE,
+               xIN_PARAMok    := TRUE,
+               xIN_FREE       := TRUE,
+               xIN_FREE_HOME  := TRUE,
+               rIN_POSMIN     := ST115_Axis.const115_10W.POS_MIN,
+               rIN_POSMAX     := ST115_Axis.const115_10W.POS_MAX,
+               rIN_VELOMAX    := ST115_Axis.const115_10W.VELO_MAX,
+               rIN_VELOMANU   := ST115_Axis.const115_10W.VELO_MANU,
+               rIN_VELOOPEN   := ST115_Axis.const115_10W.VELO_MANU / 4,
+               rIN_JogInc     :=,
+               rIN_JogVelo    :=,
+               xIN_HomeExe    := ST115_Feeder_e.Init_home_table = iOUT_Step,
+               xIN_HomeCalib  :=,
+               xIN_Execute    := ST115_Feeder_e.Init_set_table_pos = iOUT_Step OR
+                                 ST115_Feeder_e.load_piece = iOUT_Step,
+               xIN_Relative     := ST115_Feeder_e.load_piece = iOUT_Step,
+               rIN_Position     := TO_REAL(iCurrentTableIndex * 120.0), // always move by 120°
+               rIN_Velocity     := TO_REAL(360.0),
+               rIN_Acceleration := TO_REAL(3600.0),
+               rIN_Deceleration := TO_REAL(3600.0),
+               rIN_Jerk         := TO_REAL(360000.0),
+               xIN_Reset        := xIN_Reset OR (ST115_Feeder_e.RESET = iOUT_Step),
+               xOUT_ErrFlag     =>,
+               xOUT_READY       =>,
+               xOUT_DONE        =>,
+               bOUT_Error       =>,
+               rOUT_ActPos      =>,
+               axisIN_REF       := ST115_Axis.axis115_10W.axis);
+
+(*******************************************************************)
+(* OUTPUTS *)
+(*******************************************************************)
+// Error Flag 
+xOUT_ErrFlag := (bOUT_Error <> 0);
+// Baustein befindet sich im Ablauf 
+xOUT_Busy := (iOUT_Step > ST115_Feeder_e.READY) AND (iOUT_Step < ST115_Feeder_e.DONE);
+// Baustein hat den Ablauf beendet
+xOUT_Done := (iOUT_Step = ST115_Feeder_e.DONE);
+// Process ready
+xOUT_Ready := (iOUT_Step = ST115_Feeder_e.READY);
+// Timeout FB 				 		
+xOUT_Timeout := TON_Timeout.Q;
+// Itialisierung fertig			
+xOUT_InitDone := (iOUT_Step = ST115_Feeder_e.READY);
+// Aktueller Schritt			
+iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
+sOUT_Step := TO_STRING(iOUT_Step);
+//Fehlernummer	 
+bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
+(* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
+xOUT_Wait := (iOUT_Step = ST115_Feeder_e.DONE);
+
+(*******************************************************************)
+(* Ablauf *)
+(*******************************************************************)
+
+(* Sperren *)
+IF xIN_Sperre THEN
+    iPreStep  := ST115_Feeder_e.RESET;
+    iOUT_Step := ST115_Feeder_e.RESET;
+    RETURN;
+END_IF;
+
+(* Schritt Merker *)
+IF iAktStep <> iOUT_Step THEN
+    iLastStep := iAktStep;
+    iAktStep  := iOUT_Step;
+END_IF
+
+(* START *)
+rtSTART(CLK := xIN_Start);
+rtPick(CLK := xIN_PickPiece);
+rtPutPiece(CLK := simu_feeder.xOUT_NewPiece);
+
+(*******************************************************************)
+(* Schrittkette  *)
+(*******************************************************************)
+CASE iOUT_Step OF
+
+(***** RESET *****)
+ST115_Feeder_e.RESET: (* Schritt 0-99 *)
+    //Initialisierungen
+    //Start Init Ablauf
+    IF xIN_Init THEN
+        iOUT_Step := ST115_Feeder_e.INIT;
+        //Start Manu Ablauf
+    ELSIF enIN_State = StateMANU AND xIN_NextStep THEN
+        iOUT_Step := ST115_Feeder_e.INIT;
+    END_IF;
+
+(***** INIT *****)
+ST115_Feeder_e.INIT: (* Grundstellung ? *)
+    IF CONST.USE_SIMULATION THEN
+        iOUT_Step := ST115_Feeder_e.Init_reset_search_index;
+    ELSE
+        iOUT_Step := ST115_Feeder_e.Init_home_table;
+    END_IF;
+
+ST115_Feeder_e.Init_home_table:
+    IF fb_axis115_10W.xOUT_DONE THEN
+        iCurrentTableIndex := 0;
+        iOUT_Step          := ST115_Feeder_e.Init_set_table_pos;
+    END_IF
+
+ST115_Feeder_e.Init_reset_search_index:
+    iSearchIndex := 0;
+    fifo.Empty();
+    iOUT_Step := ST115_Feeder_e.Init_set_table_pos;
+
+ST115_Feeder_e.Init_set_table_pos:
+    IF fb_axis115_10W.xOUT_DONE THEN
+        iCurrentTableIndex := iCurrentTableIndex + 1;
+        iOUT_Step          := ST115_Feeder_e.Init_see_if_piece_there;
+    END_IF
+
+ST115_Feeder_e.Init_see_if_piece_there:
+    IF simu_feeder.xOUT_NewPiece THEN
+        fifo.Put(1);
+    END_IF
+
+    IF iSearchIndex < MAX_SEARCH_TURN THEN
+        iOUT_Step    := ST115_Feeder_e.Init_set_table_pos;
+        iSearchIndex := iSearchIndex + 1;
+    ELSE
+        iOUT_Step := ST115_Feeder_e.READY;
+    END_IF
+
+(***** READY / INIT DONE *****)
+ST115_Feeder_e.READY: (* Start AUTO,END,LEER,STEP *)
+    IF xIN_Start THEN //IF rtSTART.Q THEN
+        iOUT_Step := ST115_Feeder_e.START;
+    END_IF
+
+(***** START  ZYKLISCH *****)
+ST115_Feeder_e.START: (*  *)
+    IF xIN_NextStep AND pxFG_Freigabe^ THEN
+        iOUT_Step := ST115_Feeder_e.check_if_feeding_necessary;
+    END_IF;
+
+ST115_Feeder_e.check_if_feeding_necessary:
+    IF fifo.IsFull() THEN
+        iOUT_Step := ST115_Feeder_e.DONE;
+    ELSE
+        iOUT_Step := ST115_Feeder_e.wait_on_a_piece;
+    END_IF
+
+ST115_Feeder_e.wait_on_a_piece:
+    IF NOT simu_fifo.IsEmpty() THEN
+        iOUT_Step := ST115_Feeder_e.load_piece;
+        simu_fifo.Pop(1);
+    END_IF
+
+ST115_Feeder_e.load_piece:
+    IF fb_axis115_10W.xOUT_DONE THEN
+        fifo.Put(1);
+        iOUT_Step := ST115_Feeder_e.check_if_feeding_necessary;
+    END_IF
+
+(***** DONE *****)
+ST115_Feeder_e.DONE: (* Letzter Schritt  *)
+    IF rtPick.Q THEN
+        fifo.Pop(TO_INT(PERS.recipeList[1].st110.xUseVerLeft));
+        fifo.Pop(TO_INT(PERS.recipeList[1].st110.xUseVerRight));
+    END_IF
+
+    IF NOT xIN_AlarmAktiv THEN
+        //AUTO
+        IF (enIN_State = StateAUTO) AND xIN_RestartCYCL AND NOT fifo.IsFull() THEN
+            iOUT_Step := ST115_Feeder_e.START;
+            //STEP / END / LEERFAHREN restart
+        ELSIF (enIN_State < StateAUTO) AND (enIN_State >= enState.StateSTEP) AND xIN_RestartCYCL AND NOT fifo.IsFull()
+            THEN
+            iOUT_Step := ST115_Feeder_e.START;
+            //STEP / END / LEERFAHREN fertig
+        ELSIF (enIN_State = StateREADY) THEN
+            iOUT_Step := ST115_Feeder_e.READY;
+        END_IF;
+    END_IF;
+
+(************ ERROR *************)
+ST115_Feeder_e.ERROR: (* ERROR *) ;
+
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

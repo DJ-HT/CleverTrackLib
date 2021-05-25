@@ -2,19 +2,19 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_AUT_115" Id="{a3a96c33-0990-42bc-928b-85d95cc13b50}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_115 EXTENDS FB_AUT_ABSTRACT
-    (****************************************************************************)
-    (*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
-    (*	Status				ungetestet											*)
-    (*  Version:			1.0													*)
-    (*	Beschrieb:																*)
-    (*																			*)
-    (*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
-    (*																			*)
-    (*																			*)
-    (* 	25.09.2019/Dj															*)
-    (****************************************************************************)
-    (*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
-    (****************************************************************************)
+(****************************************************************************)
+(*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
+(*	Status				ungetestet											*)
+(*  Version:			1.0													*)
+(*	Beschrieb:																*)
+(*																			*)
+(*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
+(*																			*)
+(*																			*)
+(* 	25.09.2019/Dj															*)
+(****************************************************************************)
+(*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
+(****************************************************************************)
 VAR_INPUT
     (* spezifische Eingänge *)
 
@@ -25,7 +25,8 @@ VAR_OUTPUT
 END_VAR
 VAR
     (* Bausteine *)
-    _fb_abl_1 : FB_ABL_115;
+    fb_Pnp    : FB_ABL_115_Pnp;
+    fb_Feeder : FB_ABL_115_Feeder;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -58,10 +59,26 @@ xReset := ((enIN_State < StateREADY) AND (enIN_State <> StateINIT)) OR
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
-_fb_abl_1(xIN_Reset       := xReset,
+fb_Pnp(xIN_Reset          := xReset,
+       xIN_Init           := xIN_Init,
+       xIN_Quit           := xIN_Quit,
+       xIN_Start          := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+       xIN_Sperre         := NOT xIN_On,
+       xIN_NextStep       := xNextStep,
+       xIN_AlarmAktiv     := xIN_AlarmAktiv,
+       xIN_DryCycle       := xIN_DryCycle,
+       xIN_Reset          := HMI.btArMain[7].on,
+       xIN_RestartCYCL    := enIN_State = enState.StateAUTO, // only restart when the mover has move out
+       enIN_State         := enIN_State,
+       tIN_Timeout        := tIN_Timeout,
+       pxFG_Freigabe      := ADR(xDummy),
+       Mover              := THIS^.Mover,
+       xIN_PceReadyToPick := fb_Feeder.xOUT_Done);
+
+fb_Feeder(xIN_Reset       := xReset OR HMI.btArMain[7].on,
           xIN_Init        := xIN_Init,
           xIN_Quit        := xIN_Quit,
-          xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+          xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
           xIN_Sperre      := NOT xIN_On,
           xIN_NextStep    := xNextStep,
           xIN_AlarmAktiv  := xIN_AlarmAktiv,
@@ -70,15 +87,7 @@ _fb_abl_1(xIN_Reset       := xReset,
           enIN_State      := enIN_State,
           tIN_Timeout     := tIN_Timeout,
           pxFG_Freigabe   := ADR(xDummy),
-          Mover           := THIS^.Mover,
-          xOUT_ErrFlag    =>,
-          xOUT_Busy       =>,
-          xOUT_Done       =>,
-          xOUT_Timeout    =>,
-          xOUT_InitDone   =>,
-          xOUT_Wait       =>,
-          iOUT_Step       =>,
-          bOUT_Error      =>);
+          xIN_PickPiece   := fb_Pnp.xOUT_PickPiece);
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -87,11 +96,11 @@ _fb_abl_1(xIN_Reset       := xReset,
 (*******************************************************************)
 (* OUTPUT *)
 (*******************************************************************)
-xOUT_InitDone := _fb_abl_1.xOUT_InitDone;
+xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
 xOUT_Ready    := xOUT_InitDone;
-xOUT_Done     := _fb_abl_1.xOUT_Done;
-xOUT_ErrFlag  := _fb_abl_1.xOUT_ErrFlag;
-xOUT_Wait     := _fb_abl_1.xOUT_Wait;
+xOUT_Done     := fb_Pnp.xOUT_Done AND fb_Feeder.xOUT_Done;
+xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
+xOUT_Wait     := fb_Pnp.xOUT_Wait OR fb_Feeder.xOUT_Wait;
 xOUT_AlarmST  := xOUT_ErrFlag;
 
 (*******************************************************************)
@@ -121,55 +130,9 @@ PROPERTY iCompletionPC : INT
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[iCompletionPC := THIS^._fb_abl_1.iOUT_ProcessCompletion;]]></ST>
+          <ST><![CDATA[iCompletionPC := THIS^.fb_Pnp.iOUT_ProcessCompletion;]]></ST>
         </Implementation>
       </Get>
-    </Property>
-    <Property Name="iProcessTimeMili_1" Id="{fe231114-4d52-43b0-b18e-a6a1793fe958}">
-      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili_1 : DINT
-]]></Declaration>
-      <Get Name="Get" Id="{d0cc5fa5-85f9-4f23-b6d9-d15038db31af}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[iProcessTimeMili_1 := TO_DINT(THIS^._fb_abl_1.iProcessTimeMili1);
-]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{ae702fb1-8cf0-413e-a221-b4515428e3a6}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[THIS^._fb_abl_1.iProcessTimeMili1 := TO_UDINT(iProcessTimeMili_1);
-]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="iProcessTimeMili_2" Id="{1d597d9d-1a75-415a-9e52-83e27a275071}">
-      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili_2 : DINT
-]]></Declaration>
-      <Get Name="Get" Id="{8ab0db31-1063-4ff5-857f-f95d9a68d226}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[iProcessTimeMili_2 := TO_DINT(THIS^._fb_abl_1.iProcessTimeMili2);
-]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{dfa5b3c3-16f8-4dc5-938b-92c0bf3da5c4}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[THIS^._fb_abl_1.iProcessTimeMili2 := TO_UDINT(iProcessTimeMili_2);
-]]></ST>
-        </Implementation>
-      </Set>
     </Property>
     <Property Name="ProcessExecution" Id="{8ad6cb78-4d7a-41bf-b1f1-75219ceca489}">
       <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
@@ -209,7 +172,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xBusy := THIS^._fb_abl_1.xOUT_Busy;
+          <ST><![CDATA[xBusy := THIS^.fb_Pnp.xOUT_Busy;
 ]]></ST>
         </Implementation>
       </Get>
@@ -229,7 +192,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xDone := THIS^._fb_abl_1.xOUT_Ready OR THIS^._fb_abl_1.xOUT_Done;
+          <ST><![CDATA[xDone := THIS^.fb_Pnp.xOUT_Ready OR THIS^.fb_Pnp.xOUT_Done;
 ]]></ST>
         </Implementation>
       </Get>
@@ -241,7 +204,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverPathFree := THIS^._fb_abl_1.xOUT_MoverFree OR THIS^._fb_abl_1.xOUT_Ready OR THIS^._fb_abl_1.xOUT_Done;
+          <ST><![CDATA[xMoverPathFree := THIS^.fb_Pnp.xOUT_MoverFree OR THIS^.fb_Pnp.xOUT_Ready OR THIS^.fb_Pnp.xOUT_Done;
 ]]></ST>
         </Implementation>
       </Get>
@@ -253,7 +216,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^._fb_abl_1.iOUT_Step = ST115_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Pnp.iOUT_Step = ST115_Pnp_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>

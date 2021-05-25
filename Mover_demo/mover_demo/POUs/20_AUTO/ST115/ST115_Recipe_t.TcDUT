@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST115_Recipe_t" Id="{c4b620de-21ef-4a8c-8cf7-641ea5b6b686}">
+    <Declaration><![CDATA[TYPE ST115_Recipe_t :
+STRUCT
+    ST115_01Y              : RecipeAxisLinear2Pos_t;
+    ST115_02Z              : RecipeAxisLinear2Pos_t;
+    ST115_03Z              : RecipeAxisLinear2Pos_t;
+    xUseVerLeft            : BOOL; // Is the left vertical picker element is used
+    xUseVerRight           : BOOL; // Is the right vertical picker element is used
+    HorPnpAxis_config      : LinearMotionMan_Config_t;
+    PnpVerAxisLeft_config  : LinearMotionMan_Config_t;
+    PnpVerAxisRight_config : LinearMotionMan_Config_t;
+    FeederConfig           : FeederDelays_t;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
