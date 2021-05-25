@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_AUT_UNLOAD" Id="{262c2302-c2be-4764-ab31-9dd6d6d6f785}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_UNLOAD EXTENDS FB_AUT_ABSTRACT
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_UNLOAD EXTENDS FB_AUT_ABSTRACT IMPLEMENTS ISimuMoverTimers
 (****************************************************************************)
 (*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
 (*	Status				ungetestet											*)
@@ -257,59 +257,5 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <LineIds Name="FB_AUT_UNLOAD">
-      <LineId Id="254" Count="69" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.GiveMover">
-      <LineId Id="32" Count="2" />
-      <LineId Id="18" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.iCompletionPC.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili_1.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili_1.Set">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili_2.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.iProcessTimeMili_2.Set">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.ProcessExecution.Get">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.ProcessExecution.Set">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.TakeMover">
-      <LineId Id="18" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.xBusy.Get">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.xBusy.Set">
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.xDone.Get">
-      <LineId Id="5" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.xMoverPathFree.Get">
-      <LineId Id="6" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_AUT_UNLOAD.xMoverShouldLeave.Get">
-      <LineId Id="7" Count="0" />
-      <LineId Id="6" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

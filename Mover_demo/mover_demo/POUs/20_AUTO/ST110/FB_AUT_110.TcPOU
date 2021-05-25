@@ -135,52 +135,6 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="iProcessTimeMili_1" Id="{11043a39-61b4-4cff-9ce4-83d90bbd1022}">
-      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili_1 : DINT
-]]></Declaration>
-      <Get Name="Get" Id="{3f26a0b9-7a16-410f-8b57-d726a151203e}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[iProcessTimeMili_1 := TO_DINT(THIS^.fb_Pnp.iProcessTimeMili1);
-]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{c5847137-02be-417e-8fd4-a81cb9e5a3b8}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[THIS^.fb_Pnp.iProcessTimeMili1 := TO_UDINT(iProcessTimeMili_1);
-]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="iProcessTimeMili_2" Id="{327af14e-cede-4d6c-93fc-93739b86387b}">
-      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
-PROPERTY iProcessTimeMili_2 : DINT
-]]></Declaration>
-      <Get Name="Get" Id="{01d4b1d7-3c1b-4500-ab99-b101864eee13}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[iProcessTimeMili_2 := TO_DINT(THIS^.fb_Pnp.iProcessTimeMili2);
-]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{96d3faea-0899-48aa-a2df-87795dce60cb}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[THIS^.fb_Pnp.iProcessTimeMili2 := TO_UDINT(iProcessTimeMili_2);
-]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
     <Property Name="ProcessExecution" Id="{9944028e-71e4-4f6c-ab9d-2e450d36f1e7}">
       <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
       <Get Name="Get" Id="{e439908e-0dcd-4313-9915-d6f50d6a1e3c}">

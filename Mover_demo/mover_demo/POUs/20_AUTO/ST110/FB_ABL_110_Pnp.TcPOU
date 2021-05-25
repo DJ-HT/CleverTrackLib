@@ -28,8 +28,6 @@ VAR_INPUT
     pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
 
     // Application specific
-    iProcessTimeMili1  : UDINT := 5000; // user defined station duration, in milisecond
-    iProcessTimeMili2  : UDINT := 5000; // user defined station duration, in milisecond
     Mover              : REFERENCE TO FB_Mover;
     xIN_PceReadyToPick : BOOL; // the piece(s) is/are ready to picked
 END_VAR
@@ -66,10 +64,6 @@ VAR
     (* Bausteine *)
 
     (* Spezial *)
-    udiStartProcessTimeMili : UDINT; // start of the processing time, accurate at 100ns 
-
-    udiWaitTimeBetweenStep : UDINT; // waiting time between 2 steps
-
     fb_axis110_01Y : FB_AxisLM_V1_1;
     fb_axis110_02Z : FB_AxisLIN_V1_1;
     fb_axis110_03Z : FB_AxisLIN_V1_1;
