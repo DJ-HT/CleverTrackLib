@@ -59,7 +59,7 @@ VAR_GLOBAL PERSISTENT
     iStationTimeDef2 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
 
     {attribute 'to_json'}	
-    recipeList : ARRAY[1..CONST.MAX_RECIPE_NUMBER ] OF Recipe_21_101_t;
+    recipeList : Recipe_21_101_t;
 
 END_VAR
 ]]></Declaration>

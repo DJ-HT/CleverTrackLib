@@ -227,6 +227,9 @@
     <Compile Include="POUs\20_AUTO\FileMan\SaveInMemory_Recipe.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\LinearAxis_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\Mover\ApproachScenario_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -271,6 +274,10 @@
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\MoverState_e.TcTLEO">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Mover\VISU_MoverView.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\Pos2D_t.TcDUT">
       <SubType>Code</SubType>
@@ -369,6 +376,10 @@
     <Compile Include="POUs\20_AUTO\ST110\ST110_Recipe_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\VISU_Recipe_ST110.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST110\VISU_ST110.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
@@ -440,6 +451,10 @@
     </Compile>
     <Compile Include="VISUs\Custom.TcIPO">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VISUs\VISU_LinearConfigArray.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="VISUs\VISU_main.TcVIS">
       <SubType>Code</SubType>

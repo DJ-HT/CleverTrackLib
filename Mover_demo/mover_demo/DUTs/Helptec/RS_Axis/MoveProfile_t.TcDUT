@@ -4,10 +4,10 @@
     <Declaration><![CDATA[// A move profile only provide velocity and its derivatives
 TYPE MoveProfile_t :
 STRUCT
-    lrVelocity  : LREAL;         // Velocity to position
-    lrAccel     : LREAL;         // acceleration to position
-    lrDecel     : LREAL;         // deceleration to position
-    lrJerk      : LREAL;         // jerk to position
+    lrVelocity  : REAL;         // Velocity to position
+    lrAccel     : REAL;         // acceleration to position
+    lrDecel     : REAL;         // deceleration to position
+    lrJerk      : REAL;         // jerk to position
 END_STRUCT
 END_TYPE
 ]]></Declaration>

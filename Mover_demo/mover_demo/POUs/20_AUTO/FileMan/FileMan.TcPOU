@@ -6,7 +6,7 @@ VAR
     fb_fileMan : FB_FileMan;
     bSaveData  : BOOL := FALSE;
     bLoadData  : BOOL := TRUE;
-    json_data  : STRING(10000);
+    json_data  : STRING(20000);
 	json_len : DINT;
 END_VAR
 ]]></Declaration>
@@ -21,23 +21,24 @@ fb_fileMan(sPathName    := 'D:\tmp\mover_demo.json',
            currentState =>);
 
 IF fb_fileMan.currentState = 3 THEN
-    // SaveInMemory(json_data);
-    // fb_fileMan.uiStringLen := LEN(json_data);
-	
-	json_len := SaveInMemory_Recipe(json_data);
-    fb_fileMan.uiStringLen := json_len;
+    IF NOT fb_fileMan.bBusy THEN
+        json_len               := SaveInMemory_Recipe(json_data);
+        fb_fileMan.uiStringLen := json_len;
+    END_IF
 
 ELSIF fb_fileMan.currentState = 5 THEN
     fb_fileMan.uiStringLen := 2000;
 
 ELSIF fb_fileMan.currentState = 9 THEN
-    //LoadFromMemory(json_data);
-	ReadJsonDom(json_data);
+    IF NOT fb_fileMan.bBusy THEN
+        ReadJsonDom(json_data);
+    END_IF
 
 ELSIF fb_fileMan.currentState = 10 THEN
     bSaveData := FALSE;
     bLoadData := FALSE;
-END_IF]]></ST>
+END_IF
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

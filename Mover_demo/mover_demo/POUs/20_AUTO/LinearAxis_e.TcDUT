@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="LinearAxis_e" Id="{969b3950-fd06-4754-aef9-7edb95613f8d}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE LinearAxis_e :
+(
+    ST110_01Y,
+    ST110_02Z,
+    ST110_03Z,
+    ST115_01Y,
+    ST115_02Z,
+    ST115_03Z,
+    _max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

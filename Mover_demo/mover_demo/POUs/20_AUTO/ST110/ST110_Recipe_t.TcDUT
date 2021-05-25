@@ -3,15 +3,9 @@
   <DUT Name="ST110_Recipe_t" Id="{67830e86-a656-410c-b77d-77ee05a4605e}">
     <Declaration><![CDATA[TYPE ST110_Recipe_t :
 STRUCT
-    ST110_01Y              : RecipeAxisLinear2Pos_t;
-    ST110_02Z              : RecipeAxisLinear2Pos_t;
-    ST110_03Z              : RecipeAxisLinear2Pos_t;
-    xUseVerLeft            : BOOL; // Is the left vertical picker element is used
-    xUseVerRight           : BOOL; // Is the right vertical picker element is used
-    HorPnpAxis_config      : LinearMotionMan_Config_t;
-    PnpVerAxisLeft_config  : LinearMotionMan_Config_t;
-    PnpVerAxisRight_config : LinearMotionMan_Config_t;
-    FeederConfig           : FeederDelays_t;
+    xUseVerLeft  : BOOL; // Is the left vertical picker element is used
+    xUseVerRight : BOOL; // Is the right vertical picker element is used
+    FeederConfig : FeederDelays_t;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

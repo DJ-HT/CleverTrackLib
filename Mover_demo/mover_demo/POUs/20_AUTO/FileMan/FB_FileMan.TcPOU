@@ -13,6 +13,8 @@ VAR_OUTPUT
     bError   : BOOL;  // true when a FB is in error (all fb are mixed here)
     nErrorId : UDINT; // the error id from the fb in error (all fb are mixed here)
 
+    bBusy : BOOL; // True when one of the local fb is busy
+
     currentState : INT; // current state of this FB, use it for debug
 END_VAR
 VAR
@@ -128,12 +130,9 @@ END_CASE
 
 bError       := fb_open.bError OR fb_write.bError OR fb_read.bError OR fb_close.bError;
 nErrorId     := fb_open.nErrId OR fb_write.nErrId OR fb_read.nErrId OR fb_close.nErrId;
+bBusy        := fb_open.bBusy OR fb_write.bBusy OR fb_read.bBusy OR fb_close.bBusy;
 currentState := state;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_FileMan">
-      <LineId Id="2225" Count="98" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
