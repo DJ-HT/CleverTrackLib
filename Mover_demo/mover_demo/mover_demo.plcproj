@@ -412,6 +412,10 @@
     <Compile Include="POUs\20_AUTO\ST115\ST115_Pnp_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\VISU_Recipe_ST115.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST115\VISU_ST115.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
