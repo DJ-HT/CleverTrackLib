@@ -459,6 +459,42 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\FB_ABL_125_Feeder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\FB_ABL_125_Pnp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\FB_AUT_125.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_Axis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_Feeder_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_PnpHorPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_PnpVerPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_Pnp_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\VISU_Recipe_ST125.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\VISU_ST125.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="POUs\20_AUTO\TOOL\ASSERT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
