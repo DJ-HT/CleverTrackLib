@@ -318,7 +318,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 END_FOR
 
 // start update simu mover **********************************************
-IF NOT CONST.BIND_WITH_TRACK THEN
+IF CONST.USE_SIMULATION THEN
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     	_MoverList[mv_i].MoverAxis(xIN_StopMover := HMI_xStopMover);
 	END_FOR
