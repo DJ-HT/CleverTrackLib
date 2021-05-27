@@ -115,10 +115,10 @@ THIS^._LastPos := THIS^._CurrentPos;
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[IF CONST.USE_SIMULATION THEN
-    CurrentPos := _CurrentPos;
-ELSE
+          <ST><![CDATA[IF CONST.BIND_WITH_TRACK THEN
     CurrentPos := TO_LREAL(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._iID].diCurrentPos_um) / 1000.0;
+ELSE
+    CurrentPos := _CurrentPos;
 END_IF
 ]]></ST>
         </Implementation>

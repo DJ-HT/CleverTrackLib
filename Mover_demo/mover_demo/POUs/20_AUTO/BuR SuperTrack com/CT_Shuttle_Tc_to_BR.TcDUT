@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CT_Shuttle_Tc_to_BR" Id="{da804b5a-fe23-4ff7-9a03-ebd26bbc070d}">
+    <Declaration><![CDATA[TYPE CT_Shuttle_Tc_to_BR :
+STRUCT
+    bCommand     : BYTE; (* command bit field *)
+    bNextStation : BYTE; (* next station *)
+    iNextOffset  : INT;  (* needs to be between -500 and 500 *)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

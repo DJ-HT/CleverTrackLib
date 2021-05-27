@@ -318,7 +318,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 END_FOR
 
 // start update simu mover **********************************************
-IF CONST.USE_SIMULATION THEN
+IF NOT CONST.BIND_WITH_TRACK THEN
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     	_MoverList[mv_i].MoverAxis(xIN_StopMover := HMI_xStopMover);
 	END_FOR
@@ -326,7 +326,7 @@ END_IF
 // stop update simu mover **********************************************
 
 // start collision check **********************************************
-IF CONST.USE_SIMULATION THEN
+IF NOT CONST.BIND_WITH_TRACK THEN
     FOR mv_i := 1 TO MOVER_NUMBER - 1 BY 1 DO
         _MoverList[mv_i].MoverAxis.IsColliding(_MoverList[mv_i + 1].MoverAxis);
         _MoverList[mv_i].MoverAxis.WillCollide(_MoverList[mv_i + 1].MoverAxis);
