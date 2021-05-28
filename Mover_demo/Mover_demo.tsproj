@@ -1458,6 +1458,33 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
+			<Name GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..7] OF UINT</Name>
+			<BitSize>112</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>7</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..3] OF UINT</Name>
+			<BitSize>48</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>3</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF BOOL</Name>
+			<BitSize>64</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>8</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
 			<Name GUID="{13410A84-7A9F-0C78-F36B-EAECC43A6C96}" AutoDeleteType="true">CT_Track_BR_to_Tc_t</Name>
 			<BitSize>64</BitSize>
 			<SubItem>
@@ -1492,33 +1519,6 @@ External Setpoint Generation:
 				<BitSize>64</BitSize>
 				<BitOffs>0</BitOffs>
 			</SubItem>
-		</DataType>
-		<DataType>
-			<Name GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..3] OF UINT</Name>
-			<BitSize>48</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>3</Elements>
-			</ArrayInfo>
-		</DataType>
-		<DataType>
-			<Name GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..7] OF UINT</Name>
-			<BitSize>112</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>7</Elements>
-			</ArrayInfo>
-		</DataType>
-		<DataType>
-			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF BOOL</Name>
-			<BitSize>64</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
-			<ArrayInfo>
-				<LBound>0</LBound>
-				<Elements>8</Elements>
-			</ArrayInfo>
 		</DataType>
 		<DataType>
 			<Name GUID="{7E93FD2C-B4B9-D6CD-E29B-70267E70F157}" AutoDeleteType="true">CT_Track_Tc_to_BR_t</Name>
@@ -4137,18 +4137,24 @@ External Setpoint Generation:
 					<Vars VarGrpType="1" ContextId="2" AreaNo="32">
 						<Name>Task_fileMan Inputs</Name>
 						<Var>
-							<Name>gMoverAxis.I_CT_Track_from_BR</Name>
-							<Type GUID="{7918C191-47AB-9E2C-CDC5-80ED611A3BC2}">CT_Track_BR_to_Tc_u</Type>
+							<Name>_02_SAFETY.xIN_ESdelOut</Name>
+							<Comment><![CDATA[EStop del Out]]></Comment>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>_02_SAFETY.uiArOUT_State</Name>
-							<Comment><![CDATA[Module State ]]></Comment>
-							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
+							<Name>_02_SAFETY.xIN_ESout</Name>
+							<Comment><![CDATA[EStop	Out]]></Comment>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.uiArIN_State</Name>
 							<Comment><![CDATA[Module State ]]></Comment>
 							<Type GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}">ARRAY [1..7] OF UINT</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.uiArOUT_State</Name>
+							<Comment><![CDATA[Module State ]]></Comment>
+							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xArIN_Input1</Name>
@@ -4184,16 +4190,6 @@ External Setpoint Generation:
 							<Name>_02_SAFETY.xArIN_Input7</Name>
 							<Comment><![CDATA[Mapping Inputs ]]></Comment>
 							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}">ARRAY [0..7] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_ESdelOut</Name>
-							<Comment><![CDATA[EStop del Out]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_ESout</Name>
-							<Comment><![CDATA[EStop	Out]]></Comment>
-							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xIN_MonDelOut</Name>
@@ -4281,6 +4277,10 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>gMoverAxis.I_CT_Track_from_BR</Name>
+							<Type GUID="{7918C191-47AB-9E2C-CDC5-80ED611A3BC2}">CT_Track_BR_to_Tc_u</Type>
+						</Var>
+						<Var>
 							<Name>ST110_Axis.axis110_01Y.wState</Name>
 							<Comment><![CDATA[ Axis status word]]></Comment>
 							<Type>WORD</Type>
@@ -4303,10 +4303,6 @@ External Setpoint Generation:
 					</Vars>
 					<Vars VarGrpType="2" ContextId="2" AreaNo="33">
 						<Name>Task_fileMan Outputs</Name>
-						<Var>
-							<Name>gMoverAxis.Q_CT_Track_to_BR</Name>
-							<Type GUID="{6C6B7E7B-A9A2-2C68-CF9B-3F3029560B40}">CT_Track_Tc_to_BR_u</Type>
-						</Var>
 						<Var>
 							<Name>_02_SAFETY.xOUT_ResetES</Name>
 							<Comment><![CDATA[Reset ES]]></Comment>
@@ -4361,6 +4357,10 @@ External Setpoint Generation:
 							<Name>_02_SAFETY._FB_Gr005Output.xOUT_RunStop</Name>
 							<Comment><![CDATA[ Run Stop]]></Comment>
 							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>gMoverAxis.Q_CT_Track_to_BR</Name>
+							<Type GUID="{6C6B7E7B-A9A2-2C68-CF9B-3F3029560B40}">CT_Track_Tc_to_BR_u</Type>
 						</Var>
 						<Var>
 							<Name>ST110_Axis.axis110_01Y.bCtrlHi</Name>
@@ -4421,7 +4421,7 @@ External Setpoint Generation:
 			</Project>
 		</Plc>
 		<Io>
-			<Device Id="1" DevType="111" DevFlags="#x0003" AmsPort="28673" AmsNetId="192.168.20.192.2.1" RemoteName="Device 1 (EtherCAT)">
+			<Device Id="1" Disabled="true" DevType="111" DevFlags="#x0003" AmsPort="28673" AmsNetId="192.168.20.192.2.1" RemoteName="Device 1 (EtherCAT)">
 				<Name>Device 1 (EtherCAT)</Name>
 				<AddressInfo>
 					<Pnp>
@@ -5782,7 +5782,6 @@ External Setpoint Generation:
 		</Io>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{00000000-2001-0850-0020-500810000403}" Id="#x02030020"/>
 		<MappingInfo Identifier="{05000010-2001-0850-3000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
 		<OwnerA Name="TIPC^mover_demo^mover_demo Instance">
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Box 1 (CIFX RE/ECS)">

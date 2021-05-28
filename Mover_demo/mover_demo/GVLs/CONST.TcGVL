@@ -8,12 +8,12 @@ VAR_GLOBAL CONSTANT
     (*******************************************************************)
 
     USE_SIMULATION  : BOOL := TRUE;
-    BIND_WITH_TRACK : BOOL := TRUE;
+    BIND_WITH_TRACK : BOOL := FALSE;
 
     STATION_NUMBER        : INT   := 18;
     MAX_GROUP             : INT   := 6;
     MAX_STATION_PER_GROUP : INT   := 8;
-    MAX_RECIPE_NUMBER     : INT   := 4;
+    MAX_RECIPE_NUMBER     : INT   := 10;
     MAX_TRACK_LENGTH      : LREAL := 10060;
     MAX_MOVER_SIZE        : LREAL := 200.0;
     MAX_VECTOR_LIST       : INT   := 10;

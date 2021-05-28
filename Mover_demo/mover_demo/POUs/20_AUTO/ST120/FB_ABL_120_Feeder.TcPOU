@@ -122,8 +122,8 @@ fb_pivotLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
                        (ST120_Feeder_e.rotate_to_feeder > iOUT_Step) AND (ST120_Feeder_e.rotate_to_pnp <= iOUT_Step)
                            ), // TODO use sensor
              xIN_FREE := xIN_PnpNotOnTheWay OR xIN_PnpGripperOpen,
-             xINtoGS  := PERS.recipeList.st120.xUseVerLeft AND (ST120_Feeder_e.rotate_to_pnp = iOUT_Step),
-             xINtoAS  := PERS.recipeList.st120.xUseVerLeft AND
+             xINtoGS  := _20_AUTO.recipe.st120.xUseVerLeft AND (ST120_Feeder_e.rotate_to_pnp = iOUT_Step),
+             xINtoAS  := _20_AUTO.recipe.st120.xUseVerLeft AND
                          (ST120_Feeder_e.rotate_to_feeder = iOUT_Step OR
                          ST120_Feeder_e.Init_pneumatics = iOUT_Step),
              tIN_ErrAS  := T#1S,
@@ -143,8 +143,8 @@ fb_pivotRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
                         (ST120_Feeder_e.rotate_to_feeder > iOUT_Step) AND (ST120_Feeder_e.rotate_to_pnp <= iOUT_Step)
                             ), // TODO use sensor
               xIN_FREE := xIN_PnpGripperOpen OR xIN_PnpNotOnTheWay,
-              xINtoGS  := PERS.recipeList.st120.xUseVerRight AND (ST120_Feeder_e.rotate_to_pnp = iOUT_Step),
-              xINtoAS  := PERS.recipeList.st120.xUseVerRight AND
+              xINtoGS  := _20_AUTO.recipe.st120.xUseVerRight AND (ST120_Feeder_e.rotate_to_pnp = iOUT_Step),
+              xINtoAS  := _20_AUTO.recipe.st120.xUseVerRight AND
                           (ST120_Feeder_e.rotate_to_feeder = iOUT_Step OR
                           ST120_Feeder_e.Init_pneumatics = iOUT_Step),
               tIN_ErrAS  := T#1S,
@@ -153,22 +153,22 @@ fb_pivotRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
               tIN_WaitGS := T#0S);
 
 fb_feederLeft(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
-                            PERS.recipeList.st120.xUseVerLeft,
+                            _20_AUTO.recipe.st120.xUseVerLeft,
               xIN_PieceInEnd      := NOT simu_fifo_left.IsEmpty(),
               xIN_PieceMax        := (simu_fifo_left.GetLen() >= BAND_SIZE_FOR_TUBE_LEFT),
-              diIN_SignlFilter_ms := PERS.recipeList.st120.FeederConfigLeft.InFilterDelay,
-              diIN_StartDelay_ms  := PERS.recipeList.st120.FeederConfigLeft.StartDelay,
-              diIN_StopDelay_ms   := PERS.recipeList.st120.FeederConfigLeft.StopDelay,
-              diIN_EmptyDelay     := PERS.recipeList.st120.FeederConfigLeft.EmptyDelay);
+              diIN_SignlFilter_ms := _20_AUTO.recipe.st120.FeederConfigLeft.InFilterDelay,
+              diIN_StartDelay_ms  := _20_AUTO.recipe.st120.FeederConfigLeft.StartDelay,
+              diIN_StopDelay_ms   := _20_AUTO.recipe.st120.FeederConfigLeft.StopDelay,
+              diIN_EmptyDelay     := _20_AUTO.recipe.st120.FeederConfigLeft.EmptyDelay);
 
 fb_feederRight(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
-                             PERS.recipeList.st120.xUseVerRight,
+                             _20_AUTO.recipe.st120.xUseVerRight,
                xIN_PieceInEnd      := NOT simu_fifo_right.IsEmpty(),
                xIN_PieceMax        := (simu_fifo_right.GetLen() >= BAND_SIZE_FOR_TUBE_RIGHT),
-               diIN_SignlFilter_ms := PERS.recipeList.st120.FeederConfigRight.InFilterDelay,
-               diIN_StartDelay_ms  := PERS.recipeList.st120.FeederConfigRight.StartDelay,
-               diIN_StopDelay_ms   := PERS.recipeList.st120.FeederConfigRight.StopDelay,
-               diIN_EmptyDelay     := PERS.recipeList.st120.FeederConfigRight.EmptyDelay);
+               diIN_SignlFilter_ms := _20_AUTO.recipe.st120.FeederConfigRight.InFilterDelay,
+               diIN_StartDelay_ms  := _20_AUTO.recipe.st120.FeederConfigRight.StartDelay,
+               diIN_StopDelay_ms   := _20_AUTO.recipe.st120.FeederConfigRight.StopDelay,
+               diIN_EmptyDelay     := _20_AUTO.recipe.st120.FeederConfigRight.EmptyDelay);
 
 simu_feederLeft(xIN_Enable         := fb_feederLeft.xOUT_EnableFeeder,
                 tIN_NewPieceTime   := 500,
@@ -278,8 +278,8 @@ ST120_Feeder_e.START: (*  *)
 
 ST120_Feeder_e.wait_tube_presence:
     IF CONST.USE_SIMULATION AND
-       ((NOT PERS.recipeList.st120.xUseVerLeft OR (simu_fifo_left.GetLen() >= BAND_SIZE_FOR_TUBE_LEFT)) AND
-       (NOT PERS.recipeList.st120.xUseVerRight OR (simu_fifo_right.GetLen() >= BAND_SIZE_FOR_TUBE_RIGHT))) THEN
+       ((NOT _20_AUTO.recipe.st120.xUseVerLeft OR (simu_fifo_left.GetLen() >= BAND_SIZE_FOR_TUBE_LEFT)) AND
+       (NOT _20_AUTO.recipe.st120.xUseVerRight OR (simu_fifo_right.GetLen() >= BAND_SIZE_FOR_TUBE_RIGHT))) THEN
         iOUT_Step := ST120_Feeder_e.wait_pnp_ready;
     END_IF
 
@@ -297,11 +297,11 @@ ST120_Feeder_e.rotate_to_pnp:
 
 ST120_Feeder_e.wait_pce_picked:
     IF xIN_PickPiece THEN
-        IF PERS.recipeList.st120.xUseVerLeft THEN
+        IF _20_AUTO.recipe.st120.xUseVerLeft THEN
             simu_fifo_left.Pop(1);
         END_IF
 
-        IF PERS.recipeList.st120.xUseVerRight THEN
+        IF _20_AUTO.recipe.st120.xUseVerRight THEN
             simu_fifo_right.Pop(1);
         END_IF
 

@@ -6,14 +6,13 @@
 VAR_INPUT
     xIN_Quit   : BOOL;    //Quittieren
     enIN_State : enState; //Status der Maschine 
+    recipe     : REFERENCE TO Recipe_21_101_t;
 END_VAR
 VAR_OUTPUT
-    recipe : Recipe_21_101_t;
 END_VAR
 VAR
-    recipeHMI      : REFERENCE TO Recipe_21_101_t; // recipe values shown on the HMI
-    iRecipeCurrent : INT := 1;                     // selected recipe to be executed
-    iRecipeHMI     : INT := 1;                     // selected recipe to show on the HMI
+    recipeHMI       : REFERENCE TO Recipe_21_101_t;                // recipe values shown on the HMI
+    iRecipeCopyDest : RecipeType_e := CONST.MAX_RECIPE_NUMBER - 1; // selected recipe to copy to
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -21,6 +20,22 @@ END_VAR
 //POU_ERR_000(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
 //POU_MSG_000(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArMSG[1]));
 
+recipeHMI REF= PERS.recipeList[PERS.iRecipeCurrent];
+recipe    REF= PERS.recipeList[PERS.iRecipeCurrent];
+
+IF HMI.btCopyRecipe.rtrig THEN
+    PERS.recipeList[iRecipeCopyDest] := PERS.recipeList[PERS.iRecipeCurrent];
+    // reset the position of iRecipeCopyDest to tell the user the saving is done
+    iRecipeCopyDest := CONST.MAX_RECIPE_NUMBER - 1;
+END_IF
+
+IF HMI.btCopyAxisCfg.rtrig THEN
+    PERS.recipeList[PERS.iRecipeCurrent].linearAxis[HMI.iSelectAxisCopy] :=
+        PERS.recipeList[PERS.iRecipeCurrent].linearAxis[HMI.iSelectAxis];
+
+    // reset the position of iRecipeCopyDest to tell the user the saving is done
+    HMI.iSelectAxisCopy := TO_INT(LinearAxis_e._max);
+END_IF
 
 //Station01
 

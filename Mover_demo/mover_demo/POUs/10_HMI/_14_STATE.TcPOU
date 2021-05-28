@@ -127,5 +127,82 @@ fb_State(xIN_AutoInit := FALSE,
 sStateDbg := TO_STRING(HMI.enState);
 ]]></ST>
     </Implementation>
+    <Method Name="FB_init" Id="{73d68fed-109d-48d3-8347-db09d26fc03c}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode  : BOOL; // if TRUE, the instance afterwards gets moved into the copy code (online change)
+
+    i  : INT;
+    ii : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO TO_INT(LinearAxis_e._max)-1 BY 1 DO
+	FOR ii := 0 TO CONST.MAX_VECTOR_LIST-1 BY 1 DO
+		HMI.movesName[i][ii] := TO_STRING(ii);
+	END_FOR
+END_FOR
+
+
+// ST110
+HMI.movesName[LinearAxis_e.ST110_01Y][0] := TO_STRING(ST110_PnpHorPos_e.GS);
+HMI.movesName[LinearAxis_e.ST110_01Y][1] := TO_STRING(ST110_PnpHorPos_e.AS);
+
+HMI.movesName[LinearAxis_e.ST110_02Z][0] := TO_STRING(ST110_PnpVerPos_e.UpEmpty);
+HMI.movesName[LinearAxis_e.ST110_02Z][1] := TO_STRING(ST110_PnpVerPos_e.DownEmpty);
+HMI.movesName[LinearAxis_e.ST110_02Z][2] := TO_STRING(ST110_PnpVerPos_e.UpFull);
+HMI.movesName[LinearAxis_e.ST110_02Z][3] := TO_STRING(ST110_PnpVerPos_e.DownFullQuick);
+HMI.movesName[LinearAxis_e.ST110_02Z][4] := TO_STRING(ST110_PnpVerPos_e.DownFullTorqueControl);
+
+HMI.movesName[LinearAxis_e.ST110_03Z][0] := TO_STRING(ST110_PnpVerPos_e.UpEmpty);
+HMI.movesName[LinearAxis_e.ST110_03Z][1] := TO_STRING(ST110_PnpVerPos_e.DownEmpty);
+HMI.movesName[LinearAxis_e.ST110_03Z][2] := TO_STRING(ST110_PnpVerPos_e.UpFull);
+HMI.movesName[LinearAxis_e.ST110_03Z][3] := TO_STRING(ST110_PnpVerPos_e.DownFullQuick);
+HMI.movesName[LinearAxis_e.ST110_03Z][4] := TO_STRING(ST110_PnpVerPos_e.DownFullTorqueControl);
+
+HMI.movesName[LinearAxis_e.ST110_04Z][0] := TO_STRING(ST110_PnpHorPos_e.GS);
+HMI.movesName[LinearAxis_e.ST110_04Z][1] := TO_STRING(ST110_PnpHorPos_e.AS);
+
+// ST115
+HMI.movesName[LinearAxis_e.ST115_01Y][0] := TO_STRING(ST115_PnpHorPos_e.GS);
+HMI.movesName[LinearAxis_e.ST115_01Y][1] := TO_STRING(ST115_PnpHorPos_e.AS);
+
+HMI.movesName[LinearAxis_e.ST115_02Z][0] := TO_STRING(ST115_PnpVerPos_e.UpEmpty);
+HMI.movesName[LinearAxis_e.ST115_02Z][1] := TO_STRING(ST115_PnpVerPos_e.DownEmpty);
+HMI.movesName[LinearAxis_e.ST115_02Z][2] := TO_STRING(ST115_PnpVerPos_e.UpFull);
+HMI.movesName[LinearAxis_e.ST115_02Z][3] := TO_STRING(ST115_PnpVerPos_e.DownFullQuick);
+HMI.movesName[LinearAxis_e.ST115_02Z][4] := TO_STRING(ST115_PnpVerPos_e.DownFullTorqueControl);
+
+HMI.movesName[LinearAxis_e.ST115_03Z][0] := TO_STRING(ST115_PnpVerPos_e.UpEmpty);
+HMI.movesName[LinearAxis_e.ST115_03Z][1] := TO_STRING(ST115_PnpVerPos_e.DownEmpty);
+HMI.movesName[LinearAxis_e.ST115_03Z][2] := TO_STRING(ST115_PnpVerPos_e.UpFull);
+HMI.movesName[LinearAxis_e.ST115_03Z][3] := TO_STRING(ST115_PnpVerPos_e.DownFullQuick);
+HMI.movesName[LinearAxis_e.ST115_03Z][4] := TO_STRING(ST115_PnpVerPos_e.DownFullTorqueControl);
+
+HMI.movesName[LinearAxis_e.ST115_04Z][0] := TO_STRING(ST115_PnpHorPos_e.GS);
+HMI.movesName[LinearAxis_e.ST115_04Z][1] := TO_STRING(ST115_PnpHorPos_e.AS);
+
+// ST120
+HMI.movesName[LinearAxis_e.ST120_01Y][0] := TO_STRING(ST120_PnpHorPos_e.GS);
+HMI.movesName[LinearAxis_e.ST120_01Y][1] := TO_STRING(ST120_PnpHorPos_e.AS);
+
+HMI.movesName[LinearAxis_e.ST120_02Z][0] := TO_STRING(ST120_PnpVerPos_e.UpEmpty);
+HMI.movesName[LinearAxis_e.ST120_02Z][1] := TO_STRING(ST120_PnpVerPos_e.DownEmpty);
+HMI.movesName[LinearAxis_e.ST120_02Z][2] := TO_STRING(ST120_PnpVerPos_e.UpFull);
+HMI.movesName[LinearAxis_e.ST120_02Z][3] := TO_STRING(ST120_PnpVerPos_e.DownFullQuick);
+HMI.movesName[LinearAxis_e.ST120_02Z][4] := TO_STRING(ST120_PnpVerPos_e.DownFullTorqueControl);
+
+// ST125
+HMI.movesName[LinearAxis_e.ST125_01Y][0] := TO_STRING(ST120_PnpHorPos_e.GS);
+HMI.movesName[LinearAxis_e.ST125_01Y][1] := TO_STRING(ST120_PnpHorPos_e.AS);
+
+HMI.movesName[LinearAxis_e.ST125_02Z][0] := TO_STRING(ST120_PnpVerPos_e.UpEmpty);
+HMI.movesName[LinearAxis_e.ST125_02Z][1] := TO_STRING(ST120_PnpVerPos_e.DownEmpty);
+HMI.movesName[LinearAxis_e.ST125_02Z][2] := TO_STRING(ST120_PnpVerPos_e.UpFull);
+HMI.movesName[LinearAxis_e.ST125_02Z][3] := TO_STRING(ST120_PnpVerPos_e.DownFullQuick);
+HMI.movesName[LinearAxis_e.ST125_02Z][4] := TO_STRING(ST120_PnpVerPos_e.DownFullTorqueControl);]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

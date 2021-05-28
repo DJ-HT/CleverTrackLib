@@ -38,7 +38,6 @@ VAR_GLOBAL PERSISTENT
                                                             0:
                                                             1:  
                                                         *)
-  
 
     (***********************************************************************************************)
     (* Werte *)
@@ -52,14 +51,20 @@ VAR_GLOBAL PERSISTENT
     (***********************************************************************************************)
     (* Application *)
     (***********************************************************************************************)
-	
-    {attribute 'to_json'}	
+
+    {attribute 'to_json'}
     iStationTimeDef1 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
-    {attribute 'to_json'}	
+    {attribute 'to_json'}
     iStationTimeDef2 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
 
-    {attribute 'to_json'}	
-    recipeList : Recipe_21_101_t;
+    //{attribute 'to_json'}
+    //_20_AUTO.recipe : Recipe_21_101_t;
+	
+
+    {attribute 'to_json'}
+    recipeList : ARRAY[0..CONST.MAX_RECIPE_NUMBER] OF Recipe_21_101_t; // registery of recipe
+    {attribute 'to_json'}
+    iRecipeCurrent : RecipeType_e; // selected recipe to be executed
 
 END_VAR
 ]]></Declaration>
