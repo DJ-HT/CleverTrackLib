@@ -202,7 +202,6 @@ VAR
 END_VAR
 VAR CONSTANT
     MOVER_NUMBER : INT    := 18;
-    caca         : STRING := 'dise$20beispiel$20funktionniert$20!';
 END_VAR
 VAR_STAT
     _iInstanceCounter : INT := 1; // instance counter
@@ -240,6 +239,11 @@ END_CASE
 
 // should be done elsewhere ...
 SIMU.lrAccelMover := SIMU.lrAccelMoverSlider * SIMU.lrAccelMoverSlider;
+
+// Affect station offset depending on the station offset list
+FOR mv_i := 1 TO CONST.STATION_NUMBER BY 1 DO
+	 _StationList[mv_i].Offset := PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[mv_i-1];
+END_FOR
 
 FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;

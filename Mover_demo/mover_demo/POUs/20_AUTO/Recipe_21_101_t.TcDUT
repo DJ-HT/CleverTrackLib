@@ -4,11 +4,12 @@
     <Declaration><![CDATA[// Recipe for the 21.101 machine
 TYPE Recipe_21_101_t :
 STRUCT
-    linearAxis : ARRAY[0..LinearAxis_e._max - 1] OF LinearMotionMan_Config_t;
-    st110      : ST110_Recipe_t;
-    st115      : ST115_Recipe_t;
-    st120      : ST120_Recipe_t;
-    st125      : ST125_Recipe_t;
+    linearAxis     : ARRAY[0..LinearAxis_e._max - 1] OF LinearMotionMan_Config_t;
+    stationOffsets : ARRAY[0..CONST.STATION_NUMBER-1] OF REAL;
+    st110          : ST110_Recipe_t;
+    st115          : ST115_Recipe_t;
+    st120          : ST120_Recipe_t;
+    st125          : ST125_Recipe_t;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

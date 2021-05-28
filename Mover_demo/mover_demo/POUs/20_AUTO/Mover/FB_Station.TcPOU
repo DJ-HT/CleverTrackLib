@@ -13,6 +13,7 @@ VAR
     _WaitPosOffset     : LREAL; // offset of the station position, should always be negative
     _iMaxWaitingMovers : INT;   // Maximum of waiting mover in front of the station
     _iGroupNumber      : INT;   // The current group member
+    _lrOffset          : LREAL; // offset position of this station for a given recipe
 
     _ApproachScenario : ApproachScenario_e := ApproachScenario_e.WaitOnFinishedProcess;
 
@@ -119,6 +120,25 @@ END_VAR
         <Implementation>
           <ST><![CDATA[THIS^._iMaxWaitingMovers := iMaxWaitingMovers;
 ]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Offset" Id="{0f5c0952-f6ae-4ee6-a98e-3ef72644cd22}">
+      <Declaration><![CDATA[PROPERTY PUBLIC Offset : LREAL]]></Declaration>
+      <Get Name="Get" Id="{a2b591ed-26cc-4237-a108-b54e2e588ae0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Offset := THIS^._lrOffset;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e6b836b5-2768-4f08-a3fe-d5e742cff61f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._lrOffset := Offset;]]></ST>
         </Implementation>
       </Set>
     </Property>

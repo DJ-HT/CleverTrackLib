@@ -108,9 +108,11 @@ END_VAR
 IF CONST.BIND_WITH_TRACK THEN
     IsInStationPos :=
         THIS^.Station.Position.isInPos(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
-                                       THIS^._AttachedTool.PosOffset);
+                                       THIS^._AttachedTool.PosOffset -
+                                       THIS^.Station.Offset);
 ELSE
-    IsInStationPos := THIS^.Station.Position.isInPos(THIS^.MoverAxis.CurrentPos - THIS^._AttachedTool.PosOffset);
+    IsInStationPos := THIS^.Station.Position
+        .isInPos(THIS^.MoverAxis.CurrentPos - THIS^._AttachedTool.PosOffset - THIS^.Station.Offset);
 END_IF
 ]]></ST>
       </Implementation>
@@ -142,7 +144,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
-    THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset));
+    THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
     THIS^._State := MoverState_e.MovingToStation;
 END_IF
 
@@ -161,7 +163,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
     IF THIS^.Station.WaitPos <= (THIS^.Station.Position.lrWorkPosition - CONST.MAX_MOVER_SIZE) THEN
-        THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset));
+        THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
     END_IF
 END_IF
 
