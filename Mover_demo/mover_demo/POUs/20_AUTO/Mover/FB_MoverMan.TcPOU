@@ -140,7 +140,6 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-
 CASE step OF
 0:
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
@@ -320,10 +319,21 @@ END_FOR
 // start update simu mover **********************************************
 IF CONST.USE_SIMULATION THEN
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
-    	_MoverList[mv_i].MoverAxis(xIN_StopMover := HMI_xStopMover);
-	END_FOR
+        _MoverList[mv_i].MoverAxis(xIN_StopMover := HMI_xStopMover);
+    END_FOR
 END_IF
+
 // stop update simu mover **********************************************
+
+IF CONST.BIND_WITH_TRACK THEN
+    FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
+        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.0 :=
+            _MoverList[mv_i].State = MoverState_e.MovingToStation;
+
+        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation := _MoverList[mv_i].Station.SuperTrackNumber;
+        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].iNextOffset  := 0;
+    END_FOR
+END_IF
 
 // start collision check **********************************************
 IF NOT CONST.BIND_WITH_TRACK THEN

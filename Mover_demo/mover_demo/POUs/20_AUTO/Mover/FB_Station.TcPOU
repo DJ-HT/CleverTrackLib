@@ -178,6 +178,17 @@ SetWaitPosOffset REF= THIS^;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="SuperTrackNumber" Id="{48708baa-3e61-4dbb-9ae9-95a95949b98d}">
+      <Declaration><![CDATA[PROPERTY SuperTrackNumber : BYTE]]></Declaration>
+      <Get Name="Get" Id="{708941da-5b74-4ce8-aea6-ab99c1baa276}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SuperTrackNumber := TO_BYTE((this^._iID+1)*5);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="ToString" Id="{e92fcd0f-4798-488b-aab7-2e05aaeb6db9}">
       <Declaration><![CDATA[METHOD ToString : STRING
 VAR_INPUT

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <DUT Name="CT_Shuttle_Tc_to_BR" Id="{da804b5a-fe23-4ff7-9a03-ebd26bbc070d}">
-    <Declaration><![CDATA[TYPE CT_Shuttle_Tc_to_BR :
+  <DUT Name="CT_Shuttle_Tc_to_BR_t" Id="{da804b5a-fe23-4ff7-9a03-ebd26bbc070d}">
+    <Declaration><![CDATA[TYPE CT_Shuttle_Tc_to_BR_t :
 STRUCT
     bCommand     : BYTE; (* command bit field *)
     bNextStation : BYTE; (* next station *)

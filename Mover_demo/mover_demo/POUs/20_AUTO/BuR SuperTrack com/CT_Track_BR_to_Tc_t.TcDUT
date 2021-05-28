@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <DUT Name="CT_Track_BR_to_Tc" Id="{d998620d-8bd2-44fc-8a31-d292ede48ec9}">
-    <Declaration><![CDATA[TYPE CT_Track_BR_to_Tc :
+  <DUT Name="CT_Track_BR_to_Tc_t" Id="{d998620d-8bd2-44fc-8a31-d292ede48ec9}">
+    <Declaration><![CDATA[TYPE CT_Track_BR_to_Tc_t :
 STRUCT
     bStatus : BYTE;
     diError : DINT;

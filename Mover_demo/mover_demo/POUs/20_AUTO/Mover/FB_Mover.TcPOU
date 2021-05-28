@@ -105,7 +105,13 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[// we have to substract the piecholder offset to find the station position again
-IsInStationPos := THIS^.Station.Position.isInPos(THIS^.MoverAxis.CurrentPos - this^._AttachedTool.PosOffset);
+IF CONST.BIND_WITH_TRACK THEN
+    IsInStationPos :=
+        THIS^.Station.Position.isInPos(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
+                                       THIS^._AttachedTool.PosOffset);
+ELSE
+    IsInStationPos := THIS^.Station.Position.isInPos(THIS^.MoverAxis.CurrentPos - THIS^._AttachedTool.PosOffset);
+END_IF
 ]]></ST>
       </Implementation>
     </Method>
