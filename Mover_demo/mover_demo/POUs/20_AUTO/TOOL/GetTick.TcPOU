@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="GetTick" Id="{29921add-6e89-4945-967a-5cd442b28ed3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION GetTick : UDINT
+VAR_INPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[GetTick := TO_UDINT(F_GetTaskTime()/10000);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="AxisBeckhoff_t" Id="{6fda199b-b00f-4961-846e-53893f7d0ce4}">
+    <Declaration><![CDATA[TYPE AxisBeckhoff_t EXTENDS AxisBase_t :
+STRUCT
+    axis : AXIS_REF; // reference of the axis 
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

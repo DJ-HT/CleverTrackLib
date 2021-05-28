@@ -215,7 +215,7 @@ ST100_Load_e.proceedOperation_2: (*  *)
         iOUT_Step := ST100_Load_e.SYNC_MOVER_LEAVE;
     END_IF;
 
-ST100_Modify_e.SYNC_MOVER_LEAVE:
+ST100_Load_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
         iOUT_Step := ST100_Unload_e.DONE;
@@ -242,9 +242,5 @@ ST100_Load_e.ERROR: (* ERROR *) ;
 END_CASE;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_ABL_LOAD">
-      <LineId Id="677" Count="157" />
-      <LineId Id="9" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

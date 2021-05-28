@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="F_GetPercent_2" Id="{0878eded-c7f7-41d7-bb23-34257f9b0ae4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION F_GetPercent_2 : INT
+VAR_INPUT
+    iAktStep      : INT; // actual step
+    iStepP1_start : INT; // step process 1 start
+    iStepP1_stop  : INT; // step process 1 stop
+    iStepP2_start : INT; // step process 2 start
+    iStepP2_stop  : INT; // step process 2 stop
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF iAktStep < iStepP1_start THEN
+    F_GetPercent_2 := 0;
+
+ELSIF iAktStep > iStepP1_stop AND iAktStep < iStepP2_start THEN
+    F_GetPercent_2 := 50;
+
+ELSIF iAktStep > iStepP2_stop THEN
+    F_GetPercent_2 := 100;
+
+ELSIF iAktStep >= iStepP1_start AND iAktStep <= iStepP1_stop THEN
+    F_GetPercent_2 := 50 * (iAktStep - iStepP1_start) / ((iStepP1_stop - iStepP1_start) + 1);
+
+ELSIF iAktStep >= iStepP2_start AND iAktStep <= iStepP2_stop THEN
+    F_GetPercent_2 := 50 + 50 * (iAktStep - iStepP2_start) / ((iStepP2_stop - iStepP2_start) + 1);
+
+ELSE
+    F_GetPercent_2 := 0;
+
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

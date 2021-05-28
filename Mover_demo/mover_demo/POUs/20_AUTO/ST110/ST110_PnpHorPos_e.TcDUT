@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST110_PnpHorPos_e" Id="{84e1a7e3-96fd-41b8-9875-96adbe80b49b}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE ST110_PnpHorPos_e :
+(
+	GS,
+	AS,
+	_max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

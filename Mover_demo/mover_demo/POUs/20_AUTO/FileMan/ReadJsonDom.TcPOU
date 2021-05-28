@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="ReadJsonDom" Id="{279571ce-db73-4cae-bbb0-df8c1ed5f757}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION ReadJsonDom : BOOL
+VAR_INPUT
+END_VAR
+VAR
+    fb_json : FB_JsonDomParser;
+
+    json_head                   : SJsonValue;
+    json_value                  : SJsonValue;
+    json_iStationTimeDef1       : SJsonValue;
+    json_iStationTimeDef2       : SJsonValue;
+    json_recipeList             : SJsonValue;
+    json_st110                  : SJsonValue;
+    json_ST110_01Y              : SJsonValue;
+    json_ST110_02Z              : SJsonValue;
+    json_ST110_03Z              : SJsonValue;
+    json_HorPnpAxis_config      : SJsonValue;
+    json_defProfile             : SJsonValue;
+    json_movesList              : SJsonValue;
+    json_PnpVerAxisLeft_config  : SJsonValue;
+    json_PnpVerAxisRight_config : SJsonValue;
+    json_FeederConfig           : SJsonValue;
+    json_st115                  : SJsonValue;
+    json_ST115_01Y              : SJsonValue;
+    json_ST115_02Z              : SJsonValue;
+    json_ST115_03Z              : SJsonValue;
+    json_i                      : SJsonValue;
+    json_ii                     : SJsonValue;
+
+    i  : INT;
+    ii : INT;
+
+END_VAR
+VAR_IN_OUT
+    sMessage : STRING(10000);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

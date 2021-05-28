@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Fifo" Id="{6f707f12-aae7-46df-b176-7968e36b0a28}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Fifo
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    _CurrLen : INT := 0;
+    _MaxLen  : INT := 0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Empty" Id="{58f038f0-14be-450b-8e8a-85eb1e95bb5d}">
+      <Declaration><![CDATA[// Empty the Fifo
+METHOD Empty : REFERENCE TO FB_Fifo
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._CurrLen := 0;
+Empty          REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{6f0691f6-6991-403a-b6e1-416e6cfff49b}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode  : BOOL; // if TRUE, the instance afterwards gets moved into the copy code (online change)
+
+    iSize : INT; // Size of the Fifo
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._MaxLen := iSize;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetLen" Id="{85eee8f0-f7ca-46a0-8266-85e4de21c04a}">
+      <Declaration><![CDATA[// Get the current element number inside the Fifo
+METHOD GetLen : INT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetLen := _CurrLen;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsEmpty" Id="{bb850917-5dfa-4dde-93d9-9bff27a090c4}">
+      <Declaration><![CDATA[// Return TRUE when the Fifo is empty
+METHOD IsEmpty : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsEmpty := 0 = THIS^._CurrLen;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsFull" Id="{9669bc02-2a26-4da5-86b0-1c14b245890b}">
+      <Declaration><![CDATA[// Return true when the current element in the fifo is equal as the maximum
+METHOD IsFull : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsFull := THIS^._CurrLen >= THIS^._MaxLen;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Pop" Id="{b376c6f9-470b-47ef-afad-d0feda10391b}">
+      <Declaration><![CDATA[// Remove i element inside the Fifo
+// Return TRUE when the requested number of element could be removed
+// If the Fifo is not empty and you try to pop more element than
+// the current element number of the fifo, no element will be 
+// removed and FALSE will be returned
+METHOD Pop : BOOL
+VAR_INPUT
+    numberOfElement : INT; // number of element to take away
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Pop := FALSE;
+
+IF THIS^._CurrLen - numberOfElement >= 0 THEN
+    THIS^._CurrLen := THIS^._CurrLen - numberOfElement;
+    Pop            := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Put" Id="{e3e525ad-9ef0-47a8-a035-e5e3b94e4f3d}">
+      <Declaration><![CDATA[// Add i element inside the Fifo
+// Return False when the Fifo is already full
+// If the Fifo is not empty and you try to put more
+// element than the maximum, the Fifo will return FALSE
+// and its current length will not change
+METHOD Put : BOOL
+VAR_INPUT
+	numberOfElement : INT; // how many element do you put in the 
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Put := FALSE;
+
+IF THIS^._CurrLen + numberOfElement <= THIS^._MaxLen THEN
+    THIS^._CurrLen := THIS^._CurrLen + numberOfElement;
+    Put            := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

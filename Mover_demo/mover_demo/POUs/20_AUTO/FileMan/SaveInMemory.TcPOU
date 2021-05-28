@@ -35,6 +35,7 @@ FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
     fbJson.AddDint(PERS.iStationTimeDef2[i]);
 END_FOR
 
+
 fbJson.EndArray();
 fbJson.EndObject();
 

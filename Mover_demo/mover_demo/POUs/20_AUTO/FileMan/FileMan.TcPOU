@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FileMan" Id="{ee1d2427-27a4-44cb-afef-997a09ac86a7}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM FileMan
+VAR
+    fb_fileMan : FB_FileMan;
+    bSaveData  : BOOL := FALSE;
+    bLoadData  : BOOL := TRUE;
+    json_data  : STRING(20000);
+	json_len : DINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+fb_fileMan(sPathName    := 'D:\tmp\mover_demo.json',
+           bSave        := bSaveData,
+           bLoad        := bLoadData,
+           sRefString   := ADR(json_data),
+           bError       =>,
+           nErrorId     =>,
+           currentState =>);
+
+IF fb_fileMan.currentState = 3 THEN
+    IF NOT fb_fileMan.bBusy THEN
+        json_len               := SaveInMemory_Recipe(json_data);
+        fb_fileMan.uiStringLen := json_len;
+    END_IF
+
+ELSIF fb_fileMan.currentState = 5 THEN
+    fb_fileMan.uiStringLen := 2000;
+
+ELSIF fb_fileMan.currentState = 9 THEN
+    IF NOT fb_fileMan.bBusy THEN
+        ReadJsonDom(json_data);
+    END_IF
+
+ELSIF fb_fileMan.currentState = 10 THEN
+    bSaveData := FALSE;
+    bLoadData := FALSE;
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

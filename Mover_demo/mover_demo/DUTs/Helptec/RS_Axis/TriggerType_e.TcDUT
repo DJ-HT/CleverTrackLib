@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="TriggerType_e" Id="{e38e47f4-85c3-41dc-b833-3157594eff5d}">
+    <Declaration><![CDATA[// Tell when the 'InRange' signal should be true
+// The trigger permit your application to run faster by allowing
+// another element/axis to start moving before the movement is really
+// completed
+{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE TriggerType_e :
+(
+    None := 0,     // no trigger is used. The InRange flag will raise at the same moment as the 'InPos' flag
+    SetPos := 1,   // The trigger is set at the given position
+    FromLast := 2, // The trigger is placed relative to the last position
+    FromEnd := 3,  // The trigger is placed relative to end position
+    _max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

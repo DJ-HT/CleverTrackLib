@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST120_Feeder_e" Id="{2e07e953-9586-42fa-849e-610b434d24d9}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE ST120_Feeder_e :
+(
+    RESET := 0, // Reset
+
+    INIT := 100, // Initialisieren 
+    Init_pneumatics,
+
+    READY := 999,  // READY to Start, Init Done 
+    START := 1000, // Start Zyklisch
+    wait_tube_presence,
+	wait_pnp_ready,
+	rotate_to_pnp,
+	wait_pce_picked,
+	wait_pnp_move_out_with_the_piece,
+	rotate_to_feeder,
+
+    DONE := 8000,  // Ablauf beendet 
+    ERROR := 9000, // Fehler 
+    _max
+);
+END_TYPE]]></Declaration>
+  </DUT>
+</TcPlcObject>

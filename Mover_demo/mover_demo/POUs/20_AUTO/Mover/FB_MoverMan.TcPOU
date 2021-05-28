@@ -94,7 +94,7 @@ VAR
         (_PosList[18], GVL._Process18, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
 
     _StationSet1 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, 0, 0, 0, 0, 1, 1, 0, 0, 2, 2, 3, 3, 0, 0, 0, 0, 0];
+        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, 0, 0, 0, 0, 1, 1, 0, 0, 2, 2, 3, 3, 0, 4, 4, 0, 0];
     _StationSet2 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1];
     _StationSet3 :
@@ -102,10 +102,10 @@ VAR
     _StationSet4 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, 0];
 
-    _SelWorkStationList : ARRAY[1..CONST.RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF BOOL
+    _SelWorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF BOOL
         := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4)];
 
-    _WorkStationList : ARRAY[1..CONST.RECIPE_NUMBER] OF FB_StationMan[
+    _WorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF FB_StationMan[
         (ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
         (ADR(_StationList), _SelWorkStationList[2], _PieceHolderList[1]),
         (ADR(_StationList), _SelWorkStationList[3], _PieceHolderList[2]),
@@ -114,11 +114,6 @@ VAR
     step : INT := 0; //test step
 
     PH_num : INT := 1; // piece holder selection
-
-    fb_fileMan : FB_FileMan;
-    bSaveData  : BOOL := FALSE;
-    bLoadData  : BOOL := TRUE;
-    json_data  : STRING(2000);
 
     mv_i                : INT;           // mover index
     bMoverSync          : BOOL := FALSE; // external trigger for movers
@@ -145,28 +140,6 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-fb_fileMan(sPathName    := 'D:\tmp\mover_demo.json',
-           bSave        := bSaveData,
-           bLoad        := bLoadData,
-           sRefString   := ADR(json_data),
-           bError       =>,
-           nErrorId     =>,
-           currentState =>);
-
-IF fb_fileMan.currentState = 3 THEN
-    SaveInMemory(json_data);
-    fb_fileMan.uiStringLen := LEN(json_data);
-
-ELSIF fb_fileMan.currentState = 5 THEN
-    fb_fileMan.uiStringLen := 2000;
-
-ELSIF fb_fileMan.currentState = 9 THEN
-    LoadFromMemory(json_data);
-
-ELSIF fb_fileMan.currentState = 10 THEN
-    bSaveData := FALSE;
-    bLoadData := FALSE;
-END_IF
 
 CASE step OF
 0:

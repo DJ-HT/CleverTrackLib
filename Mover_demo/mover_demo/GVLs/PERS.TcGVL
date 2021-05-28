@@ -2,7 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <GVL Name="PERS" Id="{fbf39650-67ca-4454-aedb-fafdd3046409}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL RETAIN
+VAR_GLOBAL PERSISTENT
     (***********************************************************************************************)
     (* COUNTER *)
     (***********************************************************************************************)
@@ -24,38 +24,7 @@ VAR_GLOBAL RETAIN
     (***********************************************************************************************)
     udiArCntST00 : ARRAY[0..4] OF UDINT; (* Counter ST00 
 															0:
-														*)
-    udiArCntST01 : ARRAY[0..4] OF UDINT; (* Counter ST01 
-															0:
-														 *)
-    udiArCntST02 : ARRAY[0..4] OF UDINT; (* Counter ST02 
-															0:
-														 *)
-    udiArCntST03 : ARRAY[0..4] OF UDINT; (* Counter ST03 
-															0:
-														 *)
-    udiArCntST04 : ARRAY[0..4] OF UDINT; (* Counter ST04 
-															0:
-														 *)
-    udiArCntST05 : ARRAY[0..4] OF UDINT; (* Counter ST05 
-															0:
-														 *)
-    udiArCntST06 : ARRAY[0..4] OF UDINT; (* Counter ST06 
-															0:
-														 *)
-    udiArCntST07 : ARRAY[0..4] OF UDINT; (* Counter ST07 
-															0:
-														 *)
-    udiArCntST08 : ARRAY[0..4] OF UDINT; (* Counter ST08 
-															0:
-														 *)
-    udiArCntST09 : ARRAY[0..4] OF UDINT; (* Counter ST09 
-															0:
-														 *)
-    udiArCntST10 : ARRAY[0..4] OF UDINT; (* Counter ST10 
-															0:
-														 *)
-
+	*)
     (***********************************************************************************************)
     (* Timer *)
     (***********************************************************************************************)
@@ -63,88 +32,13 @@ VAR_GLOBAL RETAIN
     dwArTimeZylST01 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
 																0: GENERAL
 																1: 
-														*)
-    dwArTimeZylST02 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
-    dwArTimeZylST03 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
-    dwArTimeZylST04 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
-    dwArTimeZylST05 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
-    dwArTimeZylST06 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
-    dwArTimeZylST07 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
-    dwArTimeZylST08 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
-    dwArTimeZylST09 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
-    dwArTimeZylST10 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
-																0: GENERAL
-																1: 
-														*)
+	*)
     //Diverse
     dwArTimeST00 : ARRAY[0..10] OF DWORD; (* Time zur ST00
                                                             0:
                                                             1:  
                                                         *)
-    dwArTimeST01 : ARRAY[0..10] OF DWORD; (* Time zur ST01
-                                                            0:
-                                                            1:  
-                                                        *)
-    dwArTimeST02 : ARRAY[0..10] OF DWORD; (* Time zur ST02
-                                                            0:
-                                                            1:  PRESSEN
-                                                        *)
-    dwArTimeST03 : ARRAY[0..10] OF DWORD; (* Time zur ST03
-                                                            0:
-                                                            1:  
-                                                        *)
-    dwArTimeST04 : ARRAY[0..10] OF DWORD; (* Time zur ST04
-                                                            0:
-                                                            1:  
-                                                        *)
-    dwArTimeST05 : ARRAY[0..10] OF DWORD; (* Time zur ST05
-                                                            0:
-                                                            1:  
-                                                        *)
-    dwArTimeST06 : ARRAY[0..10] OF DWORD; (* Time zur ST06
-                                                            0:
-                                                            1:  
-                                                        *)
-    dwArTimeST07 : ARRAY[0..10] OF DWORD; (* Time zur ST07
-                                                            0:
-                                                            1:  
-                                                        *)
-    dwArTimeST08 : ARRAY[0..10] OF DWORD; (* Time zur ST08
-                                                            0:
-                                                            1:  
-                                                        *)
-    dwArTimeST09 : ARRAY[0..10] OF DWORD; (* Time zur ST09
-                                                            0:
-                                                            1:  
-                                                        *)
-    dwArTimeST10 : ARRAY[0..10] OF DWORD; (* Time zur ST10
-                                                            0:
-                                                            1:  
-                                                        *)
+  
 
     (***********************************************************************************************)
     (* Werte *)
@@ -158,8 +52,14 @@ VAR_GLOBAL RETAIN
     (***********************************************************************************************)
     (* Application *)
     (***********************************************************************************************)
+	
+    {attribute 'to_json'}	
     iStationTimeDef1 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+    {attribute 'to_json'}	
     iStationTimeDef2 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+
+    {attribute 'to_json'}	
+    recipeList : Recipe_21_101_t;
 
 END_VAR
 ]]></Declaration>

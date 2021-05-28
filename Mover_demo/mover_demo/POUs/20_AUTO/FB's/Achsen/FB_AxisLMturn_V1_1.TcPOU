@@ -1,0 +1,513 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_AxisLMturn_V1_1" Id="{3c7dd37b-3044-43c7-a8c3-f0ff01dc8d6a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AxisLMturn_V1_1
+(****************************************************************************)
+(*	FB_AxisLM			FB für Linear-Achse	LinMot Drehantrieb				*)
+(*	Status				ungetestet											*)
+(*  Version:			1.1													*)
+(*	Beschrieb:			Achsfunktionen für eine Horizontalachse				*)
+(*	MC-Bausteine:		MC_Power		Achsenfreigabe						*)
+(*						MC_Reset		Achse Reset							*)
+(*						MC_MoveAbsolute	Verfahren Absolut 					*)
+(*						MC_MoveRelative	Verfahren Relativ					*) 
+(*						MC_Jog			Verfahren Tipp-Betrieb				*)
+(*						MC_Stop			Achse Stoppen						*)
+(*						MC_ReadStatus	Achsenstatus aktualisieren			*)
+(*																			*)
+(*																			*)
+(*																			*)
+(* 	09.09.2019/Dj															*)
+(****************************************************************************)
+(*	31.03.2021/Dj	1.1 xIN_DisButtons: INPUT Disable Manu Buttons			*)
+(****************************************************************************)
+VAR_INPUT
+	///Status Anlage/Zelle
+	enIN_State: enState;
+	///Pointer auf Tasten
+	parIN_Buttons: POINTER TO ARRAY[0..7] OF structbutton;
+	///Tasten deaktiviert
+	xIN_DisButtons : BOOL;
+	///Error quitieren
+	xIN_Quit: BOOL;
+	///HMI Parameter validiert
+	xIN_PARAMok: BOOL := TRUE;
+	///Achse Freilauf von Extern (z.B. Endlagen, Positionen)
+	xIN_FREE: BOOL := TRUE;
+	///Achse Freilauf von Extern für Homing
+	xIN_FREE_HOME: BOOL := TRUE;
+	///LIMITEN
+	rIN_POSMIN: REAL := 0;
+	rIN_POSMAX: REAL := 10;
+	rIN_VELOMAX: REAL := 100;
+	rIN_VELOMANU: REAL := 50;
+	rIN_VELOOPEN: REAL := 25;
+	///Jog Mode Inching Value
+	rIN_JogInc: REAL := 0.1;
+	///Start Move
+	xIN_Execute: BOOL := FALSE;
+	///Move Relative
+	xIN_Relative: BOOL := FALSE;
+	///Stop Extern
+	xIN_STOP: BOOL := FALSE;
+	xIN_OFF: BOOL := FALSE;
+	///Position / Distance
+	rIN_Position: REAL := 10;
+	///Velocity in %
+	rIN_Velocity: REAL := 1;
+	///Acc
+	rIN_Acceleration: REAL := 0;
+	///Dec
+	rIN_Deceleration: REAL := 0;
+	///Jerk
+	rIN_Jerk: REAL := 0;
+	///Positionen für Manuellfahrt
+	rIN_PosManu: REAL;
+	///Homing
+	xIN_Home: BOOL;
+	///Reset von Extern
+	xIN_Reset: BOOL := FALSE;
+	///Statuswort
+	wAxisState: WORD;
+END_VAR
+VAR_OUTPUT
+	///Axis Controlword
+	bOUT_AxisCntr: BYTE;
+	///Error Flag 
+	xOUT_ErrFlag: BOOL;
+	///Achse Bereit für Positionierung
+	xOUT_READY: BOOL;
+	///Achse Referenziert
+	xOUT_HOMED: BOOL := FALSE;
+	///MoveDone
+	xOUT_DONE: BOOL;
+	/// Fehlernummer
+	bOUT_Error: BYTE;
+	///									1:
+	///								 	2: MC_Power;			// Freigabe
+	///								 	3: MC_Reset;			// Reset 
+	///								 	4: MC_MoveAbsolute;		// Verfahren Absolut 
+	///									6: MC_Jog;				// Jog
+	///									7: MC_Stop;				// Stopp
+	///									8: Homing;				// Homing
+	///									9: MC_ReadStatus;		//Status aktualisieren
+	///									10: AxisRef ERROR
+	///									11: Parameter NIO
+	///					
+	///Aktuelle Position
+	rOUT_ActPos: REAL;
+END_VAR
+VAR_IN_OUT
+	///Achsreferenz
+	axisIN_REF: AXIS_REF;
+END_VAR
+VAR
+	/// Freigabe
+	_MC_Power: MC_Power;
+	/// Reset 
+	_MC_Reset: MC_Reset;
+	/// Verfahren Absolut 
+	_MC_MoveAbs: MC_MoveAbsolute;
+	/// Verfahren Absolut 
+	_MC_MoveRel: MC_MoveRelative;
+	/// Jog
+	_MC_Jog: MC_Jog;
+	/// Stopp
+	_MC_Stop: MC_Stop;
+	/// Homing
+	_MC_Home: MC_Home;
+	///Status aktualisieren
+	_MC_ReadStatus: MC_ReadStatus;
+	///Jog Mode 0: OFF, 1: INCHING, 2: SLOW, 3: FAST, 4: MOVE
+	bJogMode: BYTE := 0;
+	///Button Disable 
+	_FB_btOFF: FB_BUTTON;
+	///Button Inching 
+	_FB_btINCH: FB_BUTTON;
+	///Button Slow 
+	_FB_btSLOW: FB_BUTTON;
+	///Button Fast 
+	_FB_btFAST: FB_BUTTON;
+	///Button Move   
+	_FB_btMOVE: FB_BUTTON;
+	///Button Manu Move NEGATIVE
+	_FB_btJOGneg: FB_BUTTON;
+	///Button Manu Move POSITIVE 
+	_FB_btJOGpos: FB_BUTTON;
+	///Button Manu Homing 
+	_FB_btHOME: FB_BUTTON;
+	///Step Ablauf Reset
+	iStepAxisReset: INT;
+	///Zähle Reset-Versuche
+	iCountTryReset: INT;
+	///Achse Disabled
+	xOFF: BOOL;
+	///Parameter gültig
+	xParamValid: BOOL;
+	///Ablauf Homing
+	uiHomeStep: UINT;
+	///Timeout Homing
+	T_ToutHome: TON;
+	///Warte nach Reset
+	TON_WaitReset: TON;
+	///Reset-Ablauf Timeout
+	TON_ToutReset: TON;
+	///Achse PowerOFF über Safety
+	TOF_PowSafety: TOF;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//***************************** MC FBs *************************************
+	(* _05X1 PORTAL *)
+(*	_FB_SoEReset( Axis:= axisIN_REF );
+*)
+	_MC_Power( 	Enable_Positive:= TRUE,
+				Enable_Negative:= TRUE,
+				Axis:= axisIN_REF  );
+
+	_MC_Reset( Axis:= axisIN_REF);
+
+	_MC_Stop( Axis:= axisIN_REF );
+
+	_MC_MoveAbs( Axis:= axisIN_REF );
+	_MC_MoveRel( Axis:= axisIN_REF );
+
+	_MC_Jog (	Axis:= axisIN_REF );
+
+	_MC_ReadStatus(	Enable:= TRUE ,
+					Axis:= axisIN_REF);
+
+	
+
+//***************************** Buttons ************************************
+	//	Jog Mode OFF 
+	_FB_btOFF(pbtIN:= ADR(parIN_Buttons^[0]),
+	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
+	xINon:= (enIN_State=StateMANU) AND (bJogMode=0), 
+	xINerr:= FALSE);
+	//	Jog Mode INCH 
+	_FB_btINCH(pbtIN:= ADR(parIN_Buttons^[1]),
+	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
+	xINon:= (enIN_State=StateMANU) AND (bJogMode=1), 
+	xINerr:=  _MC_Jog.Error);
+	//	Jog Mode SLOW 
+	_FB_btSLOW(pbtIN:= ADR(parIN_Buttons^[2]),
+	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
+	xINon:= (enIN_State=StateMANU) AND (bJogMode=2), 
+	xINerr:=  _MC_Jog.Error);
+	//	Jog Mode FAST 
+	_FB_btFAST(pbtIN:= ADR(parIN_Buttons^[3]),
+	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
+	xINon:= (enIN_State=StateMANU) AND (bJogMode=3), 
+	xINerr:= _MC_Jog.Error);
+	//	Jog Mode MOVE 
+	_FB_btMOVE(pbtIN:= ADR(parIN_Buttons^[4]),
+	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
+	xINon:= (enIN_State=StateMANU) AND (bJogMode=4), 
+	xINerr:= _MC_MoveAbs.Error OR _MC_MoveRel.Error);
+	//	Jog NEGATIVE 
+	_FB_btJOGneg(pbtIN:= ADR(parIN_Buttons^[5]),
+	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
+	xINon:= (enIN_State=StateMANU) AND (bJogMode>0), 
+	xINerr:= FALSE);
+	//	Jog POSITIVE 
+	_FB_btJOGpos(pbtIN:= ADR(parIN_Buttons^[6]),
+	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
+	xINon:= (enIN_State=StateMANU) AND (bJogMode>0), 
+	xINerr:= FALSE);	
+	//	Manuell HOMING 
+	_FB_btHOME(pbtIN:= ADR(parIN_Buttons^[7]),
+	xINdis:= (enIN_State<>StateMANU) or xIN_DisButtons, 
+	xINon:= xOUT_HOMED, 
+	xINerr:= FALSE);	
+	IF (enIN_State=StateMANU) THEN
+	//Mode
+			IF _FB_btOFF.pbtIN^.rtrig THEN
+				IF (bJogMode=0) THEN
+					bJogMode := 4;
+				ELSE
+					bJogMode := 0;
+				END_IF;
+				_MC_MoveAbs.Execute:= FALSE;
+				_MC_MoveRel.Execute:= FALSE;
+				_MC_Home.Execute:= FALSE;
+			ELSIF _FB_btINCH.pbtIN^.rtrig THEN
+				;//bJogMode := 1;
+			ELSIF _FB_btSLOW.pbtIN^.rtrig THEN
+				;//bJogMode := 2;
+			ELSIF _FB_btFAST.pbtIN^.rtrig THEN
+				;//bJogMode := 3;
+			ELSIF _FB_btMOVE.pbtIN^.rtrig THEN
+				;//bJogMode := 4;
+			END_IF
+	END_IF;
+						
+//***************************** Velocity / ACC-DEC-JERK *******************
+	(* Velocity *)
+	rIN_Velocity := LIMIT(1,rIN_Velocity,100);
+	IF (_02_SAFETY.xOUT_Einrichten) THEN
+		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOOPEN / 100;
+	ELSIF (enIN_State<StateREADY) THEN
+		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOMANU / 100;
+	ELSE
+		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOMAX / 100;
+	END_IF
+	_MC_MoveRel.Velocity := _MC_MoveAbs.Velocity;
+	(* Acceleration *)
+	IF (rIN_Acceleration>0) THEN
+		_MC_MoveAbs.Acceleration := rIN_Acceleration;
+		_MC_MoveRel.Acceleration := rIN_Acceleration;
+	END_IF
+	(* Deceleration *)
+	IF (rIN_Deceleration>0) THEN
+		_MC_MoveAbs.Deceleration := rIN_Deceleration;
+		_MC_MoveRel.Deceleration := rIN_Deceleration;
+	END_IF
+	(* Jerk *)
+	IF (rIN_Jerk>0) THEN
+		_MC_MoveAbs.Jerk := rIN_Jerk;
+		_MC_MoveRel.Jerk := rIN_Jerk;
+	END_IF
+	
+//***************************** HOMING ***********************************
+	(*					Ablauf Homing:
+							PowerON
+							Set byAxisCont =08
+							Warte bis Status Bit #8 1->0
+							Reset
+							Set byAxisCont =00
+							Warte bis Status Bit #13 0->1
+							*)
+	T_ToutHome(IN:= (uiHomeStep>0) AND (uiHomeStep<900), PT:= T#60S);
+	IF T_ToutHome.Q THEN
+		uiHomeStep:=999;
+	END_IF
+	CASE uiHomeStep OF
+		
+	0:	//Start Homing
+		bOUT_AxisCntr.3 := FALSE;
+		IF axisIN_REF.Status.Operational AND NOT axisIN_REF.Status.Error  AND
+			xIN_FREE_HOME AND xIN_PARAMok AND NOT xOUT_ErrFlag THEN
+			IF _FB_btHOME.pbtIN^.rtrig OR xIN_Home THEN
+				xOUT_HOMED := FALSE;
+				uiHomeStep := 10;
+			END_IF;
+		END_IF;
+			
+	10:	//SET Ctrl-Bit 
+		_MC_Reset.Execute := FALSE;
+		bOUT_AxisCntr.3 := TRUE;
+		uiHomeStep := 20;
+		
+	20:	//Status Bit #8
+		IF wAxisState.7 THEN
+			uiHomeStep := 30;
+		END_IF
+	
+	30:	//Status Bit #8 ->0
+		IF NOT wAxisState.7 THEN
+			uiHomeStep := 40;
+		END_IF
+		
+	40:	//RESET
+		_MC_Reset.Execute := TRUE;
+		uiHomeStep := 50;
+		
+	50:	//RESET DONE
+		IF _MC_Reset.Done THEN
+			_MC_Reset.Execute := FALSE;
+			uiHomeStep := 60;
+		END_IF
+	
+	60:	//RESET Ctrl-Bit 
+		bOUT_AxisCntr.3 := FALSE;
+		uiHomeStep := 70;
+		
+	70:	//Status Bit #13
+		IF wAxisState.12 THEN
+			uiHomeStep := 80;
+		END_IF
+
+	80:	//IN HOMED OFF
+		xOUT_HOMED := TRUE;	
+		IF NOT xIN_Home THEN
+			uiHomeStep := 0;
+		END_IF;
+		
+
+	999:	//Error
+		bOUT_AxisCntr.3 := FALSE;
+		IF xIN_Quit THEN
+			uiHomeStep := 0;
+		END_IF
+	END_CASE
+	
+
+//*********************** STOP - STO - POWER ******************************	
+	xOFF := xIN_OFF OR ((enIN_State<StateENGIZED) AND NOT (enIN_State=StateREF)) OR ((enIN_State=StateMANU) AND (bJogMode=0));
+	TOF_PowSafety(IN:= NOT xOFF, PT:=T#50MS);
+	_MC_Stop.Execute := _MC_Power.Enable AND 
+		(	NOT _02_SAFETY.xOUT_ESout OR NOT _02_SAFETY.xOUT_MonOut OR 				//SAFETY
+			xIN_STOP OR																//Extern
+			(enIN_State<StateREF) OR (enIN_State=StateREADY) OR						//STATE
+			(enIN_State=StateSTOP)(*dj200501 OR (enIN_State=StateALARM) *) OR	
+			(	(enIN_State=StateMANU) AND (bJogMode=4) AND							//MANU MOVE
+					NOT _FB_btJOGneg.pbtIN^.press AND NOT _FB_btJOGpos.pbtIN^.press ) OR
+			(	NOT xIN_Free AND ((enIN_State>StateINIT) OR	(bJogMode>2)) ) 		//FREE
+		);
+	_MC_Power.Enable := _02_SAFETY.xOUT_ESdelOut AND _02_SAFETY.xOUT_MonDelOut AND TOF_PowSafety.Q AND 
+						xIN_PARAMok;
+
+
+		
+//***************************** MOVE *************************************
+IF xOUT_HOMED THEN
+	IF xOUT_READY THEN
+			_MC_MoveAbs.Position:= rIN_Position;
+			_MC_MoveRel.Distance:= rIN_Position;
+		//AUTO
+		IF (enIN_State>StateALARM) OR (enIN_State=StateINIT) OR (enIN_State=StateREF) THEN
+			//Mode
+			bJogMode:=0;
+			//Position
+			//Absolute
+			_MC_MoveAbs.Execute:= NOT xIN_Relative AND xIN_Execute;
+			//Relative
+			_MC_MoveRel.Execute:= xIN_Relative AND xIN_Execute;
+		//MANUELL
+		ELSIF (enIN_State=StateMANU) THEN
+			_MC_MoveAbs.Position:= rIN_PosManu;
+			//*********************************************
+			//Move
+			IF (bJogMode=4) THEN
+				//Absolute
+				_MC_MoveAbs.Execute:= NOT xIN_Relative AND 
+					(_FB_btJOGneg.pbtIN^.press OR _FB_btJOGpos.pbtIN^.press);
+				//Relative
+				_MC_MoveRel.Execute:= xIN_Relative AND 
+					(_FB_btJOGneg.pbtIN^.press OR _FB_btJOGpos.pbtIN^.press);
+			//*********************************************
+			//Jog
+			ELSIF (bJogMode>0) THEN
+				_MC_Jog.Mode := MC_JOGMODE_STANDARD_SLOW;
+				IF (bJogMode=1) THEN
+					_MC_Jog.Mode := MC_JOGMODE_INCHING;
+				ELSIF (bJogMode=3) THEN
+					_MC_Jog.Mode := MC_JOGMODE_STANDARD_FAST;
+				END_IF;
+				_MC_Jog.JogBackwards := _FB_btJOGneg.pbtIN^.press;
+				_MC_Jog.JogForward := _FB_btJOGpos.pbtIN^.press;
+			END_IF;
+		END_IF;
+	END_IF;
+END_IF;
+
+//***************************** RESET *************************************
+
+	TON_WaitReset(IN:=_MC_Reset.Done , PT:=T#1S , Q=> , ET=> );
+
+	TON_ToutReset(IN:= (iStepAxisReset<>0), PT:= T#15S);
+	IF TON_ToutReset.Q THEN
+		iStepAxisReset:=0;
+	END_IF
+
+	CASE iStepAxisReset OF
+	0:	(* Alles OK *)
+		IF  xOUT_ErrFlag AND 
+			(	(enIN_State=StateENGIZED) OR  xIN_Quit OR xIN_Reset)  THEN
+			iCountTryReset := 0;
+			iStepAxisReset	:= 10;
+		END_IF;
+
+	10:	(* AXIS RESET EXECUTES *)
+		_MC_Reset.Execute := FALSE;
+		_MC_MoveAbs.Execute := FALSE;
+		_MC_MoveRel.Execute := FALSE;
+		IF _MC_Power.Active THEN
+			iStepAxisReset	:= 20;
+		END_IF;
+		
+	20:	(* *)
+		iStepAxisReset := 30;
+
+	30:	(* RESET ACHSE *)
+		_MC_Reset.Execute := TRUE;
+		iStepAxisReset	:= 40;
+
+	40:	(* RESET DONE *)
+		IF _MC_Reset.Done AND TON_WaitReset.Q THEN
+			_MC_Reset.Execute := FALSE;
+			iStepAxisReset	:= 50;
+		END_IF;
+
+	50:  (* ACHSE OK *)
+		IF axisIN_REF.Status.Error THEN
+			IF (iCountTryReset>5) THEN
+				iStepAxisReset := 100;
+			ELSE
+				iCountTryReset := iCountTryReset + 1;
+				iStepAxisReset	:= 10;
+			END_IF;
+		ELSE
+			iStepAxisReset	:= 0;
+		END_IF;
+
+	100:	(* ALARM *)
+		IF xIN_Quit  OR (enIN_State<>StateENGIZED) THEN
+			iStepAxisReset	:= 0;
+		END_IF;
+	END_CASE;
+	
+//*********************** ERRORS *******************************
+	//QUIT
+	IF xOUT_ErrFlag AND xIN_Quit THEN
+		xOUT_ErrFlag := FALSE;
+		bOUT_Error := 0;
+	END_IF
+	//SET ERROR
+
+	IF _MC_Power.Error THEN
+		bOUT_Error := 2;
+	END_IF
+	IF _MC_Reset.Error THEN
+		bOUT_Error := 3;
+	END_IF
+	IF _MC_MoveAbs.Error THEN
+		bOUT_Error := 4;
+	END_IF
+	IF _MC_MoveRel.Error THEN
+		bOUT_Error := 5;
+	END_IF
+	IF _MC_Jog.Error THEN
+		bOUT_Error := 6;
+	END_IF
+	IF _MC_Stop.Error THEN
+		bOUT_Error := 7;
+	END_IF
+	IF (uiHomeStep>900) THEN
+		bOUT_Error := 8;
+	END_IF
+	IF _MC_ReadStatus.Error THEN
+		bOUT_Error := 9;
+	END_IF
+	IF axisIN_REF.Status.Error THEN
+		bOUT_Error := 10;
+	ELSIF NOT xIN_PARAMok THEN
+		bOUT_Error := 11;
+	END_IF
+	xOUT_ErrFlag := (bOUT_Error<>0);
+	
+//***************************** OUTS *************************************
+	(* Anzeige / Ready *)
+	rOUT_ActPos := LREAL_TO_REAL(axisIN_REF.NcToPlc.ActPos);
+	xOUT_READY 	:= 	axisIN_REF.Status.Operational AND 
+					NOT axisIN_REF.Status.Error  AND
+					xOUT_HOMED AND 
+					xIN_Free AND xIN_PARAMok AND NOT xOUT_ErrFlag ;
+	xOUT_DONE 	:= 	(NOT xIN_Relative AND _MC_MoveAbs.Done) OR
+					(xIN_Relative AND _MC_MoveRel.Done);
+					
+				]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

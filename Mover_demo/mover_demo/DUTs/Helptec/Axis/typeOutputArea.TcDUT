@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="typeOutputArea" Id="{0cb5db62-1e6e-48c7-b7b6-b27880dffc6a}">
+    <Declaration><![CDATA[TYPE typeOutputArea :
+STRUCT
+    OutPorToWhiSigAreAll : UINT;
+    NumericalDataFlag    : UINT;
+    StartFlag            : USINT;
+    OperationMethod      : USINT;
+    Speed                : UINT;
+    TargetPosition       : DINT;
+    Acceleration         : UINT;
+    Deceleration         : UINT;
+    PushingForce         : UINT;
+    TriggerLv            : UINT;
+    PushingSpeed         : UINT;
+    PushingForceForPos   : UINT;
+    Area1                : DINT;
+    Area2                : DINT;
+    PositioningWidth     : DINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
