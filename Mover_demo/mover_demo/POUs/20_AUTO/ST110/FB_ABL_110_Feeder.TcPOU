@@ -112,10 +112,10 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 fb_feeder(xIN_Enable          := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
           xIN_PieceInEnd      := NOT simu_fifo.IsEmpty(),
           xIN_PieceMax        := (simu_fifo.GetLen() > 10),
-          diIN_SignlFilter_ms := PERS.recipeList.st110.FeederConfig.InFilterDelay,
-          diIN_StartDelay_ms  := PERS.recipeList.st110.FeederConfig.StartDelay,
-          diIN_StopDelay_ms   := PERS.recipeList.st110.FeederConfig.StopDelay,
-          diIN_EmptyDelay     := PERS.recipeList.st110.FeederConfig.EmptyDelay);
+          diIN_SignlFilter_ms := _20_AUTO.recipe.st110.FeederConfig.InFilterDelay,
+          diIN_StartDelay_ms  := _20_AUTO.recipe.st110.FeederConfig.StartDelay,
+          diIN_StopDelay_ms   := _20_AUTO.recipe.st110.FeederConfig.StopDelay,
+          diIN_EmptyDelay     := _20_AUTO.recipe.st110.FeederConfig.EmptyDelay);
 
 simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder,
             tIN_NewPieceTime   := 500,
@@ -292,8 +292,8 @@ ST110_Feeder_e.load_piece:
 (***** DONE *****)
 ST110_Feeder_e.DONE: (* Letzter Schritt  *)
     IF rtPick.Q THEN
-        fifo.Pop(TO_INT(PERS.recipeList.st110.xUseVerLeft));
-        fifo.Pop(TO_INT(PERS.recipeList.st110.xUseVerRight));
+        fifo.Pop(TO_INT(_20_AUTO.recipe.st110.xUseVerLeft));
+        fifo.Pop(TO_INT(_20_AUTO.recipe.st110.xUseVerRight));
     END_IF
 
     IF NOT xIN_AlarmAktiv THEN

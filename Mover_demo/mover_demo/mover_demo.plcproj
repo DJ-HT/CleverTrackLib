@@ -136,6 +136,9 @@
     <Compile Include="POUs\10_HMI\FB%27s\FB_BUTTON.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\10_HMI\FB%27s\FB_HMI_BT.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\10_HMI\FB%27s\FB_LampeBNI007F.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -157,9 +160,33 @@
     <Compile Include="POUs\20_AUTO\BuR SuperTrack com\BuR_MoverAxis_EtherCAT_st.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_Tc_to_BR_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_Tc_to_BR_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_BR_to_Tc_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_BR_to_Tc_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_Tc_to_BR_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_Tc_to_BR_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\BuR SuperTrack com\gMoverAxis.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\LinearAxis_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\RecipeType_e.TcTLEO">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Achsen\FB_AxisLIN_V1_1.TcPOU">
       <SubType>Code</SubType>
@@ -230,9 +257,6 @@
     <Compile Include="POUs\20_AUTO\FileMan\SaveInMemory_Recipe.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\LinearAxis_e.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\20_AUTO\Mover\ApproachScenario_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -277,6 +301,10 @@
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\MoverState_e.TcTLEO">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Mover\VISU_MoverDetail.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="POUs\20_AUTO\Mover\VISU_MoverView.TcVIS">
       <SubType>Code</SubType>

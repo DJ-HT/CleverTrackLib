@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_HMI_BT" Id="{6cf2b881-962a-40f3-b1d7-66d64c9e7dda}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_HMI_BT
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    // Recipe HMI management
+    _FB_btCopyRecipe  : FB_BUTTON;
+    _FB_btCopyAxisCfg : FB_BUTTON;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[_FB_btCopyRecipe(pbtIN  := ADR(HMI.btCopyRecipe),
+                 xINdis := FALSE,
+                 xINon  := FALSE,
+                 xINerr := FALSE);
+
+_FB_btCopyAxisCfg(pbtIN  := ADR(HMI.btCopyAxisCfg),
+                  xINdis := FALSE,
+                  xINon  := FALSE,
+                  xINerr := FALSE);
+]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{347224b3-cdd2-4365-a399-1465c7726187}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode  : BOOL; // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+VAR
+    i  : INT;
+    ii : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 0 TO TO_INT(LinearAxis_e._max) - 1 BY 1 DO
+    FOR ii := 0 TO CONST.MAX_VECTOR_LIST - 1 BY 1 DO
+        HMI.movesName[i][ii] := ' - ';
+    END_FOR
+END_FOR
+
+// ST110
+HMI.movesName[LinearAxis_e.ST110_01Y][0] := TO_STRING("Zurück");
+HMI.movesName[LinearAxis_e.ST110_01Y][1] := TO_STRING("Vor");
+													  
+HMI.movesName[LinearAxis_e.ST110_02Z][0] := TO_STRING("Auf Leer");
+HMI.movesName[LinearAxis_e.ST110_02Z][1] := TO_STRING("Ab Leer");
+HMI.movesName[LinearAxis_e.ST110_02Z][2] := TO_STRING("Auf Voll");
+HMI.movesName[LinearAxis_e.ST110_02Z][3] := TO_STRING("Ab Voll Schnell");
+HMI.movesName[LinearAxis_e.ST110_02Z][4] := TO_STRING("Ab Voll Kraft");
+													  
+HMI.movesName[LinearAxis_e.ST110_03Z][0] := TO_STRING("Auf Leer");
+HMI.movesName[LinearAxis_e.ST110_03Z][1] := TO_STRING("Ab Leer");
+HMI.movesName[LinearAxis_e.ST110_03Z][2] := TO_STRING("Auf Voll");
+HMI.movesName[LinearAxis_e.ST110_03Z][3] := TO_STRING("Ab Voll Schnell");
+HMI.movesName[LinearAxis_e.ST110_03Z][4] := TO_STRING("Ab Voll Kraft");
+													  
+HMI.movesName[LinearAxis_e.ST110_04Z][0] := TO_STRING("Ab");
+HMI.movesName[LinearAxis_e.ST110_04Z][1] := TO_STRING("Auf");
+
+// ST115
+HMI.movesName[LinearAxis_e.ST115_01Y][0] := TO_STRING("Zurück");
+HMI.movesName[LinearAxis_e.ST115_01Y][1] := TO_STRING("Vor");
+
+HMI.movesName[LinearAxis_e.ST115_02Z][0] := TO_STRING("Auf Leer");
+HMI.movesName[LinearAxis_e.ST115_02Z][1] := TO_STRING("Ab Leer");
+HMI.movesName[LinearAxis_e.ST115_02Z][2] := TO_STRING("Auf Voll");
+HMI.movesName[LinearAxis_e.ST115_02Z][3] := TO_STRING("Ab Voll Schnell");
+HMI.movesName[LinearAxis_e.ST115_02Z][4] := TO_STRING("Ab Voll Kraft");
+
+HMI.movesName[LinearAxis_e.ST115_03Z][0] := TO_STRING("Auf Leer");
+HMI.movesName[LinearAxis_e.ST115_03Z][1] := TO_STRING("Ab Leer");
+HMI.movesName[LinearAxis_e.ST115_03Z][2] := TO_STRING("Auf Voll");
+HMI.movesName[LinearAxis_e.ST115_03Z][3] := TO_STRING("Ab Voll Schnell");
+HMI.movesName[LinearAxis_e.ST115_03Z][4] := TO_STRING("Ab Voll Kraft");
+
+HMI.movesName[LinearAxis_e.ST115_04Z][0] := TO_STRING("Ab");
+HMI.movesName[LinearAxis_e.ST115_04Z][1] := TO_STRING("Auf");
+
+// ST120
+HMI.movesName[LinearAxis_e.ST120_01Y][0] := TO_STRING("Zurück");
+HMI.movesName[LinearAxis_e.ST120_01Y][1] := TO_STRING("Vor");
+
+HMI.movesName[LinearAxis_e.ST120_02Z][0] := TO_STRING("Auf Leer");
+HMI.movesName[LinearAxis_e.ST120_02Z][1] := TO_STRING("Ab Leer");
+HMI.movesName[LinearAxis_e.ST120_02Z][2] := TO_STRING("Auf Voll");
+HMI.movesName[LinearAxis_e.ST120_02Z][3] := TO_STRING("Ab Voll Schnell");
+HMI.movesName[LinearAxis_e.ST120_02Z][4] := TO_STRING("Ab Voll Kraft");
+
+// ST125
+HMI.movesName[LinearAxis_e.ST125_01Y][0] := TO_STRING("Zurück");
+HMI.movesName[LinearAxis_e.ST125_01Y][1] := TO_STRING("Vor");
+
+HMI.movesName[LinearAxis_e.ST125_02Z][0] := TO_STRING("Auf Leer");
+HMI.movesName[LinearAxis_e.ST125_02Z][1] := TO_STRING("Ab Leer");
+HMI.movesName[LinearAxis_e.ST125_02Z][2] := TO_STRING("Auf Voll");
+HMI.movesName[LinearAxis_e.ST125_02Z][3] := TO_STRING("Ab Voll Schnell");
+HMI.movesName[LinearAxis_e.ST125_02Z][4] := TO_STRING("Ab Voll Kraft");
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

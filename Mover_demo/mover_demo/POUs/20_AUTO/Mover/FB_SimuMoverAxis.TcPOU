@@ -115,10 +115,10 @@ THIS^._LastPos := THIS^._CurrentPos;
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[IF CONST.USE_SIMULATION THEN
-    CurrentPos := _CurrentPos;
-ELSE
+          <ST><![CDATA[IF CONST.BIND_WITH_TRACK THEN
     CurrentPos := TO_LREAL(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._iID].diCurrentPos_um) / 1000.0;
+ELSE
+    CurrentPos := _CurrentPos;
 END_IF
 ]]></ST>
         </Implementation>
@@ -291,7 +291,7 @@ END_VAR
 VAR CONSTANT
     (* The track has this dimension in reality
               __________
-     1000mm (___________) 1000 mm
+     1030mm (___________) 1030 mm
               4000 mm
 			  
      and we map it like that:
@@ -310,9 +310,9 @@ VAR CONSTANT
     RADIUS_Y    : LREAL := 100.0;
 
     FIRST_RADIUS_START  : LREAL := 4000;
-    FIRST_RADIUS_END    : LREAL := 5000;
-    SECOND_RADIUS_START : LREAL := 9000;
-    SECOND_RADIUS_END   : LREAL := 10000;
+    FIRST_RADIUS_END    : LREAL := 5030;
+    SECOND_RADIUS_START : LREAL := 9030;
+    SECOND_RADIUS_END   : LREAL := 10060;
 END_VAR
 
 VAR

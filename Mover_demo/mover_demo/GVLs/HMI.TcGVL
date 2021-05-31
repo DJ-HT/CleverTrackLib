@@ -55,13 +55,21 @@ VAR_GLOBAL
     (*******************************************************************)
     (* ANZEIGE - Werte *)
     (*******************************************************************)
-    iSelectAxis : LinearAxis_e := LinearAxis_e.ST110_01Y;
+    iSelectAxis     : LinearAxis_e := LinearAxis_e.ST110_01Y;
+    iSelectAxisCopy : LinearAxis_e := LinearAxis_e._max;
+    btCopyAxisCfg   : structButton;
 
     (*******************************************************************)
     (* Cycle Time [STATION]*)
     (*******************************************************************)
     dwArStartTime : ARRAY[0..10] OF DWORD;
     dwArCycleTime : ARRAY[0..10] OF DWORD;
+
+    (*******************************************************************)
+    (* Recipe HMI management *)
+    (*******************************************************************)
+    btCopyRecipe : structButton;
+    movesName    : ARRAY[0..LinearAxis_e._max - 1] OF ARRAY[0..CONST.MAX_VECTOR_LIST] OF STRING;
 
     (*******************************************************************)
     (* Diverses *)

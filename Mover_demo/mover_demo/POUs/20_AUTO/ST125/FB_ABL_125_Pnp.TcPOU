@@ -103,7 +103,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
-fb_PnpHorAxis(config          := PERS.recipeList.linearAxis[LinearAxis_e.ST125_01Y],
+fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_01Y],
               lrIN_CurrPos    := fb_axis125_01Y.rOUT_ActPos,
               lrIN_Delta_mm   := 0.01,
               iIN_CurrentStep := iOUT_Step,
@@ -143,7 +143,7 @@ fb_simu_axis125_01Y(bIN_AxisCntr        := fb_axis125_01Y.bOUT_AxisCntr,
                     rIN_PixMin          := 0,
                     wOUT_AxisState      => fb_axis125_01Y.wAxisState);
 
-fb_PnpVerAxis(config          := PERS.recipeList.linearAxis[LinearAxis_e.ST125_02Z],
+fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_02Z],
               lrIN_CurrPos    := fb_axis125_02Z.rOUT_ActPos,
               lrIN_Delta_mm   := 0.01,
               iIN_CurrentStep := iOUT_Step,
@@ -168,7 +168,7 @@ fb_axis125_02Z(enIN_State     := enIN_State,
                rIN_JogVelo    :=,
                xIN_HomeExe    :=,
                xIN_HomeCalib  :=,
-               xIN_Execute    := (PERS.recipeList.st125.xUseVerLeft OR (iOUT_Step < ST125_Pnp_e.READY)) AND
+               xIN_Execute    := (_20_AUTO.recipe.st125.xUseVerLeft OR (iOUT_Step < ST125_Pnp_e.READY)) AND
                                  (fb_PnpVerAxis.xOUT_Execute),
                xIN_HomeExe      := NOT CONST.USE_SIMULATION AND (ST125_Pnp_e.Init_HomeVerticals = iAktStep),
                xIN_Relative     :=,
@@ -264,7 +264,7 @@ ST125_Pnp_e.INIT: (* Grundstellung ? *)
     END_IF;
 
 ST125_Pnp_e.Init_HomeVerticals:
-    fb_axis125_02Z.rIN_Velocity := PERS.recipeList.linearAxis[LinearAxis_e.ST125_02Z].movesList[0].lrVelocity;
+    fb_axis125_02Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_02Z].movesList[0].lrVelocity;
 
     IF fb_axis125_02Z.xOUT_DONE THEN
         iOUT_Step := ST125_Pnp_e.Init_VerticalsUp;
@@ -280,7 +280,7 @@ ST125_Pnp_e.Init_VerticalsUp:
     END_IF
 
 ST125_Pnp_e.Init_HomeHorizontals:
-    fb_axis125_01Y.rIN_Velocity := PERS.recipeList.linearAxis[LinearAxis_e.ST125_01Y].movesList[0].lrVelocity;
+    fb_axis125_01Y.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_01Y].movesList[0].lrVelocity;
 
     IF fb_axis125_01Y.xOUT_HOMED THEN
         iOUT_Step := ST125_Pnp_e.Init_HorizontalsToTrack;

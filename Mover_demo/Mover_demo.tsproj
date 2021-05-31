@@ -1409,13 +1409,53 @@ External Setpoint Generation:
 			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..3] OF UINT</Name>
-			<BitSize>48</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>3</Elements>
-			</ArrayInfo>
+			<Name GUID="{0EE085F2-95FF-D0EC-F568-13F75588797D}" AutoDeleteType="true">CT_Shuttle_Tc_to_BR_t</Name>
+			<BitSize>32</BitSize>
+			<SubItem>
+				<Name>bCommand</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment><![CDATA[ command bit field ]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>bNextStation</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment><![CDATA[ next station ]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>8</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>iNextOffset</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000006}">INT</Type>
+				<Comment><![CDATA[ needs to be between -500 and 500 ]]></Comment>
+				<BitSize>16</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{64D7C2E4-F78B-7111-14FB-87ADD1AAE03B}" AutoDeleteType="true">CT_Shuttle_Tc_to_BR_u</Name>
+			<BitSize>1616</BitSize>
+			<SubItem>
+				<Name>asStruct</Name>
+				<Type GUID="{0EE085F2-95FF-D0EC-F568-13F75588797D}">CT_Shuttle_Tc_to_BR_t</Type>
+				<ArrayInfo>
+					<LBound>1</LBound>
+					<Elements>20</Elements>
+				</ArrayInfo>
+				<BitSize>640</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>asArray</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>201</Elements>
+				</ArrayInfo>
+				<BitSize>1608</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
 		</DataType>
 		<DataType>
 			<Name GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..7] OF UINT</Name>
@@ -1427,6 +1467,15 @@ External Setpoint Generation:
 			</ArrayInfo>
 		</DataType>
 		<DataType>
+			<Name GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..3] OF UINT</Name>
+			<BitSize>48</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>3</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
 			<Name GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..7] OF BOOL</Name>
 			<BitSize>64</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000030}">BOOL</BaseType>
@@ -1434,6 +1483,73 @@ External Setpoint Generation:
 				<LBound>0</LBound>
 				<Elements>8</Elements>
 			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{13410A84-7A9F-0C78-F36B-EAECC43A6C96}" AutoDeleteType="true">CT_Track_BR_to_Tc_t</Name>
+			<BitSize>64</BitSize>
+			<SubItem>
+				<Name>bStatus</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>diError</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000009}">DINT</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{7918C191-47AB-9E2C-CDC5-80ED611A3BC2}" AutoDeleteType="true">CT_Track_BR_to_Tc_u</Name>
+			<BitSize>64</BitSize>
+			<SubItem>
+				<Name>asStruct</Name>
+				<Type GUID="{13410A84-7A9F-0C78-F36B-EAECC43A6C96}">CT_Track_BR_to_Tc_t</Type>
+				<BitSize>64</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>asArray</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>8</Elements>
+				</ArrayInfo>
+				<BitSize>64</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{7E93FD2C-B4B9-D6CD-E29B-70267E70F157}" AutoDeleteType="true">CT_Track_Tc_to_BR_t</Name>
+			<BitSize>8</BitSize>
+			<SubItem>
+				<Name>bCommand</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000001}">BYTE</Type>
+				<Comment><![CDATA[ command bit field for the track system ]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{6C6B7E7B-A9A2-2C68-CF9B-3F3029560B40}" AutoDeleteType="true">CT_Track_Tc_to_BR_u</Name>
+			<BitSize>8</BitSize>
+			<SubItem>
+				<Name>asStruct</Name>
+				<Type GUID="{7E93FD2C-B4B9-D6CD-E29B-70267E70F157}">CT_Track_Tc_to_BR_t</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>asArray</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>1</Elements>
+				</ArrayInfo>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
 		</DataType>
 	</DataTypes>
 	<ImageDatas>
@@ -3479,6 +3595,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -3638,6 +3755,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -3797,6 +3915,7 @@ External Setpoint Generation:
 					<Drive Name="Drive" DrvType="5">
 						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
@@ -3959,6 +4078,10 @@ External Setpoint Generation:
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
 						<Var>
+							<Name>gMoverAxis.Q_CT_Shuttle_to_BR</Name>
+							<Type GUID="{64D7C2E4-F78B-7111-14FB-87ADD1AAE03B}">CT_Shuttle_Tc_to_BR_u</Type>
+						</Var>
+						<Var>
 							<Name>ST110_Axis.axis110_01Y.axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
@@ -4014,14 +4137,29 @@ External Setpoint Generation:
 					<Vars VarGrpType="1" ContextId="2" AreaNo="32">
 						<Name>Task_fileMan Inputs</Name>
 						<Var>
-							<Name>_02_SAFETY.uiArOUT_State</Name>
-							<Comment><![CDATA[Module State ]]></Comment>
-							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
+							<Name>_02_SAFETY.xIN_ESdelOut</Name>
+							<Comment><![CDATA[EStop del Out]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.xIN_ESout</Name>
+							<Comment><![CDATA[EStop	Out]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.xIN_MonDelOut</Name>
+							<Comment><![CDATA[Mon del Out Türen]]></Comment>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.uiArIN_State</Name>
 							<Comment><![CDATA[Module State ]]></Comment>
 							<Type GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}">ARRAY [1..7] OF UINT</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.uiArOUT_State</Name>
+							<Comment><![CDATA[Module State ]]></Comment>
+							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xArIN_Input1</Name>
@@ -4057,21 +4195,6 @@ External Setpoint Generation:
 							<Name>_02_SAFETY.xArIN_Input7</Name>
 							<Comment><![CDATA[Mapping Inputs ]]></Comment>
 							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}">ARRAY [0..7] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_ESdelOut</Name>
-							<Comment><![CDATA[EStop del Out]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_ESout</Name>
-							<Comment><![CDATA[EStop	Out]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_MonDelOut</Name>
-							<Comment><![CDATA[Mon del Out Türen]]></Comment>
-							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xIN_MonOut</Name>
@@ -4154,6 +4277,10 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>gMoverAxis.I_CT_Track_from_BR</Name>
+							<Type GUID="{7918C191-47AB-9E2C-CDC5-80ED611A3BC2}">CT_Track_BR_to_Tc_u</Type>
+						</Var>
+						<Var>
 							<Name>ST110_Axis.axis110_01Y.wState</Name>
 							<Comment><![CDATA[ Axis status word]]></Comment>
 							<Type>WORD</Type>
@@ -4182,13 +4309,13 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>_02_SAFETY._FB_Gr001Input.xOUT_RunStop</Name>
-							<Comment><![CDATA[ Run Stop]]></Comment>
+							<Name>_02_SAFETY._FB_Gr001Input.xOUT_ErrAck</Name>
+							<Comment><![CDATA[ Error Acknowledge]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>_02_SAFETY._FB_Gr001Input.xOUT_ErrAck</Name>
-							<Comment><![CDATA[ Error Acknowledge]]></Comment>
+							<Name>_02_SAFETY._FB_Gr001Input.xOUT_RunStop</Name>
+							<Comment><![CDATA[ Run Stop]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -4230,6 +4357,10 @@ External Setpoint Generation:
 							<Name>_02_SAFETY._FB_Gr005Output.xOUT_RunStop</Name>
 							<Comment><![CDATA[ Run Stop]]></Comment>
 							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>gMoverAxis.Q_CT_Track_to_BR</Name>
+							<Type GUID="{6C6B7E7B-A9A2-2C68-CF9B-3F3029560B40}">CT_Track_Tc_to_BR_u</Type>
 						</Var>
 						<Var>
 							<Name>ST110_Axis.axis110_01Y.bCtrlHi</Name>
@@ -5766,7 +5897,6 @@ External Setpoint Generation:
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[199]" VarB="TxPDO^1 Byte In (199)"/>
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[19]" VarB="TxPDO^1 Byte In (19)"/>
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[1]" VarB="TxPDO^1 Byte In (1)"/>
-				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[200]" VarB="TxPDO_1^1 Byte In (200)"/>
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[20]" VarB="TxPDO^1 Byte In (20)"/>
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[21]" VarB="TxPDO^1 Byte In (21)"/>
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[22]" VarB="TxPDO^1 Byte In (22)"/>
@@ -5855,6 +5985,207 @@ External Setpoint Generation:
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[98]" VarB="TxPDO^1 Byte In (98)"/>
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[99]" VarB="TxPDO^1 Byte In (99)"/>
 				<Link VarA="PlcTask Inputs^gMoverAxis.I_BuR_MoverAxis^asArray[9]" VarB="TxPDO^1 Byte In (9)"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (0)"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (1)" Size="8" OffsA="8"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (10)" Size="8" OffsA="80"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (100)" Size="8" OffsA="800"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (101)" Size="8" OffsA="808"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (102)" Size="8" OffsA="816"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (103)" Size="8" OffsA="824"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (104)" Size="8" OffsA="832"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (105)" Size="8" OffsA="840"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (106)" Size="8" OffsA="848"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (107)" Size="8" OffsA="856"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (108)" Size="8" OffsA="864"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (109)" Size="8" OffsA="872"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (11)" Size="8" OffsA="88"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (110)" Size="8" OffsA="880"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (111)" Size="8" OffsA="888"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (112)" Size="8" OffsA="896"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (113)" Size="8" OffsA="904"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (114)" Size="8" OffsA="912"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (115)" Size="8" OffsA="920"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (116)" Size="8" OffsA="928"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (117)" Size="8" OffsA="936"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (118)" Size="8" OffsA="944"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (119)" Size="8" OffsA="952"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (12)" Size="8" OffsA="96"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (120)" Size="8" OffsA="960"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (121)" Size="8" OffsA="968"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (122)" Size="8" OffsA="976"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (123)" Size="8" OffsA="984"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (124)" Size="8" OffsA="992"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (125)" Size="8" OffsA="1000"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (126)" Size="8" OffsA="1008"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (127)" Size="8" OffsA="1016"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (128)" Size="8" OffsA="1024"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (129)" Size="8" OffsA="1032"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (13)" Size="8" OffsA="104"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (130)" Size="8" OffsA="1040"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (131)" Size="8" OffsA="1048"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (132)" Size="8" OffsA="1056"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (133)" Size="8" OffsA="1064"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (134)" Size="8" OffsA="1072"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (135)" Size="8" OffsA="1080"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (136)" Size="8" OffsA="1088"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (137)" Size="8" OffsA="1096"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (138)" Size="8" OffsA="1104"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (139)" Size="8" OffsA="1112"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (14)" Size="8" OffsA="112"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (140)" Size="8" OffsA="1120"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (141)" Size="8" OffsA="1128"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (142)" Size="8" OffsA="1136"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (143)" Size="8" OffsA="1144"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (144)" Size="8" OffsA="1152"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (145)" Size="8" OffsA="1160"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (146)" Size="8" OffsA="1168"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (147)" Size="8" OffsA="1176"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (148)" Size="8" OffsA="1184"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (149)" Size="8" OffsA="1192"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (15)" Size="8" OffsA="120"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (150)" Size="8" OffsA="1200"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (151)" Size="8" OffsA="1208"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (152)" Size="8" OffsA="1216"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (153)" Size="8" OffsA="1224"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (154)" Size="8" OffsA="1232"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (155)" Size="8" OffsA="1240"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (156)" Size="8" OffsA="1248"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (157)" Size="8" OffsA="1256"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (158)" Size="8" OffsA="1264"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (159)" Size="8" OffsA="1272"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (16)" Size="8" OffsA="128"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (160)" Size="8" OffsA="1280"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (161)" Size="8" OffsA="1288"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (162)" Size="8" OffsA="1296"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (163)" Size="8" OffsA="1304"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (164)" Size="8" OffsA="1312"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (165)" Size="8" OffsA="1320"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (166)" Size="8" OffsA="1328"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (167)" Size="8" OffsA="1336"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (168)" Size="8" OffsA="1344"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (169)" Size="8" OffsA="1352"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (17)" Size="8" OffsA="136"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (170)" Size="8" OffsA="1360"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (171)" Size="8" OffsA="1368"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (172)" Size="8" OffsA="1376"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (173)" Size="8" OffsA="1384"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (174)" Size="8" OffsA="1392"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (175)" Size="8" OffsA="1400"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (176)" Size="8" OffsA="1408"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (177)" Size="8" OffsA="1416"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (178)" Size="8" OffsA="1424"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (179)" Size="8" OffsA="1432"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (18)" Size="8" OffsA="144"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (180)" Size="8" OffsA="1440"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (181)" Size="8" OffsA="1448"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (182)" Size="8" OffsA="1456"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (183)" Size="8" OffsA="1464"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (184)" Size="8" OffsA="1472"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (185)" Size="8" OffsA="1480"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (186)" Size="8" OffsA="1488"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (187)" Size="8" OffsA="1496"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (188)" Size="8" OffsA="1504"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (189)" Size="8" OffsA="1512"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (19)" Size="8" OffsA="152"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (190)" Size="8" OffsA="1520"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (191)" Size="8" OffsA="1528"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (192)" Size="8" OffsA="1536"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (193)" Size="8" OffsA="1544"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (194)" Size="8" OffsA="1552"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (195)" Size="8" OffsA="1560"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (196)" Size="8" OffsA="1568"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (197)" Size="8" OffsA="1576"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (198)" Size="8" OffsA="1584"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (199)" Size="8" OffsA="1592"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (2)" Size="8" OffsA="16"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (20)" Size="8" OffsA="160"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (21)" Size="8" OffsA="168"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (22)" Size="8" OffsA="176"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (23)" Size="8" OffsA="184"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (24)" Size="8" OffsA="192"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (25)" Size="8" OffsA="200"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (26)" Size="8" OffsA="208"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (27)" Size="8" OffsA="216"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (28)" Size="8" OffsA="224"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (29)" Size="8" OffsA="232"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (3)" Size="8" OffsA="24"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (30)" Size="8" OffsA="240"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (31)" Size="8" OffsA="248"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (32)" Size="8" OffsA="256"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (33)" Size="8" OffsA="264"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (34)" Size="8" OffsA="272"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (35)" Size="8" OffsA="280"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (36)" Size="8" OffsA="288"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (37)" Size="8" OffsA="296"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (38)" Size="8" OffsA="304"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (39)" Size="8" OffsA="312"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (4)" Size="8" OffsA="32"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (40)" Size="8" OffsA="320"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (41)" Size="8" OffsA="328"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (42)" Size="8" OffsA="336"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (43)" Size="8" OffsA="344"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (44)" Size="8" OffsA="352"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (45)" Size="8" OffsA="360"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (46)" Size="8" OffsA="368"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (47)" Size="8" OffsA="376"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (48)" Size="8" OffsA="384"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (49)" Size="8" OffsA="392"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (5)" Size="8" OffsA="40"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (50)" Size="8" OffsA="400"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (51)" Size="8" OffsA="408"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (52)" Size="8" OffsA="416"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (53)" Size="8" OffsA="424"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (54)" Size="8" OffsA="432"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (55)" Size="8" OffsA="440"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (56)" Size="8" OffsA="448"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (57)" Size="8" OffsA="456"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (58)" Size="8" OffsA="464"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (59)" Size="8" OffsA="472"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (6)" Size="8" OffsA="48"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (60)" Size="8" OffsA="480"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (61)" Size="8" OffsA="488"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (62)" Size="8" OffsA="496"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (63)" Size="8" OffsA="504"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (64)" Size="8" OffsA="512"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (65)" Size="8" OffsA="520"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (66)" Size="8" OffsA="528"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (67)" Size="8" OffsA="536"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (68)" Size="8" OffsA="544"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (69)" Size="8" OffsA="552"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (7)" Size="8" OffsA="56"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (70)" Size="8" OffsA="560"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (71)" Size="8" OffsA="568"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (72)" Size="8" OffsA="576"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (73)" Size="8" OffsA="584"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (74)" Size="8" OffsA="592"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (75)" Size="8" OffsA="600"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (76)" Size="8" OffsA="608"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (77)" Size="8" OffsA="616"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (78)" Size="8" OffsA="624"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (79)" Size="8" OffsA="632"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (8)" Size="8" OffsA="64"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (80)" Size="8" OffsA="640"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (81)" Size="8" OffsA="648"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (82)" Size="8" OffsA="656"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (83)" Size="8" OffsA="664"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (84)" Size="8" OffsA="672"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (85)" Size="8" OffsA="680"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (86)" Size="8" OffsA="688"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (87)" Size="8" OffsA="696"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (88)" Size="8" OffsA="704"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (89)" Size="8" OffsA="712"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (9)" Size="8" OffsA="72"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (90)" Size="8" OffsA="720"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (91)" Size="8" OffsA="728"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (92)" Size="8" OffsA="736"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (93)" Size="8" OffsA="744"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (94)" Size="8" OffsA="752"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (95)" Size="8" OffsA="760"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (96)" Size="8" OffsA="768"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (97)" Size="8" OffsA="776"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (98)" Size="8" OffsA="784"/>
+				<Link VarA="PlcTask Outputs^gMoverAxis.Q_CT_Shuttle_to_BR^asArray" VarB="RxPDO^1 Byte Out (99)" Size="8" OffsA="792"/>
+				<Link VarA="Task_fileMan Outputs^gMoverAxis.Q_CT_Track_to_BR^asArray[0]" VarB="RxPDO_1^1 Byte Out (200)"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^ST110_01Y">
 				<Link VarA="PlcTask Inputs^ST110_Axis.axis110_01Y.axis.NcToPlc" VarB="Outputs^ToPlc"/>

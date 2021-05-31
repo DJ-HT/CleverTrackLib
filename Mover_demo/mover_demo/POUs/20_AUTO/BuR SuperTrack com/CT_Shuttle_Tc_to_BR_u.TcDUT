@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CT_Shuttle_Tc_to_BR_u" Id="{6c63717f-a552-41fa-a5d6-e30f8e212804}">
+    <Declaration><![CDATA[TYPE CT_Shuttle_Tc_to_BR_u :
+UNION
+    asStruct : ARRAY[1..20] OF CT_Shuttle_Tc_to_BR_t;
+    asArray  : ARRAY[0..200] OF USINT;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
