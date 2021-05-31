@@ -64,6 +64,7 @@ VAR
                                                              (5175, 1, 1),
                                                              (5425, 1, 1),
                                                              (6135, 1, 1),
+                                                             (6835, 1, 1), // waiting pos
                                                              (7335, 1, 1),
                                                              (7665, 1, 1),
                                                              (8625, 1, 1),
@@ -77,17 +78,18 @@ VAR
                    (_PosList[5], GVL._Process5, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
                    (_PosList[6], GVL._Process6, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
                    (_PosList[7], GVL._Process7, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[8], GVL._Process8, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+                   (_PosList[8], GVL._Process8, 0, ApproachScenario_e.DoNotWait, 0),
                    (_PosList[9], GVL._Process9, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
                    (_PosList[10], GVL._Process10, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
                    (_PosList[11], GVL._Process11, -500, ApproachScenario_e.WaitOnFinishedProcess, 1),
                    (_PosList[12], GVL._Process12, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
                    (_PosList[13], GVL._Process13, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
                    (_PosList[14], GVL._Process14, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
-                   (_PosList[15], GVL._Process15, -400, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[16], GVL._Process16, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[17], GVL._Process17, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[18], GVL._Process18, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
+                   (_PosList[15], 0, 0, ApproachScenario_e.DoNotWait, 3),
+                   (_PosList[16], GVL._Process15, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+                   (_PosList[17], GVL._Process16, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+                   (_PosList[18], GVL._Process17, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
+                   (_PosList[19], GVL._Process18, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
 
     _StationSet1 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
@@ -103,6 +105,7 @@ VAR
                                                   2,
                                                   3,
                                                   3,
+                                                  0,
                                                   0,
                                                   4,
                                                   4,
@@ -124,11 +127,13 @@ VAR
                                                   0,
                                                   -1,
                                                   0,
+                                                  0,
                                                   -1,
                                                   0,
                                                   -1];
     _StationSet3 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
+                                                  0,
                                                   0,
                                                   0,
                                                   0,
@@ -161,6 +166,7 @@ VAR
                                                   -1,
                                                   0,
                                                   -1,
+                                                  0,
                                                   0,
                                                   -1,
                                                   0,
@@ -201,7 +207,7 @@ VAR
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
 VAR CONSTANT
-    MOVER_NUMBER : INT    := 18;
+    MOVER_NUMBER : INT := 18;
 END_VAR
 VAR_STAT
     _iInstanceCounter : INT := 1; // instance counter
@@ -242,7 +248,7 @@ SIMU.lrAccelMover := SIMU.lrAccelMoverSlider * SIMU.lrAccelMoverSlider;
 
 // Affect station offset depending on the station offset list
 FOR mv_i := 1 TO CONST.STATION_NUMBER BY 1 DO
-	 _StationList[mv_i].Offset := PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[mv_i-1];
+    _StationList[mv_i].Offset := PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[mv_i - 1];
 END_FOR
 
 FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
@@ -330,7 +336,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 
                 IF _MoverList[mv_i].Station.Process.xMoverPathFree AND
                    NOT (_MoverList[mv_i].Station.Equals(THIS^.GetNextMover(_MoverList[mv_i]).Station)) AND
-                   (iNumOfMoverOnTheWay <= 1) THEN
+                   (iNumOfMoverOnTheWay <= _MoverList[mv_i].Station.iMaxWaitingMovers) THEN
                     _MoverList[mv_i].MoveToStation();
                 END_IF
 
@@ -347,6 +353,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 // If there is no station (waiting position)
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
+            	_MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
 
             ELSE
                 _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);

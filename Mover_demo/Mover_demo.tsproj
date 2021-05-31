@@ -4047,6 +4047,10 @@ External Setpoint Generation:
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
+							<Name>ST115_Axis.axis115_03Z.axis.NcToPlc</Name>
+							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
+						<Var>
 							<Name>ST115_Axis.axis115_10W.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
@@ -4056,10 +4060,6 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>ST120_Axis.axis120_02Z.axis.NcToPlc</Name>
-							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
-						</Var>
-						<Var>
-							<Name>ST115_Axis.axis115_03Z.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
@@ -4147,6 +4147,11 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>_02_SAFETY.xIN_MonDelOut</Name>
+							<Comment><![CDATA[Mon del Out Türen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>_02_SAFETY.uiArIN_State</Name>
 							<Comment><![CDATA[Module State ]]></Comment>
 							<Type GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}">ARRAY [1..7] OF UINT</Type>
@@ -4190,11 +4195,6 @@ External Setpoint Generation:
 							<Name>_02_SAFETY.xArIN_Input7</Name>
 							<Comment><![CDATA[Mapping Inputs ]]></Comment>
 							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}">ARRAY [0..7] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_MonDelOut</Name>
-							<Comment><![CDATA[Mon del Out Türen]]></Comment>
-							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xIN_MonOut</Name>

@@ -249,9 +249,9 @@ GVL._Process14(xIN_Init       := HMI.enState = enState.StateINIT,
                tIN_Timeout    := T#10S,
                xIN_On         := TRUE);
 
-SIMU.iCompletionHMI[15]           := GVL._Process15.iCompletionPC;
-GVL._Process15.iProcessTimeMili_1 := PERS.iStationTimeDef1[15];
-GVL._Process15.iProcessTimeMili_2 := PERS.iStationTimeDef2[15];
+SIMU.iCompletionHMI[16]           := GVL._Process15.iCompletionPC;
+GVL._Process15.iProcessTimeMili_1 := PERS.iStationTimeDef1[16];
+GVL._Process15.iProcessTimeMili_2 := PERS.iStationTimeDef2[16];
 GVL._Process15(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -264,9 +264,9 @@ GVL._Process15(xIN_Init       := HMI.enState = enState.StateINIT,
                tIN_Timeout    := T#10S,
                xIN_On         := TRUE);
 
-SIMU.iCompletionHMI[16]           := GVL._Process16.iCompletionPC;
-GVL._Process16.iProcessTimeMili_1 := PERS.iStationTimeDef1[16];
-GVL._Process16.iProcessTimeMili_2 := PERS.iStationTimeDef2[16];
+SIMU.iCompletionHMI[17]           := GVL._Process16.iCompletionPC;
+GVL._Process16.iProcessTimeMili_1 := PERS.iStationTimeDef1[17];
+GVL._Process16.iProcessTimeMili_2 := PERS.iStationTimeDef2[17];
 GVL._Process16(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -279,9 +279,9 @@ GVL._Process16(xIN_Init       := HMI.enState = enState.StateINIT,
                tIN_Timeout    := T#10S,
                xIN_On         := TRUE);
 
-SIMU.iCompletionHMI[17]           := GVL._Process17.iCompletionPC;
-GVL._Process17.iProcessTimeMili_1 := PERS.iStationTimeDef1[17];
-GVL._Process17.iProcessTimeMili_2 := PERS.iStationTimeDef2[17];
+SIMU.iCompletionHMI[18]           := GVL._Process17.iCompletionPC;
+GVL._Process17.iProcessTimeMili_1 := PERS.iStationTimeDef1[18];
+GVL._Process17.iProcessTimeMili_2 := PERS.iStationTimeDef2[18];
 GVL._Process17(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
@@ -294,9 +294,9 @@ GVL._Process17(xIN_Init       := HMI.enState = enState.StateINIT,
                tIN_Timeout    := T#10S,
                xIN_On         := TRUE);
 
-SIMU.iCompletionHMI[18]           := GVL._Process18.iCompletionPC;
-GVL._Process18.iProcessTimeMili_1 := PERS.iStationTimeDef1[18];
-GVL._Process18.iProcessTimeMili_2 := PERS.iStationTimeDef2[18];
+SIMU.iCompletionHMI[19]           := GVL._Process18.iCompletionPC;
+GVL._Process18.iProcessTimeMili_1 := PERS.iStationTimeDef1[19];
+GVL._Process18.iProcessTimeMili_2 := PERS.iStationTimeDef2[19];
 GVL._Process18(xIN_Init       := HMI.enState = enState.StateINIT,
                xIN_Start      := HMI.btArMain[9].press,
                xIN_Step       := HMI.btArMain[1].rtrig,
