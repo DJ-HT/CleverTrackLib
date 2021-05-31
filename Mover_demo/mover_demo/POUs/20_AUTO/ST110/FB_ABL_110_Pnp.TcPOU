@@ -247,10 +247,14 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                xIN_FREE     := TRUE,
                xINtoGS      := ST110_Pnp_e.Vacum_off = iOUT_Step,
                xINtoAS      := _20_AUTO.recipe.st110.xUseVerLeft AND (ST110_Pnp_e.Vacum_on = iOUT_Step),
-               tIN_ErrAS    := T#1S,
-               tIN_ErrGS    := T#1S,
-               tIN_WaitAS   := T#0S,
-               tIN_WaitGS   := T#0S);
+               tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                                [ST110_Cylinders_e. VakuumgreiferLinks].toAS_alarm_time),
+               tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                             [ST110_Cylinders_e. VakuumgreiferLinks].toGS_alarm_time),
+               tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                              [ST110_Cylinders_e. VakuumgreiferLinks].toAS_wait_time),
+               tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                              [ST110_Cylinders_e. VakuumgreiferLinks].toGS_wait_time));
 
 simu_gripperLeft(xIN_Enable := CONST.USE_SIMULATION,
                  xIN_toGS   := NOT simu_gripperLeft.xIN_toAS,
@@ -267,10 +271,14 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                 xIN_FREE     := TRUE,
                 xINtoGS      := ST110_Pnp_e.Vacum_off = iOUT_Step,
                 xINtoAS      := _20_AUTO.recipe.st110.xUseVerRight AND (ST110_Pnp_e.Vacum_on = iOUT_Step),
-                tIN_ErrAS    := T#1S,
-                tIN_ErrGS    := T#1S,
-                tIN_WaitAS   := T#0S,
-                tIN_WaitGS   := T#0S);
+               tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                                [ST110_Cylinders_e.VakuumgreiferRechts].toAS_alarm_time),
+               tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                             [ST110_Cylinders_e.VakuumgreiferRechts].toGS_alarm_time),
+               tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                              [ST110_Cylinders_e.VakuumgreiferRechts].toAS_wait_time),
+               tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                              [ST110_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
 simu_gripperRight(xIN_Enable := CONST.USE_SIMULATION,
                   xIN_toGS   := NOT simu_gripperRight.xIN_toAS,

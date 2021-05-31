@@ -118,9 +118,9 @@ fb_feeder(xIN_Enable          := enIN_State = enState.StateAUTO OR enIN_State = 
           diIN_EmptyDelay     := _20_AUTO.recipe.st115.FeederConfig.EmptyDelay);
 
 simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder,
-            tIN_NewPieceTime   := 500,
-            iIN_WaitTimeMin_ms := 500,
-            iIN_WaitTimeMax_ms := 1000);
+            tIN_NewPieceTime   := 200,
+            iIN_WaitTimeMin_ms := 200,
+            iIN_WaitTimeMax_ms := 500);
 
 IF rtPutPiece.Q AND NOT simu_fifo.IsFull() THEN
     simu_fifo.Put(1);

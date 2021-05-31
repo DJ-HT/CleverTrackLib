@@ -41,13 +41,20 @@ VAR_GLOBAL
     //Manuel Station 1
     btArManu110 : ARRAY[0..10] OF structButton; (*	
 													0: Zyklus	
+													1: Vacum Gripper left
+													2: Vacum Gripper right
+													*)
+    btArManu115 : ARRAY[0..10] OF structButton; (*	
+													0: Zyklus	
 													1: Gripper left
 													2: Gripper right
 													*)
     btArManu120 : ARRAY[0..10] OF structButton; (*	
 													0: Zyklus	
-													1: Rotative cylinder left
-													2: Rotative cylinder right
+													1: Gripper left
+													2: Gripper right
+													3: Rotative cylinder left
+													4: Rotative cylinder right
 													*)
 
     (*******************************************************************)

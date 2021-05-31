@@ -113,7 +113,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 fb_pivotLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
              xIN_Quit     := xIN_Quit,
              xIN_Manu     := enState.StateMANU = enIN_State,
-             pbtIN_Button := ADR(HMI.btArManu120[1]),
+             pbtIN_Button := ADR(HMI.btArManu120[3]),
              xIN_GS
                  := NOT fb_pivotLeft.xIN_AS AND NOT (ST120_Feeder_e.rotate_to_pnp = iOUT_Step), // TODO use sensor
              xIN_AS := fb_pivotLeft.xOUT_VALVE AND
@@ -134,7 +134,7 @@ fb_pivotLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
 fb_pivotRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
               xIN_Quit     := xIN_Quit,
               xIN_Manu     := enState.StateMANU = enIN_State,
-              pbtIN_Button := ADR(HMI.btArManu120[2]),
+              pbtIN_Button := ADR(HMI.btArManu120[4]),
               xIN_GS
                   := NOT fb_pivotRight.xIN_AS AND NOT (ST120_Feeder_e.rotate_to_pnp = iOUT_Step), // TODO use sensor
               xIN_AS := fb_pivotRight.xOUT_VALVE AND

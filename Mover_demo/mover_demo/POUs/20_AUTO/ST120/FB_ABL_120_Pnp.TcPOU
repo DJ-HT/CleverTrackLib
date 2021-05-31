@@ -40,7 +40,7 @@ VAR_OUTPUT
     xOUT_Timeout  : BOOL;        // Timeout FB 
     xOUT_InitDone : BOOL;        // initialisierung fertig
     xOUT_Wait     : BOOL;        // Wartet auf Bedingung
-    iOUT_Step     : ST110_Pnp_e; // Aktueller Schritt 
+    iOUT_Step     : ST120_Pnp_e; // Aktueller Schritt 
     sOUT_Step     : STRING;      // Aktueller Schritt but in string format
     bOUT_Error    : BYTE;        // Fehlernummer
 
@@ -52,9 +52,9 @@ END_VAR
 VAR
     (* Standard *)
     (* Schritt *)
-    iLastStep : ST110_Pnp_e; // Merker letzter Schritt 
-    iPreStep  : ST110_Pnp_e; // Schritt zurück nach Alarm 
-    iAktStep  : ST110_Pnp_e; // aktueller Schritt
+    iLastStep : ST120_Pnp_e; // Merker letzter Schritt 
+    iPreStep  : ST120_Pnp_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST120_Pnp_e; // aktueller Schritt
 
     // Trigger Starten 
     rtSTART : R_TRIG;

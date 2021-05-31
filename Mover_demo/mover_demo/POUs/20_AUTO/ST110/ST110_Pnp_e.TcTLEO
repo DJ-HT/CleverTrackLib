@@ -19,36 +19,18 @@ ST110_Pnp_e :
     START := 1000,      // Start Zyklisch
     MOVER_FREE_OP,      // Ab here, operation without mover can be done
 
-//110.01Y	P+P handl. horiz.
 	PnP_Hor_ToRotTablePos,
 	PnP_WaitOnFeeder,
-//110.02Z	P+P handl. vertic.
 	PnP_Ver_RotTableDown,
-//110,05	Vacuum gripper
-//110,06	Vacuum gripper
 	Vacum_on,
-//110.03Z	P+P handl. vertic.
 	PnP_Ver_RotTableUp,
-//110.01Y	P+P handl. horiz.
 	PnP_Hor_ToTrackPos,
-//110.10W	rotary table
-//110.10W	rotary table
-// Done in mask time
-	
     waitOnMover,        // wait until the mover is there
     MOVER_NEEDED_OP,    // Since here, a mover in position is needed to perform the action
 
-//110.02Z	P+P handl. vertic.
-//110.03Z	P+P handl. vertic.
 	PnP_Ver_ShuttleDown,
-//110,55	Force Controll
-//110,56	Force Controll
 	PnP_Ver_ShuttleTorqueControl,
-//110,05	Vacuum gripper
-//110,06	Vacuum gripper
 	Vacum_off,
-//110.02Z	P+P handl. vertic.
-//110.03Z	P+P handl. vertic.
 	PnP_Ver_ShuttleUp,
 	
     SYNC_MOVER_LEAVE,   // MoverMan need to take the mover
