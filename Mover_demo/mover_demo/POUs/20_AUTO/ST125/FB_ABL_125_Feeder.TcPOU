@@ -128,7 +128,7 @@ END_IF
 
 fb_axis125_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := FALSE,
+               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st125_10W,
                xIN_Quit       := xIN_Quit,
                xIN_AX5000     := TRUE,
                xIN_ENC_ABS    := TRUE,

@@ -75,6 +75,8 @@ VAR_GLOBAL
     iSelectCylinderCopy : StationList_e := StationList_e._max;
     btCopyCylinderCfg   : structButton;
 
+	iSelectJogAxis : Axis_e;
+
     (*******************************************************************)
     (* Cycle Time [STATION]*)
     (*******************************************************************)

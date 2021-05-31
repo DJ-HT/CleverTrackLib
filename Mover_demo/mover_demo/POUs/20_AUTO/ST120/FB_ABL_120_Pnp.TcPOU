@@ -116,7 +116,7 @@ fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST120_0
 
 fb_axis120_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := FALSE,
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st120_01Y,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -156,7 +156,7 @@ fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST120_0
 
 fb_axis120_02Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := FALSE,
+               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST120_02Z,
                xIN_Quit       := xIN_Quit,
                axisIN_REF     := ST120_Axis.axis120_02Z.axis,
                xIN_AX5000     := FALSE,

@@ -119,7 +119,7 @@ fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_0
 
 fb_axis115_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := FALSE,
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.ST115_01Y,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -158,7 +158,7 @@ fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_
 
 fb_axis115_02Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := FALSE,
+               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST115_02Z,
                xIN_Quit       := xIN_Quit,
                axisIN_REF     := ST115_Axis.axis115_02Z.axis,
                xIN_AX5000     := FALSE,
@@ -207,7 +207,7 @@ fb_PnpVerAxisR(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_
 
 fb_axis115_03Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := FALSE,
+               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST115_03Z,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE, (*TODO*)
                xIN_FREE       := TRUE,
