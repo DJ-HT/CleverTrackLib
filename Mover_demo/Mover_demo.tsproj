@@ -1458,21 +1458,21 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..7] OF UINT</Name>
-			<BitSize>112</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>7</Elements>
-			</ArrayInfo>
-		</DataType>
-		<DataType>
 			<Name GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..3] OF UINT</Name>
 			<BitSize>48</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
 			<ArrayInfo>
 				<LBound>1</LBound>
 				<Elements>3</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..7] OF UINT</Name>
+			<BitSize>112</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>7</Elements>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
@@ -4147,19 +4147,14 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>_02_SAFETY.xIN_MonDelOut</Name>
-							<Comment><![CDATA[Mon del Out Türen]]></Comment>
-							<Type>BOOL</Type>
+							<Name>_02_SAFETY.uiArOUT_State</Name>
+							<Comment><![CDATA[Module State ]]></Comment>
+							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.uiArIN_State</Name>
 							<Comment><![CDATA[Module State ]]></Comment>
 							<Type GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}">ARRAY [1..7] OF UINT</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.uiArOUT_State</Name>
-							<Comment><![CDATA[Module State ]]></Comment>
-							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xArIN_Input1</Name>
@@ -4195,6 +4190,11 @@ External Setpoint Generation:
 							<Name>_02_SAFETY.xArIN_Input7</Name>
 							<Comment><![CDATA[Mapping Inputs ]]></Comment>
 							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}">ARRAY [0..7] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.xIN_MonDelOut</Name>
+							<Comment><![CDATA[Mon del Out Türen]]></Comment>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xIN_MonOut</Name>

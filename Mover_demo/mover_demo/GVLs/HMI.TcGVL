@@ -64,6 +64,10 @@ VAR_GLOBAL
     iSelectAxisCopy : LinearAxis_e := LinearAxis_e._max;
     btCopyAxisCfg   : structButton;
 
+    iSelectCylinder     : StationList_e := StationList_e.ST105;
+    iSelectCylinderCopy : StationList_e := StationList_e._max;
+    btCopyCylinderCfg   : structButton;
+
     (*******************************************************************)
     (* Cycle Time [STATION]*)
     (*******************************************************************)
@@ -73,8 +77,9 @@ VAR_GLOBAL
     (*******************************************************************)
     (* Recipe HMI management *)
     (*******************************************************************)
-    btCopyRecipe : structButton;
-    movesName    : ARRAY[0..LinearAxis_e._max - 1] OF ARRAY[0..CONST.MAX_VECTOR_LIST] OF STRING;
+    btCopyRecipe  : structButton;
+    movesNames    : ARRAY[0..LinearAxis_e._max - 1] OF ARRAY[0..CONST.MAX_VECTOR_LIST] OF STRING;
+    cylinderNames : ARRAY[0..StationList_e._max - 1] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF STRING;
 
     (*******************************************************************)
     (* Diverses *)

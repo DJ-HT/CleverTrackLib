@@ -37,6 +37,14 @@ IF HMI.btCopyAxisCfg.rtrig THEN
     HMI.iSelectAxisCopy := TO_INT(LinearAxis_e._max);
 END_IF
 
+IF HMI.btCopyCylinderCfg.rtrig THEN
+    PERS.recipeList[PERS.iRecipeCurrent].cylinder2Pos[HMI.iSelectCylinderCopy] :=
+        PERS.recipeList[PERS.iRecipeCurrent].cylinder2Pos[HMI.iSelectCylinder];
+
+    // reset the position of iRecipeCopyDest to tell the user the saving is done
+    HMI.iSelectCylinderCopy := TO_INT(StationList_e._max);
+END_IF
+
 //Station01
 
 SIMU.iCompletionHMI[1]           := GVL._Process1.iCompletionPC;

@@ -50,6 +50,9 @@
     <Compile Include="DUTs\Helptec\Axis\typeOutputArea.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Helptec\Cylinder2Pos_config.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Helptec\enLamp.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -331,6 +334,9 @@
     <Compile Include="POUs\20_AUTO\Simu\FB_Simu_Feeder.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\Simu\FB_Simu_Zyl2Pos.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST100\F_GetPercent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -374,6 +380,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST100\ST100_Unload_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\ST110_Cylinders_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST110\ST110_Feeder_e.TcDUT">
@@ -421,6 +430,9 @@
     <Compile Include="POUs\20_AUTO\ST115\FB_AUT_115.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\ST115_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST115\ST115_Recipe_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -455,6 +467,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST120\FB_AUT_120.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST120\ST120_Cylinders_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST120\ST120_Axis.TcGVL">
@@ -493,6 +508,9 @@
     <Compile Include="POUs\20_AUTO\ST125\FB_AUT_125.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST125\ST125_Axis.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -519,6 +537,9 @@
     <Compile Include="POUs\20_AUTO\ST125\VISU_ST125.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\StationList_e.TcTLEO">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\TOOL\ASSERT.TcPOU">
       <SubType>Code</SubType>
@@ -557,6 +578,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VISUs\VISU_LinearConfigArray.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\VISU_Cylinder2PosConfig.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>

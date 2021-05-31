@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="Cylinder2Pos_config" Id="{ccd19c7e-79a4-415e-86b3-0698b1a9e276}">
+    <Declaration><![CDATA[TYPE Cylinder2Pos_config :
+STRUCT
+    toGS_alarm_time : DINT; // maximum time allowed to go from AS to GS
+    toAS_alarm_time : DINT; // maximum time allowed to go from GS to AS
+    toGS_wait_time  : DINT; // additionnal waiting time, added when GS sensor is reached
+    toAS_wait_time  : DINT; // additionnal waiting time, added when AS sensor is reached
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
