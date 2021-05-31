@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Simu_Zyl2Pos" Id="{43e25e45-cc17-48d7-a4af-5a3f003a2b3c}" SpecialFunc="None">
+    <Declaration><![CDATA[// Simu fb for FB_ZylMo2El_V2_1
+FUNCTION_BLOCK FB_Simu_Zyl2Pos
+VAR_INPUT
+    xIN_Enable : BOOL; // enable this FB. You should only enable this FB when you are sure to be in sumulation modes
+    xIN_toGS   : BOOL; // connect to the xIN_toGS signal of the FB_ZylMo2El_V2_1 fb
+    xIN_toAS   : BOOL; // connect to the xIN_toAS signal of the FB_ZylMo2El_V2_1 fb
+    tIN_GS_ms  : DINT; // time in ms when GS signal should be on
+    tIN_AS_ms  : DINT; // time in ms when AS signal should be on
+END_VAR
+VAR_OUTPUT
+    xOUT_inGS : BOOL; // in GS position (simulation)
+    xOUT_inAS : BOOL; // in AS position (simulation)
+END_VAR
+VAR
+    _tick       : UDINT;
+    _in_gs_tick : UDINT;
+    _in_as_tick : UDINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[_tick := GetTick();
+
+IF NOT xIN_toGS THEN
+    _in_gs_tick := _tick;
+END_IF
+
+IF NOT xIN_toAS THEN
+    _in_as_tick := _tick;
+END_IF
+
+xOUT_inGS := xIN_Enable AND (TO_DINT(_tick - _in_gs_tick) > tIN_GS_ms);
+xOUT_inAS := xIN_Enable AND (TO_DINT(_tick - _in_as_tick) > tIN_AS_ms);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
