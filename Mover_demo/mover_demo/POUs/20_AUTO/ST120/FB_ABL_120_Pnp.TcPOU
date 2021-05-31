@@ -70,6 +70,11 @@ VAR
     fb_PnpHorAxis : FB_LinearMotionMan;
     fb_PnpVerAxis : FB_LinearMotionMan;
 
+    fb_gripperLeft    : FB_ZylMo2El_V2_1;
+    fb_gripperRight   : FB_ZylMo2El_V2_1;
+    simu_gripperLeft  : FB_Simu_Zyl2Pos;
+    simu_gripperRight : FB_Simu_Zyl2Pos;
+
     fb_simu_axis120_01Y : FB_Simu_AxisLM_V1_1;
     fb_simu_axis120_02Z : FB_Simu_AxisLIN_V1_1;
 
@@ -186,6 +191,54 @@ fb_simu_axis120_02Z(rIN_PosActual := fb_axis120_02Z.rOUT_ActPos,
                     rIN_PixMax    := 80,
                     rIN_PixMin    := 0);
 
+fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
+               xIN_Quit     := xIN_Quit,
+               xIN_Manu     := enState.StateMANU = enIN_State,
+               pbtIN_Button := ADR(HMI.btArManu120[1]),
+               xIN_GS       := simu_gripperLeft.xOUT_inGS, // TODO use sensor
+               xIN_AS       := simu_gripperLeft.xOUT_inAS, // TODO use sensor
+               xIN_FREE     := TRUE,
+               xINtoGS      := ST120_Pnp_e.Gripper_close = iOUT_Step,
+               xINtoAS      := _20_AUTO.recipe.st120.xUseVerLeft AND ST120_Pnp_e.Gripper_open = iOUT_Step,
+               tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                                [ST120_Cylinders_e.GreiferLinks].toAS_alarm_time),
+               tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                             [ST120_Cylinders_e.GreiferLinks].toGS_alarm_time),
+               tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                              [ST120_Cylinders_e.GreiferLinks].toAS_wait_time),
+               tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                              [ST120_Cylinders_e.GreiferLinks].toGS_wait_time));
+
+simu_gripperLeft(xIN_Enable := CONST.USE_SIMULATION,
+                 xIN_toGS   := NOT simu_gripperLeft.xIN_toAS,
+                 xIN_toAS   := fb_gripperLeft.xOUT_VALVE,
+                 tIN_GS_ms  := 500,  //ms
+                 tIN_AS_ms  := 500); //ms
+
+fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
+                xIN_Quit     := xIN_Quit,
+                xIN_Manu     := enState.StateMANU = enIN_State,
+                pbtIN_Button := ADR(HMI.btArManu120[2]),
+                xIN_GS       := simu_gripperRight.xOUT_inGS, // TODO use sensor
+                xIN_AS       := simu_gripperRight.xOUT_inAS, // TODO use sensor
+                xIN_FREE     := TRUE,
+                xINtoGS      := ST120_Pnp_e.Gripper_close = iOUT_Step,
+                xINtoAS      := _20_AUTO.recipe.st120.xUseVerRight AND ST120_Pnp_e.Gripper_open = iOUT_Step,
+                tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                                 [ST120_Cylinders_e.GreiferRechts].toAS_alarm_time),
+                tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                              [ST120_Cylinders_e.GreiferRechts].toGS_alarm_time),
+                tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                               [ST120_Cylinders_e.GreiferRechts].toAS_wait_time),
+                tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                               [ST120_Cylinders_e.GreiferRechts].toGS_wait_time));
+
+simu_gripperRight(xIN_Enable := CONST.USE_SIMULATION,
+                  xIN_toGS   := NOT simu_gripperRight.xIN_toAS,
+                  xIN_toAS   := fb_gripperRight.xOUT_VALVE,
+                  tIN_GS_ms  := 500,  //ms
+                  tIN_AS_ms  := 500); //ms
+
 (*******************************************************************)
 (* OUTPUTS *)
 (*******************************************************************)
@@ -217,7 +270,7 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          ST120_Pnp_e.PnP_Ver_ShuttleDown,
                                          ST120_Pnp_e.PnP_Ver_ShuttleUp);
 
-xOUT_PickPiece := iOUT_Step = ST120_Pnp_e.Vacum_on;
+xOUT_PickPiece := iOUT_Step = ST120_Pnp_e.PnP_Ver_RotTableUp;
 
 (*******************************************************************)
 (* Ablauf *)
@@ -315,11 +368,13 @@ ST120_Pnp_e.PnP_WaitOnFeeder:
 
 ST120_Pnp_e.PnP_Ver_RotTableDown:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.DownEmpty).xOUT_InPos THEN
-        iOUT_Step := ST120_Pnp_e.Vacum_on;
+        iOUT_Step := ST120_Pnp_e.Gripper_open;
     END_IF;
 
-ST120_Pnp_e.Vacum_on:
-    IF xIN_NextStep AND NOT fb_axis120_02Z.xOUT_DONE THEN
+ST120_Pnp_e.Gripper_open:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
         iOUT_Step := ST120_Pnp_e.PnP_Ver_RotTableUp;
     END_IF;
 
@@ -346,11 +401,11 @@ ST120_Pnp_e.PnP_Ver_ShuttleDown:
 // We need a fb that enables for us torque control. Here we just go a bit further
 ST120_Pnp_e.PnP_Ver_ShuttleTorqueControl:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos THEN
-        iOUT_Step := ST120_Pnp_e.Vacum_off;
+        iOUT_Step := ST120_Pnp_e.Gripper_close;
     END_IF;
 
-ST120_Pnp_e.Vacum_off:
-    IF xIN_NextStep THEN
+ST120_Pnp_e.Gripper_close:
+    IF xIN_NextStep AND fb_gripperLeft.xOUT_inGS AND fb_gripperRight.xOUT_inGS THEN
         iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleUp;
     END_IF;
 

@@ -21,7 +21,7 @@ TYPE ST115_Pnp_e :
 	PnP_Hor_ToRotTablePos,
 	PnP_WaitOnFeeder,
 	PnP_Ver_RotTableDown,
-	Gripper_close,
+	Gripper_open,
 	PnP_Ver_RotTableUp,
 	PnP_Hor_ToTrackPos,
     waitOnMover,        // wait until the mover is there
@@ -29,7 +29,7 @@ TYPE ST115_Pnp_e :
 
 	PnP_Ver_ShuttleDown,
 	PnP_Ver_ShuttleTorqueControl,
-	Gripper_open,
+	Gripper_close,
 	PnP_Ver_ShuttleUp,
 	
     SYNC_MOVER_LEAVE,   // MoverMan need to take the mover
@@ -104,7 +104,7 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Gripper_close"</v>
+              <v n="TextID">"Gripper_open"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
@@ -139,7 +139,7 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Gripper_open"</v>
+              <v n="TextID">"Gripper_close"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

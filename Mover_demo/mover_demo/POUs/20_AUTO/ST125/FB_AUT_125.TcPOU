@@ -217,7 +217,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Pnp.iOUT_Step = ST110_Pnp_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Pnp.iOUT_Step = ST125_Pnp_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>

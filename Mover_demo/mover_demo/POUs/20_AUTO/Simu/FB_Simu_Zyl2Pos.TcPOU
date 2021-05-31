@@ -31,8 +31,8 @@ IF NOT xIN_toAS THEN
     _in_as_tick := _tick;
 END_IF
 
-xOUT_inGS := xIN_Enable AND (TO_DINT(_tick - _in_gs_tick) > tIN_GS_ms);
-xOUT_inAS := xIN_Enable AND (TO_DINT(_tick - _in_as_tick) > tIN_AS_ms);
+xOUT_inGS := xIN_Enable AND (TO_LINT(_tick - _in_gs_tick) > tIN_GS_ms);
+xOUT_inAS := xIN_Enable AND (TO_LINT(_tick - _in_as_tick) > tIN_AS_ms);
 ]]></ST>
     </Implementation>
   </POU>

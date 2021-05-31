@@ -245,8 +245,8 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
                xIN_GS       := NOT fb_gripperLeft.xIN_AS,
                xIN_AS       := simu_gripperLeft.xOUT_inAS,
                xIN_FREE     := TRUE,
-               xINtoGS      := ST115_Pnp_e.Gripper_open = iOUT_Step,
-               xINtoAS      := _20_AUTO.recipe.st115.xUseVerLeft AND (ST115_Pnp_e.Gripper_close = iOUT_Step),
+               xINtoGS      := ST115_Pnp_e.Gripper_close = iOUT_Step,
+               xINtoAS      := _20_AUTO.recipe.st115.xUseVerLeft AND (ST115_Pnp_e.Gripper_open = iOUT_Step),
                tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
                                                 [ST115_Cylinders_e.GreiferLinks].toAS_alarm_time),
                tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
@@ -269,8 +269,8 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
                 xIN_GS       := NOT fb_gripperRight.xIN_AS,
                 xIN_AS       := simu_gripperRight.xOUT_inAS,
                 xIN_FREE     := TRUE,
-                xINtoGS      := ST115_Pnp_e.Gripper_open = iOUT_Step,
-                xINtoAS      := _20_AUTO.recipe.st115.xUseVerRight AND (ST115_Pnp_e.Gripper_close = iOUT_Step),
+                xINtoGS      := ST115_Pnp_e.Gripper_close = iOUT_Step,
+                xINtoAS      := _20_AUTO.recipe.st115.xUseVerRight AND (ST115_Pnp_e.Gripper_open = iOUT_Step),
                 tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
                                                  [ST115_Cylinders_e.GreiferRechts].toAS_alarm_time),
                 tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
@@ -421,10 +421,10 @@ ST115_Pnp_e.PnP_Ver_RotTableDown:
        NOT _20_AUTO.recipe.st115.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST115_PnpVerPos_e.DownEmpty).xOUT_InPos OR
        NOT _20_AUTO.recipe.st115.xUseVerRight) THEN
-        iOUT_Step := ST115_Pnp_e.Gripper_close;
+        iOUT_Step := ST115_Pnp_e.Gripper_open;
     END_IF;
 
-ST115_Pnp_e.Gripper_close:
+ST115_Pnp_e.Gripper_open:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st115.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st115.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
@@ -468,10 +468,10 @@ ST115_Pnp_e.PnP_Ver_ShuttleTorqueControl:
        NOT _20_AUTO.recipe.st115.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST115_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT _20_AUTO.recipe.st115.xUseVerRight) THEN
-        iOUT_Step := ST115_Pnp_e.Gripper_open;
+        iOUT_Step := ST115_Pnp_e.Gripper_close;
     END_IF;
 
-ST115_Pnp_e.Gripper_open:
+ST115_Pnp_e.Gripper_close:
     IF xIN_NextStep AND fb_gripperLeft.xOUT_inGS AND fb_gripperRight.xOUT_inGS THEN
         iOUT_Step := ST115_Pnp_e.PnP_Ver_ShuttleUp;
     END_IF;
