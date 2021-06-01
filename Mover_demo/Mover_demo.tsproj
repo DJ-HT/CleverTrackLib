@@ -1702,12 +1702,17 @@ External Setpoint Generation:
 				<Cpu CpuId="7"/>
 				<IoIdleTask CycleTime="100000"/>
 			</Settings>
-			<Licenses>
+			<Licenses CacheOrCheckLicensesOnStartup="true">
 				<Target>
 					<ManualSelect>{57BD9670-089D-434A-85CF-90A857EE0EFF}</ManualSelect>
-					<ManualSelect>{BF78CFC7-2E63-42C3-8C07-BB6C346BFB8B}</ManualSelect>
 					<ManualSelect>{2752D285-16AD-4E89-AE6C-80E72784D264}</ManualSelect>
 					<ManualSelect>{8C57D0A8-BD63-4554-BAE1-E9C797EF0D0E}</ManualSelect>
+					<TargetSelect TargetId="2">{57BD9670-089D-434A-85CF-90A857EE0EFF}</TargetSelect>
+					<TargetSelect TargetId="2">{FDE02854-39A7-440C-9EAE-C234A16A3CED}</TargetSelect>
+					<TargetSelect TargetId="2">{796D380F-D49E-4C0C-A05F-500052FAC883}</TargetSelect>
+					<TargetSelect TargetId="2">{2752D285-16AD-4E89-AE6C-80E72784D264}</TargetSelect>
+					<TargetSelect TargetId="2">{8C57D0A8-BD63-4554-BAE1-E9C797EF0D0E}</TargetSelect>
+					<LicenseDevice DongleHardwareId="2" DongleDevice="#x03020002" DongleLevel="60" DongleSystemId="{FBF61D1B-ACA0-8BAB-731C-5B73B966D50A}" DongleSerialNumber="100099778"/>
 				</Target>
 			</Licenses>
 			<Tasks>
@@ -4698,7 +4703,7 @@ External Setpoint Generation:
 						</Vars>
 					</Encoder>
 					<Drive Name="Drive" DrvType="9">
-						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00000100">
+						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00030100">
 							<Analog VeloScale="1.02400649589962" TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -4843,7 +4848,7 @@ External Setpoint Generation:
 						</Vars>
 					</Encoder>
 					<Drive Name="Drive" DrvType="9">
-						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00000100">
+						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00030100">
 							<Analog VeloScale="1.02400649589962" TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
