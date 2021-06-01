@@ -224,8 +224,8 @@ fb_gripperFilterhutLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
 simu_gripperFilterhutLeft(xIN_Enable := CONST.USE_SIMULATION,
                           xIN_toGS   := NOT simu_gripperFilterhutLeft.xIN_toAS,
                           xIN_toAS   := fb_gripperFilterhutLeft.xOUT_VALVE,
-                          tIN_GS_ms  := 500,  //ms
-                          tIN_AS_ms  := 500); //ms
+                          tIN_GS_ms  := 200,  //ms
+                          tIN_AS_ms  := 200); //ms
 
 fb_gripperFilterhutRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
                          xIN_Quit     := xIN_Quit,
@@ -249,8 +249,8 @@ fb_gripperFilterhutRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_
 simu_gripperFilterhutRight(xIN_Enable := CONST.USE_SIMULATION,
                            xIN_toGS   := NOT simu_gripperFilterhutRight.xIN_toAS,
                            xIN_toAS   := fb_gripperFilterhutRight.xOUT_VALVE,
-                           tIN_GS_ms  := 500,  //ms
-                           tIN_AS_ms  := 500); //ms
+                           tIN_GS_ms  := 200,  //ms
+                           tIN_AS_ms  := 200); //ms
 
 fb_gripperSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
                        xIN_Quit     := xIN_Quit,
@@ -276,8 +276,8 @@ fb_gripperSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_St
 simu_gripperSolerohrLeft(xIN_Enable := CONST.USE_SIMULATION,
                          xIN_toGS   := NOT simu_gripperSolerohrLeft.xIN_toAS,
                          xIN_toAS   := fb_gripperSolerohrLeft.xOUT_VALVE,
-                         tIN_GS_ms  := 500,  //ms
-                         tIN_AS_ms  := 500); //ms
+                         tIN_GS_ms  := 200,  //ms
+                         tIN_AS_ms  := 200); //ms
 
 fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
                         xIN_Quit     := xIN_Quit,
@@ -303,8 +303,8 @@ fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
 simu_gripperSolerohrRight(xIN_Enable := CONST.USE_SIMULATION,
                           xIN_toGS   := NOT simu_gripperSolerohrRight.xIN_toAS,
                           xIN_toAS   := fb_gripperSolerohrRight.xOUT_VALVE,
-                          tIN_GS_ms  := 500,  //ms
-                          tIN_AS_ms  := 500); //ms
+                          tIN_GS_ms  := 200,  //ms
+                          tIN_AS_ms  := 200); //ms
 
 fb_handlingSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
                         xIN_Quit     := xIN_Quit,
