@@ -17,6 +17,12 @@ TYPE LinearAxis_e :
     ST120_02Z,
     ST125_01Y,
     ST125_02Z,
+	ST130_01Z,
+	ST130_10Z,
+	ST135_01Z,
+	ST135_10Z,
+	ST145_01Y,
+	ST145_02Z,
     _max
 );
 END_TYPE
@@ -82,6 +88,36 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"ST125_02Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST130_01Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST130_10Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST135_01Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST135_10Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST145_01Y"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST145_02Z"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
