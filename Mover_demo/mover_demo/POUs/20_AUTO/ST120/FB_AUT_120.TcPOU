@@ -59,7 +59,7 @@ xReset := ((enIN_State < StateREADY) AND (enIN_State <> StateINIT)) OR
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
-fb_Pnp(xIN_Reset          := xReset,
+fb_Pnp(xIN_Reset          := HMI.btArMain[7].on,
        xIN_Init           := xIN_Init,
        xIN_Quit           := xIN_Quit,
        xIN_Start          := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
@@ -67,7 +67,6 @@ fb_Pnp(xIN_Reset          := xReset,
        xIN_NextStep       := xNextStep,
        xIN_AlarmAktiv     := xIN_AlarmAktiv,
        xIN_DryCycle       := xIN_DryCycle,
-       xIN_Reset          := HMI.btArMain[7].on,
        xIN_RestartCYCL    := enIN_State = enState.StateAUTO, // only restart when the mover has move out
        enIN_State         := enIN_State,
        tIN_Timeout        := tIN_Timeout,
@@ -75,7 +74,7 @@ fb_Pnp(xIN_Reset          := xReset,
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := ST120_Feeder_e.wait_pce_picked = fb_Feeder.iOUT_Step);
 
-fb_Feeder(xIN_Reset       := xReset OR HMI.btArMain[7].on,
+fb_Feeder(xIN_Reset       := HMI.btArMain[7].on,
           xIN_Init        := xIN_Init,
           xIN_Quit        := xIN_Quit,
           xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 

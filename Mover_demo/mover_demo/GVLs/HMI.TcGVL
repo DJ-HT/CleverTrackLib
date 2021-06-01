@@ -38,24 +38,20 @@ VAR_GLOBAL
 													9: START
 													10: ...
 												*)
-    //Manuel Station 1
-    btArManu110 : ARRAY[0..10] OF structButton; (*	
-													0: Zyklus	
-													1: Vacum Gripper left
-													2: Vacum Gripper right
-													*)
-    btArManu115 : ARRAY[0..10] OF structButton; (*	
-													0: Zyklus	
-													1: Gripper left
-													2: Gripper right
-													*)
-    btArManu120 : ARRAY[0..10] OF structButton; (*	
-													0: Zyklus	
-													1: Gripper left
-													2: Gripper right
-													3: Rotative cylinder left
-													4: Rotative cylinder right
-													*)
+    //Manual pneumatics
+    // see below for button button instance 
+    btManuCylinders : ARRAY[0..StationList_e._max] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF structButton;
+    (*
+     * [StationList_e.ST110]
+     * [0]: Zyklus [1]: Vacum Gripper left [2]: Vacum Gripper right
+     *
+     * [StationList_e.ST115]
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right
+     *
+     * [StationList_e.ST120]
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: Rotative cylinder left
+     * [4]: Rotative cylinder right
+     *)
 
     (*******************************************************************)
     (* ALARME  *)
@@ -75,7 +71,7 @@ VAR_GLOBAL
     iSelectCylinderCopy : StationList_e := StationList_e._max;
     btCopyCylinderCfg   : structButton;
 
-	iSelectJogAxis : Axis_e;
+    iSelectJogAxis : Axis_e;
 
     (*******************************************************************)
     (* Cycle Time [STATION]*)

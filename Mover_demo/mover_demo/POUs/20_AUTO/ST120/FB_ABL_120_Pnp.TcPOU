@@ -194,7 +194,7 @@ fb_simu_axis120_02Z(rIN_PosActual := fb_axis120_02Z.rOUT_ActPos,
 fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
                xIN_Quit     := xIN_Quit,
                xIN_Manu     := enState.StateMANU = enIN_State,
-               pbtIN_Button := ADR(HMI.btArManu120[1]),
+               pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][1]),
                xIN_GS       := simu_gripperLeft.xOUT_inGS, // TODO use sensor
                xIN_AS       := simu_gripperLeft.xOUT_inAS, // TODO use sensor
                xIN_FREE     := TRUE,
@@ -218,7 +218,7 @@ simu_gripperLeft(xIN_Enable := CONST.USE_SIMULATION,
 fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
                 xIN_Quit     := xIN_Quit,
                 xIN_Manu     := enState.StateMANU = enIN_State,
-                pbtIN_Button := ADR(HMI.btArManu120[2]),
+                pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][2]),
                 xIN_GS       := simu_gripperRight.xOUT_inGS, // TODO use sensor
                 xIN_AS       := simu_gripperRight.xOUT_inAS, // TODO use sensor
                 xIN_FREE     := TRUE,

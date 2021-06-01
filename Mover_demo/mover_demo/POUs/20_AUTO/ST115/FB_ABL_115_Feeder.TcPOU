@@ -147,7 +147,7 @@ fb_axis115_10W(enIN_State     := enIN_State,
                xIN_Execute    := ST115_Feeder_e.Init_set_table_pos = iOUT_Step OR
                                  ST115_Feeder_e.load_piece = iOUT_Step,
                xIN_Relative     := ST115_Feeder_e.load_piece = iOUT_Step,
-               rIN_Position     := TO_REAL(iCurrentTableIndex * 120.0), // always move by 120°
+               rIN_Position     := TO_REAL(1 * 120.0), // always move by 120°
                rIN_Velocity     := TO_REAL(360.0),
                rIN_Acceleration := TO_REAL(3600.0),
                rIN_Deceleration := TO_REAL(3600.0),

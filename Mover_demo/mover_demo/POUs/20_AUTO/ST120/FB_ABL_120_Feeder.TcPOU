@@ -120,7 +120,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 fb_pivotLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
              xIN_Quit     := xIN_Quit,
              xIN_Manu     := enState.StateMANU = enIN_State,
-             pbtIN_Button := ADR(HMI.btArManu120[3]),
+             pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][3]),
              xIN_GS       := simu_pivotLeft.xOUT_inGS, // TODO use sensor
              xIN_AS       := simu_pivotLeft.xOUT_inAS, // TODO use sensor
              xIN_FREE     := xIN_PnpNotOnTheWay OR xIN_PnpGripperOpen,
@@ -146,7 +146,7 @@ simu_pivotLeft(xIN_Enable := CONST.USE_SIMULATION,
 fb_pivotRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
               xIN_Quit     := xIN_Quit,
               xIN_Manu     := enState.StateMANU = enIN_State,
-              pbtIN_Button := ADR(HMI.btArManu120[4]),
+              pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][4]),
               xIN_GS       := simu_pivotRight.xOUT_inGS, // TODO use sensor
               xIN_AS       := simu_pivotRight.xOUT_inAS, // TODO use sensor
               xIN_FREE     := xIN_PnpGripperOpen OR xIN_PnpNotOnTheWay,
@@ -200,7 +200,7 @@ simu_feederRight(xIN_Enable         := fb_feederRight.xOUT_EnableFeeder,
 fb_hubladerLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
                 xIN_Quit     := xIN_Quit,
                 xIN_Manu     := enState.StateMANU = enIN_State,
-                pbtIN_Button := ADR(HMI.btArManu120[5]),
+                pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][5]),
                 xIN_GS       := simu_hubladerLeft.xOUT_inGS, // TODO use sensor
                 xIN_AS       := simu_hubladerLeft.xOUT_inAS, // TODO use sensor
                 xIN_FREE     := TRUE,
@@ -224,7 +224,7 @@ simu_hubladerLeft(xIN_Enable := CONST.USE_SIMULATION,
 fb_hubladerRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
                  xIN_Quit     := xIN_Quit,
                  xIN_Manu     := enState.StateMANU = enIN_State,
-                 pbtIN_Button := ADR(HMI.btArManu120[6]),
+                 pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][6]),
                  xIN_GS       := simu_hubladerRight.xOUT_inGS, // TODO use sensor
                  xIN_AS       := simu_hubladerRight.xOUT_inAS, // TODO use sensor
                  xIN_FREE     := TRUE,
