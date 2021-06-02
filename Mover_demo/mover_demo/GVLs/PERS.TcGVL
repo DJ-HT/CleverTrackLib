@@ -2,7 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <GVL Name="PERS" Id="{fbf39650-67ca-4454-aedb-fafdd3046409}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL PERSISTENT
+VAR_GLOBAL RETAIN PERSISTENT
     (***********************************************************************************************)
     (* COUNTER *)
     (***********************************************************************************************)

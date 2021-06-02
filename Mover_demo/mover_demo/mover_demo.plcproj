@@ -111,6 +111,10 @@
     <Compile Include="GVLs\IN.TcGVL">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GVLs\IO_BOX.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVLs\OUT.TcGVL">
       <SubType>Code</SubType>
     </Compile>

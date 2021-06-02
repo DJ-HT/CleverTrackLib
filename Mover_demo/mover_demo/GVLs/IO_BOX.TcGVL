@@ -1,0 +1,413 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="IO_BOX" Id="{6b78bdcf-8bb4-4936-9355-773ba3dbadfd}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    (*******************************************************************)
+    (* EINGÄNGE Schrank A *)
+    (*******************************************************************)
+
+    (* IO-Link Boxen 190A1 *)
+    (*******************************************************************)
+    //-194A3
+    (* BN Lampe *)
+
+    //-201A1
+    (* Ventil Batterie 201 A*)
+    Q0000_14_                               AT %Q* : BOOL; // 
+    Q0000_12_ST130_kammer_offnen_links      AT %Q* : BOOL; // ST130 Kammer öffnen links
+    Q0001_14_                               AT %Q* : BOOL; // 
+    Q0001_12_ST130_kammer_offnen_rechts     AT %Q* : BOOL; // ST130 Kammer öffnen rechts
+    Q0002_14_                               AT %Q* : BOOL; // 
+    Q0002_12_ST130_kammer_nachfullen_links  AT %Q* : BOOL; // ST130 Kammer nachfüllen links
+    Q0003_14_                               AT %Q* : BOOL; // 
+    Q0003_12_ST130_kammer_nachfullen_rechts AT %Q* : BOOL; // ST130 Kammer nachfüllen rechts
+    Q0004_14_                               AT %Q* : BOOL; // 
+    Q0004_12_ST130_vibrieren_kammer_aus     AT %Q* : BOOL; // ST130 Vibrieren Kammer links/rechts aus
+    Q0005_14_ST130_vibrieren_kammer_ein     AT %Q* : BOOL; // ST130 Vibrieren Kammer links/rechts ein
+    Q0005_12_ST130_niederhalter_patrone     AT %Q* : BOOL; // ST130 Niederhalter Patrone
+    Q0006_14_                               AT %Q* : BOOL; // 
+    Q0006_12_ST135_kammer_offnen_links      AT %Q* : BOOL; // ST135 Kammer öffnen links
+    Q0007_14_                               AT %Q* : BOOL; // 
+    Q0007_12_ST135_kammer_offnen_rechts     AT %Q* : BOOL; // ST135 Kammer öffnen rechts
+    Q0008_14_                               AT %Q* : BOOL; // 
+    Q0008_12_ST135_kammer_nachfullen_links  AT %Q* : BOOL; // ST135 Kammer nachfüllen links
+    Q0009_14_                               AT %Q* : BOOL; // 
+    Q0009_12_ST135_kammer_nachfullen_rechts AT %Q* : BOOL; // ST135 Kammer nachfüllen rechts
+    Q0010_14_                               AT %Q* : BOOL; // 
+    Q0010_12_ST135_vibrieren_kammer_aus     AT %Q* : BOOL; // ST135 Vibrieren Kammer links/rechts aus
+    Q0011_14_ST135_vibrieren_kammer_ein     AT %Q* : BOOL; // ST135 Vibrieren Kammer links/rechts ein
+    Q0011_12                                AT %Q* : BOOL; // ST135 Niederhalter Patrone
+    Q0012_14_                               AT %Q* : BOOL; //
+    Q0012_12_                               AT %Q* : BOOL; // 
+    Q0013_14_                               AT %Q* : BOOL; //
+    Q0013_12_                               AT %Q* : BOOL; // 
+    Q0014_14_                               AT %Q* : BOOL; //
+    Q0014_12_                               AT %Q* : BOOL; // 
+    Q0015_14_                               AT %Q* : BOOL; //
+    Q0015_12_                               AT %Q* : BOOL; // 
+
+    //-202A1
+    (* Ventil Batterie 202 A *)
+    Q0100_14_                          AT %Q* : BOOL; // 
+    Q0100_12_ST145_vakum_greifer_links AT %Q* : BOOL; // Vakumgreifer links ST145
+    Q0101_14_                          AT %Q* : BOOL; // 
+    Q0101_12_ST145_vakumgreifer_rechts AT %Q* : BOOL; // Vakumgreifer rechts ST145
+    Q0102_14_                          AT %Q* : BOOL; // 
+    Q0102_12_ST150_kraftubersetzung    AT %Q* : BOOL; // Kraftübersetzung ST150
+    Q0103_14_                          AT %Q* : BOOL; // 
+    Q0103_12_ST155_kraftubersetzung    AT %Q* : BOOL; // Kraftübersetzung ST155
+    Q0104_14_                          AT %Q* : BOOL; // 
+    Q0104_12_                          AT %Q* : BOOL; // 
+    Q0105_14_                          AT %Q* : BOOL; // 
+    Q0105_12_                          AT %Q* : BOOL; // 
+
+    //-203A1
+    (* Ventil Batterie 203 A *)
+    Q0200_14_                                AT %Q* : BOOL; // 
+    Q0200_12_ST160_niederhalter_links        AT %Q* : BOOL; // ST160 Niederhalter links ST160
+    Q0201_14_                                AT %Q* : BOOL; // 
+    Q0201_12_ST160_niederhalter_rechts       AT %Q* : BOOL; // ST160 Niederhalter rechts ST160
+    Q0202_14_ST160_dichtung_pruflocker_aus   AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts aus
+    Q0202_12_ST160_dichtung_pruflocker_ein   AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts ein
+    Q0203_14_ST160_dichtung_pruflocker_aus_2 AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts aus ???
+    Q0203_12_ST160_dichtung_pruflocker_ein_2 AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts ein ???
+    Q0204_14_                                AT %Q* : BOOL; // 
+    Q0204_12_ST165_niederhalter_links        AT %Q* : BOOL; // ST165 Niederhalter links ST160
+    Q0205_14_                                AT %Q* : BOOL; // 
+    Q0205_12_ST165_niederhalter_rechts       AT %Q* : BOOL; // ST165 Niederhalter rechts ST160
+    Q0206_14_ST165_dichtung_pruflocker_aus   AT %Q* : BOOL; // 
+    Q0206_12_ST165_dichtung_pruflocker_ein   AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts aus
+    Q0207_14_ST165_dichtung_pruflocker_aus_2 AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts ein
+    Q0207_12_ST165_dichtung_pruflocker_ein_2 AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts aus ???
+    Q0208_14_                                AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts ein ???
+    Q0208_12_                                AT %Q* : BOOL; // 
+    Q0209_14_                                AT %Q* : BOOL; // 
+    Q0209_12_                                AT %Q* : BOOL; // 
+    Q0210_14_                                AT %Q* : BOOL; // 
+    Q0210_12_                                AT %Q* : BOOL; // 
+    Q0211_14_                                AT %Q* : BOOL; // 
+    Q0211_12_                                AT %Q* : BOOL; // 
+
+    (* IO-Link Boxen 190A4 *)
+    (*******************************************************************)
+    //-970B2
+    (* FullstandKontrolle ST130.55 *)
+    I1000_ AT %I* : BOOL; // FullstandKontrolle ST130.55
+
+    //-970B4
+    (* FullstandKontrolle ST130.56 *)
+    I1100_ AT %I* : BOOL; // FullstandKontrolle ST130.56
+
+    //-970B6
+    (* FullstandKontrolle ST135.55 *)
+    I1200_ AT %I* : BOOL; // FullstandKontrolle ST135.55
+
+    //-970B7
+    (* FullstandKontrolle ST135.56 *)
+    I1300_ AT %I* : BOOL; // 
+
+    //-5009
+    (* ST130 I - 8x IO *)
+    I1400_ST130_kammer_offnen_links_zuruck     AT %I* : BOOL; // 0: Kammer öffnen links zurück
+    I1401_ST130_kammer_offnen_rechts_vor       AT %I* : BOOL; // 1: Kammer öffnen links vor
+    I1402_ST130_kammer_offnen_links_zuruck     AT %I* : BOOL; // 2: Kammer öffnen rechts zurück
+    I1403_ST130_kammer_offnen_rechts_vor       AT %I* : BOOL; // 3: Kammer öffnen rechts vor
+    I1404_ST130_nachfullen_offnen_links_zuruck AT %I* : BOOL; // 4: Kummer nachfüllen links zurück
+    I1405_ST130_nachfullen_offnen_rechts_vor   AT %I* : BOOL; // 5: Kummer nachfüllen links vor
+    I1406_ST130_nachfullen_offnen_links_zuruck AT %I* : BOOL; // 6: Kammer nachfüllen rechts zurück
+    I1407_ST130_nachfullen_offnen_rechts_vor   AT %I* : BOOL; // 7: Kammer nachfüllen rechts vor
+
+    //-5010
+    (* ST135 I - 8x IO *)
+    I1500_ST135_kammer_offnen_links_zuruck     AT %I* : BOOL; // 0: Kammer öffnen links zurück
+    I1501_ST135_kammer_offnen_rechts_vor       AT %I* : BOOL; // 1: Kammer öffnen links vor
+    I1502_ST135_kammer_offnen_links_zuruck     AT %I* : BOOL; // 2: Kammer öffnen rechts zurück
+    I1503_ST135_kammer_offnen_rechts_vor       AT %I* : BOOL; // 3: Kammer öffnen rechts vor
+    I1504_ST135_nachfullen_offnen_links_zuruck AT %I* : BOOL; // 4: Kummer nachfüllen links zurück
+    I1505_ST135_nachfullen_offnen_rechts_vor   AT %I* : BOOL; // 5: Kummer nachfüllen links vor
+    I1506_ST135_nachfullen_offnen_links_zuruck AT %I* : BOOL; // 6: Kammer nachfüllen rechts zurück
+    I1507_ST135_nachfullen_offnen_rechts_vor   AT %I* : BOOL; // 7: Kammer nachfüllen rechts vor
+
+    //-5014
+    (* ST110 I - 4x IO *)
+    I1600_ST110_vakum_teil_in_greiffer_left  AT %I* : BOOL; // 0: Vakuumkontrolle Teil in Greifer 110.03
+    I1601_ST110_vakum_teil_in_greiffer_right AT %I* : BOOL; // 1: Vakuumkontrolle Teil in Greifer 110.04
+    I1602_                                   AT %I* : BOOL; // 2: 
+    I1603_                                   AT %I* : BOOL; // 3: 
+
+    (* IO-Link Boxen 190A8 *)
+    (*******************************************************************)
+    //-5011
+    (* Filterhut vorhanden ST130/135 I - 8x IO *)
+    I2000_ST130_filterhut_vorhanden_links    AT %I* : BOOL; // 0: ST130 Filterhut vorhanden links
+    I2001_ST130_filterhut_vorhanden_rechts   AT %I* : BOOL; // 1: ST130 Filterhut vorhanden rechts
+    I2002_ST130_filterhut_vorhanden_links_2  AT %I* : BOOL; // 2: ST130 Filterhut vorhanden links ???
+    I2003_ST130_filterhut_vorhanden_rechts_2 AT %I* : BOOL; // 3: ST130 Filferhut vorhanden rechts ???
+    I2004_ST130_filterhut_vorhanden_links    AT %I* : BOOL; // 4: ST135 Filterhut vorhanden links
+    I2005_ST130_filterhut_vorhanden_rechts   AT %I* : BOOL; // 5: ST135 Filterhut vorhanden rechts
+    I2006_ST130_filterhut_vorhanden_links_2  AT %I* : BOOL; // 6: ST135 Filterhut vorhanden links ???
+    I2007_ST130_filterhut_vorhanden_rechts_2 AT %I* : BOOL; // 7: ST135 Filterhut vorhanden rechts ???
+
+    //-5012
+    (* Niederhalter Patrone ST130/135 I - 8x IO *)
+    I2100_ST130_niederhalter_patrone_oben  AT %I* : BOOL; // 0: ST130 Niederhalter Patrone oben
+    I2101_ST130_niederhalter_patrone_unten AT %I* : BOOL; // 1: ST130 Niederhalter Patrone unten
+    I2102_ST135_niederhalter_patrone_oben  AT %I* : BOOL; // 2: ST135 Niederhalter Patrone oben
+    I2103_ST135_niederhalter_patrone_unten AT %I* : BOOL; // 3: ST135 Niederhalter Patrone unten
+
+    //-5013
+    (* Niederhalter & Vorsatzwanne ST130 I - 8x IO *)
+    I2200_ST130_niederhalter_vorne  AT %I* : BOOL; // 0: Niederhalter in Arbeitspos. vorne
+    I2201_ST130_niederhalter_hinten AT %I* : BOOL; // 1: Niederhalter in Wartungspos. hinten
+    I2202_ST130_Vorsatzwanne_vorne  AT %I* : BOOL; // 2: Vorsatzwanne in Arbeitspos. vorne
+    I2203_ST130_Vorsatzwanne_hinten AT %I* : BOOL; // 3: Vorsatzwanne in Ruhepos. hinten
+
+    //-5015
+    (* ST145/150/155 I - 8x IO *)
+    I2300_ST145_teil_in_vereinzelung    AT %I* : BOOL; // 0: AWK Teil in Vereinzelung (RST) ST145
+    I2301_ST150_kraftubersetzunh_zuruck AT %I* : BOOL; // 1: Kraftübersetzung zurück ST150
+    I2302_ST150_kraftubersetzunh_vor    AT %I* : BOOL; // 2: Kraftübersetzung vor ST150
+    I2303_ST150_deckel_vohanden         AT %I* : BOOL; // 3: Deckel vorhanden ST150
+    I2304_ST155_kraftubersetzunh_zuruck AT %I* : BOOL; // 4: Kraftübersetzung zurück ST155
+    I2305_ST155_kraftubersetzunh_vor    AT %I* : BOOL; // 5: Kraftübersetzung vor ST155
+    I2306_ST155_deckel_vohanden         AT %I* : BOOL; // 6: Deckel vorhanden ST155
+
+    //-5501
+    (* feeder ST145 *)
+    I2400_ST145_freigabe_wf AT %I* : BOOL; // 0: Freigabe WF
+    I2401_ST145_maximum_wf  AT %I* : BOOL; // 1: Maximum WF
+
+    (* IO-Link Boxen 191A2 *)
+    (*******************************************************************)
+    //-960B2
+    (* Wegmessenor ST160.02 *)
+    I3000_ AT %I* : BOOL;
+
+    //-960B4
+    (* Wegmessenor ST160.03 *)
+    I3100_ AT %I* : BOOL;
+
+    //-960B6
+    (* Wegmessenor ST165.02 *)
+    I3200_ AT %I* : BOOL;
+
+    //-960B7
+    (* Wegmessenor ST165.03 *)
+    I3300_ AT %I* : BOOL;
+
+    (*******************************************************************)
+    (* EINGÄNGE Schrank B *)
+    (*******************************************************************)
+
+    (* IO-Link Boxen 1012045.1 *)
+    (*******************************************************************)
+    //-10194A3
+    (* Meldeleuchte 3 Zonen mit Horni BNI0086 *)
+
+    //-10201B1
+    (* Ventilbat. 201 B *)
+    // empty
+
+    //-10202B1
+    (* Ventilbat. 202 B *)
+    //  q0: Greifer links ST115
+    //  q1: Greifer rechts ST115
+    //  q2: Greifer links ST120
+    //  q3: Greifer rechts ST120
+    //  q4: Schwenken links ST120
+    //  q5: Schwenken rechts ST120
+    //  q6: Greifer Filterhut links ST125
+    //  q7: Greifer Filterhut rechts ST125
+    //  q8: Handling Solerohr links ST125
+    //  q9: Handling Solerohr rechts ST125
+    // q10: Greifer Solerohr links ST125
+    // q11: Greifer Solerohr rechts ST125
+    // q12: 
+    // q13: 
+    // q14: 
+    // q15: 
+
+    //-10203B1
+    (* Ventilbat. 203 B *)
+    // q0: Niederhalter ST175
+    // q1: Kabinentür Einlaufseite
+    // q2: Kabinentür Auflaufseite
+    // q3: 
+    // q4: 
+
+    //-10204B1
+    (* Ventilbat. 204 B *)
+    //  q0: Greifer Patrone links ST180
+    //  q1: Grefier Patrone rechts ST180
+    //  q2: Niederhalter Deckel links ST180
+    //  q3: Niederhalter Deckel rechts ST180
+    //  q4: Greifer Patrone links ST185
+    //  q5: Greifer Patrone rechts ST185
+    //  q6: Niederhalter Deckel links ST185
+    //  q7: Niederhalter Deckel rechts ST185
+    //  q8: 
+    //  q9: 
+    // q10: 
+    // q11: 
+
+    //-10950B1
+    (* Vakuumsch. Greifer 110.05 *)
+
+    //-10950B3
+    (* Vakuumsch. Greifer 110.06 *)
+
+    (* IO-Link Boxen 10120A5.2 *)
+    (*******************************************************************)
+    //-5002
+    (* Teil in Vereinzelung (RST) ST110/115 - 8x IO *)
+
+    //-5003
+    (* Greifer links ST115 - 4x IO *)
+    // 0: Greifer links offen
+    // 1: Greifer links geschlossen
+
+    //-5004
+    (* Greifer recht ST115 - 4x IO  *)
+    // 0: Greifer rechts offen
+    // 1: Greifer rechts geschlossen
+
+    //-5005
+    (* Greifern link & rechts ST120 - 4x IO*)
+    // 0: Greifer links geschlossen
+    // 1: Greifer links offen
+    // 2: Greifer rechts geschlossen
+    // 3: Greifer rechts offen
+
+    //-5006
+    (* feeder ST120 - 8x IO *)
+    // 0: Schwenken links vertikal
+    // 1: Schwenken links horizontal
+    // 2: Schwenken rechts vertikal
+    // 3: Schwenken rechts horizontal
+    // 4: Teil in Vereinzelung links
+    // 5: Teil in Vereinzelung rechts
+
+    //-5007
+    (* Pnp Filterhut Greifer ST125 - 4x IO*)
+    // 0: G. Filterhut links geschlossen
+    // 1: G. Filterhut links offen
+    // 2: G. Filterhut rechts geschlossen
+    // 3: G. Filterhut rechts offen
+
+    //-5008
+    (* Pnp Solerohr Greiffer ST125 - 8x IO *)
+    // 0: Solerohr handling links unten
+    // 1: Solerohr handling links oben
+    // 2: Solerohr handling rechts unten
+    // 3: Solerohr handling rechts oben
+    // 4: G.Solerohr links geschlossen
+    // 5: G.Solerohr links offen
+    // 6: G.Solerohr rechts geschlossen
+    // 7: G.Solerohr rechts offen
+
+    (* IO-Link Boxen 10190A8 *)
+    (*******************************************************************)
+    //-10945.2 / 110.55
+    (* Wandler Kraftsensor 110 links *)
+
+    //-10945.3 / 110.56
+    (* Wandler Kraftsensor 110 rechts *)
+
+    //-10945.3 / 115.55
+    (* Wandler Kraftsensor 115 links *)
+
+    //-10945.5 / 115.56
+    (* Wandler Kraftsensor 115 rechts *)
+
+    //-10945.7 / 120.55
+    (* Wandler Kraftsensor 120 links *)
+
+    //-10945.8 / 120.56
+    (* Wandler Kraftsensor 120 rechts *)
+
+    //-10946.2 / 125.55
+    (* Wandler Kraftsensor 125 links *)
+
+    //-10946.3 / 125.56
+    (* Wandler Kraftsensor 125 rechts *)
+
+    (* IO-Link Boxen 10191A2 *)
+    (*******************************************************************)
+    //-15501
+    (* feeder ST110 - 8x IO *)
+    // 0: Freigabe WF ST110
+    // 1: Maximum WF ST110
+    // 2: Alarm Förderband ST110
+    // q3: Förderband ein ST110
+    // 4: Farbsensor Lagekontrolle
+
+    //-15502
+    (* feeder ST110 - 8x IO *)
+    // q0: Freigabe WF ST115
+    // 1: Maximum WF ST115
+    // q2: Alarm Förderband ST115
+    // q3: Förderband ein ST115
+
+    //-15503
+    (* feeder links ST120 - 8x IO *)
+    // q0: Alarm Förderband ST115
+    // q1: Förderband ein
+    // q2: Alarm Förderband
+    // q3: Förderband ein
+    // 4: Hublader links unten
+    // 5: Hublader links oben
+    // 6: Hublader links Nivaukontrolle
+    // q7: Hublader links 120.12
+
+    //-15504
+    (* feeder rechts ST120 - 8x IO *)
+    // 0: Hublader rechts unten
+    // 1: Hublader rechts oben
+    // 2: Hublader rechts Nivaukontrolle
+    // q3: HublAder rechts 120.13
+    // 4: Mini-Maxi Kontrolle Zuführung links
+    // 5: Mini-Maxi Kontrolle Zuführung rechts
+
+    //-15505
+    (* xxx *)
+    // q0: Freigabe WF
+    // 1: Maximum WF
+
+    (* IO-Link Boxen 10191A5 *)
+    (*******************************************************************)
+    //-5016
+    (* ST175/180 8x IO *)
+    // 0: Kabinentür Einlauf offen ST175
+    // 1: Kabinentür Auslauf offen ST175
+    // 2: Entlade-& Füllstandskontrolle Box ST180
+
+    //-5017
+    (* pnp ST180 *)
+    // 0: ST180 Greifer Patrone links zu
+    // 1: ST180 Greifer Patrone links offen
+    // 2: ST180 Greifer Patrone rechts zu
+    // 3: ST180 Greifer Patrone rechts offen
+    // 4: ST180 Niederhalter Deckel links oben
+    // 5: ST180 Niederhalter Deckel links unten
+    // 6: ST180 Niederhalter Deckel rechts oben
+    // 7: ST180 Niederhalter Deckel rechts unten
+
+    //-5018
+    (* pnp ST185 *)
+    // 0: ST185 Greifer Patrone links zu
+    // 1: ST185 Greifer Patrone links offen
+    // 2: ST185 Greifer Patrone rechts zu
+    // 3: ST185 Greifer Patrone rechts offen
+    // 4: ST185 Niederhalter Deckel links oben
+    // 5: ST185 Niederhalter Deckel links unten
+    // 6: ST185 Niederhalter Deckel rechts oben
+    // 7: ST185 Niederhalter Deckel rechts unten
+
+    //-10960B2
+    (* Wegmesssenor ST175 *)
+    // 0: Wegmesssenor ST175
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>
