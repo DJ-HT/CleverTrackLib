@@ -6262,11 +6262,11 @@ External Setpoint Generation:
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>ST115_Axis.axis115_02Z.axis.NcToPlc</Name>
+							<Name>ST115_Axis.axis115_03Z.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>ST115_Axis.axis115_03Z.axis.NcToPlc</Name>
+							<Name>ST115_Axis.axis115_02Z.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
@@ -7386,38 +7386,459 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I2300_</Name>
+							<Name>IO_BOX.I2300_ST145_teil_in_vereinzelung</Name>
 							<Comment><![CDATA[ 0: AWK Teil in Vereinzelung (RST) ST145]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I2301_</Name>
+							<Name>IO_BOX.I2301_ST150_kraftubersetzunh_zuruck</Name>
 							<Comment><![CDATA[ 1: Kraftübersetzung zurück ST150]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I2302_</Name>
+							<Name>IO_BOX.I2302_ST150_kraftubersetzunh_vor</Name>
 							<Comment><![CDATA[ 2: Kraftübersetzung vor ST150]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I2303_</Name>
+							<Name>IO_BOX.I2303_ST150_deckel_vohanden</Name>
 							<Comment><![CDATA[ 3: Deckel vorhanden ST150]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I2304_</Name>
+							<Name>IO_BOX.I2304_ST155_kraftubersetzunh_zuruck</Name>
 							<Comment><![CDATA[ 4: Kraftübersetzung zurück ST155]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I2305_</Name>
+							<Name>IO_BOX.I2305_ST155_kraftubersetzunh_vor</Name>
 							<Comment><![CDATA[ 5: Kraftübersetzung vor ST155]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I2306_</Name>
+							<Name>IO_BOX.I2306_ST155_deckel_vohanden</Name>
 							<Comment><![CDATA[ 6: Deckel vorhanden ST155]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I2400_ST145_freigabe_wf</Name>
+							<Comment><![CDATA[ 0: Freigabe WF]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I2401_ST145_maximum_wf</Name>
+							<Comment><![CDATA[ 1: Maximum WF]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I3000_</Name>
+							<Comment><![CDATA[ IO-Link Boxen 191A2 
+*****************************************************************
+-960B2
+ Wegmessenor ST160.02 ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I3100_</Name>
+							<Comment><![CDATA[-960B4
+ Wegmessenor ST160.03 ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I3200_</Name>
+							<Comment><![CDATA[-960B6
+ Wegmessenor ST165.02 ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I3300_</Name>
+							<Comment><![CDATA[-960B7
+ Wegmessenor ST165.03 ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I5500_ST110_vakumkontrolle_links</Name>
+							<Comment><![CDATA[ Vakuumsch. Greifer 110.05]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I5600_ST110_vakumkontrolle_rechts</Name>
+							<Comment><![CDATA[ Vakuumsch. Greifer 110.05]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6000_ST110_teil_in_vereinzelung</Name>
+							<Comment><![CDATA[ Teil in Vereinzelung (RST) ST110]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6001_ST115_teil_in_vereinzelung</Name>
+							<Comment><![CDATA[ Teil in Vereinzelung (RST) ST115]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6100_ST115_greifer_links_offen</Name>
+							<Comment><![CDATA[ 0: Greifer links offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6101_ST115_greifer_links_geschlossen</Name>
+							<Comment><![CDATA[ 1: Greifer links geschlossen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6200_ST115_greifer_rechts_offen</Name>
+							<Comment><![CDATA[ 0: Greifer rechts offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6201_ST115_greifer_rechts_geschlossen</Name>
+							<Comment><![CDATA[ 1: Greifer rechts geschlossen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6300_ST120_greifer_links_geschlossen</Name>
+							<Comment><![CDATA[ 0: Greifer links geschlossen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6301_ST120_greifer_links_offen</Name>
+							<Comment><![CDATA[ 1: Greifer links offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6302_ST120_greifer_rechts_geschlossen</Name>
+							<Comment><![CDATA[ 2: Greifer rechts geschlossen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6303_ST120_greifer_rechts_offen</Name>
+							<Comment><![CDATA[ 3: Greifer rechts offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6400_ST120_schwenken_links_in_vertikal</Name>
+							<Comment><![CDATA[ 0: Schwenken links vertikal]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6401_ST120_schwenken_links_in_horizontal</Name>
+							<Comment><![CDATA[ 1: Schwenken links horizontal]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6402_ST120_schwenken_rechts_in_vertikal</Name>
+							<Comment><![CDATA[ 2: Schwenken rechts vertikal]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6403_ST120_schwenken_rechts_in_horizontal</Name>
+							<Comment><![CDATA[ 3: Schwenken rechts horizontal]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6404_ST120_teil_in_vereizelung_links</Name>
+							<Comment><![CDATA[ 4: Teil in Vereinzelung links]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts</Name>
+							<Comment><![CDATA[ 5: Teil in Vereinzelung rechts]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6500_ST125_greiffer_filterhut_links_geschlossen</Name>
+							<Comment><![CDATA[ 0: G. Filterhut links geschlossen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6501_ST125_greiffer_filterhut_links_offen</Name>
+							<Comment><![CDATA[ 1: G. Filterhut links offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6502_ST125_greiffer_filterhut_rechts_geschlossen</Name>
+							<Comment><![CDATA[ 2: G. Filterhut rechts geschlossen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6503_ST125_greiffer_filterhut_rechts_offen</Name>
+							<Comment><![CDATA[ 3: G. Filterhut rechts offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6600_ST125_solerhor_handling_links_unten</Name>
+							<Comment><![CDATA[ 0: Solerohr handling links unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6601_ST125_solerhor_handling_links_oben</Name>
+							<Comment><![CDATA[ 1: Solerohr handling links oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6602_ST125_solerhor_handling_rechts_unten</Name>
+							<Comment><![CDATA[ 2: Solerohr handling rechts unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6603_ST125_solerhor_handling_rechts_oben</Name>
+							<Comment><![CDATA[ 3: Solerohr handling rechts oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6604_ST125_greifer_solerohr_links_geschlossen</Name>
+							<Comment><![CDATA[ 4: G.Solerohr links geschlossen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6605_ST125_greifer_solerohr_links_offen</Name>
+							<Comment><![CDATA[ 5: G.Solerohr links offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6606_ST125_greifer_solerohr_rechts_geschlossen</Name>
+							<Comment><![CDATA[ 6: G.Solerohr rechts geschlossen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I6607_ST125_greifer_solerohr_rechts_offen</Name>
+							<Comment><![CDATA[ 7: G.Solerohr rechts offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I7000_ST110_kraftsensor_links</Name>
+							<Comment><![CDATA[ IO-Link Boxen 10190A8 
+*****************************************************************
+-10945.2 / 110.55
+ Wandler Kraftsensor 110 links ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I7100_ST110_kraftsensor_rechts</Name>
+							<Comment><![CDATA[-10945.3 / 110.56
+ Wandler Kraftsensor 110 rechts ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I7200_ST115_kraftsensor_links</Name>
+							<Comment><![CDATA[-10945.3 / 115.55
+ Wandler Kraftsensor 115 links ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I7300_ST115_kraftsensor_rechts</Name>
+							<Comment><![CDATA[-10945.5 / 115.56
+ Wandler Kraftsensor 115 rechts ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I7400_ST120_kraftsensor_links</Name>
+							<Comment><![CDATA[-10945.7 / 120.55
+ Wandler Kraftsensor 120 links ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I7500_ST120_kraftsensor_rechts</Name>
+							<Comment><![CDATA[-10945.8 / 120.56
+ Wandler Kraftsensor 120 rechts ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I7600_ST125_kraftsensor_links</Name>
+							<Comment><![CDATA[-10946.2 / 125.55
+ Wandler Kraftsensor 125 links ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I7700_ST125_kraftsensor_rechts</Name>
+							<Comment><![CDATA[-10946.3 / 125.56
+ Wandler Kraftsensor 125 rechts ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8001_ST110_maximum</Name>
+							<Comment><![CDATA[ 1: Maximum WF ST110]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8002_ST110_alarm_forderband</Name>
+							<Comment><![CDATA[ 2: Alarm Förderband ST110]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8003_ST110_forderband_ein</Name>
+							<Comment><![CDATA[ q3: Förderband ein ST110]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8004_ST110_farbsensor_lagekontrolle</Name>
+							<Comment><![CDATA[ 4: Farbsensor Lagekontrolle]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8101_ST115_maximum</Name>
+							<Comment><![CDATA[ 1: Maximum WF ST115]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8102_ST115_alarm_forderband</Name>
+							<Comment><![CDATA[ 2: Alarm Förderband ST115]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8103_ST115_forderband_ein</Name>
+							<Comment><![CDATA[ q3: Förderband ein ST115]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8200_ST120_alarm_forderband</Name>
+							<Comment><![CDATA[  0: Alarm Förderband ST115]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8202_ST120_alarm_forderband</Name>
+							<Comment><![CDATA[  2: Alarm Förderband]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8204_ST120_hublader_links_unten</Name>
+							<Comment><![CDATA[  4: Hublader links unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8205_ST120_hublader_links_oben</Name>
+							<Comment><![CDATA[  5: Hublader links oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8206_ST120_hublader_links_niveaukontrolle</Name>
+							<Comment><![CDATA[  6: Hublader links Nivaukontrolle]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8300_ST120_hublader_rechts_unten</Name>
+							<Comment><![CDATA[  0: Hublader rechts unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8301_ST120_hublader_rechts_oben</Name>
+							<Comment><![CDATA[  1: Hublader rechts oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8302_ST120_hublader_rechts_niveaukontrolle</Name>
+							<Comment><![CDATA[  2: Hublader rechts Nivaukontrolle]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8304_ST120_mini_maxi_knotrolle_zufurung_links</Name>
+							<Comment><![CDATA[  4: Mini-Maxi Kontrolle Zuführung links]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8305_ST120_mini_maxi_knotrolle_zufurung_rechts</Name>
+							<Comment><![CDATA[  5: Mini-Maxi Kontrolle Zuführung rechts]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I8401_ST125_maximum_wf</Name>
+							<Comment><![CDATA[  1: Maximum WF]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9000_ST175_kabinentur_einlauf_offen</Name>
+							<Comment><![CDATA[ 0: Kabinentür Einlauf offen ST175]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9001_ST175_kabinentur_auslauf_offen</Name>
+							<Comment><![CDATA[ 1: Kabinentür Auslauf offen ST175]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9002_ST180_entlad_fullstandskontroll_box</Name>
+							<Comment><![CDATA[ 2: Entlade-& Füllstandskontrolle Box ST180]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9100_ST180_greifer_patrone_links_zu</Name>
+							<Comment><![CDATA[ 0: ST180 Greifer Patrone links zu]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9101_ST180_greifer_patrone_links_offen</Name>
+							<Comment><![CDATA[ 1: ST180 Greifer Patrone links offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9102_ST180_greifer_patrone_rechts_zu</Name>
+							<Comment><![CDATA[ 2: ST180 Greifer Patrone rechts zu]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9103_ST180_greifer_patrone_rechts_offen</Name>
+							<Comment><![CDATA[ 3: ST180 Greifer Patrone rechts offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9104_ST180_niederhalter_deckel_links_oben</Name>
+							<Comment><![CDATA[ 4: ST180 Niederhalter Deckel links oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9105_ST180_niederhalter_deckel_links_unten</Name>
+							<Comment><![CDATA[ 5: ST180 Niederhalter Deckel links unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9106_ST180_niederhalter_deckel_rechts_oben</Name>
+							<Comment><![CDATA[ 6: ST180 Niederhalter Deckel rechts oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9107_ST180_niederhalter_deckel_rechts_unten</Name>
+							<Comment><![CDATA[ 7: ST180 Niederhalter Deckel rechts unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9200_ST185_greifer_patrone_links_zu</Name>
+							<Comment><![CDATA[ 0: ST185 Greifer Patrone links zu]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9201_ST185_greifer_patrone_links_offen</Name>
+							<Comment><![CDATA[ 1: ST185 Greifer Patrone links offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9202_ST185_greifer_patrone_rechts_zu</Name>
+							<Comment><![CDATA[ 2: ST185 Greifer Patrone rechts zu]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9203_ST185_greifer_patrone_rechts_offen</Name>
+							<Comment><![CDATA[ 3: ST185 Greifer Patrone rechts offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9204_ST185_niederhalter_deckel_links_oben</Name>
+							<Comment><![CDATA[ 4: ST185 Niederhalter Deckel links oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9205_ST185_niederhalter_deckel_links_unten</Name>
+							<Comment><![CDATA[ 5: ST185 Niederhalter Deckel links unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9206_ST185_niederhalter_deckel_rechts_oben</Name>
+							<Comment><![CDATA[ 6: ST185 Niederhalter Deckel rechts oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9207_ST185_niederhalter_deckel_rechts_unten</Name>
+							<Comment><![CDATA[ 7: ST185 Niederhalter Deckel rechts unten]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 					</Vars>
@@ -7508,317 +7929,308 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0000_12</Name>
-							<Comment><![CDATA[  q0_12: ]]></Comment>
+							<Name>IO_BOX.Q0000_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0000_14_ST130_kammer_offnen_links</Name>
-							<Comment><![CDATA[  q0_14: ST130 Kammer öffnen links]]></Comment>
+							<Name>IO_BOX.Q0000_12_ST130_kammer_offnen_links</Name>
+							<Comment><![CDATA[ ST130 Kammer öffnen links]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0001_12_</Name>
-							<Comment><![CDATA[  q1_12: ]]></Comment>
+							<Name>IO_BOX.Q0001_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0001_14_ST130_kammer_offnen_rechts</Name>
-							<Comment><![CDATA[  q1_14: ST130 Kammer öffnen rechts]]></Comment>
+							<Name>IO_BOX.Q0001_12_ST130_kammer_offnen_rechts</Name>
+							<Comment><![CDATA[ ST130 Kammer öffnen rechts]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0002_12_</Name>
-							<Comment><![CDATA[  q2_12: ]]></Comment>
+							<Name>IO_BOX.Q0002_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0002_14_ST130_kammer_nachfullen_links</Name>
-							<Comment><![CDATA[  q2_14: ST130 Kammer nachfüllen links]]></Comment>
+							<Name>IO_BOX.Q0002_12_ST130_kammer_nachfullen_links</Name>
+							<Comment><![CDATA[ ST130 Kammer nachfüllen links]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0003_12_</Name>
-							<Comment><![CDATA[  q3_12: ]]></Comment>
+							<Name>IO_BOX.Q0003_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0003_14_ST130_kammer_nachfullen_rechts</Name>
-							<Comment><![CDATA[  q3_14: ST130 Kammer nachfüllen rechts]]></Comment>
+							<Name>IO_BOX.Q0003_12_ST130_kammer_nachfullen_rechts</Name>
+							<Comment><![CDATA[ ST130 Kammer nachfüllen rechts]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0004_12_</Name>
-							<Comment><![CDATA[  q4_12: ]]></Comment>
+							<Name>IO_BOX.Q0004_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0004_14_ST130_vibrieren_kammer_aus</Name>
-							<Comment><![CDATA[  q4_14: ST130 Vibrieren Kammer links/rechts aus]]></Comment>
+							<Name>IO_BOX.Q0004_12_ST130_vibrieren_kammer_aus</Name>
+							<Comment><![CDATA[ ST130 Vibrieren Kammer links/rechts aus]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0005_12_ST130_vibrieren_kammer_ein</Name>
-							<Comment><![CDATA[  q5_12: ST130 Vibrieren Kammer links/rechts ein]]></Comment>
+							<Name>IO_BOX.Q0005_14_ST130_vibrieren_kammer_ein</Name>
+							<Comment><![CDATA[ ST130 Vibrieren Kammer links/rechts ein]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0005_14_ST130_niederhalter_patrone</Name>
-							<Comment><![CDATA[  q5_14: ST130 Niederhalter Patrone]]></Comment>
+							<Name>IO_BOX.Q0005_12_ST130_niederhalter_patrone</Name>
+							<Comment><![CDATA[ ST130 Niederhalter Patrone]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0006_12_</Name>
-							<Comment><![CDATA[  q6_12: ]]></Comment>
+							<Name>IO_BOX.Q0006_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0006_14_ST135_kammer_offnen_links</Name>
-							<Comment><![CDATA[  q6_14: ST135 Kammer öffnen links]]></Comment>
+							<Name>IO_BOX.Q0006_12_ST135_kammer_offnen_links</Name>
+							<Comment><![CDATA[ ST135 Kammer öffnen links]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0007_12_</Name>
-							<Comment><![CDATA[  q7_12: ]]></Comment>
+							<Name>IO_BOX.Q0007_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0007_14_ST135_kammer_offnen_rechts</Name>
-							<Comment><![CDATA[  q7_14: ST135 Kammer öffnen rechts]]></Comment>
+							<Name>IO_BOX.Q0007_12_ST135_kammer_offnen_rechts</Name>
+							<Comment><![CDATA[ ST135 Kammer öffnen rechts]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0008_12_</Name>
-							<Comment><![CDATA[  q8_12: ]]></Comment>
+							<Name>IO_BOX.Q0008_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0008_14_ST135_kammer_nachfullen_links</Name>
-							<Comment><![CDATA[  q8_14: ST135 Kammer nachfüllen links]]></Comment>
+							<Name>IO_BOX.Q0008_12_ST135_kammer_nachfullen_links</Name>
+							<Comment><![CDATA[ ST135 Kammer nachfüllen links]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0009_12_</Name>
-							<Comment><![CDATA[  q9_12: ]]></Comment>
+							<Name>IO_BOX.Q0009_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0009_14_ST135_kammer_nachfullen_rechts</Name>
-							<Comment><![CDATA[  q9_14: ST135 Kammer nachfüllen rechts]]></Comment>
+							<Name>IO_BOX.Q0009_12_ST135_kammer_nachfullen_rechts</Name>
+							<Comment><![CDATA[ ST135 Kammer nachfüllen rechts]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0010_12_</Name>
-							<Comment><![CDATA[ q10_12: ]]></Comment>
+							<Name>IO_BOX.Q0010_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0010_14_ST135_vibrieren_kammer_aus</Name>
-							<Comment><![CDATA[ q10_14: ST135 Vibrieren Kammer links/rechts aus]]></Comment>
+							<Name>IO_BOX.Q0010_12_ST135_vibrieren_kammer_aus</Name>
+							<Comment><![CDATA[ ST135 Vibrieren Kammer links/rechts aus]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0011_12_ST135_vibrieren_kammer_ein</Name>
-							<Comment><![CDATA[ q11_12: ST135 Vibrieren Kammer links/rechts ein]]></Comment>
+							<Name>IO_BOX.Q0011_14_ST135_vibrieren_kammer_ein</Name>
+							<Comment><![CDATA[ ST135 Vibrieren Kammer links/rechts ein]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0011_14_ST135_niederhalter_patrone</Name>
-							<Comment><![CDATA[ q11_14: ST135 Niederhalter Patrone]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0012_12_</Name>
-							<Comment><![CDATA[ q12_12:]]></Comment>
+							<Name>IO_BOX.Q0011_12</Name>
+							<Comment><![CDATA[ ST135 Niederhalter Patrone]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>IO_BOX.Q0012_14_</Name>
-							<Comment><![CDATA[ q12_14: ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0013_12_</Name>
-							<Comment><![CDATA[ q13_12:]]></Comment>
+							<Name>IO_BOX.Q0012_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>IO_BOX.Q0013_14_</Name>
-							<Comment><![CDATA[ q13_14: ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0014_12_</Name>
-							<Comment><![CDATA[ q14_12:]]></Comment>
+							<Name>IO_BOX.Q0013_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>IO_BOX.Q0014_14_</Name>
-							<Comment><![CDATA[ q14_14: ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0015_12_</Name>
-							<Comment><![CDATA[ q15_12:]]></Comment>
+							<Name>IO_BOX.Q0014_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>IO_BOX.Q0015_14_</Name>
-							<Comment><![CDATA[ q15_14: ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0100_12_</Name>
-							<Comment><![CDATA[ q0_12:]]></Comment>
+							<Name>IO_BOX.Q0015_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0100_14_ST145_vakum_greifer_links</Name>
-							<Comment><![CDATA[ q0_14: Vakumgreifer links ST145]]></Comment>
+							<Name>IO_BOX.Q0100_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0101_12_</Name>
-							<Comment><![CDATA[ q1_12: ]]></Comment>
+							<Name>IO_BOX.Q0100_12_ST145_vakum_greifer_links</Name>
+							<Comment><![CDATA[ Vakumgreifer links ST145]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0101_14_ST145_vakumgreifer_rechts</Name>
-							<Comment><![CDATA[ q1_14: Vakumgreifer rechts ST145]]></Comment>
+							<Name>IO_BOX.Q0101_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0102_12_</Name>
-							<Comment><![CDATA[ q2_12: ]]></Comment>
+							<Name>IO_BOX.Q0101_12_ST145_vakumgreifer_rechts</Name>
+							<Comment><![CDATA[ Vakumgreifer rechts ST145]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0102_14_ST150_kraftubersetzung</Name>
-							<Comment><![CDATA[ q2_14: Kraftübersetzung ST150]]></Comment>
+							<Name>IO_BOX.Q0102_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0103_12_</Name>
-							<Comment><![CDATA[ q3_12: ]]></Comment>
+							<Name>IO_BOX.Q0102_12_ST150_kraftubersetzung</Name>
+							<Comment><![CDATA[ Kraftübersetzung ST150]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0103_14_ST155_kraftubersetzung</Name>
-							<Comment><![CDATA[ q3_14: Kraftübersetzung ST155]]></Comment>
+							<Name>IO_BOX.Q0103_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0104_12_</Name>
-							<Comment><![CDATA[ q4_12: ]]></Comment>
+							<Name>IO_BOX.Q0103_12_ST155_kraftubersetzung</Name>
+							<Comment><![CDATA[ Kraftübersetzung ST155]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>IO_BOX.Q0104_14_</Name>
-							<Comment><![CDATA[ q4_14: ]]></Comment>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0105_12_</Name>
-							<Comment><![CDATA[ q5_12: ]]></Comment>
+							<Name>IO_BOX.Q0104_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>IO_BOX.Q0105_14_</Name>
-							<Comment><![CDATA[ q5_14: ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0200_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0200_14_ST160_niederhalter_links</Name>
+							<Name>IO_BOX.Q0105_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0200_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0200_12_ST160_niederhalter_links</Name>
 							<Comment><![CDATA[ ST160 Niederhalter links ST160]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0201_12_</Name>
+							<Name>IO_BOX.Q0201_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0201_14_ST160_niederhalter_rechts</Name>
+							<Name>IO_BOX.Q0201_12_ST160_niederhalter_rechts</Name>
 							<Comment><![CDATA[ ST160 Niederhalter rechts ST160]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0202_12_ST160_dichtung_pruflocker_aus</Name>
+							<Name>IO_BOX.Q0202_14_ST160_dichtung_pruflocker_aus</Name>
 							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts aus]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0202_14_ST160_dichtung_pruflocker_ein</Name>
+							<Name>IO_BOX.Q0202_12_ST160_dichtung_pruflocker_ein</Name>
 							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts ein]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0203_12_ST160_dichtung_pruflocker_aus_2</Name>
+							<Name>IO_BOX.Q0203_14_ST160_dichtung_pruflocker_aus_2</Name>
 							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts aus ???]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0203_14_ST160_dichtung_pruflocker_ein_2</Name>
+							<Name>IO_BOX.Q0203_12_ST160_dichtung_pruflocker_ein_2</Name>
 							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts ein ???]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0204_12_</Name>
+							<Name>IO_BOX.Q0204_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0204_14_ST165_niederhalter_links</Name>
+							<Name>IO_BOX.Q0204_12_ST165_niederhalter_links</Name>
 							<Comment><![CDATA[ ST165 Niederhalter links ST160]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0205_12_</Name>
+							<Name>IO_BOX.Q0205_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0205_14_ST165_niederhalter_rechts</Name>
+							<Name>IO_BOX.Q0205_12_ST165_niederhalter_rechts</Name>
 							<Comment><![CDATA[ ST165 Niederhalter rechts ST160]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0206_12_ST165_dichtung_pruflocker_aus</Name>
+							<Name>IO_BOX.Q0206_14_ST165_dichtung_pruflocker_aus</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0206_14_ST165_dichtung_pruflocker_ein</Name>
+							<Name>IO_BOX.Q0206_12_ST165_dichtung_pruflocker_ein</Name>
 							<Comment><![CDATA[ ST165 Dichtung Prüfglocker links/rechts aus]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0207_12_ST165_dichtung_pruflocker_aus_2</Name>
+							<Name>IO_BOX.Q0207_14_ST165_dichtung_pruflocker_aus_2</Name>
 							<Comment><![CDATA[ ST165 Dichtung Prüfglocker links/rechts ein]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0207_14_ST165_dichtung_pruflocker_ein_2</Name>
+							<Name>IO_BOX.Q0207_12_ST165_dichtung_pruflocker_ein_2</Name>
 							<Comment><![CDATA[ ST165 Dichtung Prüfglocker links/rechts aus ???]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0208_12_</Name>
+							<Name>IO_BOX.Q0208_14_</Name>
 							<Comment><![CDATA[ ST165 Dichtung Prüfglocker links/rechts ein ???]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0208_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0209_12_</Name>
+							<Name>IO_BOX.Q0208_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
@@ -7828,7 +8240,7 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0210_12_</Name>
+							<Name>IO_BOX.Q0209_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
@@ -7838,13 +8250,380 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0211_12_</Name>
+							<Name>IO_BOX.Q0210_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>IO_BOX.Q0211_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0211_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5200_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5200_12_ST115_greifer_links</Name>
+							<Comment><![CDATA[ Greifer links ST115]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5201_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5201_12_ST115_greifer_rechts</Name>
+							<Comment><![CDATA[ Greifer rechts ST115]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5202_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5202_12_ST120_greifer_links</Name>
+							<Comment><![CDATA[ Greifer links ST120]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5203_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5203_12_ST120_greifer_rechts</Name>
+							<Comment><![CDATA[ Greifer rechts ST120]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5204_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5204_12_ST120_schwenken_links</Name>
+							<Comment><![CDATA[ Schwenken links ST120]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5205_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5205_12_ST120_schwenken_rechts</Name>
+							<Comment><![CDATA[ Schwenken rechts ST120]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5206_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5206_12_ST125_greifer_filterhut_links</Name>
+							<Comment><![CDATA[ Greifer Filterhut links ST125]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5207_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5207_12_ST125_greifer_filterhut_rechts</Name>
+							<Comment><![CDATA[ Greifer Filterhut rechts ST125]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5208_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5208_12_ST125_handling_solerohr_links</Name>
+							<Comment><![CDATA[ Handling Solerohr links ST125]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5209_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5209_12_ST125_handling_solerohr_rechts</Name>
+							<Comment><![CDATA[ Handling Solerohr rechts ST125]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5210_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5210_12_ST125_greifer_solerohr_links</Name>
+							<Comment><![CDATA[ Greifer Solerohr links ST125]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5211_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5211_12_ST125_greifer_solerohr_rechts</Name>
+							<Comment><![CDATA[ Greifer Solerohr rechts ST125]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5212_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5212_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5213_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5213_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5214_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5214_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5215_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5215_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5300_14_</Name>
+							<Comment><![CDATA[-10203B1
+ Ventilbat. 203 B - 5 slots ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5300_12_ST175_niederhalter</Name>
+							<Comment><![CDATA[ q0: Niederhalter ST175]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5301_14_</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5301_12_ST175_kabinentur_einlaufseite</Name>
+							<Comment><![CDATA[ q1: Kabinentür Einlaufseite]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5302_14_</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5302_12_ST175_kabinentur_auflaufseite</Name>
+							<Comment><![CDATA[ q2: Kabinentür Auflaufseite]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5303_14_</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5303_12_</Name>
+							<Comment><![CDATA[ q3: ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5304_14_</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5304_12_</Name>
+							<Comment><![CDATA[ q4: ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5400_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5400_12_ST180_greifer_patrone_links</Name>
+							<Comment><![CDATA[ Greifer Patrone links ST180]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5401_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5401_12_ST180_greifer_patrone_rechts</Name>
+							<Comment><![CDATA[ Grefier Patrone rechts ST180]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5402_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5402_12_ST180_niederhalter_deckel_links</Name>
+							<Comment><![CDATA[ Niederhalter Deckel links ST180]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5403_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5403_12_ST180_Niederhalter_deckel_rechts</Name>
+							<Comment><![CDATA[ Niederhalter Deckel rechts ST180]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5404_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5404_12_ST185_greifer_patrone_links</Name>
+							<Comment><![CDATA[ Greifer Patrone links ST185]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5405_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5405_12_ST185_greifer_patrone_rechts</Name>
+							<Comment><![CDATA[ Greifer Patrone rechts ST185]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5406_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5406_12_ST185_niederhalter_deckel_links</Name>
+							<Comment><![CDATA[ Niederhalter Deckel links ST185]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5407_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5407_12_ST185_Niederhalter_deckel_rechts</Name>
+							<Comment><![CDATA[ Niederhalter Deckel rechts ST185]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5408_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5408_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5409_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5409_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5410_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5410_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5411_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5411_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8000_ST110_freigabe_wf</Name>
+							<Comment><![CDATA[ 0: Freigabe WF ST110]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8100_ST115_freigabe_wf</Name>
+							<Comment><![CDATA[ q0: Freigabe WF ST115]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8201_ST120_forderband_ein</Name>
+							<Comment><![CDATA[ q1: Förderband ein]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8203_ST120_forderband_ein</Name>
+							<Comment><![CDATA[ q3: Förderband ein]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8207_ST120_hublader_links_valve</Name>
+							<Comment><![CDATA[ q7: Hublader links 120.12]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8303_ST120_hublader_rechts_valve</Name>
+							<Comment><![CDATA[ q3: Hublader rechts 120.13]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q8400_ST125_freigabe_wf</Name>
+							<Comment><![CDATA[ q0: Freigabe WF]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 					</Vars>
