@@ -131,11 +131,9 @@ VAR_GLOBAL
     I1507_ST135_nachfullen_offnen_rechts_vor   AT %I* : BOOL; // 7: Kammer nachfüllen rechts vor
 
     //-5014
-    (* ST110 I - 4x IO *)
-    I1600_ST110_vakum_teil_in_greiffer_left  AT %I* : BOOL; // 0: Vakuumkontrolle Teil in Greifer 110.03
-    I1601_ST110_vakum_teil_in_greiffer_right AT %I* : BOOL; // 1: Vakuumkontrolle Teil in Greifer 110.04
-    I1602_                                   AT %I* : BOOL; // 2: 
-    I1603_                                   AT %I* : BOOL; // 3: 
+    (* ST145 I - 4x IO *)
+    I1600_ST145_vakum_teil_in_greiffer_left  AT %I* : BOOL; // 0: Vakuumkontrolle Teil in Greifer 145.03
+    I1601_ST145_vakum_teil_in_greiffer_right AT %I* : BOOL; // 1: Vakuumkontrolle Teil in Greifer 145.04
 
     (* IO-Link Boxen 190A8 *)
     (*******************************************************************)

@@ -210,8 +210,8 @@ fb_gripperFilterhutLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         xIN_Quit     := xIN_Quit,
                         xIN_Manu     := enState.StateMANU = enIN_State,
                         pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][1]),
-                        xIN_GS       := simu_gripperFilterhutLeft.xOUT_inGS, // TODO use sensor
-                        xIN_AS       := simu_gripperFilterhutLeft.xOUT_inAS, // TODO use sensor
+                        xIN_GS       := simu_gripperFilterhutLeft.xOUT_inGS,
+                        xIN_AS       := simu_gripperFilterhutLeft.xOUT_inAS,
                         xIN_FREE     := TRUE,
                         xINtoGS      := ST125_Pnp_e.Pnp_putTubeCap = iOUT_Step,
                         xINtoAS      :=
@@ -225,9 +225,10 @@ fb_gripperFilterhutLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                        [ST125_Cylinders_e.GreiferFilterhutLinks].toGS_wait_time));
 
-simu_gripperFilterhutLeft(xIN_Enable := CONST.USE_SIMULATION,
-                          xIN_toGS   := NOT simu_gripperFilterhutLeft.xIN_toAS,
-                          xIN_toAS   := fb_gripperFilterhutLeft.xOUT_VALVE,
+simu_gripperFilterhutLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                          xIN_inGS   := IO_BOX.I6500_ST125_greiffer_filterhut_links_geschlossen,
+                          xIN_inAS   := IO_BOX.I6501_ST125_greiffer_filterhut_links_offen,
+                          xIN_valve  := fb_gripperFilterhutLeft.xOUT_VALVE,
                           tIN_GS_ms  := 200,  //ms
                           tIN_AS_ms  := 200); //ms
 
@@ -235,8 +236,8 @@ fb_gripperFilterhutRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_
                          xIN_Quit     := xIN_Quit,
                          xIN_Manu     := enState.StateMANU = enIN_State,
                          pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][2]),
-                         xIN_GS       := simu_gripperFilterhutRight.xOUT_inGS, // TODO use sensor
-                         xIN_AS       := simu_gripperFilterhutRight.xOUT_inAS, // TODO use sensor
+                         xIN_GS       := simu_gripperFilterhutRight.xOUT_inGS,
+                         xIN_AS       := simu_gripperFilterhutRight.xOUT_inAS,
                          xIN_FREE     := TRUE,
                          xINtoGS      := ST125_Pnp_e.Pnp_putTubeCap = iOUT_Step,
                          xINtoAS      :=
@@ -250,9 +251,10 @@ fb_gripperFilterhutRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_
                          tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                         [ST125_Cylinders_e.GreiferFilterhutRechts].toGS_wait_time));
 
-simu_gripperFilterhutRight(xIN_Enable := CONST.USE_SIMULATION,
-                           xIN_toGS   := NOT simu_gripperFilterhutRight.xIN_toAS,
-                           xIN_toAS   := fb_gripperFilterhutRight.xOUT_VALVE,
+simu_gripperFilterhutRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                           xIN_inGS   := IO_BOX.I6502_ST125_greiffer_filterhut_rechts_geschlossen,
+                           xIN_inAS   := IO_BOX.I6503_ST125_greiffer_filterhut_rechts_offen,
+                           xIN_valve  := fb_gripperFilterhutRight.xOUT_VALVE,
                            tIN_GS_ms  := 200,  //ms
                            tIN_AS_ms  := 200); //ms
 
@@ -274,9 +276,10 @@ fb_handlingSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                        [ST125_Cylinders_e.HandlingSolerohrLinks].toGS_wait_time));
 
-simu_handlingSolerohrLeft(xIN_Enable := CONST.USE_SIMULATION,
-                          xIN_toGS   := NOT simu_handlingSolerohrLeft.xIN_toAS,
-                          xIN_toAS   := fb_handlingSolerohrLeft.xOUT_VALVE,
+simu_handlingSolerohrLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                          xIN_inGS   := IO_BOX.I6600_ST125_solerhor_handling_links_unten,
+                          xIN_inAS   := IO_BOX.I6601_ST125_solerhor_handling_links_oben,
+                          xIN_valve  := fb_handlingSolerohrLeft.xOUT_VALVE,
                           tIN_GS_ms  := 500,  //ms
                           tIN_AS_ms  := 500); //ms
 
@@ -284,8 +287,8 @@ fb_handlingSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_
                          xIN_Quit     := xIN_Quit,
                          xIN_Manu     := enState.StateMANU = enIN_State,
                          pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][4]),
-                         xIN_GS       := simu_handlingSolerohrRight.xOUT_inGS, // TODO use sensor
-                         xIN_AS       := simu_handlingSolerohrRight.xOUT_inAS, // TODO use sensor
+                         xIN_GS       := simu_handlingSolerohrRight.xOUT_inGS,
+                         xIN_AS       := simu_handlingSolerohrRight.xOUT_inAS,
                          xIN_FREE     := TRUE,
                          xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step,
                          xINtoAS      :=
@@ -299,9 +302,10 @@ fb_handlingSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_
                          tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                         [ST125_Cylinders_e.HandlingSolerohrRechts].toGS_wait_time));
 
-simu_handlingSolerohrRight(xIN_Enable := CONST.USE_SIMULATION,
-                           xIN_toGS   := NOT simu_handlingSolerohrRight.xIN_toAS,
-                           xIN_toAS   := fb_handlingSolerohrRight.xOUT_VALVE,
+simu_handlingSolerohrRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                           xIN_inGS   := IO_BOX.I6602_ST125_solerhor_handling_rechts_unten,
+                           xIN_inAS   := IO_BOX.I6603_ST125_solerhor_handling_rechts_oben,
+                           xIN_valve  := fb_handlingSolerohrRight.xOUT_VALVE,
                            tIN_GS_ms  := 500,  //ms
                            tIN_AS_ms  := 500); //ms
 
@@ -326,18 +330,19 @@ fb_gripperSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_St
                        tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                       [ST125_Cylinders_e.GreiferSolerohrLinks].toGS_wait_time));
 
-simu_gripperSolerohrLeft(xIN_Enable := CONST.USE_SIMULATION,
-                         xIN_toGS   := NOT simu_gripperSolerohrLeft.xIN_toAS,
-                         xIN_toAS   := fb_gripperSolerohrLeft.xOUT_VALVE,
-                         tIN_GS_ms  := 200,  //ms
-                         tIN_AS_ms  := 200); //ms
+simu_gripperSolerohrLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                         xIN_inGS   := IO_BOX.I6605_ST125_greifer_solerohr_links_offen,
+                         xIN_inAS   := IO_BOX.I6604_ST125_greifer_solerohr_links_geschlossen,
+                         xIN_valve  := fb_gripperSolerohrLeft.xOUT_VALVE,
+                         tIN_GS_ms  := 300,  //ms
+                         tIN_AS_ms  := 300); //ms
 
 fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
                         xIN_Quit     := xIN_Quit,
                         xIN_Manu     := enState.StateMANU = enIN_State,
                         pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][6]),
-                        xIN_GS       := simu_gripperSolerohrRight.xOUT_inGS, // TODO use sensor
-                        xIN_AS       := simu_gripperSolerohrRight.xOUT_inAS, // TODO use sensor
+                        xIN_GS       := simu_gripperSolerohrRight.xOUT_inGS,
+                        xIN_AS       := simu_gripperSolerohrRight.xOUT_inAS,
                         xIN_FREE     := TRUE,
                         xINtoGS      := ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step,
                         xINtoAS      := _20_AUTO.recipe.st125.xUseVerRight AND
@@ -353,11 +358,12 @@ fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                        [ST125_Cylinders_e.GreiferSolerohrRechts].toGS_wait_time));
 
-simu_gripperSolerohrRight(xIN_Enable := CONST.USE_SIMULATION,
-                          xIN_toGS   := NOT simu_gripperSolerohrRight.xIN_toAS,
-                          xIN_toAS   := fb_gripperSolerohrRight.xOUT_VALVE,
-                          tIN_GS_ms  := 200,  //ms
-                          tIN_AS_ms  := 200); //ms
+simu_gripperSolerohrRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                          xIN_inGS   := IO_BOX.I6607_ST125_greifer_solerohr_rechts_offen,
+                          xIN_inAS   := IO_BOX.I6606_ST125_greifer_solerohr_rechts_geschlossen,
+                          xIN_valve  := fb_gripperSolerohrRight.xOUT_VALVE,
+                          tIN_GS_ms  := 300,  //ms
+                          tIN_AS_ms  := 300); //ms
 
 (*******************************************************************)
 (* OUTPUTS *)

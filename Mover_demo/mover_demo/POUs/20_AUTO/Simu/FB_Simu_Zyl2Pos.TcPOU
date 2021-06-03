@@ -5,14 +5,15 @@
 FUNCTION_BLOCK FB_Simu_Zyl2Pos
 VAR_INPUT
     xIN_Enable : BOOL; // enable this FB. You should only enable this FB when you are sure to be in sumulation modes
-    xIN_toGS   : BOOL; // connect to the xIN_toGS signal of the FB_ZylMo2El_V2_1 fb
-    xIN_toAS   : BOOL; // connect to the xIN_toAS signal of the FB_ZylMo2El_V2_1 fb
+    xIN_inGS   : BOOL; // connect to the sensor inGS
+    xIN_inAS   : BOOL; // connect to the sensor inAS
+    xIN_valve  : BOOL; // connect to valve output of the simulated valve
     tIN_GS_ms  : DINT; // time in ms when GS signal should be on
     tIN_AS_ms  : DINT; // time in ms when AS signal should be on
 END_VAR
 VAR_OUTPUT
-    xOUT_inGS : BOOL; // in GS position (simulation)
-    xOUT_inAS : BOOL; // in AS position (simulation)
+    xOUT_inGS : BOOL; // in GS position 
+    xOUT_inAS : BOOL; // in AS position 
 END_VAR
 VAR
     _tick       : UDINT;
@@ -23,16 +24,19 @@ END_VAR
     <Implementation>
       <ST><![CDATA[_tick := GetTick();
 
-IF NOT xIN_toGS THEN
+IF xIN_valve THEN
     _in_gs_tick := _tick;
 END_IF
 
-IF NOT xIN_toAS THEN
+IF NOT xIN_valve THEN
     _in_as_tick := _tick;
 END_IF
 
-xOUT_inGS := xIN_Enable AND (TO_LINT(_tick - _in_gs_tick) > tIN_GS_ms);
-xOUT_inAS := xIN_Enable AND (TO_LINT(_tick - _in_as_tick) > tIN_AS_ms);
+xOUT_inGS := xIN_Enable AND (TO_LINT(_tick - _in_gs_tick) > tIN_GS_ms) OR
+             NOT xIN_Enable AND xIN_inGS;
+
+xOUT_inAS := xIN_Enable AND (TO_LINT(_tick - _in_as_tick) > tIN_AS_ms) OR
+             NOT xIN_Enable AND xIN_inAS;
 ]]></ST>
     </Implementation>
   </POU>

@@ -118,17 +118,5 @@ POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
 	xOUT_Wait		:=	_FB_ABL_xxxA.xOUT_Wait;
 	xOUT_AlarmST	:= 	xOUT_ErrFlag;	]]></ST>
     </Implementation>
-    <LineIds Name="POU_AUT_VORLAGE">
-      <LineId Id="59" Count="24" />
-      <LineId Id="156" Count="10" />
-      <LineId Id="147" Count="8" />
-      <LineId Id="116" Count="0" />
-      <LineId Id="168" Count="0" />
-      <LineId Id="172" Count="1" />
-      <LineId Id="169" Count="1" />
-      <LineId Id="174" Count="0" />
-      <LineId Id="107" Count="7" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

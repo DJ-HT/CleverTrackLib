@@ -11,8 +11,11 @@ TYPE ST125_Pnp_e :
     INIT := 100, // Initialisieren 
     Init_HomeVerticals,
     Init_VerticalsUp,
+	Init_open_solenohr_gripper,
+	Init_handling_up,
     Init_HomeHorizontals,
     Init_HorizontalsToTrack,
+	Init_check_if_pces_handled,
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
@@ -69,12 +72,27 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"Init_open_solenohr_gripper"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_handling_up"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"Init_HomeHorizontals"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_HorizontalsToTrack"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_check_if_pces_handled"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

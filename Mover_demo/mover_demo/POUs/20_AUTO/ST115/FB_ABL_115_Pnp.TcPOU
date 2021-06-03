@@ -247,7 +247,7 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
                xIN_Quit     := xIN_Quit,
                xIN_Manu     := enState.StateMANU = enIN_State,
                pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST115][1]),
-               xIN_GS       := NOT fb_gripperLeft.xIN_AS,
+               xIN_GS       := simu_gripperLeft.xOUT_inGS,
                xIN_AS       := simu_gripperLeft.xOUT_inAS,
                xIN_FREE     := TRUE,
                xINtoGS      := ST115_Pnp_e.Gripper_close = iOUT_Step,
@@ -261,9 +261,10 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
                tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
                                               [ST115_Cylinders_e.GreiferLinks].toGS_wait_time));
 
-simu_gripperLeft(xIN_Enable := CONST.USE_SIMULATION,
-                 xIN_toGS   := NOT simu_gripperLeft.xIN_toAS,
-                 xIN_toAS   := fb_gripperLeft.xOUT_VALVE,
+simu_gripperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                 xIN_inGS   := IO_BOX.I6100_ST115_greifer_links_offen,
+                 xIN_inAS   := IO_BOX.I6101_ST115_greifer_links_geschlossen,
+                 xIN_valve  := fb_gripperLeft.xOUT_VALVE,
                  tIN_GS_ms  := 200,  //ms
                  tIN_AS_ms  := 200); //ms
 
@@ -271,7 +272,7 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
                 xIN_Quit     := xIN_Quit,
                 xIN_Manu     := enState.StateMANU = enIN_State,
                 pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST115][2]),
-                xIN_GS       := NOT fb_gripperRight.xIN_AS,
+                xIN_GS       := simu_gripperRight.xOUT_inGS,
                 xIN_AS       := simu_gripperRight.xOUT_inAS,
                 xIN_FREE     := TRUE,
                 xINtoGS      := ST115_Pnp_e.Gripper_close = iOUT_Step,
@@ -285,9 +286,10 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
                 tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
                                                [ST115_Cylinders_e.GreiferRechts].toGS_wait_time));
 
-simu_gripperRight(xIN_Enable := CONST.USE_SIMULATION,
-                  xIN_toGS   := NOT simu_gripperRight.xIN_toAS,
-                  xIN_toAS   := fb_gripperRight.xOUT_VALVE,
+simu_gripperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                  xIN_inGS   := IO_BOX.I6200_ST115_greifer_rechts_offen,
+                  xIN_inAS   := IO_BOX.I6201_ST115_greifer_rechts_geschlossen,
+                  xIN_valve  := fb_gripperRight.xOUT_VALVE,
                   tIN_GS_ms  := 200,  //ms
                   tIN_AS_ms  := 200); //ms
 

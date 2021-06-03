@@ -89,6 +89,8 @@ END_VAR
 VAR CONSTANT
     BAND_SIZE_FOR_TUBE_LEFT  : INT := 3; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
     BAND_SIZE_FOR_TUBE_RIGHT : INT := 2; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
+	
+    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -121,8 +123,8 @@ fb_pivotLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
              xIN_Quit     := xIN_Quit,
              xIN_Manu     := enState.StateMANU = enIN_State,
              pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][3]),
-             xIN_GS       := simu_pivotLeft.xOUT_inGS, // TODO use sensor
-             xIN_AS       := simu_pivotLeft.xOUT_inAS, // TODO use sensor
+             xIN_GS       := simu_pivotLeft.xOUT_inGS,
+             xIN_AS       := simu_pivotLeft.xOUT_inAS,
              xIN_FREE     := xIN_PnpNotOnTheWay OR xIN_PnpGripperOpen,
              xINtoGS      := _20_AUTO.recipe.st120.xUseVerLeft AND (ST120_Feeder_e.rotate_to_pnp = iOUT_Step),
              xINtoAS      := _20_AUTO.recipe.st120.xUseVerLeft AND
@@ -137,18 +139,19 @@ fb_pivotLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
              tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
                                             [ST120_Cylinders_e.GreiferLinks].toGS_wait_time));
 
-simu_pivotLeft(xIN_Enable := CONST.USE_SIMULATION,
-               xIN_toGS   := NOT simu_pivotLeft.xIN_toAS,
-               xIN_toAS   := fb_pivotLeft.xOUT_VALVE,
-               tIN_GS_ms  := 200,  //ms
-               tIN_AS_ms  := 200); //ms
+simu_pivotLeft(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+               xIN_inGS   := IO_BOX.I6400_ST120_schwenken_links_in_vertikal,
+               xIN_inAS   := IO_BOX.I6401_ST120_schwenken_links_in_horizontal,
+               xIN_valve  := fb_pivotLeft.xOUT_VALVE,
+               tIN_GS_ms  := 500,  //ms
+               tIN_AS_ms  := 500); //ms
 
 fb_pivotRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
               xIN_Quit     := xIN_Quit,
               xIN_Manu     := enState.StateMANU = enIN_State,
               pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][4]),
-              xIN_GS       := simu_pivotRight.xOUT_inGS, // TODO use sensor
-              xIN_AS       := simu_pivotRight.xOUT_inAS, // TODO use sensor
+              xIN_GS       := simu_pivotRight.xOUT_inGS,
+              xIN_AS       := simu_pivotRight.xOUT_inAS,
               xIN_FREE     := xIN_PnpGripperOpen OR xIN_PnpNotOnTheWay,
               xINtoGS      := _20_AUTO.recipe.st120.xUseVerRight AND (ST120_Feeder_e.rotate_to_pnp = iOUT_Step),
               xINtoAS      := _20_AUTO.recipe.st120.xUseVerRight AND
@@ -163,11 +166,12 @@ fb_pivotRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
               tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
                                              [ST120_Cylinders_e.GreiferRechts].toGS_wait_time));
 
-simu_pivotRight(xIN_Enable := CONST.USE_SIMULATION,
-                xIN_toGS   := NOT simu_pivotRight.xIN_toAS,
-                xIN_toAS   := fb_pivotRight.xOUT_VALVE,
-                tIN_GS_ms  := 200,  //ms
-                tIN_AS_ms  := 200); //ms
+simu_pivotRight(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                xIN_inGS   := IO_BOX.I6402_ST120_schwenken_rechts_in_vertikal,
+                xIN_inAS   := IO_BOX.I6403_ST120_schwenken_rechts_in_horizontal,
+                xIN_valve  := fb_pivotRight.xOUT_VALVE,
+                tIN_GS_ms  := 500,  //ms
+                tIN_AS_ms  := 500); //ms
 
 fb_feederLeft(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
                             _20_AUTO.recipe.st120.xUseVerLeft,
@@ -176,7 +180,7 @@ fb_feederLeft(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enSt
               diIN_SignlFilter_ms := _20_AUTO.recipe.st120.FeederConfigLeft.InFilterDelay,
               diIN_StartDelay_ms  := _20_AUTO.recipe.st120.FeederConfigLeft.StartDelay,
               diIN_StopDelay_ms   := _20_AUTO.recipe.st120.FeederConfigLeft.StopDelay,
-              diIN_EmptyDelay_ms     := _20_AUTO.recipe.st120.FeederConfigLeft.EmptyDelay);
+              diIN_EmptyDelay_ms  := _20_AUTO.recipe.st120.FeederConfigLeft.EmptyDelay);
 
 fb_feederRight(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
                              _20_AUTO.recipe.st120.xUseVerRight,
@@ -185,7 +189,7 @@ fb_feederRight(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enS
                diIN_SignlFilter_ms := _20_AUTO.recipe.st120.FeederConfigRight.InFilterDelay,
                diIN_StartDelay_ms  := _20_AUTO.recipe.st120.FeederConfigRight.StartDelay,
                diIN_StopDelay_ms   := _20_AUTO.recipe.st120.FeederConfigRight.StopDelay,
-               diIN_EmptyDelay_ms     := _20_AUTO.recipe.st120.FeederConfigRight.EmptyDelay);
+               diIN_EmptyDelay_ms  := _20_AUTO.recipe.st120.FeederConfigRight.EmptyDelay);
 
 simu_feederLeft(xIN_Enable         := fb_feederLeft.xOUT_EnableFeeder,
                 tIN_NewPieceTime   := 500,
@@ -201,8 +205,8 @@ fb_hubladerLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
                 xIN_Quit     := xIN_Quit,
                 xIN_Manu     := enState.StateMANU = enIN_State,
                 pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][5]),
-                xIN_GS       := simu_hubladerLeft.xOUT_inGS, // TODO use sensor
-                xIN_AS       := simu_hubladerLeft.xOUT_inAS, // TODO use sensor
+                xIN_GS       := simu_hubladerLeft.xOUT_inGS,
+                xIN_AS       := simu_hubladerLeft.xOUT_inAS,
                 xIN_FREE     := TRUE,
                 xINtoGS      := fb_feederLeft.xOUT_EnableFeeder AND fb_hubladerLeft.xIN_AS,
                 xINtoAS      := fb_feederLeft.xOUT_EnableFeeder AND fb_hubladerLeft.xIN_GS,
@@ -215,18 +219,19 @@ fb_hubladerLeft(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
                 tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
                                                [ST120_Cylinders_e.HubladerLinks].toGS_wait_time));
 
-simu_hubladerLeft(xIN_Enable := CONST.USE_SIMULATION,
-                  xIN_toGS   := NOT simu_hubladerLeft.xIN_toAS,
-                  xIN_toAS   := fb_hubladerLeft.xOUT_VALVE,
-                  tIN_GS_ms  := 500,  //ms
-                  tIN_AS_ms  := 500); //ms
+simu_hubladerLeft(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                  xIN_inGS   := IO_BOX.I8204_ST120_hublader_links_unten,
+                  xIN_inAS   := IO_BOX.I8205_ST120_hublader_links_oben,
+                  xIN_valve  := fb_hubladerLeft.xOUT_VALVE,
+                  tIN_GS_ms  := 800,  //ms
+                  tIN_AS_ms  := 800); //ms
 
 fb_hubladerRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step),
                  xIN_Quit     := xIN_Quit,
                  xIN_Manu     := enState.StateMANU = enIN_State,
                  pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][6]),
-                 xIN_GS       := simu_hubladerRight.xOUT_inGS, // TODO use sensor
-                 xIN_AS       := simu_hubladerRight.xOUT_inAS, // TODO use sensor
+                 xIN_GS       := simu_hubladerRight.xOUT_inGS,
+                 xIN_AS       := simu_hubladerRight.xOUT_inAS,
                  xIN_FREE     := TRUE,
                  xINtoGS      := fb_feederRight.xOUT_EnableFeeder AND fb_hubladerRight.xIN_AS,
                  xINtoAS      := fb_feederRight.xOUT_EnableFeeder AND fb_hubladerRight.xIN_GS,
@@ -239,11 +244,12 @@ fb_hubladerRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step)
                  tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
                                                 [ST120_Cylinders_e.HubladerRechts].toGS_wait_time));
 
-simu_hubladerRight(xIN_Enable := CONST.USE_SIMULATION,
-                   xIN_toGS   := NOT simu_hubladerRight.xIN_toAS,
-                   xIN_toAS   := fb_hubladerRight.xOUT_VALVE,
-                   tIN_GS_ms  := 500,  //ms
-                   tIN_AS_ms  := 500); //ms
+simu_hubladerRight(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                   xIN_inGS   := IO_BOX.I8300_ST120_hublader_rechts_unten,
+                   xIN_inAS   := IO_BOX.I8301_ST120_hublader_rechts_oben,
+				   xIN_valve := fb_hubladerRight.xOUT_VALVE,
+                   tIN_GS_ms  := 800,  //ms
+                   tIN_AS_ms  := 800); //ms
 
 rtPutPieceLeft(CLK := simu_hubladerLeft.xOUT_inAS);
 rtPutPieceRight(CLK := simu_hubladerRight.xOUT_inAS);

@@ -200,8 +200,8 @@ fb_vakumGriperLeft(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),
                    xIN_Quit     := xIN_Quit,
                    xIN_Manu     := enState.StateMANU = enIN_State,
                    pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST145][1]),
-                   xIN_GS       := simu_vacumGriperLeft.xOUT_inGS, // TODO use sensor
-                   xIN_AS       := simu_vacumGriperLeft.xOUT_inAS, // TODO use sensor
+                   xIN_GS       := simu_vacumGriperLeft.xOUT_inGS,
+                   xIN_AS       := simu_vacumGriperLeft.xOUT_inAS,
                    xIN_FREE     := TRUE,
                    xINtoGS      := ST145_Pnp_e.Vacum_off = iOUT_Step,
                    xINtoAS      := _20_AUTO.recipe.st145.xUseVerLeft AND ST145_Pnp_e.Vacum_on = iOUT_Step,
@@ -214,18 +214,19 @@ fb_vakumGriperLeft(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),
                    tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST145]
                                                   [ST145_Cylinders_e.VakuumgreiferLinks].toGS_wait_time));
 
-simu_vacumGriperLeft(xIN_Enable := CONST.USE_SIMULATION,
-                     xIN_toGS   := NOT simu_vacumGriperLeft.xIN_toAS,
-                     xIN_toAS   := fb_vakumGriperLeft.xOUT_VALVE,
-                     tIN_GS_ms  := 500,  //ms
-                     tIN_AS_ms  := 500); //ms
+simu_vacumGriperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                     xIN_inGS   := NOT IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left,
+                     xIN_inAS   := IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left,
+                     xIN_valve  := fb_vakumGriperLeft.xOUT_VALVE,
+                     tIN_GS_ms  := 0,    //ms
+                     tIN_AS_ms  := 200); //ms
 
 fb_vakumGriperRight(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),
                     xIN_Quit     := xIN_Quit,
                     xIN_Manu     := enState.StateMANU = enIN_State,
                     pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST145][2]),
-                    xIN_GS       := simu_vacumGriperRight.xOUT_inGS, // TODO use sensor
-                    xIN_AS       := simu_vacumGriperRight.xOUT_inAS, // TODO use sensor
+                    xIN_GS       := simu_vacumGriperRight.xOUT_inGS,
+                    xIN_AS       := simu_vacumGriperRight.xOUT_inAS,
                     xIN_FREE     := TRUE,
                     xINtoGS      := ST145_Pnp_e.Vacum_off = iOUT_Step,
                     xINtoAS      := _20_AUTO.recipe.st145.xUseVerRight AND ST145_Pnp_e.Vacum_on = iOUT_Step,
@@ -238,11 +239,12 @@ fb_vakumGriperRight(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step)
                     tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST145]
                                                    [ST145_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
-simu_vacumGriperRight(xIN_Enable := CONST.USE_SIMULATION,
-                      xIN_toGS   := NOT simu_vacumGriperRight.xIN_toAS,
-                      xIN_toAS   := fb_vakumGriperRight.xOUT_VALVE,
-                      tIN_GS_ms  := 500,  //ms
-                      tIN_AS_ms  := 500); //ms
+simu_vacumGriperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                      xIN_inGS   := NOT IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right,
+                      xIN_inAS   := IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right,
+                      xIN_valve  := fb_vakumGriperRight.xOUT_VALVE,
+                      tIN_GS_ms  := 0,    //ms
+                      tIN_AS_ms  := 200); //ms
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -346,7 +348,28 @@ ST145_Pnp_e.Init_HomeHorizontals:
 
 ST145_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.GS).xOUT_InPos THEN
+        iOUT_Step := ST145_Pnp_e.Init_check_if_pces_handled;
+    END_IF
+
+ST145_Pnp_e.Init_check_if_pces_handled:
+    (* Karnaugh table gives us the folowing result :
+	 * Pl = Piece left, Pr = Piece right, Ul = Use left, Ur = Use right
+	 * Go to wait mover state = S = ((Ul AND Pl) XOR (Ur AND Pr)) OR (Ul AND Pl AND Ur AND Pr)
+	 * Go to ready state = R = NOT Pl AND NOT Pr
+	 * Go to error state for all the possibilities left
+	 *)
+    IF ((_20_AUTO.recipe.st145.xUseVerLeft AND IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left) XOR
+       (_20_AUTO.recipe.st145.xUseVerRight AND IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right)) OR
+       ((_20_AUTO.recipe.st145.xUseVerLeft AND IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left) AND
+       (_20_AUTO.recipe.st145.xUseVerRight AND IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right)) THEN
+        iOUT_Step := ST145_Pnp_e.waitOnMover;
+
+    ELSIF NOT IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left AND
+          NOT IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right THEN
         iOUT_Step := ST145_Pnp_e.READY;
+
+    ELSE
+        iOUT_Step := ST145_Pnp_e.ERROR;
     END_IF
 
 (***** READY / INIT DONE *****)
