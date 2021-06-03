@@ -3,99 +3,69 @@
   <GVL Name="OUT" Id="{34e7e6b5-dae5-49d5-beec-62d6ab1eb96d}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
-(*******************************************************************)
-(* AUSGÄNGE *)
-(*******************************************************************)
-	(* Modul *)	
-	//-EL#
-//	Q000_LAMP_NRJ		AT %QX0.0		:	BOOL;			//Lampe Energie
-//	Q001_TuerVer		AT %QX0.1		:	BOOL;			//Türen verriegelt
-//	Q002_				AT %QX0.2		:	BOOL;			//
-//	Q003_				AT %QX0.3		:	BOOL;			//Reserve
-//	Q004_WF_FG			AT %QX0.4		:	BOOL;			//ST01 Freigabe WF 
-//	Q005_				AT %QX0.5		:	BOOL;			//Reserve
-//	Q006_				AT %QX0.6		:	BOOL;			//
-//	Q007_				AT %QX0.7		:	BOOL;			//
-//	
-//	Q010_				AT %QX1.0		:	BOOL;			//
-//	Q011_				AT %QX1.1		:	BOOL;			//
-//	Q012_				AT %QX1.2		:	BOOL;			//Reserve
-//	Q013_				AT %QX1.3		:	BOOL;			//Reserve
-//	Q014_				AT %QX1.4		:	BOOL;			//Reserve
-//	Q015_				AT %QX1.5		:	BOOL;			//Reserve
-//	Q016_				AT %QX1.6		:	BOOL;			//Reserve
-//	Q017_				AT %QX1.7		:	BOOL;			//Reserve
-//			
-//
-//	(* IO-Link  *)
-//(*******************************************************************)
-//	(* Lampe *)
-//	QW194A3				AT%Q*			:	WORD;			//Signallampe1
-//	QW194A6				AT%Q*			: 	WORD;			//Signallampe2
-//	
-//	Q194A3_SycStart		AT %Q*			:	BOOL;			//Syscstart 194A3
-//	Q194A6_SycStart		AT %Q*			:	BOOL;			//Syscstart 194A6	
-//	Q194A3_SycImp		AT %Q*			:	BOOL;			//SyscImp 194A3
-//	Q194A6_SycImp		AT %Q*			:	BOOL;			//SyscImp 194A6		
-//	
-//	(* Boxen *)
-//	(*Beispiel 	ST01 Stopper Mono, Greifer Mono, Vereinzelung Bi,
-//				ST02 Stopper Mono, Indexierer Mono, Presse Mono
-//	*)
-//	Q101_01_AS			AT	%QX2000.0	:	BOOL;			//101.01 Stopper
-//	Q200A1_1_12			AT	%QX2000.1	:	BOOL;			//
-//	Q101_02_AS			AT	%QX2000.2	:	BOOL;			//101.02 Greifer
-//	Q200A1_2_12			AT	%QX2000.3	:	BOOL;			//
-//	Q101_03_AS			AT	%QX2000.4	:	BOOL;			//101.03 Vereinzelung AS
-//	Q101_03_GS			AT	%QX2000.5	:	BOOL;			//101.03 Vereinzelung GS
-//	Q102_01_AS			AT	%QX2000.6	:	BOOL;			//102.01 Stopper
-//	Q200A1_4_12			AT	%QX2000.7	:	BOOL;			//
-//	Q102_02_AS			AT	%QX2000.8	:	BOOL;			//102.02 Indexieren
-//	Q200A1_5_12			AT	%QX2000.9	:	BOOL;			//
-//	Q102_03_AS			AT	%QX2000.10	:	BOOL;			//102.03 Pressen
-//	Q200A1_6_12			AT	%QX2000.11	:	BOOL;			//
-//	Q200A1_7_14			AT	%QX2000.12	:	BOOL;			//
-//	Q200A1_7_12			AT	%QX2000.13	:	BOOL;			//
-//	Q200A1_8_14			AT	%QX2000.14	:	BOOL;			//
-//	Q200A1_8_12			AT	%QX2000.15	:	BOOL;			//
-//(*	QW200A1				AT	%QB2000		:	WORD;			//IO-Link 8er VENTILBLOCK 
-//	Q200A1_1_14			AT	%QX2000.0	:	BOOL;			//
-//	Q200A1_1_12			AT	%QX2000.1	:	BOOL;			//
-//	Q200A1_2_14			AT	%QX2000.2	:	BOOL;			//
-//	Q200A1_2_12			AT	%QX2000.3	:	BOOL;			//
-//	Q200A1_3_14			AT	%QX2000.4	:	BOOL;			//
-//	Q200A1_3_12			AT	%QX2000.5	:	BOOL;			//
-//	Q200A1_4_14			AT	%QX2000.6	:	BOOL;			//
-//	Q200A1_4_12			AT	%QX2000.7	:	BOOL;			//
-//	Q200A1_5_14			AT	%QX2000.8	:	BOOL;			//
-//	Q200A1_5_12			AT	%QX2000.9	:	BOOL;			//
-//	Q200A1_6_14			AT	%QX2000.10	:	BOOL;			//
-//	Q200A1_6_12			AT	%QX2000.11	:	BOOL;			//
-//	Q200A1_7_14			AT	%QX2000.12	:	BOOL;			//
-//	Q200A1_7_12			AT	%QX2000.13	:	BOOL;			//
-//	Q200A1_8_14			AT	%QX2000.14	:	BOOL;			//
-//	Q200A1_8_12			AT	%QX2000.15	:	BOOL;			//
-//*)	
-//	QW200A2				AT	%QB2002		:	WORD;			//IO-Link 8er VENTILBLOCK 
-//	Q200A2_1_14			AT	%QX2002.0	:	BOOL;			//
-//	Q200A2_1_12			AT	%QX2002.1	:	BOOL;			//
-//	Q200A2_2_14			AT	%QX2002.2	:	BOOL;			//
-//	Q200A2_2_12			AT	%QX2002.3	:	BOOL;			//
-//	Q200A2_3_14			AT	%QX2002.4	:	BOOL;			//
-//	Q200A2_3_12			AT	%QX2002.5	:	BOOL;			//
-//	Q200A2_4_14			AT	%QX2002.6	:	BOOL;			//
-//	Q200A2_4_12			AT	%QX2002.7	:	BOOL;			//
-//	Q200A2_5_14			AT	%QX2002.8	:	BOOL;			//
-//	Q200A2_5_12			AT	%QX2002.9	:	BOOL;			//
-//	Q200A2_6_14			AT	%QX2002.10	:	BOOL;			//
-//	Q200A2_6_12			AT	%QX2002.11	:	BOOL;			//
-//	Q200A2_7_14			AT	%QX2002.12	:	BOOL;			//
-//	Q200A2_7_12			AT	%QX2002.13	:	BOOL;			//
-//	Q200A2_8_14			AT	%QX2002.14	:	BOOL;			//
-//	Q200A2_8_12			AT	%QX2002.15	:	BOOL;			//
+    (*******************************************************************)
+    (* AUSGÄNGE *)
+    (*******************************************************************)
+    (* Modul *)
 
+    // 170D2
+    Q000_ AT %QX0.0 : BOOL; // 
+    Q001_ AT %QX0.1 : BOOL; // 
+    Q002_ AT %QX0.2 : BOOL; // 
+    Q003_ AT %QX0.3 : BOOL; // 
+    Q004_ AT %QX0.4 : BOOL; // 
+    Q005_ AT %QX0.5 : BOOL; // 
+    Q006_ AT %QX0.6 : BOOL; // 
+    Q007_ AT %QX0.7 : BOOL; // 
 
-	
-END_VAR]]></Declaration>
+    Q010_Sauger_LN_230_Start AT %QX1.0 : BOOL; // Sauger LN 230 Start
+    Q011_                    AT %QX1.1 : BOOL; // 
+    Q012_                    AT %QX1.2 : BOOL; // 
+    Q013_                    AT %QX1.3 : BOOL; // 
+    Q014_                    AT %QX1.4 : BOOL; // 
+    Q015_                    AT %QX1.5 : BOOL; // 
+    Q016_                    AT %QX1.6 : BOOL; // 
+    Q017_                    AT %QX1.7 : BOOL; // 
+
+    // 170D7
+    Q020_ST150_ultraschall_start      AT %QX0.0 : BOOL; // Ultraschall 150.20 Start
+    Q021_ST150_ultraschall_reset      AT %QX0.1 : BOOL; // Ultraschall 150.20 Reset
+    Q022_ST150_ultraschall_data_bit_0 AT %QX0.2 : BOOL; // Ultraschall 150.20 Data HEX1
+    Q023_ST150_ultraschall_data_bit_1 AT %QX0.3 : BOOL; // Ultraschall 150.20 Data HEX2
+    Q024_ST150_ultraschall_data_bit_2 AT %QX0.4 : BOOL; // Ultraschall 150.20 Data HEX4
+    Q025_ST150_ultraschall_data_bit_3 AT %QX0.5 : BOOL; // Ultraschall 150.20 Data HEX8
+    Q026_ST170_rfid_test_links        AT %QX0.6 : BOOL; // RFID Test links 170.20
+    Q027_ST170_rfid_test_rechts       AT %QX0.7 : BOOL; // RFID Test rechts 170.21
+
+    Q030_ST155_ultraschall_start      AT %QX1.0 : BOOL; // Ultraschall 155.20 Start    
+    Q031_ST155_ultraschall_reset      AT %QX1.1 : BOOL; // Ultraschall 155.20 Reset    
+    Q032_ST155_ultraschall_data_bit_0 AT %QX1.2 : BOOL; // Ultraschall 155.20 Data HEX1
+    Q033_ST155_ultraschall_data_bit_1 AT %QX1.3 : BOOL; // Ultraschall 155.20 Data HEX2
+    Q034_ST155_ultraschall_data_bit_2 AT %QX1.4 : BOOL; // Ultraschall 155.20 Data HEX4
+    Q035_ST155_ultraschall_data_bit_3 AT %QX1.5 : BOOL; // Ultraschall 155.20 Data HEX8
+    Q036_                             AT %QX1.6 : BOOL; // 
+    Q037_                             AT %QX1.7 : BOOL; // 
+
+    // 171D2
+    Q040_ AT %QX0.0 : BOOL; // 
+    Q041_ AT %QX0.1 : BOOL; // 
+    Q042_ AT %QX0.2 : BOOL; // 
+    Q043_ AT %QX0.3 : BOOL; // 
+    Q044_ AT %QX0.4 : BOOL; // 
+    Q045_ AT %QX0.5 : BOOL; // 
+    Q046_ AT %QX0.6 : BOOL; // 
+    Q047_ AT %QX0.7 : BOOL; // 
+
+    Q050_ AT %QX1.0 : BOOL; // 
+    Q051_ AT %QX1.1 : BOOL; // 
+    Q052_ AT %QX1.2 : BOOL; // 
+    Q053_ AT %QX1.3 : BOOL; // 
+    Q054_ AT %QX1.4 : BOOL; // 
+    Q055_ AT %QX1.5 : BOOL; // 
+    Q056_ AT %QX1.6 : BOOL; // 
+    Q057_ AT %QX1.7 : BOOL; // 
+
+END_VAR
+]]></Declaration>
   </GVL>
 </TcPlcObject>

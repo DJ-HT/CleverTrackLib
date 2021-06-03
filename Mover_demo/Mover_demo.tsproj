@@ -6262,11 +6262,11 @@ External Setpoint Generation:
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>ST115_Axis.axis115_03Z.axis.NcToPlc</Name>
+							<Name>ST115_Axis.axis115_02Z.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>ST115_Axis.axis115_02Z.axis.NcToPlc</Name>
+							<Name>ST115_Axis.axis115_03Z.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
@@ -6620,399 +6620,399 @@ External Setpoint Generation:
 					<Vars VarGrpType="1" ContextId="2" AreaNo="32">
 						<Name>Task_fileMan Inputs</Name>
 						<Var>
-							<Name>IN.IA000_</Name>
+							<Name>IN.I000_</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA001_monitor_24V</Name>
+							<Name>IN.I001_monitor_24V</Name>
 							<Comment><![CDATA[ Netzgerät Schaltschrank A Überwachung +24V]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA002_monitor_BR</Name>
+							<Name>IN.I002_monitor_BR</Name>
 							<Comment><![CDATA[ Netzgerüt B&R Überwachung +24V]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA003_lufter_safety</Name>
+							<Name>IN.I003_lufter_safety</Name>
 							<Comment><![CDATA[ Lüfter Safety ok]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA004_druckwachter_luftdruck_ok</Name>
+							<Name>IN.I004_druckwachter_luftdruck_ok</Name>
 							<Comment><![CDATA[ Druckwächter Luftdruck ok]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA005_klimagerat_ok</Name>
+							<Name>IN.I005_klimagerat_ok</Name>
 							<Comment><![CDATA[ Klimagerät ok]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA006_</Name>
+							<Name>IN.I006_</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA007_</Name>
+							<Name>IN.I007_</Name>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA010_distanzsensor_verschmutzung_140_51</Name>
+							<Name>IN.I010_distanzsensor_verschmutzung_140_51</Name>
 							<Comment><![CDATA[ Distanzsensor 140.51 Verschmutzung]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA011_distanzsensor_verschmutzung_140_52</Name>
+							<Name>IN.I011_distanzsensor_verschmutzung_140_52</Name>
 							<Comment><![CDATA[ Distanzsensor 140.52 Verschmutzung]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA012_</Name>
+							<Name>IN.I012_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA013_</Name>
+							<Name>IN.I013_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA014_</Name>
+							<Name>IN.I014_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA015_</Name>
+							<Name>IN.I015_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA016_</Name>
+							<Name>IN.I016_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA017_</Name>
+							<Name>IN.I017_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA020_ultraschall_bereit_150_20</Name>
+							<Name>IN.I020_ultraschall_bereit_150_20</Name>
 							<Comment><![CDATA[ Ultraschall 150.20 Bereit]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA021_ultraschall_fehler_150_20</Name>
+							<Name>IN.I021_ultraschall_fehler_150_20</Name>
 							<Comment><![CDATA[ Ultraschall 150.20 Fehler]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA022_ultraschall_us_on_150_20</Name>
+							<Name>IN.I022_ultraschall_us_on_150_20</Name>
 							<Comment><![CDATA[ Ultraschall 150.20 US on]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA023_ultraschall_nullpos_150_20</Name>
+							<Name>IN.I023_ultraschall_nullpos_150_20</Name>
 							<Comment><![CDATA[ Ultraschall 150.20 Nullposition]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA024_ultraschall_bereit_155_20</Name>
+							<Name>IN.I024_ultraschall_bereit_155_20</Name>
 							<Comment><![CDATA[ Ultraschall 155.20 Bereit]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA025_ultraschall_fehler_155_20</Name>
+							<Name>IN.I025_ultraschall_fehler_155_20</Name>
 							<Comment><![CDATA[ Ultraschall 155.20 Fehler]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA026_ultraschall_us_on_155_20</Name>
+							<Name>IN.I026_ultraschall_us_on_155_20</Name>
 							<Comment><![CDATA[ Ultraschall 155.20 US on]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA027_ultraschall_nullpos_155_20</Name>
+							<Name>IN.I027_ultraschall_nullpos_155_20</Name>
 							<Comment><![CDATA[ Ultraschall 155.20 Nullposifion]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA030_rfid_test_link_out1_170_20</Name>
+							<Name>IN.I030_rfid_test_link_out1_170_20</Name>
 							<Comment><![CDATA[ RFID Test links 170.20 OUT 1]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA031_rfid_test_link_out2_170_20</Name>
+							<Name>IN.I031_rfid_test_link_out2_170_20</Name>
 							<Comment><![CDATA[ RFID Test links 170.20 OUT 2]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA032_rfid_test_link_out3_170_20</Name>
+							<Name>IN.I032_rfid_test_link_out3_170_20</Name>
 							<Comment><![CDATA[ RFID Test links 170.20 OUT 3]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA033_rfid_test_link_out1_170_21</Name>
+							<Name>IN.I033_rfid_test_link_out1_170_21</Name>
 							<Comment><![CDATA[ RFID Test links 170.21 OUT 1]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA034_rfid_test_link_out2_170_21</Name>
+							<Name>IN.I034_rfid_test_link_out2_170_21</Name>
 							<Comment><![CDATA[ RFID Test links 170.21 OUT 2]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA035_rfid_test_link_out3_170_21</Name>
+							<Name>IN.I035_rfid_test_link_out3_170_21</Name>
 							<Comment><![CDATA[ RFID Test links 170.21 OUT 3]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA036_</Name>
+							<Name>IN.I036_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA037_</Name>
+							<Name>IN.I037_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA040_</Name>
+							<Name>IN.I040_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA041_</Name>
+							<Name>IN.I041_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA042_</Name>
+							<Name>IN.I042_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA043_</Name>
+							<Name>IN.I043_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA044_</Name>
+							<Name>IN.I044_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA045_</Name>
+							<Name>IN.I045_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA046_</Name>
+							<Name>IN.I046_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA047_</Name>
+							<Name>IN.I047_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA050_</Name>
+							<Name>IN.I050_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA051_</Name>
+							<Name>IN.I051_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA052_</Name>
+							<Name>IN.I052_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA053_</Name>
+							<Name>IN.I053_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA054_</Name>
+							<Name>IN.I054_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA055_</Name>
+							<Name>IN.I055_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA056_</Name>
+							<Name>IN.I056_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IA057_</Name>
+							<Name>IN.I057_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB500_laser_sammelfehler_175</Name>
+							<Name>IN.I500_laser_sammelfehler_175</Name>
 							<Comment><![CDATA[ Sauger Laser 175.21 Sammelfehler]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB501_laser_filter_voll_175</Name>
+							<Name>IN.I501_laser_filter_voll_175</Name>
 							<Comment><![CDATA[ Sauger Laser 175.21 Filter voll]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB502_laser_drehzahl_175</Name>
+							<Name>IN.I502_laser_drehzahl_175</Name>
 							<Comment><![CDATA[ Sauger Laser 175.21 Drehzahl]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB503_laser_temperatur_175</Name>
+							<Name>IN.I503_laser_temperatur_175</Name>
 							<Comment><![CDATA[ Sauger Laser 175.21 Temperatur]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB504_distanzsensor_verschmutzung_125</Name>
+							<Name>IN.I504_distanzsensor_verschmutzung_125</Name>
 							<Comment><![CDATA[ Distanzsensor 125.51 Verschmutzung]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB505_uberwachung_24V</Name>
+							<Name>IN.I505_uberwachung_24V</Name>
 							<Comment><![CDATA[ Netzgerät Schaltschrank B Überwachung +24V]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB506_klimagerat_ok</Name>
+							<Name>IN.I506_klimagerat_ok</Name>
 							<Comment><![CDATA[ Klimagerät schaltschrank B ok]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB507_entladeBand_125_alarm</Name>
+							<Name>IN.I507_entladeBand_125_alarm</Name>
 							<Comment><![CDATA[ Entladeband 185.21 Alarm]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB510_lufter_safey_ok</Name>
+							<Name>IN.I510_lufter_safey_ok</Name>
 							<Comment><![CDATA[ Lüfter Safety Schaltschrank B ok]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB511_</Name>
+							<Name>IN.I511_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB512_</Name>
+							<Name>IN.I512_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB513_</Name>
+							<Name>IN.I513_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB514_</Name>
+							<Name>IN.I514_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB515_</Name>
+							<Name>IN.I515_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB516_</Name>
+							<Name>IN.I516_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB517_</Name>
+							<Name>IN.I517_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB520_</Name>
+							<Name>IN.I520_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB521_</Name>
+							<Name>IN.I521_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB522_</Name>
+							<Name>IN.I522_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB523_</Name>
+							<Name>IN.I523_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB524_</Name>
+							<Name>IN.I524_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB525_</Name>
+							<Name>IN.I525_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB526_</Name>
+							<Name>IN.I526_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB527_</Name>
+							<Name>IN.I527_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB530_</Name>
+							<Name>IN.I530_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB531_</Name>
+							<Name>IN.I531_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB532_</Name>
+							<Name>IN.I532_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB533_</Name>
+							<Name>IN.I533_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB534_</Name>
+							<Name>IN.I534_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB535_</Name>
+							<Name>IN.I535_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB536_</Name>
+							<Name>IN.I536_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>IN.IB537_</Name>
+							<Name>IN.I537_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7841,9 +7841,254 @@ External Setpoint Generation:
 							<Comment><![CDATA[ 7: ST185 Niederhalter Deckel rechts unten]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
+						<Var>
+							<Name>IO_BOX.I9300_ST175_wegmesssensor</Name>
+							<Comment><![CDATA[ 0: Wegmesssenor ST175]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2" ContextId="2" AreaNo="33">
 						<Name>Task_fileMan Outputs</Name>
+						<Var>
+							<Name>OUT.Q000_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q020_ST150_ultraschall_start</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Start]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q040_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q041_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q021_ST150_ultraschall_reset</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Reset]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q001_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q022_ST150_ultraschall_data_bit_0</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX1]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q042_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q002_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q023_ST150_ultraschall_data_bit_1</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX2]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q003_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q043_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q044_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q004_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q045_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q005_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q025_ST150_ultraschall_data_bit_3</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX8]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q006_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q046_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q026_ST170_rfid_test_links</Name>
+							<Comment><![CDATA[ RFID Test links 170.20]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q007_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q047_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q027_ST170_rfid_test_rechts</Name>
+							<Comment><![CDATA[ RFID Test rechts 170.21]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q050_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q010_Sauger_LN_230_Start</Name>
+							<Comment><![CDATA[ Sauger LN 230 Start]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q030_ST155_ultraschall_start</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Start    ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q031_ST155_ultraschall_reset</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Reset    ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q011_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q051_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q032_ST155_ultraschall_data_bit_0</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX1]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q052_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q012_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q033_ST155_ultraschall_data_bit_1</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX2]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q053_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q013_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q054_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q034_ST155_ultraschall_data_bit_2</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX4]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q014_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q035_ST155_ultraschall_data_bit_3</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX8]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q055_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q015_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q016_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q036_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q056_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q017_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q037_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q057_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
 						<Var>
 							<Name>_02_SAFETY.xOUT_ResetES</Name>
 							<Comment><![CDATA[Reset ES]]></Comment>
@@ -7929,159 +8174,8 @@ External Setpoint Generation:
 							<Type>BYTE</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0000_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0000_12_ST130_kammer_offnen_links</Name>
-							<Comment><![CDATA[ ST130 Kammer öffnen links]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0001_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0001_12_ST130_kammer_offnen_rechts</Name>
-							<Comment><![CDATA[ ST130 Kammer öffnen rechts]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0002_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0002_12_ST130_kammer_nachfullen_links</Name>
-							<Comment><![CDATA[ ST130 Kammer nachfüllen links]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0003_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0003_12_ST130_kammer_nachfullen_rechts</Name>
-							<Comment><![CDATA[ ST130 Kammer nachfüllen rechts]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0004_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0004_12_ST130_vibrieren_kammer_aus</Name>
-							<Comment><![CDATA[ ST130 Vibrieren Kammer links/rechts aus]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0005_14_ST130_vibrieren_kammer_ein</Name>
-							<Comment><![CDATA[ ST130 Vibrieren Kammer links/rechts ein]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0005_12_ST130_niederhalter_patrone</Name>
-							<Comment><![CDATA[ ST130 Niederhalter Patrone]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0006_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0006_12_ST135_kammer_offnen_links</Name>
-							<Comment><![CDATA[ ST135 Kammer öffnen links]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0007_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0007_12_ST135_kammer_offnen_rechts</Name>
-							<Comment><![CDATA[ ST135 Kammer öffnen rechts]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0008_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0008_12_ST135_kammer_nachfullen_links</Name>
-							<Comment><![CDATA[ ST135 Kammer nachfüllen links]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0009_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0009_12_ST135_kammer_nachfullen_rechts</Name>
-							<Comment><![CDATA[ ST135 Kammer nachfüllen rechts]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0010_14_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0010_12_ST135_vibrieren_kammer_aus</Name>
-							<Comment><![CDATA[ ST135 Vibrieren Kammer links/rechts aus]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0011_14_ST135_vibrieren_kammer_ein</Name>
-							<Comment><![CDATA[ ST135 Vibrieren Kammer links/rechts ein]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0011_12</Name>
-							<Comment><![CDATA[ ST135 Niederhalter Patrone]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0012_14_</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0012_12_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0013_14_</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0013_12_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0014_14_</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0014_12_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0015_14_</Name>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q0015_12_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>IO_BOX.I0000_</Name>
+							<Comment><![CDATA[ lampe]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8090,8 +8184,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0100_12_ST145_vakum_greifer_links</Name>
-							<Comment><![CDATA[ Vakumgreifer links ST145]]></Comment>
+							<Name>IO_BOX.Q0100_12_ST130_kammer_offnen_links</Name>
+							<Comment><![CDATA[ ST130 Kammer öffnen links]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8100,8 +8194,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0101_12_ST145_vakumgreifer_rechts</Name>
-							<Comment><![CDATA[ Vakumgreifer rechts ST145]]></Comment>
+							<Name>IO_BOX.Q0101_12_ST130_kammer_offnen_rechts</Name>
+							<Comment><![CDATA[ ST130 Kammer öffnen rechts]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8110,8 +8204,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0102_12_ST150_kraftubersetzung</Name>
-							<Comment><![CDATA[ Kraftübersetzung ST150]]></Comment>
+							<Name>IO_BOX.Q0102_12_ST130_kammer_nachfullen_links</Name>
+							<Comment><![CDATA[ ST130 Kammer nachfüllen links]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8120,8 +8214,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0103_12_ST155_kraftubersetzung</Name>
-							<Comment><![CDATA[ Kraftübersetzung ST155]]></Comment>
+							<Name>IO_BOX.Q0103_12_ST130_kammer_nachfullen_rechts</Name>
+							<Comment><![CDATA[ ST130 Kammer nachfüllen rechts]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8130,17 +8224,113 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0104_12_</Name>
+							<Name>IO_BOX.Q0104_12_ST130_vibrieren_kammer_aus</Name>
+							<Comment><![CDATA[ ST130 Vibrieren Kammer links/rechts aus]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0105_14_ST130_vibrieren_kammer_ein</Name>
+							<Comment><![CDATA[ ST130 Vibrieren Kammer links/rechts ein]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0105_12_ST130_niederhalter_patrone</Name>
+							<Comment><![CDATA[ ST130 Niederhalter Patrone]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0106_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0105_14_</Name>
+							<Name>IO_BOX.Q0106_12_ST135_kammer_offnen_links</Name>
+							<Comment><![CDATA[ ST135 Kammer öffnen links]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0107_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0105_12_</Name>
+							<Name>IO_BOX.Q0107_12_ST135_kammer_offnen_rechts</Name>
+							<Comment><![CDATA[ ST135 Kammer öffnen rechts]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0108_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0108_12_ST135_kammer_nachfullen_links</Name>
+							<Comment><![CDATA[ ST135 Kammer nachfüllen links]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0109_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0109_12_ST135_kammer_nachfullen_rechts</Name>
+							<Comment><![CDATA[ ST135 Kammer nachfüllen rechts]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0110_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0110_12_ST135_vibrieren_kammer_aus</Name>
+							<Comment><![CDATA[ ST135 Vibrieren Kammer links/rechts aus]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0111_14_ST135_vibrieren_kammer_ein</Name>
+							<Comment><![CDATA[ ST135 Vibrieren Kammer links/rechts ein]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0111_12</Name>
+							<Comment><![CDATA[ ST135 Niederhalter Patrone]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0112_14_</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0112_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0113_14_</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0113_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0114_14_</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0114_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0115_14_</Name>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0115_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
@@ -8150,8 +8340,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0200_12_ST160_niederhalter_links</Name>
-							<Comment><![CDATA[ ST160 Niederhalter links ST160]]></Comment>
+							<Name>IO_BOX.Q0200_12_ST145_vakum_greifer_links</Name>
+							<Comment><![CDATA[ Vakumgreifer links ST145]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8160,28 +8350,28 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0201_12_ST160_niederhalter_rechts</Name>
-							<Comment><![CDATA[ ST160 Niederhalter rechts ST160]]></Comment>
+							<Name>IO_BOX.Q0201_12_ST145_vakumgreifer_rechts</Name>
+							<Comment><![CDATA[ Vakumgreifer rechts ST145]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0202_14_ST160_dichtung_pruflocker_aus</Name>
-							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts aus]]></Comment>
+							<Name>IO_BOX.Q0202_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0202_12_ST160_dichtung_pruflocker_ein</Name>
-							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts ein]]></Comment>
+							<Name>IO_BOX.Q0202_12_ST150_kraftubersetzung</Name>
+							<Comment><![CDATA[ Kraftübersetzung ST150]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0203_14_ST160_dichtung_pruflocker_aus_2</Name>
-							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts aus ???]]></Comment>
+							<Name>IO_BOX.Q0203_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0203_12_ST160_dichtung_pruflocker_ein_2</Name>
-							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts ein ???]]></Comment>
+							<Name>IO_BOX.Q0203_12_ST155_kraftubersetzung</Name>
+							<Comment><![CDATA[ Kraftübersetzung ST155]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8190,8 +8380,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0204_12_ST165_niederhalter_links</Name>
-							<Comment><![CDATA[ ST165 Niederhalter links ST160]]></Comment>
+							<Name>IO_BOX.Q0204_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8200,67 +8390,127 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0205_12_ST165_niederhalter_rechts</Name>
+							<Name>IO_BOX.Q0205_12_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0300_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0300_12_ST160_niederhalter_links</Name>
+							<Comment><![CDATA[ ST160 Niederhalter links ST160]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0301_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0301_12_ST160_niederhalter_rechts</Name>
+							<Comment><![CDATA[ ST160 Niederhalter rechts ST160]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0302_14_ST160_dichtung_pruflocker_aus</Name>
+							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts aus]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0302_12_ST160_dichtung_pruflocker_ein</Name>
+							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts ein]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0303_14_ST160_dichtung_pruflocker_aus_2</Name>
+							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts aus ???]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0303_12_ST160_dichtung_pruflocker_ein_2</Name>
+							<Comment><![CDATA[ ST160 Dichtung Prüfglocker links/rechts ein ???]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0304_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0304_12_ST165_niederhalter_links</Name>
+							<Comment><![CDATA[ ST165 Niederhalter links ST160]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0305_14_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q0305_12_ST165_niederhalter_rechts</Name>
 							<Comment><![CDATA[ ST165 Niederhalter rechts ST160]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0206_14_ST165_dichtung_pruflocker_aus</Name>
+							<Name>IO_BOX.Q0306_14_ST165_dichtung_pruflocker_aus</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0206_12_ST165_dichtung_pruflocker_ein</Name>
+							<Name>IO_BOX.Q0306_12_ST165_dichtung_pruflocker_ein</Name>
 							<Comment><![CDATA[ ST165 Dichtung Prüfglocker links/rechts aus]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0207_14_ST165_dichtung_pruflocker_aus_2</Name>
+							<Name>IO_BOX.Q0307_14_ST165_dichtung_pruflocker_aus_2</Name>
 							<Comment><![CDATA[ ST165 Dichtung Prüfglocker links/rechts ein]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0207_12_ST165_dichtung_pruflocker_ein_2</Name>
+							<Name>IO_BOX.Q0307_12_ST165_dichtung_pruflocker_ein_2</Name>
 							<Comment><![CDATA[ ST165 Dichtung Prüfglocker links/rechts aus ???]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0208_14_</Name>
+							<Name>IO_BOX.Q0308_14_</Name>
 							<Comment><![CDATA[ ST165 Dichtung Prüfglocker links/rechts ein ???]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0208_12_</Name>
+							<Name>IO_BOX.Q0308_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0209_14_</Name>
+							<Name>IO_BOX.Q0309_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0209_12_</Name>
+							<Name>IO_BOX.Q0309_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0210_14_</Name>
+							<Name>IO_BOX.Q0310_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0210_12_</Name>
+							<Name>IO_BOX.Q0310_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0211_14_</Name>
+							<Name>IO_BOX.Q0311_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q0211_12_</Name>
+							<Name>IO_BOX.Q0311_12_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
