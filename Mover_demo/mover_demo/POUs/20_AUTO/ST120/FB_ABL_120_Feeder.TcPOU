@@ -176,7 +176,7 @@ fb_feederLeft(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enSt
               diIN_SignlFilter_ms := _20_AUTO.recipe.st120.FeederConfigLeft.InFilterDelay,
               diIN_StartDelay_ms  := _20_AUTO.recipe.st120.FeederConfigLeft.StartDelay,
               diIN_StopDelay_ms   := _20_AUTO.recipe.st120.FeederConfigLeft.StopDelay,
-              diIN_EmptyDelay     := _20_AUTO.recipe.st120.FeederConfigLeft.EmptyDelay);
+              diIN_EmptyDelay_ms     := _20_AUTO.recipe.st120.FeederConfigLeft.EmptyDelay);
 
 fb_feederRight(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
                              _20_AUTO.recipe.st120.xUseVerRight,
@@ -185,7 +185,7 @@ fb_feederRight(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enS
                diIN_SignlFilter_ms := _20_AUTO.recipe.st120.FeederConfigRight.InFilterDelay,
                diIN_StartDelay_ms  := _20_AUTO.recipe.st120.FeederConfigRight.StartDelay,
                diIN_StopDelay_ms   := _20_AUTO.recipe.st120.FeederConfigRight.StopDelay,
-               diIN_EmptyDelay     := _20_AUTO.recipe.st120.FeederConfigRight.EmptyDelay);
+               diIN_EmptyDelay_ms     := _20_AUTO.recipe.st120.FeederConfigRight.EmptyDelay);
 
 simu_feederLeft(xIN_Enable         := fb_feederLeft.xOUT_EnableFeeder,
                 tIN_NewPieceTime   := 500,

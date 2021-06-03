@@ -80,6 +80,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -136,17 +137,20 @@ fb_axis145_01Y(enIN_State       := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               rOUT_ActPos      => st145_axis.axis145_01Y.rActPos,
-               axisIN_REF       := ST145_Axis.axis145_01Y.axis);
+               wAxisState       :=
+               fb_simu_axis145_01Y.wOUT_AxisState, // The simu fb gives the hardware state when we are not in simu
+               rOUT_ActPos => st145_axis.axis145_01Y.rActPos,
+               axisIN_REF  := ST145_Axis.axis145_01Y.axis);
 
-fb_simu_axis145_01Y(bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
+fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
                     udiIN_HomingTime_ms := 2000,
                     rIN_PosActual       := fb_axis145_01Y.rOUT_ActPos,
                     rIN_PosMax          := ST145_Axis.const145_01Y.POS_MAX,
                     rIN_PosMin          := ST145_Axis.const145_01Y.POS_MIN,
                     rIN_PixMax          := 100,
-                    rIN_PixMin          := 0,
-                    wOUT_AxisState      => fb_axis145_01Y.wAxisState);
+                    rIN_PixMin          := 0);
 
 fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_02Z],
               lrIN_CurrPos    := fb_axis145_02Z.rOUT_ActPos,

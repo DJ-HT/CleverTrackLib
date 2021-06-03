@@ -2137,12 +2137,7 @@ External Setpoint Generation:
 					<ManualSelect>{57BD9670-089D-434A-85CF-90A857EE0EFF}</ManualSelect>
 					<ManualSelect>{2752D285-16AD-4E89-AE6C-80E72784D264}</ManualSelect>
 					<ManualSelect>{8C57D0A8-BD63-4554-BAE1-E9C797EF0D0E}</ManualSelect>
-					<TargetSelect TargetId="2">{57BD9670-089D-434A-85CF-90A857EE0EFF}</TargetSelect>
-					<TargetSelect TargetId="2">{FDE02854-39A7-440C-9EAE-C234A16A3CED}</TargetSelect>
-					<TargetSelect TargetId="2">{796D380F-D49E-4C0C-A05F-500052FAC883}</TargetSelect>
-					<TargetSelect TargetId="2">{2752D285-16AD-4E89-AE6C-80E72784D264}</TargetSelect>
-					<TargetSelect TargetId="2">{8C57D0A8-BD63-4554-BAE1-E9C797EF0D0E}</TargetSelect>
-					<LicenseDevice DongleHardwareId="2" DongleDevice="#x03020002" DongleLevel="60" DongleSystemId="{FBF61D1B-ACA0-8BAB-731C-5B73B966D50A}" DongleSerialNumber="100099778"/>
+					<LicenseDevice Disabled="true" DongleHardwareId="2" DongleDevice="#x03020002" DongleLevel="60" DongleSystemId="{FBF61D1B-ACA0-8BAB-731C-5B73B966D50A}" DongleSerialNumber="100099778"/>
 				</Target>
 			</Licenses>
 			<Tasks>
@@ -5067,7 +5062,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="19" CreateSymbols="true" AxisType="1">
+				<Axis Id="19" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>Axis 19</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5212,7 +5207,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="20" CreateSymbols="true" AxisType="1">
+				<Axis Id="20" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>Axis 20</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5357,7 +5352,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="21" CreateSymbols="true" AxisType="1">
+				<Axis Id="21" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>Axis 21</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5502,7 +5497,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="22" CreateSymbols="true" AxisType="1">
+				<Axis Id="22" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>Axis 22</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5647,7 +5642,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="23" CreateSymbols="true" AxisType="1">
+				<Axis Id="23" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>Axis 23</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5792,7 +5787,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="24" CreateSymbols="true" AxisType="1">
+				<Axis Id="24" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>Axis 24</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -5937,7 +5932,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="25" CreateSymbols="true" AxisType="1">
+				<Axis Id="25" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>Axis 25</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -6082,7 +6077,7 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="26" CreateSymbols="true" AxisType="1">
+				<Axis Id="26" Disabled="true" CreateSymbols="true" AxisType="1">
 					<Name>Axis 26</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
@@ -6246,6 +6241,11 @@ External Setpoint Generation:
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
+							<Name>ST110_Axis.axis110_01Y.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
 							<Name>ST110_Axis.axis110_02Z.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
@@ -6260,6 +6260,11 @@ External Setpoint Generation:
 						<Var>
 							<Name>ST115_Axis.axis115_01Y.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST115_Axis.axis115_01Y.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
 						</Var>
 						<Var>
 							<Name>ST115_Axis.axis115_02Z.axis.NcToPlc</Name>
@@ -6278,12 +6283,22 @@ External Setpoint Generation:
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
+							<Name>ST120_Axis.axis120_01Y.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
 							<Name>ST120_Axis.axis120_02Z.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
 							<Name>ST125_Axis.axis125_01Y.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST125_Axis.axis125_01Y.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
 						</Var>
 						<Var>
 							<Name>ST125_Axis.axis125_02Z.axis.NcToPlc</Name>
@@ -6294,8 +6309,23 @@ External Setpoint Generation:
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 						</Var>
 						<Var>
+							<Name>IO_BOX.I2300_ST145_teil_in_vereinzelung</Name>
+							<Comment><![CDATA[ 0: AWK Teil in Vereinzelung (RST) ST145]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I2401_ST145_maximum_wf</Name>
+							<Comment><![CDATA[ 1: Maximum WF]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>ST145_Axis.axis145_01Y.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST145_Axis.axis145_01Y.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
 						</Var>
 						<Var>
 							<Name>ST145_Axis.axis145_02Z.axis.NcToPlc</Name>
@@ -6304,6 +6334,11 @@ External Setpoint Generation:
 						<Var>
 							<Name>ST145_Axis.axis145_10W.axis.NcToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST145_Axis.axis145_10W.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
@@ -6315,6 +6350,11 @@ External Setpoint Generation:
 						<Var>
 							<Name>ST110_Axis.axis110_01Y.axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST110_Axis.axis110_01Y.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
 							<Name>ST110_Axis.axis110_02Z.axis.PlcToNc</Name>
@@ -6333,6 +6373,11 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
+							<Name>ST115_Axis.axis115_01Y.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
 							<Name>ST115_Axis.axis115_02Z.axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
@@ -6349,12 +6394,22 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
+							<Name>ST120_Axis.axis120_01Y.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
 							<Name>ST120_Axis.axis120_02Z.axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
 							<Name>ST125_Axis.axis125_01Y.axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST125_Axis.axis125_01Y.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
 						</Var>
 						<Var>
 							<Name>ST125_Axis.axis125_02Z.axis.PlcToNc</Name>
@@ -6369,12 +6424,22 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
+							<Name>ST145_Axis.axis145_01Y.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
 							<Name>ST145_Axis.axis145_02Z.axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
 							<Name>ST145_Axis.axis145_10W.axis.PlcToNc</Name>
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST145_Axis.axis145_10W.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="8" AreaNo="4">
@@ -7161,31 +7226,6 @@ External Setpoint Generation:
 							<Type GUID="{7918C191-47AB-9E2C-CDC5-80ED611A3BC2}">CT_Track_BR_to_Tc_u</Type>
 						</Var>
 						<Var>
-							<Name>ST110_Axis.axis110_01Y.wState</Name>
-							<Comment><![CDATA[ Axis status word]]></Comment>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>ST115_Axis.axis115_01Y.wState</Name>
-							<Comment><![CDATA[ Axis status word]]></Comment>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>ST120_Axis.axis120_01Y.wState</Name>
-							<Comment><![CDATA[ Axis status word]]></Comment>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>ST125_Axis.axis125_01Y.wState</Name>
-							<Comment><![CDATA[ Axis status word]]></Comment>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
-							<Name>ST145_Axis.axis145_01Y.wState</Name>
-							<Comment><![CDATA[ Axis status word]]></Comment>
-							<Type>WORD</Type>
-						</Var>
-						<Var>
 							<Name>IO_BOX.I1000_</Name>
 							<Comment><![CDATA[ FullstandKontrolle ST130.55]]></Comment>
 							<Type>BOOL</Type>
@@ -7386,11 +7426,6 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I2300_ST145_teil_in_vereinzelung</Name>
-							<Comment><![CDATA[ 0: AWK Teil in Vereinzelung (RST) ST145]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>IO_BOX.I2301_ST150_kraftubersetzunh_zuruck</Name>
 							<Comment><![CDATA[ 1: Kraftübersetzung zurück ST150]]></Comment>
 							<Type>BOOL</Type>
@@ -7423,11 +7458,6 @@ External Setpoint Generation:
 						<Var>
 							<Name>IO_BOX.I2400_ST145_freigabe_wf</Name>
 							<Comment><![CDATA[ 0: Freigabe WF]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I2401_ST145_maximum_wf</Name>
-							<Comment><![CDATA[ 1: Maximum WF]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -7850,22 +7880,17 @@ External Setpoint Generation:
 					<Vars VarGrpType="2" ContextId="2" AreaNo="33">
 						<Name>Task_fileMan Outputs</Name>
 						<Var>
-							<Name>OUT.Q000_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q020_ST150_ultraschall_start</Name>
 							<Comment><![CDATA[ Ultraschall 150.20 Start]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q040_</Name>
+							<Name>OUT.Q000_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q041_</Name>
+							<Name>OUT.Q040_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7880,17 +7905,22 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>OUT.Q041_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q002_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
 							<Name>OUT.Q022_ST150_ultraschall_data_bit_0</Name>
 							<Comment><![CDATA[ Ultraschall 150.20 Data HEX1]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
 							<Name>OUT.Q042_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q002_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7910,6 +7940,11 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
 							<Name>OUT.Q044_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
@@ -7920,8 +7955,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
+							<Name>OUT.Q025_ST150_ultraschall_data_bit_3</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX8]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -7935,13 +7970,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q025_ST150_ultraschall_data_bit_3</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Data HEX8]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q006_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q026_ST170_rfid_test_links</Name>
+							<Comment><![CDATA[ RFID Test links 170.20]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -7950,12 +7980,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q026_ST170_rfid_test_links</Name>
-							<Comment><![CDATA[ RFID Test links 170.20]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q007_</Name>
+							<Name>OUT.Q006_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7965,13 +7990,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q027_ST170_rfid_test_rechts</Name>
-							<Comment><![CDATA[ RFID Test rechts 170.21]]></Comment>
+							<Name>OUT.Q007_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q050_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q027_ST170_rfid_test_rechts</Name>
+							<Comment><![CDATA[ RFID Test rechts 170.21]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -7985,8 +8010,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q031_ST155_ultraschall_reset</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Reset    ]]></Comment>
+							<Name>OUT.Q050_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8000,13 +8025,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q032_ST155_ultraschall_data_bit_0</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Data HEX1]]></Comment>
+							<Name>OUT.Q031_ST155_ultraschall_reset</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Reset    ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q052_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q032_ST155_ultraschall_data_bit_0</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX1]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8015,8 +8040,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q033_ST155_ultraschall_data_bit_1</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Data HEX2]]></Comment>
+							<Name>OUT.Q052_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8030,8 +8055,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q054_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q033_ST155_ultraschall_data_bit_1</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX2]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8041,6 +8066,16 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>OUT.Q014_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q054_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q015_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8055,7 +8090,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q015_</Name>
+							<Name>OUT.Q056_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8066,11 +8101,6 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>OUT.Q036_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q056_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8147,31 +8177,6 @@ External Setpoint Generation:
 						<Var>
 							<Name>gMoverAxis.Q_CT_Track_to_BR</Name>
 							<Type GUID="{6C6B7E7B-A9A2-2C68-CF9B-3F3029560B40}">CT_Track_Tc_to_BR_u</Type>
-						</Var>
-						<Var>
-							<Name>ST110_Axis.axis110_01Y.bCtrlHi</Name>
-							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>ST115_Axis.axis115_01Y.bCtrlHi</Name>
-							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>ST120_Axis.axis120_01Y.bCtrlHi</Name>
-							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>ST125_Axis.axis125_01Y.bCtrlHi</Name>
-							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
-							<Type>BYTE</Type>
-						</Var>
-						<Var>
-							<Name>ST145_Axis.axis145_01Y.bCtrlHi</Name>
-							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
-							<Type>BYTE</Type>
 						</Var>
 						<Var>
 							<Name>IO_BOX.I0000_</Name>
@@ -46830,7 +46835,7 @@ Bit1: Value smaller than Limit2]]></Comment>
 				</Box>
 				<EtherCAT DcSyncMode="3"/>
 			</Device>
-			<Device Id="5" DevType="121">
+			<Device Id="5" Disabled="true" DevType="121">
 				<Name>Device 5 (NOV-DP-RAM)</Name>
 				<AddressInfo>
 					<Pci>
@@ -46921,7 +46926,6 @@ Bit1: Value smaller than Limit2]]></Comment>
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{05000010-2001-0850-3000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
-		<MappingInfo Identifier="{BEB62F5F-65CF-C8EC-AEBE-33F3902C0C23}" Id="#x02030020"/>
 		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 19">
 			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 63 (AX5203-0000-0213)">
 				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="AT 1^Following distance"/>

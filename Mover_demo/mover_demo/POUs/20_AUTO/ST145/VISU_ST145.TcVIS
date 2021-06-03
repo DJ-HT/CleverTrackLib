@@ -1590,7 +1590,7 @@
                     </o>
                     <o>
                       <v n="Id">1999528970L</v>
-                      <v n="Value">"NOT GVL._Process9.fb_Feeder.simu_fifo.IsEmpty()"</v>
+                      <v n="Value">"NOT GVL._Process9.fb_Feeder.simu_fifo_feeder_to_rotTable.IsEmpty()"</v>
                     </o>
                     <o>
                       <v n="Id">3719097617L</v>
@@ -1806,7 +1806,7 @@
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"GVL._Process9.fb_Feeder.simu_fifo.GetLen()"</v>
+                      <v n="Value">"GVL._Process9.fb_Feeder.simu_fifo_feeder_to_rotTable.GetLen()"</v>
                     </o>
                     <o>
                       <v n="Id">2597686782L</v>
@@ -2570,10 +2570,10 @@
               <d n="FbMethods" t="CaseInsensitiveHashtable" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>7545cc56-c5ae-454a-bdb1-bba4f6fd6e53</v>
-                <v>FB_Exit</v>
-                <v>a00f44ad-d604-433e-b6f0-c6e15fa91e8c</v>
                 <v>FB_Reinit</v>
                 <v>528eb60e-6f2d-463d-940c-5df0123dc564</v>
+                <v>FB_Exit</v>
+                <v>a00f44ad-d604-433e-b6f0-c6e15fa91e8c</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{ee0cf292-866e-4a04-8577-113e09a2cacd}</v>

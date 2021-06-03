@@ -11,7 +11,7 @@ END_VAR
 VAR_GLOBAL
     axis145_01Y : AxisLinMot_t;
     axis145_02Z : AxisBeckhoff_t;
-    axis145_10W : AxisBeckhoff_t;
+    axis145_10W : AxisLinMot_t;
 END_VAR
 VAR_GLOBAL RETAIN
     // Recipe values are managed elsewhere

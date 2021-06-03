@@ -83,6 +83,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -139,16 +140,20 @@ fb_axis110_01Y(enIN_State       := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST110_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               axisIN_REF       := ST110_Axis.axis110_01Y.axis);
+               // the simu fb gives the hardware signal when not in simulation
+               wAxisState  := fb_simu_axis110_01Y.wOUT_AxisState,
+               rOUT_ActPos => ST110_Axis.axis110_01Y.rActPos,
+               axisIN_REF  := ST110_Axis.axis110_01Y.axis);
 
-fb_simu_axis110_01Y(bIN_AxisCntr        := fb_axis110_01Y.bOUT_AxisCntr,
+fb_simu_axis110_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis110_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST110_Axis.axis110_01Y.wState,
                     udiIN_HomingTime_ms := 2000,
                     rIN_PosActual       := fb_axis110_01Y.rOUT_ActPos,
                     rIN_PosMax          := ST110_Axis.const110_01Y.POS_MAX,
                     rIN_PosMin          := ST110_Axis.const110_01Y.POS_MIN,
                     rIN_PixMax          := 100,
-                    rIN_PixMin          := 0,
-                    wOUT_AxisState      => fb_axis110_01Y.wAxisState);
+                    rIN_PixMin          := 0);
 
 fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_02Z],
                lrIN_CurrPos    := fb_axis110_02Z.rOUT_ActPos,
@@ -248,13 +253,13 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                xINtoGS      := ST110_Pnp_e.Vacum_off = iOUT_Step,
                xINtoAS      := _20_AUTO.recipe.st110.xUseVerLeft AND (ST110_Pnp_e.Vacum_on = iOUT_Step),
                tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
-                                                [ST110_Cylinders_e. VakuumgreiferLinks].toAS_alarm_time),
+                                                [ST110_Cylinders_e.VakuumgreiferLinks].toAS_alarm_time),
                tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
-                                             [ST110_Cylinders_e. VakuumgreiferLinks].toGS_alarm_time),
+                                             [ST110_Cylinders_e.VakuumgreiferLinks].toGS_alarm_time),
                tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
-                                              [ST110_Cylinders_e. VakuumgreiferLinks].toAS_wait_time),
+                                              [ST110_Cylinders_e.VakuumgreiferLinks].toAS_wait_time),
                tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
-                                              [ST110_Cylinders_e. VakuumgreiferLinks].toGS_wait_time));
+                                              [ST110_Cylinders_e.VakuumgreiferLinks].toGS_wait_time));
 
 simu_gripperLeft(xIN_Enable := CONST.USE_SIMULATION,
                  xIN_toGS   := NOT simu_gripperLeft.xIN_toAS,
@@ -271,14 +276,14 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                 xIN_FREE     := TRUE,
                 xINtoGS      := ST110_Pnp_e.Vacum_off = iOUT_Step,
                 xINtoAS      := _20_AUTO.recipe.st110.xUseVerRight AND (ST110_Pnp_e.Vacum_on = iOUT_Step),
-               tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
-                                                [ST110_Cylinders_e.VakuumgreiferRechts].toAS_alarm_time),
-               tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
-                                             [ST110_Cylinders_e.VakuumgreiferRechts].toGS_alarm_time),
-               tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
-                                              [ST110_Cylinders_e.VakuumgreiferRechts].toAS_wait_time),
-               tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
-                                              [ST110_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
+                tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                                 [ST110_Cylinders_e.VakuumgreiferRechts].toAS_alarm_time),
+                tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                              [ST110_Cylinders_e.VakuumgreiferRechts].toGS_alarm_time),
+                tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                               [ST110_Cylinders_e.VakuumgreiferRechts].toAS_wait_time),
+                tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
+                                               [ST110_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
 simu_gripperRight(xIN_Enable := CONST.USE_SIMULATION,
                   xIN_toGS   := NOT simu_gripperRight.xIN_toAS,

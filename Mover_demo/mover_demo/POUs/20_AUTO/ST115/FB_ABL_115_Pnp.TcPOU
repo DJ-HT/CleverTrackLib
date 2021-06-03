@@ -83,6 +83,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -139,16 +140,20 @@ fb_axis115_01Y(enIN_State       := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               axisIN_REF       := ST115_Axis.axis115_01Y.axis);
+               // the simu fb gives the hardware signal when the simulation is disabled
+               wAxisState  := fb_simu_axis115_01Y.wOUT_AxisState,
+               rOUT_ActPos => ST115_Axis.axis115_01Y.rActPos,
+               axisIN_REF  := ST115_Axis.axis115_01Y.axis);
 
-fb_simu_axis115_01Y(bIN_AxisCntr        := fb_axis115_01Y.bOUT_AxisCntr,
+fb_simu_axis115_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis115_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST115_Axis.axis115_01Y.wState,
                     udiIN_HomingTime_ms := 2000,
                     rIN_PosActual       := fb_axis115_01Y.rOUT_ActPos,
                     rIN_PosMax          := ST115_Axis.const115_01Y.POS_MAX,
                     rIN_PosMin          := ST115_Axis.const115_01Y.POS_MIN,
                     rIN_PixMax          := 100,
-                    rIN_PixMin          := 0,
-                    wOUT_AxisState      => fb_axis115_01Y.wAxisState);
+                    rIN_PixMin          := 0);
 
 fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_02Z],
                lrIN_CurrPos    := fb_axis115_02Z.rOUT_ActPos,
@@ -382,7 +387,7 @@ ST115_Pnp_e.Init_VerticalsUp:
     END_IF
 
 ST115_Pnp_e.Init_HomeHorizontals:
-    fb_axis115_01Y.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_01Y].movesList[0].lrVelocity;
+    fb_axis115_01Y.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_01Y].defProfile.lrVelocity;
 
     IF fb_axis115_01Y.xOUT_HOMED THEN
         iOUT_Step := ST115_Pnp_e.Init_HorizontalsToTrack;

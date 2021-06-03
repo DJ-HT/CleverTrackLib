@@ -115,7 +115,7 @@ fb_feeder(xIN_Enable          := enIN_State = enState.StateAUTO OR enIN_State = 
           diIN_SignlFilter_ms := _20_AUTO.recipe.st115.FeederConfig.InFilterDelay,
           diIN_StartDelay_ms  := _20_AUTO.recipe.st115.FeederConfig.StartDelay,
           diIN_StopDelay_ms   := _20_AUTO.recipe.st115.FeederConfig.StopDelay,
-          diIN_EmptyDelay     := _20_AUTO.recipe.st115.FeederConfig.EmptyDelay);
+          diIN_EmptyDelay_ms     := _20_AUTO.recipe.st115.FeederConfig.EmptyDelay);
 
 simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder,
             tIN_NewPieceTime   := 200,
