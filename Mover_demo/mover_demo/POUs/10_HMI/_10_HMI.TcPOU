@@ -73,7 +73,7 @@ _14_STATE();
 //***********************************************************************************************)
 _FB_LAMPE(
 	enIN_State:=HMI.enState , 
-	xIN_AlarmAktiv:=  GVL._Process1.xOUT_AlarmST,
+	xIN_AlarmAktiv:=  GVL.st105_aut.xOUT_AlarmST,
 	xIN_SafetyError:=FALSE, 
 	xIN_NotAus:=FALSE,	 
 	xIN_Mel1:= , 

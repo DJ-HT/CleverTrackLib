@@ -59,7 +59,7 @@ xReset := ((enIN_State < StateREADY) AND (enIN_State <> StateINIT)) OR
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
-fb_Pnp(xIN_Reset          := HMI.btArMain[7].on,
+fb_Pnp(xIN_Reset          := xReset,
        xIN_Init           := xIN_Init,
        xIN_Quit           := xIN_Quit,
        xIN_Start          := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
@@ -74,7 +74,7 @@ fb_Pnp(xIN_Reset          := HMI.btArMain[7].on,
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := ST120_Feeder_e.wait_pce_picked = fb_Feeder.iOUT_Step);
 
-fb_Feeder(xIN_Reset       := HMI.btArMain[7].on,
+fb_Feeder(xIN_Reset       := xReset,
           xIN_Init        := xIN_Init,
           xIN_Quit        := xIN_Quit,
           xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 

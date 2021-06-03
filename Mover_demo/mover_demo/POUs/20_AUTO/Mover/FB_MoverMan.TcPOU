@@ -71,25 +71,25 @@ VAR
                                                              (8875, 1, 1)];
 
     _StationList : ARRAY[1..CONST.STATION_NUMBER] OF
-        FB_Station[(_PosList[1], GVL._Process1, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[2], GVL._Process2, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
-                   (_PosList[3], GVL._Process3, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
-                   (_PosList[4], GVL._Process4, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[5], GVL._Process5, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[6], GVL._Process6, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
-                   (_PosList[7], GVL._Process7, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[8], GVL._Process8, 0, ApproachScenario_e.DoNotWait, 0),
-                   (_PosList[9], GVL._Process9, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[10], GVL._Process10, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
-                   (_PosList[11], GVL._Process11, -500, ApproachScenario_e.WaitOnFinishedProcess, 1),
-                   (_PosList[12], GVL._Process12, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[13], GVL._Process13, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[14], GVL._Process14, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
+        FB_Station[(_PosList[1], GVL.st105_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
+                   (_PosList[2], GVL.st110_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
+                   (_PosList[3], GVL.st115_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
+                   (_PosList[4], GVL.st120_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+                   (_PosList[5], GVL.st125_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+                   (_PosList[6], GVL.st130_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
+                   (_PosList[7], GVL.st135_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
+                   (_PosList[8], GVL.st140_aut, 0, ApproachScenario_e.DoNotWait, 0),
+                   (_PosList[9], GVL.st145_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+                   (_PosList[10], GVL.st150_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
+                   (_PosList[11], GVL.st155_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 1),
+                   (_PosList[12], GVL.st160_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
+                   (_PosList[13], GVL.st165_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
+                   (_PosList[14], GVL.st170_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
                    (_PosList[15], 0, 0, ApproachScenario_e.DoNotWait, 3),
-                   (_PosList[16], GVL._Process15, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[17], GVL._Process16, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[18], GVL._Process17, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[19], GVL._Process18, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
+                   (_PosList[16], GVL.st175_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+                   (_PosList[17], GVL.st176_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
+                   (_PosList[18], GVL.st180_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
+                   (_PosList[19], GVL.st185_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
 
     _StationSet1 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,

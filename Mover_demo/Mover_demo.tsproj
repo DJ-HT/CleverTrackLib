@@ -7880,23 +7880,18 @@ External Setpoint Generation:
 					<Vars VarGrpType="2" ContextId="2" AreaNo="33">
 						<Name>Task_fileMan Outputs</Name>
 						<Var>
-							<Name>OUT.Q020_ST150_ultraschall_start</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Start]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q000_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q040_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q020_ST150_ultraschall_start</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Start]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q021_ST150_ultraschall_reset</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Reset]]></Comment>
+							<Name>OUT.Q040_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -7907,6 +7902,11 @@ External Setpoint Generation:
 						<Var>
 							<Name>OUT.Q041_</Name>
 							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q021_ST150_ultraschall_reset</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Reset]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -7940,13 +7940,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
+							<Name>OUT.Q044_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q044_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -7960,12 +7960,12 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q045_</Name>
+							<Name>OUT.Q005_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q005_</Name>
+							<Name>OUT.Q045_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7985,6 +7985,11 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>OUT.Q027_ST170_rfid_test_rechts</Name>
+							<Comment><![CDATA[ RFID Test rechts 170.21]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
 							<Name>OUT.Q047_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
@@ -7995,16 +8000,6 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q027_ST170_rfid_test_rechts</Name>
-							<Comment><![CDATA[ RFID Test rechts 170.21]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q010_Sauger_LN_230_Start</Name>
-							<Comment><![CDATA[ Sauger LN 230 Start]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q030_ST155_ultraschall_start</Name>
 							<Comment><![CDATA[ Ultraschall 155.20 Start    ]]></Comment>
 							<Type>BIT</Type>
@@ -8012,6 +8007,11 @@ External Setpoint Generation:
 						<Var>
 							<Name>OUT.Q050_</Name>
 							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q010_Sauger_LN_230_Start</Name>
+							<Comment><![CDATA[ Sauger LN 230 Start]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8030,8 +8030,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q032_ST155_ultraschall_data_bit_0</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Data HEX1]]></Comment>
+							<Name>OUT.Q052_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8040,8 +8040,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q052_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q032_ST155_ultraschall_data_bit_0</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX1]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8075,7 +8075,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q015_</Name>
+							<Name>OUT.Q055_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8085,12 +8085,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q055_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q056_</Name>
+							<Name>OUT.Q015_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8105,7 +8100,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q017_</Name>
+							<Name>OUT.Q056_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8116,6 +8111,11 @@ External Setpoint Generation:
 						</Var>
 						<Var>
 							<Name>OUT.Q057_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q017_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
