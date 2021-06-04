@@ -138,9 +138,9 @@ fb_axis120_01Y(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST120_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                // the simu fb gives the hardware signal when the simulation is disabled
-               wAxisState := fb_simu_axis120_01Y.wOUT_AxisState,
+               wAxisState  := fb_simu_axis120_01Y.wOUT_AxisState,
                rOUT_ActPos => ST120_Axis.axis120_01Y.rActPos,
-               axisIN_REF := ST120_Axis.axis120_01Y.axis);
+               axisIN_REF  := ST120_Axis.axis120_01Y.axis);
 
 fb_simu_axis120_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
                     bIN_AxisCntr        := fb_axis120_01Y.bOUT_AxisCntr,
@@ -199,8 +199,8 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
                xIN_Quit     := xIN_Quit,
                xIN_Manu     := enState.StateMANU = enIN_State,
                pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][1]),
-               xIN_GS       := simu_gripperLeft.xOUT_inGS, 
-               xIN_AS       := simu_gripperLeft.xOUT_inAS, 
+               xIN_GS       := simu_gripperLeft.xOUT_inGS,
+               xIN_AS       := simu_gripperLeft.xOUT_inAS,
                xIN_FREE     := TRUE,
                xINtoGS      := ST120_Pnp_e.Gripper_close = iOUT_Step,
                xINtoAS      := _20_AUTO.recipe.st120.xUseVerLeft AND ST120_Pnp_e.Gripper_open = iOUT_Step,
@@ -216,7 +216,7 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
 simu_gripperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                  xIN_inGS   := IO_BOX.I6300_ST120_greifer_links_geschlossen,
                  xIN_inAS   := IO_BOX.I6301_ST120_greifer_links_offen,
-				 xIN_valve := fb_gripperLeft.xOUT_VALVE,
+                 xIN_valve  := fb_gripperLeft.xOUT_VALVE,
                  tIN_GS_ms  := 200,  //ms
                  tIN_AS_ms  := 200); //ms
 
@@ -239,11 +239,11 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
                                                [ST120_Cylinders_e.GreiferRechts].toGS_wait_time));
 
 simu_gripperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                 xIN_inGS   := IO_BOX.I6302_ST120_greifer_rechts_geschlossen,
-                 xIN_inAS   := IO_BOX.I6303_ST120_greifer_rechts_offen,
-				 xIN_valve := fb_gripperRight.xOUT_VALVE,
-                 tIN_GS_ms  := 200,  //ms
-                 tIN_AS_ms  := 200); //ms
+                  xIN_inGS   := IO_BOX.I6302_ST120_greifer_rechts_geschlossen,
+                  xIN_inAS   := IO_BOX.I6303_ST120_greifer_rechts_offen,
+                  xIN_valve  := fb_gripperRight.xOUT_VALVE,
+                  tIN_GS_ms  := 200,  //ms
+                  tIN_AS_ms  := 200); //ms
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -330,11 +330,21 @@ ST120_Pnp_e.Init_HomeVerticals:
     END_IF
 
 ST120_Pnp_e.Init_VerticalsUp:
-    IF fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
-        IF fb_axis120_01Y.xOUT_READY OR fb_axis120_01Y.xOUT_HOMED THEN
-            iOUT_Step := ST120_Pnp_e.Init_HorizontalsToTrack;
-        ELSE
-            iOUT_Step := ST120_Pnp_e.Init_HomeHorizontals;
+    IF fb_gripperLeft.xIN_AS OR fb_gripperRight.xIN_AS THEN
+        IF fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.UpFull).xOUT_InPos THEN
+            IF fb_axis120_01Y.xOUT_READY OR fb_axis120_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST120_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST120_Pnp_e.Init_HomeHorizontals;
+            END_IF
+        END_IF
+    ELSE
+        IF fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
+            IF fb_axis120_01Y.xOUT_READY OR fb_axis120_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST120_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST120_Pnp_e.Init_HomeHorizontals;
+            END_IF
         END_IF
     END_IF
 
@@ -350,7 +360,7 @@ ST120_Pnp_e.Init_HorizontalsToTrack:
         iOUT_Step := ST120_Pnp_e.Init_check_if_pces_handled;
     END_IF
 
-ST120_Pnp_e.Init_check_if_pces_handled:	
+ST120_Pnp_e.Init_check_if_pces_handled:
     IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) OR
        (NOT _20_AUTO.recipe.st120.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
         // ERROR: a piece is present in an unused gripper

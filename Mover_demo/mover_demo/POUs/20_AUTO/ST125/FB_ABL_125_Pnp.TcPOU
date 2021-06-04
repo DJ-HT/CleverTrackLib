@@ -450,11 +450,21 @@ ST125_Pnp_e.Init_HomeVerticals:
     END_IF
 
 ST125_Pnp_e.Init_VerticalsUp:
-    IF fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
-        IF fb_axis125_01Y.xOUT_READY OR fb_axis125_01Y.xOUT_HOMED THEN
-            iOUT_Step := ST125_Pnp_e.Init_HorizontalsToTrack;
-        ELSE
-            iOUT_Step := ST125_Pnp_e.Init_HomeHorizontals;
+    IF fb_gripperFilterhutLeft.xIN_AS OR fb_gripperFilterhutRight.xIN_AS THEN
+        IF fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpFull).xOUT_InPos THEN
+            IF fb_axis125_01Y.xOUT_READY OR fb_axis125_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST125_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST125_Pnp_e.Init_HomeHorizontals;
+            END_IF
+        END_IF
+    ELSE
+        IF fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
+            IF fb_axis125_01Y.xOUT_READY OR fb_axis125_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST125_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST125_Pnp_e.Init_HomeHorizontals;
+            END_IF
         END_IF
     END_IF
 
@@ -469,7 +479,7 @@ ST125_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST125_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST125_Pnp_e.Init_check_if_pces_handled;
     END_IF
-	
+
 ST125_Pnp_e.Init_check_if_pces_handled:
     IF (NOT _20_AUTO.recipe.st125.xUseVerLeft AND fb_gripperFilterhutLeft.xOUT_inAS) OR
        (NOT _20_AUTO.recipe.st125.xUseVerRight AND simu_gripperFilterhutRight.xOUT_inAS) THEN

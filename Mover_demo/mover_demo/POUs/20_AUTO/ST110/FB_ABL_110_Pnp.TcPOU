@@ -379,13 +379,24 @@ ST110_Pnp_e.Init_HomeVerticals:
     END_IF
 
 ST110_Pnp_e.Init_VerticalsUp:
-    IF fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.UpEmpty).xOUT_InPos AND
-       fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
-        IF fb_axis110_01Y.xOUT_READY OR fb_axis110_01Y.xOUT_HOMED THEN
-            iOUT_Step := ST110_Pnp_e.Init_HorizontalsToTrack;
-        ELSE
-            iOUT_Step := ST110_Pnp_e.Init_HomeHorizontals;
-        END_IF
+	IF fb_gripperLeft.xIN_AS OR fb_gripperRight.xIN_AS THEN
+		IF fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.UpFull).xOUT_InPos AND
+		   fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.UpFull).xOUT_InPos THEN
+			IF fb_axis110_01Y.xOUT_READY OR fb_axis110_01Y.xOUT_HOMED THEN
+				iOUT_Step := ST110_Pnp_e.Init_HorizontalsToTrack;
+			ELSE
+				iOUT_Step := ST110_Pnp_e.Init_HomeHorizontals;
+			END_IF
+		END_IF
+	ELSE
+		IF fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.UpEmpty).xOUT_InPos AND
+		   fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
+			IF fb_axis110_01Y.xOUT_READY OR fb_axis110_01Y.xOUT_HOMED THEN
+				iOUT_Step := ST110_Pnp_e.Init_HorizontalsToTrack;
+			ELSE
+				iOUT_Step := ST110_Pnp_e.Init_HomeHorizontals;
+			END_IF
+		END_IF
     END_IF
 
 ST110_Pnp_e.Init_HomeHorizontals:
