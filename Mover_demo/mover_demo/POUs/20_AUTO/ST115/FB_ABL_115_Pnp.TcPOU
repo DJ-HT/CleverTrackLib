@@ -113,6 +113,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (* Bausteine *)
 (*******************************************************************)
 fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_01Y],
+              xIN_Init        := enIN_State = enState.StateINIT,
               lrIN_CurrPos    := fb_axis115_01Y.rOUT_ActPos,
               lrIN_Delta_mm   := 0.01,
               iIN_CurrentStep := iOUT_Step,
@@ -156,6 +157,7 @@ fb_simu_axis115_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_02Z],
+               xIN_Init        := enIN_State = enState.StateINIT,
                lrIN_CurrPos    := fb_axis115_02Z.rOUT_ActPos,
                lrIN_Delta_mm   := 0.01,
                iIN_CurrentStep := iOUT_Step,

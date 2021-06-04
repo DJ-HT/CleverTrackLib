@@ -28,6 +28,7 @@
 FUNCTION_BLOCK FB_LinearMotionMan
 VAR_INPUT
     config          : LinearMotionMan_Config_t;
+    xIN_Init        : BOOL;         // True when the machine is in initialization. This flag prevent the usage of triggers
     lrIN_CurrPos    : REAL;         // current position of the axis
     lrIN_Delta_mm   : REAL := 0.01; // the accuracy of our position. Used to rise the xOUT_InPos flag
     iIN_CurrentStep : INT  := 0;    // current step from the step machine. This flag is used to prevent multiple move inside the same step
@@ -166,7 +167,7 @@ END_CASE
 
 IF (triggerPos <= THIS^.lrIN_CurrPos) AND (THIS^.lrIN_CurrPos <= my_move.lrPosition) OR
    (triggerPos >= THIS^.lrIN_CurrPos) AND (THIS^.lrIN_CurrPos >= my_move.lrPosition) THEN
-    IsTriggerFired := TRUE;
+    IsTriggerFired := NOT THIS^.xIN_Init;
 END_IF
 ]]></ST>
       </Implementation>
