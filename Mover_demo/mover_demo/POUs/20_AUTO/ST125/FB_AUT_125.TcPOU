@@ -25,9 +25,14 @@ VAR_OUTPUT
 END_VAR
 VAR
     (* Bausteine *)
-    fb_Pnp : FB_ABL_125_Pnp;
+    fb_Pnp    : FB_ABL_125_Pnp;
     fb_Feeder : FB_ABL_125_Feeder;
-	
+
+END_VAR
+
+VAR CONSTANT
+    ROT_TABLE_FREE_MAX_Y : REAL := 200.0; // If Y and Z axis is more than this value, the feeder cannot move
+    ROT_TABLE_FREE_MAX_Z : REAL := 200.0; // If Z and Y axis is more than this value, the feeder cannot move
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -86,7 +91,10 @@ fb_Feeder(xIN_Reset       := xReset,
           enIN_State      := enIN_State,
           tIN_Timeout     := tIN_Timeout,
           pxFG_Freigabe   := ADR(xDummy),
-          xIN_PickPiece   := fb_Pnp.xOUT_PickPiece);
+          // special
+          xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
+          xIN_RotTableBlockedByPnp := (ST125_Axis.axis125_01Y.rActPos > ROT_TABLE_FREE_MAX_Y) AND
+                                      (ST125_Axis.axis125_02Z.rActPos > ROT_TABLE_FREE_MAX_Z));
 
 (*******************************************************************)
 (* Mover reset flags *)

@@ -130,7 +130,7 @@ IF rtPutPiece.Q AND NOT simu_fifo.IsFull() THEN
 END_IF
 
 IF ST115_Feeder_e.Init_simu_home_table = iOUT_Step THEN
-    fb_axis115_10W.rIN_Position := 360.0 - ST115_Axis.axis115_10W.rActPos;
+    fb_axis115_10W.rIN_Position := TO_REAL(120.0 - LMOD(ST115_Axis.axis115_10W.rActPos, 120.0));
 ELSE
     fb_axis115_10W.rIN_Position := 120.0;
 END_IF

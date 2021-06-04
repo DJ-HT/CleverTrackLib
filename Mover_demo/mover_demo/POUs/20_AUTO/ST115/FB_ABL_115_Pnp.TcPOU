@@ -194,11 +194,7 @@ fb_axis115_02Z(enIN_State     := enIN_State,
                xIN_Reset        := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
 
                // output
-               xOUT_ErrFlag =>,
-               xOUT_READY   =>,
-               xOUT_DONE    =>,
-               bOUT_Error   =>,
-               rOUT_ActPos  =>);
+               rOUT_ActPos => ST115_Axis.axis115_02Z.rActPos);
 
 fb_simu_axis115_02Z(rIN_PosActual := fb_axis115_02Z.rOUT_ActPos,
                     rIN_PosMax    := ST115_Axis.const115_02Z.POS_MAX,
@@ -237,7 +233,8 @@ fb_axis115_03Z(enIN_State     := enIN_State,
                xIN_Reset        := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                axisIN_REF       := ST115_Axis.axis115_03Z.axis,
                xIN_AX5000       := FALSE,
-               xIN_ENC_ABS      := TRUE); // TODO set accordingly
+               xIN_ENC_ABS      := TRUE,
+               rOUT_ActPos => ST115_Axis.axis115_03Z.rActPos); // TODO set accordingly
 
 fb_simu_axis115_03Z(rIN_PosActual := fb_axis115_03Z.rOUT_ActPos,
                     rIN_PosMax    := ST115_Axis.const115_03Z.POS_MAX,
