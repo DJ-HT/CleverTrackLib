@@ -199,6 +199,9 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST145_Feeder_e.DONE);
 
+// TODO add simulation constant to prevent the output to be set
+IO_BOX.Q2400_ST145_freigabe_wf := fb_feeder.xOUT_EnableFeeder; // AND SIMULATION CONSTANT
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)

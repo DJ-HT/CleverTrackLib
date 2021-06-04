@@ -174,7 +174,7 @@ VAR_GLOBAL
 
     //-5501
     (* feeder ST145 *)
-    I2400_ST145_freigabe_wf AT %I* : BOOL; // 0: Freigabe WF
+    Q2400_ST145_freigabe_wf AT %Q* : BOOL; // 0: Freigabe WF
     I2401_ST145_maximum_wf  AT %I* : BOOL; // 1: Maximum WF
 
     (* IO-Link Boxen 191A2 *)
