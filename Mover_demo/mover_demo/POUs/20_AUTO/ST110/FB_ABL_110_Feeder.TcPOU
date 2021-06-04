@@ -117,7 +117,7 @@ fb_feeder(xIN_Enable          := enIN_State = enState.StateAUTO OR enIN_State = 
           diIN_SignlFilter_ms := _20_AUTO.recipe.st110.FeederConfig.InFilterDelay,
           diIN_StartDelay_ms  := _20_AUTO.recipe.st110.FeederConfig.StartDelay,
           diIN_StopDelay_ms   := _20_AUTO.recipe.st110.FeederConfig.StopDelay,
-          diIN_EmptyDelay_ms     := _20_AUTO.recipe.st110.FeederConfig.EmptyDelay);
+          diIN_EmptyDelay_ms  := _20_AUTO.recipe.st110.FeederConfig.EmptyDelay);
 
 simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder,
             tIN_NewPieceTime   := 200,
@@ -126,6 +126,12 @@ simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder,
 
 IF rtPutPiece.Q AND NOT simu_fifo.IsFull() THEN
     simu_fifo.Put(1);
+END_IF
+
+IF ST110_Feeder_e.Init_simu_home_table = iOUT_Step THEN
+    fb_axis110_10W.rIN_Position := 360.0 - ST110_Axis.axis110_10W.rActPos;
+ELSE
+    fb_axis110_10W.rIN_Position := 120.0;
 END_IF
 
 fb_axis110_10W(enIN_State     := enIN_State,
@@ -146,21 +152,21 @@ fb_axis110_10W(enIN_State     := enIN_State,
                rIN_JogVelo    := AXIS.rTeachVelo,
                xIN_HomeExe    := ST110_Feeder_e.Init_home_table = iOUT_Step,
                xIN_HomeCalib  :=,
-               xIN_Execute    := ST110_Feeder_e.Init_set_table_pos = iOUT_Step OR
+               xIN_Execute    := ST110_Feeder_e.Init_simu_home_table = iOUT_Step OR
+                                 ST110_Feeder_e.Init_set_table_pos = iOUT_Step OR
                                  ST110_Feeder_e.load_piece = iOUT_Step,
-               xIN_Relative     := ST110_Feeder_e.load_piece = iOUT_Step,
-               rIN_Position     := TO_REAL(1 * 120.0), // always move by 120°
+               xIN_Relative     := fb_axis110_10W.xIN_Execute,
+               rIN_Position     :=, // Is set above
+               rIN_Position     :=, // Is set above
                rIN_Velocity     := TO_REAL(360.0),
                rIN_Acceleration := TO_REAL(3600.0),
                rIN_Deceleration := TO_REAL(3600.0),
                rIN_Jerk         := TO_REAL(360000.0),
                xIN_Reset        := xIN_Reset OR (ST110_Feeder_e.RESET = iOUT_Step),
-               xOUT_ErrFlag     =>,
-               xOUT_READY       =>,
-               xOUT_DONE        =>,
-               bOUT_Error       =>,
                rOUT_ActPos      =>,
                axisIN_REF       := ST110_Axis.axis110_10W.axis);
+
+ST110_Axis.axis110_10W.rActPos := LREAL_TO_REAL(ST110_Axis.axis110_10W.axis.NcToPlc.ModuloActPos);
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -226,7 +232,7 @@ ST110_Feeder_e.RESET: (* Schritt 0-99 *)
 (***** INIT *****)
 ST110_Feeder_e.INIT: (* Grundstellung ? *)
     IF CONST.USE_SIMULATION THEN
-        iOUT_Step := ST110_Feeder_e.Init_reset_search_index;
+        iOUT_Step := ST110_Feeder_e.Init_simu_home_table;
     ELSE
         iOUT_Step := ST110_Feeder_e.Init_home_table;
     END_IF;
@@ -234,7 +240,12 @@ ST110_Feeder_e.INIT: (* Grundstellung ? *)
 ST110_Feeder_e.Init_home_table:
     IF fb_axis110_10W.xOUT_DONE THEN
         iCurrentTableIndex := 0;
-        iOUT_Step          := ST110_Feeder_e.Init_set_table_pos;
+        iOUT_Step          := ST110_Feeder_e.Init_reset_search_index;
+    END_IF
+
+ST110_Feeder_e.Init_simu_home_table:
+    IF fb_axis110_10W.xOUT_DONE THEN
+        iOUT_Step := ST110_Feeder_e.Init_reset_search_index;
     END_IF
 
 ST110_Feeder_e.Init_reset_search_index:

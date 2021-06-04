@@ -134,6 +134,12 @@ IF rtPutPiece.Q AND NOT simu_fifo_feeder_to_rotTable.IsFull() THEN
     simu_fifo_feeder_to_rotTable.Put(1);
 END_IF
 
+IF ST145_Feeder_e.Init_simu_home_table = iOUT_Step THEN
+    fb_axis145_10W.rIN_Position := 360.0 - ST145_Axis.axis145_10W.rActPos;
+ELSE
+    fb_axis145_10W.rIN_Position := 120.0;
+END_IF
+
 fb_axis145_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st145_10W,
@@ -147,13 +153,13 @@ fb_axis145_10W(enIN_State     := enIN_State,
                rIN_VELOMANU   := ST145_Axis.const145_10W.VELO_MANU,
                rIN_VELOOPEN   := ST145_Axis.const145_10W.VELO_MANU / 4,
                rIN_JogInc     := AXIS.rTeachIncAxis,
-               xIN_Execute    := ST145_Feeder_e.Init_set_table_pos = iOUT_Step OR
+               xIN_Execute    := ST145_Feeder_e.Init_simu_home_table = iOUT_Step OR
+                                 ST145_Feeder_e.Init_set_table_pos = iOUT_Step OR
                                  ST145_Feeder_e.load_piece = iOUT_Step,
-               xIN_Relative := ST145_Feeder_e.Init_set_table_pos = iOUT_Step OR
-                               ST145_Feeder_e.load_piece = iOUT_Step,
+               xIN_Relative     := fb_axis145_10W.xIN_Execute,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
-               rIN_Position     := TO_REAL(1 * 120.0), // always move by 120°
+               rIN_Position     :=, // Is set above
                rIN_Velocity     := TO_REAL(360.0),
                rIN_Acceleration := TO_REAL(3600.0),
                rIN_Deceleration := TO_REAL(3600.0),
@@ -164,8 +170,10 @@ fb_axis145_10W(enIN_State     := enIN_State,
                wAxisState       := simu_axis145_10W
                    .wOUT_AxisState, // The simu fb gives us the hardware signal when we are not in simulation
                bOUT_AxisCntr => ST145_Axis.axis145_10W.bCtrlHi,
-               rOUT_ActPos   => ST145_Axis.axis145_10W.rActPos,
+               rOUT_ActPos   =>,
                axisIN_REF    := ST145_Axis.axis145_10W.axis);
+
+ST145_Axis.axis145_10W.rActPos := LREAL_TO_REAL(ST145_Axis.axis145_10W.axis.NcToPlc.ModuloActPos);
 
 simu_axis145_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
                  bIN_AxisCntr        := fb_axis145_10W.bOUT_AxisCntr,
@@ -240,7 +248,7 @@ ST145_Feeder_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST145_Feeder_e.INIT: (* Grundstellung ? *)
-    IF CONST.USE_SIMULATION THEN
+    IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
         iOUT_Step := ST145_Feeder_e.Init_home_table;
     ELSE
         iOUT_Step := ST145_Feeder_e.Init_home_table;
@@ -249,7 +257,17 @@ ST145_Feeder_e.INIT: (* Grundstellung ? *)
 ST145_Feeder_e.Init_home_table:
     IF fb_axis145_10W.xOUT_HOMED THEN
         iCurrentTableIndex := 0;
-        iOUT_Step          := ST145_Feeder_e.Init_set_table_pos;
+
+        IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST145_Feeder_e.Init_simu_home_table;
+        ELSE
+            iOUT_Step := ST145_Feeder_e.Init_set_table_pos;
+        END_IF
+    END_IF
+
+ST145_Feeder_e.Init_simu_home_table:
+    IF fb_axis145_10W.xOUT_DONE THEN
+        iOUT_Step := ST145_Feeder_e.Init_reset_search_index;
     END_IF
 
 ST145_Feeder_e.Init_reset_search_index:

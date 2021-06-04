@@ -359,12 +359,6 @@ ST145_Pnp_e.Init_HorizontalsToTrack:
     END_IF
 
 ST145_Pnp_e.Init_check_if_pces_handled:
-    (* Karnaugh table gives us the folowing result :
-	 * Pl = Piece left, Pr = Piece right, Ul = Use left, Ur = Use right
-	 * Go to wait mover state = S = ((Ul AND Pl) XOR (Ur AND Pr)) OR (Ul AND Pl AND Ur AND Pr)
-	 * Go to ready state = R = NOT Pl AND NOT Pr
-	 * Go to error state for all the possibilities left
-	 *)
     IF (NOT _20_AUTO.recipe.st145.xUseVerLeft AND fb_vakumGriperLeft.xOUT_inAS) OR
        (NOT _20_AUTO.recipe.st145.xUseVerRight AND fb_vakumGriperRight.xOUT_inAS) THEN
         // ERROR: a piece is present in an unused gripper

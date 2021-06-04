@@ -259,7 +259,7 @@ xOUT_Ready := (iOUT_Step = ST120_Pnp_e.READY);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
-xOUT_InitDone := (iOUT_Step = ST120_Pnp_e.READY);
+xOUT_InitDone := (iOUT_Step = ST120_Pnp_e.READY) OR (iOUT_Step = ST120_Pnp_e.waitOnMover);
 // Aktueller Schritt			
 iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
 sOUT_Step := TO_STRING(iOUT_Step);
@@ -347,7 +347,37 @@ ST120_Pnp_e.Init_HomeHorizontals:
 
 ST120_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST120_PnpHorPos_e.GS).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.Init_check_if_pces_handled;
+    END_IF
+
+ST120_Pnp_e.Init_check_if_pces_handled:	
+    IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) OR
+       (NOT _20_AUTO.recipe.st120.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
+        // ERROR: a piece is present in an unused gripper
+        bOUT_Error := 1;
+        iOUT_Step  := ST120_Pnp_e.ERROR;
+
+    ELSIF _20_AUTO.recipe.st120.xUseVerLeft AND
+          NOT fb_gripperLeft.xOUT_inAS AND
+          _20_AUTO.recipe.st120.xUseVerRight AND
+          fb_gripperRight.xOUT_inAS THEN
+        // ERROR:  Initialisation failed. A piece is missing in the left griper.
+        bOUT_Error := 2;
+        iOUT_Step  := ST120_Pnp_e.ERROR;
+
+    ELSIF _20_AUTO.recipe.st120.xUseVerLeft AND
+          fb_gripperLeft.xOUT_inAS AND
+          _20_AUTO.recipe.st120.xUseVerRight AND
+          NOT fb_gripperRight.xOUT_inAS THEN
+        // ERROR:  Initialisation failed. A piece is missing in the right griper.
+        bOUT_Error := 3;
+        iOUT_Step  := ST120_Pnp_e.ERROR;
+
+    ELSIF NOT fb_gripperLeft.xOUT_inAS AND NOT fb_gripperRight.xOUT_inAS THEN
         iOUT_Step := ST120_Pnp_e.READY;
+
+    ELSE
+        iOUT_Step := ST120_Pnp_e.waitOnMover;
     END_IF
 
 (***** READY / INIT DONE *****)

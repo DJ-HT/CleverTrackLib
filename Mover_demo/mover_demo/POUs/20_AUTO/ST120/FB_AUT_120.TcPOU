@@ -98,7 +98,7 @@ fb_Feeder(xIN_Reset       := xReset,
 (* OUTPUT *)
 (*******************************************************************)
 xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
-xOUT_Ready    := xOUT_InitDone;
+xOUT_Ready    := fb_Pnp.xOUT_Ready AND fb_Feeder.xOUT_Ready;
 xOUT_Done     := fb_Pnp.xOUT_Done AND fb_Feeder.xOUT_Done;
 xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
 xOUT_Wait     := fb_Pnp.xOUT_Wait OR fb_Feeder.xOUT_Wait;

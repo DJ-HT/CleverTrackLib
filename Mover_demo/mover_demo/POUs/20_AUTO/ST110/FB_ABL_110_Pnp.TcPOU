@@ -307,7 +307,7 @@ xOUT_Ready := (iOUT_Step = ST110_Pnp_e.READY);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
-xOUT_InitDone := (iOUT_Step = ST110_Pnp_e.READY);
+xOUT_InitDone := (iOUT_Step = ST110_Pnp_e.READY) OR (iOUT_Step = ST110_Pnp_e.waitOnMover);
 // Aktueller Schritt			
 iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
 sOUT_Step := TO_STRING(iOUT_Step);
@@ -402,24 +402,33 @@ ST110_Pnp_e.Init_HorizontalsToTrack:
     END_IF
 
 ST110_Pnp_e.Init_check_if_pces_handled:
-    (* Karnaugh table gives us the folowing result :
-	 * Pl = Piece left, Pr = Piece right, Ul = Use left, Ur = Use right
-	 * Go to ready state = R = NOT Pl AND NOT Pr
-	 * Go to wait mover state = S = ((Ul AND Pl) XOR (Ur AND Pr)) OR (Ul AND Pl AND Ur AND Pr)
-	 * Go to error state for all the possibilities left
-	 *)
-    IF ((_20_AUTO.recipe.st110.xUseVerLeft AND IO_BOX.I5500_ST110_vakumkontrolle_links) XOR
-       (_20_AUTO.recipe.st110.xUseVerRight AND IO_BOX.I5600_ST110_vakumkontrolle_rechts)) OR
-       ((_20_AUTO.recipe.st110.xUseVerLeft AND IO_BOX.I5500_ST110_vakumkontrolle_links) AND
-       (_20_AUTO.recipe.st110.xUseVerRight AND IO_BOX.I5600_ST110_vakumkontrolle_rechts)) THEN
-        iOUT_Step := ST110_Pnp_e.waitOnMover;
+    IF (NOT _20_AUTO.recipe.st110.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) OR
+       (NOT _20_AUTO.recipe.st110.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
+        // ERROR: a piece is present in an unused gripper
+        bOUT_Error := 1;
+        iOUT_Step  := ST110_Pnp_e.ERROR;
 
-    ELSIF NOT IO_BOX.I5500_ST110_vakumkontrolle_links AND
-          NOT IO_BOX.I5600_ST110_vakumkontrolle_rechts THEN
+    ELSIF _20_AUTO.recipe.st110.xUseVerLeft AND
+          NOT fb_gripperLeft.xOUT_inAS AND
+          _20_AUTO.recipe.st110.xUseVerRight AND
+          fb_gripperRight.xOUT_inAS THEN
+        // ERROR:  Initialisation failed. A piece is missing in the left griper.
+        bOUT_Error := 2;
+        iOUT_Step  := ST110_Pnp_e.ERROR;
+
+    ELSIF _20_AUTO.recipe.st110.xUseVerLeft AND
+          fb_gripperLeft.xOUT_inAS AND
+          _20_AUTO.recipe.st110.xUseVerRight AND
+          NOT fb_gripperRight.xOUT_inAS THEN
+        // ERROR:  Initialisation failed. A piece is missing in the right griper.
+        bOUT_Error := 3;
+        iOUT_Step  := ST110_Pnp_e.ERROR;
+
+    ELSIF NOT fb_gripperLeft.xOUT_inAS AND NOT fb_gripperRight.xOUT_inAS THEN
         iOUT_Step := ST110_Pnp_e.READY;
 
     ELSE
-        iOUT_Step := ST110_Pnp_e.ERROR;
+        iOUT_Step := ST110_Pnp_e.waitOnMover;
     END_IF
 
 (***** READY / INIT DONE *****)
