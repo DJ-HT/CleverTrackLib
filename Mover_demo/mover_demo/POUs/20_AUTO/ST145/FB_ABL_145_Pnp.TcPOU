@@ -256,11 +256,11 @@ xOUT_Busy := (iOUT_Step > ST145_Pnp_e.READY) AND (iOUT_Step < ST145_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
 xOUT_Done := (iOUT_Step = ST145_Pnp_e.DONE);
 // Process ready
-xOUT_Ready := (iOUT_Step = ST145_Pnp_e.READY);
+xOUT_Ready := (iOUT_Step = ST145_Pnp_e.READY) OR (iOUT_Step = ST145_Pnp_e.waitOnMover);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
-xOUT_InitDone := (iOUT_Step = ST145_Pnp_e.READY);
+xOUT_InitDone := (iOUT_Step = ST145_Pnp_e.READY) OR (iOUT_Step = ST145_Pnp_e.waitOnMover);
 // Aktueller Schritt			
 iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
 sOUT_Step := TO_STRING(iOUT_Step);
@@ -280,8 +280,11 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
 xOUT_PickPiece := iOUT_Step = ST145_Pnp_e.Pnp_Hor_ToTrackPos;
 
 // TODO Valve should not be set when we are in simulation !
-IO_BOX.Q0200_12_ST145_vakum_greifer_links := fb_vakumGriperLeft.xOUT_VALVE; // AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
-IO_BOX.Q0201_12_ST145_vakum_greifer_rechts := fb_vakumGriperRight.xOUT_VALVE; // AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q0200_12_ST145_vakum_greifer_links :=
+    fb_vakumGriperLeft.xOUT_VALVE; // AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q0201_12_ST145_vakum_greifer_rechts :=
+    fb_vakumGriperRight.xOUT_VALVE; // AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)
@@ -362,18 +365,33 @@ ST145_Pnp_e.Init_check_if_pces_handled:
 	 * Go to ready state = R = NOT Pl AND NOT Pr
 	 * Go to error state for all the possibilities left
 	 *)
-    IF ((_20_AUTO.recipe.st145.xUseVerLeft AND IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left) XOR
-       (_20_AUTO.recipe.st145.xUseVerRight AND IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right)) OR
-       ((_20_AUTO.recipe.st145.xUseVerLeft AND IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left) AND
-       (_20_AUTO.recipe.st145.xUseVerRight AND IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right)) THEN
-        iOUT_Step := ST145_Pnp_e.waitOnMover;
+    IF (NOT _20_AUTO.recipe.st145.xUseVerLeft AND fb_vakumGriperLeft.xOUT_inAS) OR
+       (NOT _20_AUTO.recipe.st145.xUseVerRight AND fb_vakumGriperRight.xOUT_inAS) THEN
+        // ERROR: a piece is present in an unused gripper
+        bOUT_Error := 1;
+        iOUT_Step  := ST145_Pnp_e.ERROR;
 
-    ELSIF NOT IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left AND
-          NOT IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right THEN
+    ELSIF _20_AUTO.recipe.st145.xUseVerLeft AND
+          NOT fb_vakumGriperLeft.xOUT_inAS AND
+          _20_AUTO.recipe.st145.xUseVerRight AND
+          fb_vakumGriperRight.xOUT_inAS THEN
+        // ERROR:  Initialisation failed. A piece is missing in the left griper.
+        bOUT_Error := 2;
+        iOUT_Step  := ST145_Pnp_e.ERROR;
+
+    ELSIF _20_AUTO.recipe.st145.xUseVerLeft AND
+          fb_vakumGriperLeft.xOUT_inAS AND
+          _20_AUTO.recipe.st145.xUseVerRight AND
+          NOT fb_vakumGriperRight.xOUT_inAS THEN
+        // ERROR:  Initialisation failed. A piece is missing in the right griper.
+        bOUT_Error := 3;
+        iOUT_Step  := ST145_Pnp_e.ERROR;
+
+    ELSIF NOT fb_vakumGriperLeft.xOUT_inAS AND NOT fb_vakumGriperRight.xOUT_inAS THEN
         iOUT_Step := ST145_Pnp_e.READY;
 
     ELSE
-        iOUT_Step := ST145_Pnp_e.ERROR;
+        iOUT_Step := ST145_Pnp_e.waitOnMover;
     END_IF
 
 (***** READY / INIT DONE *****)
