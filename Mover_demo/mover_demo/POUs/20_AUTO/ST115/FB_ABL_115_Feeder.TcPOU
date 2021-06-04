@@ -30,6 +30,7 @@ VAR_INPUT
     // Application specific
     xIN_PickPiece : BOOL; (* signal from the pick and place element
                              the number of picked signal depend on the recipe *)
+    xIN_RotTableBlockedByPnp : BOOL; // Is the pick and place blocking the rotary table?
 END_VAR
 VAR_OUTPUT
     (* standart Ausgänge *)
@@ -141,7 +142,7 @@ fb_axis115_10W(enIN_State     := enIN_State,
                xIN_AX5000     := TRUE,
                xIN_ENC_ABS    := TRUE,
                xIN_PARAMok    := TRUE,
-               xIN_FREE       := TRUE,
+               xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
                xIN_FREE_HOME  := TRUE,
                rIN_POSMIN     := ST115_Axis.const115_10W.POS_MIN,
                rIN_POSMAX     := ST115_Axis.const115_10W.POS_MAX,
@@ -229,10 +230,12 @@ ST115_Feeder_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST115_Feeder_e.INIT: (* Grundstellung ? *)
-    IF CONST.USE_SIMULATION THEN
-        iOUT_Step := ST115_Feeder_e.Init_simu_home_table;
-    ELSE
-        iOUT_Step := ST115_Feeder_e.Init_home_table;
+    IF NOT xIN_RotTableBlockedByPnp THEN
+        IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST115_Feeder_e.Init_simu_home_table;
+        ELSE
+            iOUT_Step := ST115_Feeder_e.Init_home_table;
+        END_IF;
     END_IF;
 
 ST115_Feeder_e.Init_home_table:
