@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST180_Recipe_t" Id="{8e9fcd5f-3905-4dfd-a4e7-2aa4158cbe79}">
+    <Declaration><![CDATA[TYPE ST180_Recipe_t : 
+STRUCT
+    xUseVerLeft  : BOOL; // Is the left vertical picker element is used
+    xUseVerRight : BOOL; // Is the right vertical picker element is used
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

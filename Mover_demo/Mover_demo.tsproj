@@ -1458,6 +1458,65 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
+			<Name GUID="{4C166DD2-16EB-C115-038B-95F24B521734}" AutoDeleteType="true">RecipeType_e</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<EnumInfo>
+				<Text><![CDATA[Smart_Mini]]></Text>
+				<Enum>0</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Smart]]></Text>
+				<Enum>1</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Blue]]></Text>
+				<Enum>2</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Smart_Kristall]]></Text>
+				<Enum>3</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Smart]]></Text>
+				<Enum>4</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Blue]]></Text>
+				<Enum>5</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Smart_Kristall]]></Text>
+				<Enum>6</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Smart_Maxi]]></Text>
+				<Enum>7</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Smart_Maxi_Kristall]]></Text>
+				<Enum>8</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[_max]]></Text>
+				<Enum>9</Enum>
+			</EnumInfo>
+			<Properties>
+				<Property>
+					<Name>textlistenumeration</Name>
+				</Property>
+				<Property>
+					<Name>qualified_only</Name>
+				</Property>
+				<Property>
+					<Name>strict</Name>
+				</Property>
+				<Property>
+					<Name>generate_implicit_init_function</Name>
+				</Property>
+			</Properties>
+		</DataType>
+		<DataType>
 			<Name GUID="{5DA65DD7-CE95-D158-4254-80D11B9071C7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..19] OF DINT</Name>
 			<BitSize>608</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000009}">DINT</BaseType>
@@ -1714,17 +1773,35 @@ External Setpoint Generation:
 			<BaseType GUID="{44774651-F31E-9E51-8062-686BAFEC5496}">ST110_Recipe_t</BaseType>
 		</DataType>
 		<DataType>
-			<Name GUID="{79418790-CE0A-33EF-0EB8-EEA4ED016619}" AutoDeleteType="true">Recipe_21_101_t</Name>
+			<Name GUID="{B04012CC-8170-90AA-00A9-AC51FC125265}" AutoDeleteType="true">ST180_Recipe_t</Name>
+			<BitSize>16</BitSize>
+			<SubItem>
+				<Name>xUseVerLeft</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<Comment><![CDATA[ Is the left vertical picker element is used]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>xUseVerRight</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<Comment><![CDATA[ Is the right vertical picker element is used]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>8</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
+			<Name GUID="{185380F3-838A-1E7C-B9DC-820704E19915}" AutoDeleteType="true">Recipe_21_101_t</Name>
 			<Comment><![CDATA[ Recipe for the 21.101 machine]]></Comment>
-			<BitSize>106624</BitSize>
+			<BitSize>145856</BitSize>
 			<SubItem>
 				<Name>linearAxis</Name>
 				<Type GUID="{848E68DE-38CF-963F-539C-6EB0B97A9985}">LinearMotionMan_Config_t</Type>
 				<ArrayInfo>
 					<LBound>0</LBound>
-					<Elements>18</Elements>
+					<Elements>27</Elements>
 				</ArrayInfo>
-				<BitSize>78336</BitSize>
+				<BitSize>117504</BitSize>
 				<BitOffs>0</BitOffs>
 			</SubItem>
 			<SubItem>
@@ -1739,7 +1816,7 @@ External Setpoint Generation:
 					<Elements>11</Elements>
 				</ArrayInfo>
 				<BitSize>26752</BitSize>
-				<BitOffs>78336</BitOffs>
+				<BitOffs>117504</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>stationOffsets</Name>
@@ -1749,115 +1826,56 @@ External Setpoint Generation:
 					<Elements>19</Elements>
 				</ArrayInfo>
 				<BitSize>608</BitSize>
-				<BitOffs>105088</BitOffs>
+				<BitOffs>144256</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>st110</Name>
 				<Type GUID="{44774651-F31E-9E51-8062-686BAFEC5496}">ST110_Recipe_t</Type>
 				<BitSize>160</BitSize>
-				<BitOffs>105696</BitOffs>
+				<BitOffs>144864</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>st115</Name>
 				<Type GUID="{DC2F3B8B-E799-E5DC-7BE4-94863E688404}">ST115_Recipe_t</Type>
 				<BitSize>160</BitSize>
-				<BitOffs>105856</BitOffs>
+				<BitOffs>145024</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>st120</Name>
 				<Type GUID="{5AC0AD1A-491D-9D54-CCA0-8DDC5FBB9D96}">ST120_Recipe_t</Type>
 				<BitSize>288</BitSize>
-				<BitOffs>106016</BitOffs>
+				<BitOffs>145184</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>st125</Name>
 				<Type GUID="{28520157-119A-5BD4-FF2C-C5144F2002D5}">ST125_Recipe_t</Type>
 				<BitSize>160</BitSize>
-				<BitOffs>106304</BitOffs>
+				<BitOffs>145472</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>st145</Name>
 				<Type GUID="{6A65ED9C-7BA1-A528-F478-19182A0D21CA}">ST145_Recipe_t</Type>
 				<BitSize>160</BitSize>
-				<BitOffs>106464</BitOffs>
+				<BitOffs>145632</BitOffs>
 			</SubItem>
+			<SubItem>
+				<Name>st180</Name>
+				<Type GUID="{B04012CC-8170-90AA-00A9-AC51FC125265}">ST180_Recipe_t</Type>
+				<BitSize>16</BitSize>
+				<BitOffs>145792</BitOffs>
+			</SubItem>
+			<Hides>
+				<Hide GUID="{79418790-CE0A-33EF-0EB8-EEA4ED016619}"/>
+			</Hides>
 		</DataType>
 		<DataType>
-			<Name GUID="{CD3576AF-A162-E756-846E-DDDC878405A6}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..10] OF Recipe_21_101_t</Name>
+			<Name IecBaseType="true">ARRAY [0..10] OF Recipe_21_101_t</Name>
 			<Comment><![CDATA[ registery of recipe]]></Comment>
-			<BitSize>1172864</BitSize>
-			<BaseType GUID="{79418790-CE0A-33EF-0EB8-EEA4ED016619}">Recipe_21_101_t</BaseType>
+			<BitSize>1604416</BitSize>
+			<BaseType GUID="{185380F3-838A-1E7C-B9DC-820704E19915}">Recipe_21_101_t</BaseType>
 			<ArrayInfo>
 				<LBound>0</LBound>
 				<Elements>11</Elements>
-			</ArrayInfo>
-		</DataType>
-		<DataType>
-			<Name GUID="{4C166DD2-16EB-C115-038B-95F24B521734}" AutoDeleteType="true">RecipeType_e</Name>
-			<BitSize>16</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
-			<EnumInfo>
-				<Text><![CDATA[Smart_Mini]]></Text>
-				<Enum>0</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Smart]]></Text>
-				<Enum>1</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Blue]]></Text>
-				<Enum>2</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Smart_Kristall]]></Text>
-				<Enum>3</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Smart]]></Text>
-				<Enum>4</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Blue]]></Text>
-				<Enum>5</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Smart_Kristall]]></Text>
-				<Enum>6</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Smart_Maxi]]></Text>
-				<Enum>7</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Smart_Maxi_Kristall]]></Text>
-				<Enum>8</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[_max]]></Text>
-				<Enum>9</Enum>
-			</EnumInfo>
-			<Properties>
-				<Property>
-					<Name>textlistenumeration</Name>
-				</Property>
-				<Property>
-					<Name>qualified_only</Name>
-				</Property>
-				<Property>
-					<Name>strict</Name>
-				</Property>
-				<Property>
-					<Name>generate_implicit_init_function</Name>
-				</Property>
-			</Properties>
-		</DataType>
-		<DataType>
-			<Name GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..7] OF UINT</Name>
-			<BitSize>112</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
-			<ArrayInfo>
-				<LBound>1</LBound>
-				<Elements>7</Elements>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
@@ -1867,6 +1885,15 @@ External Setpoint Generation:
 			<ArrayInfo>
 				<LBound>1</LBound>
 				<Elements>3</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..7] OF UINT</Name>
+			<BitSize>112</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000005}">UINT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>7</Elements>
 			</ArrayInfo>
 		</DataType>
 		<DataType>
@@ -5065,13 +5092,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="19" Disabled="true" CreateSymbols="true" AxisType="1">
-					<Name>Axis 19</Name>
+				<Axis Id="27" CreateSymbols="true" AxisType="1" GroupId="28">
+					<Name>ST160_01Z</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="8">
-						<EncPara MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -5130,9 +5156,9 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="9">
-						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00030100">
-							<Analog VeloScale="1.02400649589962" TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
+							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -5173,6 +5199,22 @@ External Setpoint Generation:
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
 								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
 								</SubVar>
@@ -5210,13 +5252,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="20" Disabled="true" CreateSymbols="true" AxisType="1">
-					<Name>Axis 20</Name>
+				<Axis Id="28" CreateSymbols="true" AxisType="1" GroupId="29">
+					<Name>ST165_01Z</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="8">
-						<EncPara MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -5275,9 +5316,9 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="9">
-						<DrvPara MaxCount="#xffffffff" DriveControlDWord="#x00030100">
-							<Analog VeloScale="1.02400649589962" TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
+							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
 						<Vars VarGrpType="1">
@@ -5318,6 +5359,22 @@ External Setpoint Generation:
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
 								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
 								</SubVar>
@@ -5355,13 +5412,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="21" Disabled="true" CreateSymbols="true" AxisType="1">
-					<Name>Axis 21</Name>
+				<Axis Id="19" CreateSymbols="true" AxisType="1">
+					<Name>ST170_01Z</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -5420,8 +5476,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -5463,6 +5519,22 @@ External Setpoint Generation:
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
 								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
 								</SubVar>
@@ -5500,13 +5572,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="22" Disabled="true" CreateSymbols="true" AxisType="1">
-					<Name>Axis 22</Name>
+				<Axis Id="20" CreateSymbols="true" AxisType="1">
+					<Name>ST180_01Y</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -5565,8 +5636,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -5608,6 +5679,22 @@ External Setpoint Generation:
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
 								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
 								</SubVar>
@@ -5645,13 +5732,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="23" Disabled="true" CreateSymbols="true" AxisType="1">
-					<Name>Axis 23</Name>
+				<Axis Id="21" CreateSymbols="true" AxisType="1">
+					<Name>ST180_02Z</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -5710,8 +5796,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -5753,6 +5839,22 @@ External Setpoint Generation:
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
 								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
 								</SubVar>
@@ -5790,13 +5892,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="24" Disabled="true" CreateSymbols="true" AxisType="1">
-					<Name>Axis 24</Name>
+				<Axis Id="22" CreateSymbols="true" AxisType="1">
+					<Name>ST180_10Z</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -5855,8 +5956,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -5898,6 +5999,22 @@ External Setpoint Generation:
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
 								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
 								</SubVar>
@@ -5935,13 +6052,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="25" Disabled="true" CreateSymbols="true" AxisType="1">
-					<Name>Axis 25</Name>
+				<Axis Id="23" CreateSymbols="true" AxisType="1">
+					<Name>ST185_01Y</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -6000,8 +6116,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -6043,6 +6159,22 @@ External Setpoint Generation:
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
 								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
 								</SubVar>
@@ -6080,13 +6212,12 @@ External Setpoint Generation:
 						</Var>
 					</Vars>
 				</Axis>
-				<Axis Id="26" Disabled="true" CreateSymbols="true" AxisType="1">
-					<Name>Axis 26</Name>
+				<Axis Id="24" CreateSymbols="true" AxisType="1">
+					<Name>ST185_02Z</Name>
 					<AxisPara>
 						<OtherSettings AllowMotionCmdToSlave="true"/>
 					</AxisPara>
-					<Encoder Name="Enc" EncType="19">
-						<EncPara MaxCount="#xffffffff"/>
+					<Encoder Name="Enc" EncType="1">
 						<Vars VarGrpType="1">
 							<Name>Inputs</Name>
 							<Var>
@@ -6145,8 +6276,8 @@ External Setpoint Generation:
 							</Var>
 						</Vars>
 					</Encoder>
-					<Drive Name="Drive" DrvType="16">
-						<DrvPara MaxCount="#xffffffff">
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
 							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
 							<TimeComp TaskDelayCycles="1"/>
 						</DrvPara>
@@ -6188,6 +6319,22 @@ External Setpoint Generation:
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut2</Name>
 								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
 								<SubVar TypeFormatIndex="2">
 									<Name>nDataOut3</Name>
 								</SubVar>
@@ -6222,6 +6369,166 @@ External Setpoint Generation:
 							<Name>ToPlc</Name>
 							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
 							<BitOffs>67200</BitOffs>
+						</Var>
+					</Vars>
+				</Axis>
+				<Axis Id="25" CreateSymbols="true" AxisType="1">
+					<Name>ST185_10Z</Name>
+					<AxisPara>
+						<OtherSettings AllowMotionCmdToSlave="true"/>
+					</AxisPara>
+					<Encoder Name="Enc" EncType="1">
+						<Vars VarGrpType="1">
+							<Name>Inputs</Name>
+							<Var>
+								<Name>In</Name>
+								<Type GUID="{901C2423-655B-45CE-B7E3-21F174F0F99F}" Namespace="MC">NCENCODERSTRUCT_IN2B</Type>
+								<BitOffs>44288</BitOffs>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn1</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn2</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn3</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn4</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn5</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn6</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn7</Name>
+									<Comment><![CDATA[Drive Velocity Actual Value
+]]></Comment>
+								</SubVar>
+							</Var>
+						</Vars>
+						<Vars VarGrpType="2">
+							<Name>Outputs</Name>
+							<Var>
+								<Name>Out</Name>
+								<Type GUID="{9CC50AB2-5D79-4869-A3C2-1FA7761BAFEA}" Namespace="MC">NCENCODERSTRUCT_OUT2</Type>
+								<BitOffs>71936</BitOffs>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut1</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut3</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut4</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut5</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut6</Name>
+								</SubVar>
+							</Var>
+						</Vars>
+					</Encoder>
+					<Drive Name="Drive" DrvType="5">
+						<DrvPara>
+							<Analog TorqueSetpointScale="10" ScaleFactorActTorque="0.1"/>
+							<TimeComp TaskDelayCycles="1"/>
+						</DrvPara>
+						<Vars VarGrpType="1">
+							<Name>Inputs</Name>
+							<Var>
+								<Name>In</Name>
+								<Type GUID="{F95C7C69-0C87-46C4-9559-1285CCA5B23A}" Namespace="MC">NCDRIVESTRUCT_IN2</Type>
+								<BitOffs>44608</BitOffs>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn1</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn2</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn3</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn4</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn5</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataIn6</Name>
+								</SubVar>
+							</Var>
+						</Vars>
+						<Vars VarGrpType="2">
+							<Name>Outputs</Name>
+							<Var>
+								<Name>Out</Name>
+								<Type GUID="{644DC4BD-3D15-4DCB-94C7-24F3A5D579AA}" Namespace="MC">NCDRIVESTRUCT_OUT2</Type>
+								<BitOffs>72256</BitOffs>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut1</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut2</Name>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl2</Name>
+									<Comment><![CDATA[Digital Outputs Setpoint Generator:
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar>
+									<Name>nCtrl3</Name>
+									<Comment><![CDATA[Digital Outputs (Setpoint Generator + Position Controller):
+0x41 (0100 0001) = Minus (0x42 for inverse motor polarity)
+0x42 (0100 0010) = Plus (0x41 for inverse motor polarity)
+0x80 (1000 0000) = Stop
+]]></Comment>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut3</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut4</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut5</Name>
+								</SubVar>
+								<SubVar TypeFormatIndex="2">
+									<Name>nDataOut6</Name>
+								</SubVar>
+							</Var>
+						</Vars>
+					</Drive>
+					<Controller Name="Ctrl" CtrType="1">
+						<CtrPara PriorControlFactor="1">
+							<Observer BandWidth="20"/>
+						</CtrPara>
+					</Controller>
+					<Vars VarGrpType="1" InsertType="1">
+						<Name>Inputs</Name>
+						<Var>
+							<Name>FromPlc</Name>
+							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+							<BitOffs>43264</BitOffs>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="2" InsertType="1">
+						<Name>Outputs</Name>
+						<Var>
+							<Name>ToPlc</Name>
+							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+							<BitOffs>69888</BitOffs>
 						</Var>
 					</Vars>
 				</Axis>
@@ -6405,6 +6712,46 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>IO_BOX.I9100_ST180_greifer_patrone_links_zu</Name>
+							<Comment><![CDATA[ 0: ST180 Greifer Patrone links zu]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9101_ST180_greifer_patrone_links_offen</Name>
+							<Comment><![CDATA[ 1: ST180 Greifer Patrone links offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9102_ST180_greifer_patrone_rechts_zu</Name>
+							<Comment><![CDATA[ 2: ST180 Greifer Patrone rechts zu]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9103_ST180_greifer_patrone_rechts_offen</Name>
+							<Comment><![CDATA[ 3: ST180 Greifer Patrone rechts offen]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9104_ST180_niederhalter_deckel_links_oben</Name>
+							<Comment><![CDATA[ 4: ST180 Niederhalter Deckel links oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9105_ST180_niederhalter_deckel_links_unten</Name>
+							<Comment><![CDATA[ 5: ST180 Niederhalter Deckel links unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9106_ST180_niederhalter_deckel_rechts_oben</Name>
+							<Comment><![CDATA[ 6: ST180 Niederhalter Deckel rechts oben]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9107_ST180_niederhalter_deckel_rechts_unten</Name>
+							<Comment><![CDATA[ 7: ST180 Niederhalter Deckel rechts unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>gMoverAxis.I_BuR_MoverAxis</Name>
 							<Comment><![CDATA[ all the movers]]></Comment>
 							<Type GUID="{1B77C17F-D9E2-688D-FDA7-3326C33C19CF}">BuR_MoverAxis_Array_u</Type>
@@ -6503,6 +6850,33 @@ External Setpoint Generation:
 							<Comment><![CDATA[ Axis status word]]></Comment>
 							<Type>WORD</Type>
 						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_01Y.axis.NcToPlc</Name>
+							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_01Y.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_02Z.axis.NcToPlc</Name>
+							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_02Z.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_10Z.axis.NcToPlc</Name>
+							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_10Z.wState</Name>
+							<Comment><![CDATA[ Axis status word]]></Comment>
+							<Type>WORD</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
@@ -6519,6 +6893,26 @@ External Setpoint Generation:
 						<Var>
 							<Name>IO_BOX.Q2400_ST145_freigabe_wf</Name>
 							<Comment><![CDATA[ 0: Freigabe WF]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5400_12_ST180_greifer_patrone_links</Name>
+							<Comment><![CDATA[ Greifer Patrone links ST180]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5401_12_ST180_greifer_patrone_rechts</Name>
+							<Comment><![CDATA[ Grefier Patrone rechts ST180]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5402_12_ST180_niederhalter_deckel_links</Name>
+							<Comment><![CDATA[ Niederhalter Deckel links ST180]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.Q5403_12_ST180_Niederhalter_deckel_rechts</Name>
+							<Comment><![CDATA[ Niederhalter Deckel rechts ST180]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -6619,9 +7013,42 @@ External Setpoint Generation:
 							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
 							<Type>BYTE</Type>
 						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_01Y.axis.PlcToNc</Name>
+							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_02Z.axis.PlcToNc</Name>
+							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_01Y.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_02Z.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_10Z.axis.PlcToNc</Name>
+							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_10Z.bCtrlHi</Name>
+							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
+							<Type>BYTE</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="8" AreaNo="4">
 						<Name>PlcTask Retains</Name>
+						<Var>
+							<Name>PERS.iRecipeCurrent</Name>
+							<Comment><![CDATA[ selected recipe to be executed]]></Comment>
+							<Type GUID="{4C166DD2-16EB-C115-038B-95F24B521734}">RecipeType_e</Type>
+							<InOut>7</InOut>
+						</Var>
 						<Var>
 							<Name>PERS.udiTempOK</Name>
 							<Comment><![CDATA[ Temporary Counter  OK ]]></Comment>
@@ -6674,7 +7101,7 @@ External Setpoint Generation:
 						<Var>
 							<Name>PERS.recipeList</Name>
 							<Comment><![CDATA[ registery of recipe]]></Comment>
-							<Type GUID="{CD3576AF-A162-E756-846E-DDDC878405A6}">ARRAY [0..10] OF Recipe_21_101_t</Type>
+							<Type GUID="{AC2771CC-ECE2-CAC5-330A-B17F6E64FAAA}">ARRAY [0..10] OF Recipe_21_101_t</Type>
 							<InOut>7</InOut>
 							<SubVar>
 								<Name>PERS.recipeList[0]^st125^xUseVerLeft</Name>
@@ -6852,12 +7279,6 @@ External Setpoint Generation:
 								<Name>PERS.recipeList[10]^st145^xUseVerRight</Name>
 								<Comment><![CDATA[ Is the right vertical picker element is used]]></Comment>
 							</SubVar>
-						</Var>
-						<Var>
-							<Name>PERS.iRecipeCurrent</Name>
-							<Comment><![CDATA[ selected recipe to be executed]]></Comment>
-							<Type GUID="{4C166DD2-16EB-C115-038B-95F24B521734}">RecipeType_e</Type>
-							<InOut>7</InOut>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="1" ContextId="2" AreaNo="32">
@@ -7260,29 +7681,14 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>_02_SAFETY.xIN_ESdelOut</Name>
-							<Comment><![CDATA[EStop del Out]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_ESout</Name>
-							<Comment><![CDATA[EStop	Out]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_MonDelOut</Name>
-							<Comment><![CDATA[Mon del Out Türen]]></Comment>
-							<Type>BOOL</Type>
+							<Name>_02_SAFETY.uiArOUT_State</Name>
+							<Comment><![CDATA[Module State ]]></Comment>
+							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.uiArIN_State</Name>
 							<Comment><![CDATA[Module State ]]></Comment>
 							<Type GUID="{09A1B3AF-5DD5-E41E-C9E6-53B298C60BA7}">ARRAY [1..7] OF UINT</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.uiArOUT_State</Name>
-							<Comment><![CDATA[Module State ]]></Comment>
-							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xArIN_Input1</Name>
@@ -7318,6 +7724,21 @@ External Setpoint Generation:
 							<Name>_02_SAFETY.xArIN_Input7</Name>
 							<Comment><![CDATA[Mapping Inputs ]]></Comment>
 							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}">ARRAY [0..7] OF BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.xIN_ESdelOut</Name>
+							<Comment><![CDATA[EStop del Out]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.xIN_ESout</Name>
+							<Comment><![CDATA[EStop	Out]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY.xIN_MonDelOut</Name>
+							<Comment><![CDATA[Mon del Out Türen]]></Comment>
+							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xIN_MonOut</Name>
@@ -7791,46 +8212,6 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I9100_ST180_greifer_patrone_links_zu</Name>
-							<Comment><![CDATA[ 0: ST180 Greifer Patrone links zu]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I9101_ST180_greifer_patrone_links_offen</Name>
-							<Comment><![CDATA[ 1: ST180 Greifer Patrone links offen]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I9102_ST180_greifer_patrone_rechts_zu</Name>
-							<Comment><![CDATA[ 2: ST180 Greifer Patrone rechts zu]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I9103_ST180_greifer_patrone_rechts_offen</Name>
-							<Comment><![CDATA[ 3: ST180 Greifer Patrone rechts offen]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I9104_ST180_niederhalter_deckel_links_oben</Name>
-							<Comment><![CDATA[ 4: ST180 Niederhalter Deckel links oben]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I9105_ST180_niederhalter_deckel_links_unten</Name>
-							<Comment><![CDATA[ 5: ST180 Niederhalter Deckel links unten]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I9106_ST180_niederhalter_deckel_rechts_oben</Name>
-							<Comment><![CDATA[ 6: ST180 Niederhalter Deckel rechts oben]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I9107_ST180_niederhalter_deckel_rechts_unten</Name>
-							<Comment><![CDATA[ 7: ST180 Niederhalter Deckel rechts unten]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>IO_BOX.I9200_ST185_greifer_patrone_links_zu</Name>
 							<Comment><![CDATA[ 0: ST185 Greifer Patrone links zu]]></Comment>
 							<Type>BOOL</Type>
@@ -7898,6 +8279,11 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>OUT.Q001_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
 							<Name>OUT.Q041_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
@@ -7908,12 +8294,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q001_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q002_</Name>
+							<Name>OUT.Q042_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7923,8 +8304,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q042_</Name>
+							<Name>OUT.Q002_</Name>
 							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q023_ST150_ultraschall_data_bit_1</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX2]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -7938,8 +8324,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q023_ST150_ultraschall_data_bit_1</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Data HEX2]]></Comment>
+							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -7948,22 +8334,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q044_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q025_ST150_ultraschall_data_bit_3</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Data HEX8]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q045_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7973,7 +8344,17 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q046_</Name>
+							<Name>OUT.Q045_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q025_ST150_ultraschall_data_bit_3</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX8]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q006_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7983,12 +8364,12 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q006_</Name>
+							<Name>OUT.Q046_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q047_</Name>
+							<Name>OUT.Q007_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -7998,13 +8379,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q007_</Name>
+							<Name>OUT.Q047_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q050_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q010_Sauger_LN_230_Start</Name>
+							<Comment><![CDATA[ Sauger LN 230 Start]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8013,8 +8394,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q010_Sauger_LN_230_Start</Name>
-							<Comment><![CDATA[ Sauger LN 230 Start]]></Comment>
+							<Name>OUT.Q050_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8038,13 +8419,18 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>OUT.Q032_ST155_ultraschall_data_bit_0</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX1]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
 							<Name>OUT.Q012_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q032_ST155_ultraschall_data_bit_0</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Data HEX1]]></Comment>
+							<Name>OUT.Q033_ST155_ultraschall_data_bit_1</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX2]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8058,8 +8444,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q033_ST155_ultraschall_data_bit_1</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Data HEX2]]></Comment>
+							<Name>OUT.Q034_ST155_ultraschall_data_bit_2</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX4]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8073,18 +8459,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q034_ST155_ultraschall_data_bit_2</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Data HEX4]]></Comment>
+							<Name>OUT.Q055_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
 							<Name>OUT.Q035_ST155_ultraschall_data_bit_3</Name>
 							<Comment><![CDATA[ Ultraschall 155.20 Data HEX8]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q055_</Name>
-							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8108,17 +8489,17 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q037_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q017_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
 							<Name>OUT.Q057_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q037_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8721,18 +9102,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q5400_12_ST180_greifer_patrone_links</Name>
-							<Comment><![CDATA[ Greifer Patrone links ST180]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>IO_BOX.Q5401_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q5401_12_ST180_greifer_patrone_rechts</Name>
-							<Comment><![CDATA[ Grefier Patrone rechts ST180]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8741,18 +9112,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.Q5402_12_ST180_niederhalter_deckel_links</Name>
-							<Comment><![CDATA[ Niederhalter Deckel links ST180]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>IO_BOX.Q5403_14_</Name>
 							<Comment><![CDATA[ ]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.Q5403_12_ST180_Niederhalter_deckel_rechts</Name>
-							<Comment><![CDATA[ Niederhalter Deckel rechts ST180]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -46919,152 +47280,6 @@ Bit1: Value smaller than Limit2]]></Comment>
 	</Project>
 	<Mappings>
 		<MappingInfo Identifier="{05000010-2001-0850-3000-040300205008}" Id="#x02030010" Watchdog="14000000040000000400000004000000"/>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 19">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 63 (AX5203-0000-0213)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="AT 1^Following distance"/>
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="AT 1^Drive status word" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="AT 1^Drive status word"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="MDT 1^Master control word" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="MDT 1^Position command value"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="AT 1^Position feedback 1 value"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 20">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 63 (AX5203-0000-0213)">
-				<Link VarA="Drive^Inputs^In^nDataIn1" VarB="AT 2^Following distance"/>
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="AT 2^Drive status word" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="AT 2^Drive status word"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="MDT 2^Master control word" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="MDT 2^Position command value"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="AT 2^Position feedback 1 value"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 21">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 65 (C1150-DS-XC-1S)">
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Cylic Mode Inputs^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Cylic Mode Inputs^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Cylic Mode Inputs^Mode of Operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Cylic Position Velocity Mode^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Cylic Position Velocity Mode^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Cylic Position Velocity Mode^Mode of Operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Cylic Position Velocity Mode^Target position"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut2" VarB="Cylic Position Velocity Mode^Target velocity"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Cylic Mode Inputs^Position actual value (units)"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 22">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 66 (C1150-DS-XC-1S)">
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Cylic Mode Inputs^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Cylic Mode Inputs^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Cylic Mode Inputs^Mode of Operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Cylic Position Velocity Mode^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Cylic Position Velocity Mode^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Cylic Position Velocity Mode^Mode of Operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Cylic Position Velocity Mode^Target position"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut2" VarB="Cylic Position Velocity Mode^Target velocity"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Cylic Mode Inputs^Position actual value (units)"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 23">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 67 (C1150-DS-XC-1S)">
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Cylic Mode Inputs^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Cylic Mode Inputs^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Cylic Mode Inputs^Mode of Operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Cylic Position Velocity Mode^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Cylic Position Velocity Mode^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Cylic Position Velocity Mode^Mode of Operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Cylic Position Velocity Mode^Target position"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut2" VarB="Cylic Position Velocity Mode^Target velocity"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Cylic Mode Inputs^Position actual value (units)"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 24">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 68 (C1150-DS-XC-1S)">
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Cylic Mode Inputs^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Cylic Mode Inputs^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Cylic Mode Inputs^Mode of Operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Cylic Position Velocity Mode^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Cylic Position Velocity Mode^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Cylic Position Velocity Mode^Mode of Operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Cylic Position Velocity Mode^Target position"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut2" VarB="Cylic Position Velocity Mode^Target velocity"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Cylic Mode Inputs^Position actual value (units)"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 25">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 69 (C1150-DS-XC-1S)">
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Cylic Mode Inputs^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Cylic Mode Inputs^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Cylic Mode Inputs^Mode of Operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Cylic Position Velocity Mode^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Cylic Position Velocity Mode^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Cylic Position Velocity Mode^Mode of Operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Cylic Position Velocity Mode^Target position"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut2" VarB="Cylic Position Velocity Mode^Target velocity"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Cylic Mode Inputs^Position actual value (units)"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
-		<OwnerA Name="TINC^NC-Task 1 SAF^Axes^Axis 26">
-			<OwnerB Name="TIID^Device 1 (EtherCAT)^Drive 70 (C1150-DS-XC-1S)">
-				<Link VarA="Drive^Inputs^In^nDcOutputTime" VarB="InfoData^DcOutputShift"/>
-				<Link VarA="Drive^Inputs^In^nState1" VarB="Cylic Mode Inputs^Statusword"/>
-				<Link VarA="Drive^Inputs^In^nState2" VarB="Cylic Mode Inputs^Statusword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Drive^Inputs^In^nState4" VarB="WcState^WcState"/>
-				<Link VarA="Drive^Inputs^In^nState5" VarB="Cylic Mode Inputs^Mode of Operation display"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl1" VarB="Cylic Position Velocity Mode^Controlword"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl2" VarB="Cylic Position Velocity Mode^Controlword" Size="8" OffsB="8"/>
-				<Link VarA="Drive^Outputs^Out^nCtrl5" VarB="Cylic Position Velocity Mode^Mode of Operation"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut1" VarB="Cylic Position Velocity Mode^Target position"/>
-				<Link VarA="Drive^Outputs^Out^nDataOut2" VarB="Cylic Position Velocity Mode^Target velocity"/>
-				<Link VarA="Enc^Inputs^In^nDataIn1" VarB="Cylic Mode Inputs^Position actual value (units)"/>
-				<Link VarA="Enc^Inputs^In^nDcInputTime" VarB="InfoData^DcInputShift"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^InputToggle" Size="1" OffsA="1"/>
-				<Link VarA="Enc^Inputs^In^nState4" VarB="WcState^WcState"/>
-			</OwnerB>
-		</OwnerA>
 		<OwnerA Name="TIPC^mover_demo^mover_demo Instance">
 			<OwnerB Name="TIID^Device 5 (NOV-DP-RAM)^pers (Retain Handler)">
 				<Link VarA="PlcTask Retains^PERS.iStationTimeDef1" VarB="Retains^PERS.iStationTimeDef1_[851]" AutoLink="true" PeerAutoLink="true"/>
@@ -47139,6 +47354,18 @@ Bit1: Value smaller than Limit2]]></Comment>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^ST145_10W">
 				<Link VarA="PlcTask Inputs^ST145_Axis.axis145_10W.axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^ST145_Axis.axis145_10W.axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^ST180_01Y">
+				<Link VarA="PlcTask Inputs^ST180_Axis.axis180_01Y.axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^ST180_Axis.axis180_01Y.axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^ST180_02Z">
+				<Link VarA="PlcTask Inputs^ST180_Axis.axis180_02Z.axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^ST180_Axis.axis180_02Z.axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^ST180_10Z">
+				<Link VarA="PlcTask Inputs^ST180_Axis.axis180_10Z.axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^ST180_Axis.axis180_10Z.axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>

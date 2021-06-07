@@ -111,12 +111,24 @@ HMI.movesNames[LinearAxis_e.ST125_02Z][5] := TO_STRING("Auf handling");
 // ST145
 HMI.movesNames[LinearAxis_e.ST145_01Y][0] := TO_STRING("Zurück");
 HMI.movesNames[LinearAxis_e.ST145_01Y][1] := TO_STRING("Vor");
-                               
-HMI.movesNames[LinearAxis_e.ST145_02Z][0] := TO_STRING("Auf Leer");       
-HMI.movesNames[LinearAxis_e.ST145_02Z][1] := TO_STRING("Ab Leer");        
-HMI.movesNames[LinearAxis_e.ST145_02Z][2] := TO_STRING("Auf Voll");       
+
+HMI.movesNames[LinearAxis_e.ST145_02Z][0] := TO_STRING("Auf Leer");
+HMI.movesNames[LinearAxis_e.ST145_02Z][1] := TO_STRING("Ab Leer");
+HMI.movesNames[LinearAxis_e.ST145_02Z][2] := TO_STRING("Auf Voll");
 HMI.movesNames[LinearAxis_e.ST145_02Z][3] := TO_STRING("Ab Voll Schnell");
-HMI.movesNames[LinearAxis_e.ST145_02Z][4] := TO_STRING("Ab Voll Kraft");  
+HMI.movesNames[LinearAxis_e.ST145_02Z][4] := TO_STRING("Ab Voll Kraft");
+
+// ST180
+HMI.movesNames[LinearAxis_e.ST180_01Y][0] := TO_STRING("Zurück");
+HMI.movesNames[LinearAxis_e.ST180_01Y][1] := TO_STRING("Vor");
+
+HMI.movesNames[LinearAxis_e.ST180_02Z][0] := TO_STRING("Auf Leer");
+HMI.movesNames[LinearAxis_e.ST180_02Z][1] := TO_STRING("Ab Leer");
+HMI.movesNames[LinearAxis_e.ST180_02Z][2] := TO_STRING("Auf Voll");
+HMI.movesNames[LinearAxis_e.ST180_02Z][3] := TO_STRING("Ab Voll");
+
+HMI.movesNames[LinearAxis_e.ST180_10Z][0] := TO_STRING("Auf");
+HMI.movesNames[LinearAxis_e.ST180_10Z][1] := TO_STRING("Ab");
 
 FOR i := 0 TO TO_INT(StationList_e._max) - 1 BY 1 DO
     FOR ii := 0 TO CONST.MAX_CYLINDER_PER_STATION - 1 BY 1 DO
@@ -144,8 +156,14 @@ HMI.cylinderNames[StationList_e.ST125][3] := TO_STRING(ST125_Cylinders_e.Handlin
 HMI.cylinderNames[StationList_e.ST125][4] := TO_STRING(ST125_Cylinders_e.GreiferSolerohrLinks);
 HMI.cylinderNames[StationList_e.ST125][5] := TO_STRING(ST125_Cylinders_e.GreiferSolerohrRechts);
 
-HMI.cylinderNames[StationList_e.ST145][0] := TO_STRING(ST145_Cylinders_e.VakuumgreiferLinks);   
-HMI.cylinderNames[StationList_e.ST145][1] := TO_STRING(ST145_Cylinders_e.VakuumgreiferRechts);]]></ST>
+HMI.cylinderNames[StationList_e.ST145][0] := TO_STRING(ST145_Cylinders_e.VakuumgreiferLinks);
+HMI.cylinderNames[StationList_e.ST145][1] := TO_STRING(ST145_Cylinders_e.VakuumgreiferRechts);
+
+HMI.cylinderNames[StationList_e.ST180][0] := TO_STRING(ST180_Cylinders_e.Greifer_Patrone_Links);
+HMI.cylinderNames[StationList_e.ST180][1] := TO_STRING(ST180_Cylinders_e.Greifer_Patrone_Rechts);
+HMI.cylinderNames[StationList_e.ST180][2] := TO_STRING(ST180_Cylinders_e.Niederhalter_Deckel_Links);
+HMI.cylinderNames[StationList_e.ST180][3] := TO_STRING(ST180_Cylinders_e.Niederhalter_Deckel_Rechts);
+]]></ST>
       </Implementation>
     </Method>
   </POU>
