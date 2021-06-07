@@ -1458,65 +1458,6 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
-			<Name GUID="{4C166DD2-16EB-C115-038B-95F24B521734}" AutoDeleteType="true">RecipeType_e</Name>
-			<BitSize>16</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
-			<EnumInfo>
-				<Text><![CDATA[Smart_Mini]]></Text>
-				<Enum>0</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Smart]]></Text>
-				<Enum>1</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Blue]]></Text>
-				<Enum>2</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Smart_Kristall]]></Text>
-				<Enum>3</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Smart]]></Text>
-				<Enum>4</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Blue]]></Text>
-				<Enum>5</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Smart_Kristall]]></Text>
-				<Enum>6</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Smart_Maxi]]></Text>
-				<Enum>7</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[Pro_Smart_Maxi_Kristall]]></Text>
-				<Enum>8</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[_max]]></Text>
-				<Enum>9</Enum>
-			</EnumInfo>
-			<Properties>
-				<Property>
-					<Name>textlistenumeration</Name>
-				</Property>
-				<Property>
-					<Name>qualified_only</Name>
-				</Property>
-				<Property>
-					<Name>strict</Name>
-				</Property>
-				<Property>
-					<Name>generate_implicit_init_function</Name>
-				</Property>
-			</Properties>
-		</DataType>
-		<DataType>
 			<Name GUID="{5DA65DD7-CE95-D158-4254-80D11B9071C7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..19] OF DINT</Name>
 			<BitSize>608</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000009}">DINT</BaseType>
@@ -1877,6 +1818,65 @@ External Setpoint Generation:
 				<LBound>0</LBound>
 				<Elements>11</Elements>
 			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{4C166DD2-16EB-C115-038B-95F24B521734}" AutoDeleteType="true">RecipeType_e</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<EnumInfo>
+				<Text><![CDATA[Smart_Mini]]></Text>
+				<Enum>0</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Smart]]></Text>
+				<Enum>1</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Blue]]></Text>
+				<Enum>2</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Smart_Kristall]]></Text>
+				<Enum>3</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Smart]]></Text>
+				<Enum>4</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Blue]]></Text>
+				<Enum>5</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Smart_Kristall]]></Text>
+				<Enum>6</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Smart_Maxi]]></Text>
+				<Enum>7</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[Pro_Smart_Maxi_Kristall]]></Text>
+				<Enum>8</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[_max]]></Text>
+				<Enum>9</Enum>
+			</EnumInfo>
+			<Properties>
+				<Property>
+					<Name>textlistenumeration</Name>
+				</Property>
+				<Property>
+					<Name>qualified_only</Name>
+				</Property>
+				<Property>
+					<Name>strict</Name>
+				</Property>
+				<Property>
+					<Name>generate_implicit_init_function</Name>
+				</Property>
+			</Properties>
 		</DataType>
 		<DataType>
 			<Name GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..3] OF UINT</Name>
@@ -6737,18 +6737,8 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>IO_BOX.I9105_ST180_niederhalter_deckel_links_unten</Name>
-							<Comment><![CDATA[ 5: ST180 Niederhalter Deckel links unten]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>IO_BOX.I9106_ST180_niederhalter_deckel_rechts_oben</Name>
 							<Comment><![CDATA[ 6: ST180 Niederhalter Deckel rechts oben]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>IO_BOX.I9107_ST180_niederhalter_deckel_rechts_unten</Name>
-							<Comment><![CDATA[ 7: ST180 Niederhalter Deckel rechts unten]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -7018,13 +7008,13 @@ External Setpoint Generation:
 							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
-							<Name>ST180_Axis.axis180_02Z.axis.PlcToNc</Name>
-							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
-						</Var>
-						<Var>
 							<Name>ST180_Axis.axis180_01Y.bCtrlHi</Name>
 							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
 							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>ST180_Axis.axis180_02Z.axis.PlcToNc</Name>
+							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 						<Var>
 							<Name>ST180_Axis.axis180_02Z.bCtrlHi</Name>
@@ -7043,12 +7033,6 @@ External Setpoint Generation:
 					</Vars>
 					<Vars VarGrpType="8" AreaNo="4">
 						<Name>PlcTask Retains</Name>
-						<Var>
-							<Name>PERS.iRecipeCurrent</Name>
-							<Comment><![CDATA[ selected recipe to be executed]]></Comment>
-							<Type GUID="{4C166DD2-16EB-C115-038B-95F24B521734}">RecipeType_e</Type>
-							<InOut>7</InOut>
-						</Var>
 						<Var>
 							<Name>PERS.udiTempOK</Name>
 							<Comment><![CDATA[ Temporary Counter  OK ]]></Comment>
@@ -7279,6 +7263,12 @@ External Setpoint Generation:
 								<Name>PERS.recipeList[10]^st145^xUseVerRight</Name>
 								<Comment><![CDATA[ Is the right vertical picker element is used]]></Comment>
 							</SubVar>
+						</Var>
+						<Var>
+							<Name>PERS.iRecipeCurrent</Name>
+							<Comment><![CDATA[ selected recipe to be executed]]></Comment>
+							<Type GUID="{4C166DD2-16EB-C115-038B-95F24B521734}">RecipeType_e</Type>
+							<InOut>7</InOut>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="1" ContextId="2" AreaNo="32">
@@ -7681,6 +7671,11 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>_02_SAFETY.xIN_ESdelOut</Name>
+							<Comment><![CDATA[EStop del Out]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>_02_SAFETY.uiArOUT_State</Name>
 							<Comment><![CDATA[Module State ]]></Comment>
 							<Type GUID="{A5AC38E6-0DC4-889C-DC96-B6E74C453943}">ARRAY [1..3] OF UINT</Type>
@@ -7724,11 +7719,6 @@ External Setpoint Generation:
 							<Name>_02_SAFETY.xArIN_Input7</Name>
 							<Comment><![CDATA[Mapping Inputs ]]></Comment>
 							<Type GUID="{B06D26C8-71DC-62D0-9A93-9E8C7ADB9810}">ARRAY [0..7] OF BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY.xIN_ESdelOut</Name>
-							<Comment><![CDATA[EStop del Out]]></Comment>
-							<Type>BOOL</Type>
 						</Var>
 						<Var>
 							<Name>_02_SAFETY.xIN_ESout</Name>
@@ -8212,6 +8202,16 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
+							<Name>IO_BOX.I9105_ST180_niederhalter_deckel_links_unten</Name>
+							<Comment><![CDATA[ 5: ST180 Niederhalter Deckel links unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>IO_BOX.I9107_ST180_niederhalter_deckel_rechts_unten</Name>
+							<Comment><![CDATA[ 7: ST180 Niederhalter Deckel rechts unten]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
 							<Name>IO_BOX.I9200_ST185_greifer_patrone_links_zu</Name>
 							<Comment><![CDATA[ 0: ST185 Greifer Patrone links zu]]></Comment>
 							<Type>BOOL</Type>
@@ -8264,11 +8264,6 @@ External Setpoint Generation:
 					<Vars VarGrpType="2" ContextId="2" AreaNo="33">
 						<Name>Task_fileMan Outputs</Name>
 						<Var>
-							<Name>OUT.Q000_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q040_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
@@ -8279,8 +8274,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q001_</Name>
+							<Name>OUT.Q000_</Name>
 							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q021_ST150_ultraschall_reset</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Reset]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8289,8 +8289,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q021_ST150_ultraschall_reset</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Reset]]></Comment>
+							<Name>OUT.Q001_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q002_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8304,7 +8309,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q002_</Name>
+							<Name>OUT.Q043_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8314,18 +8319,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q043_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q003_</Name>
 							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8339,8 +8334,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q005_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q024_ST150_ultraschall_data_bit_2</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX4]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8354,6 +8349,16 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>OUT.Q005_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q046_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
 							<Name>OUT.Q006_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
@@ -8361,11 +8366,6 @@ External Setpoint Generation:
 						<Var>
 							<Name>OUT.Q026_ST170_rfid_test_links</Name>
 							<Comment><![CDATA[ RFID Test links 170.20]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q046_</Name>
-							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8404,17 +8404,17 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q051_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q011_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q052_</Name>
+							<Name>OUT.Q051_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q012_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8424,7 +8424,12 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q012_</Name>
+							<Name>OUT.Q052_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q053_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8439,13 +8444,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q053_</Name>
+							<Name>OUT.Q014_</Name>
 							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q034_ST155_ultraschall_data_bit_2</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Data HEX4]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8454,8 +8454,8 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q014_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q034_ST155_ultraschall_data_bit_2</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX4]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8479,12 +8479,12 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q016_</Name>
+							<Name>OUT.Q056_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q056_</Name>
+							<Name>OUT.Q016_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8494,12 +8494,12 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q057_</Name>
+							<Name>OUT.Q037_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q037_</Name>
+							<Name>OUT.Q057_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
