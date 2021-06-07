@@ -10,8 +10,10 @@ ST110_Pnp_e :
     RESET := 0,         // Reset
 	
     INIT := 100,        // Initialisieren 
-	Init_HomeVerticals,
-	Init_VerticalsUp,
+    Init_HomeVertical_04,    // home axis below the mover
+    Init_VerticalUp_04,      // move axis below the mover to its rest position
+    Init_HomeVertical_02_03, // home axis above the mover
+    Init_VerticalUp_02_03,   // move the axis up to rest position
 	Init_HomeHorizontals,
 	Init_HorizontalsToTrack,
 	Init_check_if_pces_handled,
@@ -56,12 +58,22 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_HomeVerticals"</v>
+              <v n="TextID">"Init_HomeVertical_04"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_VerticalsUp"</v>
+              <v n="TextID">"Init_VerticalUp_04"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_HomeVertical_02_03"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_VerticalUp_02_03"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

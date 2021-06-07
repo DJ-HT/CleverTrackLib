@@ -6877,6 +6877,10 @@ External Setpoint Generation:
 							<Comment><![CDATA[ Axis status word]]></Comment>
 							<Type>WORD</Type>
 						</Var>
+						<Var>
+							<Name>ST110_Axis.axis110_04Z.axis.NcToPlc</Name>
+							<Type GUID="{72F5AAAA-16DF-4ED3-8367-F6C8C3ADAE99}" Namespace="MC">NCTOPLC_AXIS_REF</Type>
+						</Var>
 					</Vars>
 					<Vars VarGrpType="2" AreaNo="1">
 						<Name>PlcTask Outputs</Name>
@@ -7039,6 +7043,10 @@ External Setpoint Generation:
 							<Name>ST180_Axis.axis180_10Z.bCtrlHi</Name>
 							<Comment><![CDATA[ Axis control word, Hi-Byte]]></Comment>
 							<Type>BYTE</Type>
+						</Var>
+						<Var>
+							<Name>ST110_Axis.axis110_04Z.axis.PlcToNc</Name>
+							<Type GUID="{63A84524-72E3-41C8-BEAB-4CCE44690A13}" Namespace="MC">PLCTONC_AXIS_REF</Type>
 						</Var>
 					</Vars>
 					<Vars VarGrpType="8" AreaNo="4">
@@ -7756,16 +7764,6 @@ External Setpoint Generation:
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
-							<Name>_02_SAFETY._FB_Gr002NotHalt.xIN_FBErr</Name>
-							<Comment><![CDATA[ Funktionsbaustein Error]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
-							<Name>_02_SAFETY._FB_Gr002NotHalt.xIN_OtherErr</Name>
-							<Comment><![CDATA[ Anderer Error]]></Comment>
-							<Type>BOOL</Type>
-						</Var>
-						<Var>
 							<Name>_02_SAFETY._FB_Gr001Input.xIN_OtherErr</Name>
 							<Comment><![CDATA[ Anderer Error]]></Comment>
 							<Type>BOOL</Type>
@@ -7773,6 +7771,16 @@ External Setpoint Generation:
 						<Var>
 							<Name>_02_SAFETY._FB_Gr002NotHalt.xIN_ComErr</Name>
 							<Comment><![CDATA[ Kommunikations Error]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY._FB_Gr002NotHalt.xIN_FBErr</Name>
+							<Comment><![CDATA[ Funktionsbaustein Error]]></Comment>
+							<Type>BOOL</Type>
+						</Var>
+						<Var>
+							<Name>_02_SAFETY._FB_Gr002NotHalt.xIN_OtherErr</Name>
+							<Comment><![CDATA[ Anderer Error]]></Comment>
 							<Type>BOOL</Type>
 						</Var>
 						<Var>
@@ -8264,13 +8272,13 @@ External Setpoint Generation:
 					<Vars VarGrpType="2" ContextId="2" AreaNo="33">
 						<Name>Task_fileMan Outputs</Name>
 						<Var>
-							<Name>OUT.Q020_ST150_ultraschall_start</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Start]]></Comment>
+							<Name>OUT.Q040_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q040_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q020_ST150_ultraschall_start</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Start]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8284,12 +8292,12 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q001_</Name>
+							<Name>OUT.Q041_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q041_</Name>
+							<Name>OUT.Q001_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8299,23 +8307,23 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q022_ST150_ultraschall_data_bit_0</Name>
-							<Comment><![CDATA[ Ultraschall 150.20 Data HEX1]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q042_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q043_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q022_ST150_ultraschall_data_bit_0</Name>
+							<Comment><![CDATA[ Ultraschall 150.20 Data HEX1]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
 							<Name>OUT.Q023_ST150_ultraschall_data_bit_1</Name>
 							<Comment><![CDATA[ Ultraschall 150.20 Data HEX2]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q043_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8339,17 +8347,17 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q005_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q025_ST150_ultraschall_data_bit_3</Name>
 							<Comment><![CDATA[ Ultraschall 150.20 Data HEX8]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
 							<Name>OUT.Q045_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q005_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8374,13 +8382,13 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q007_</Name>
-							<Comment><![CDATA[ ]]></Comment>
+							<Name>OUT.Q027_ST170_rfid_test_rechts</Name>
+							<Comment><![CDATA[ RFID Test rechts 170.21]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q027_ST170_rfid_test_rechts</Name>
-							<Comment><![CDATA[ RFID Test rechts 170.21]]></Comment>
+							<Name>OUT.Q007_</Name>
+							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
@@ -8414,6 +8422,11 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
+							<Name>OUT.Q012_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
 							<Name>OUT.Q052_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
@@ -8424,7 +8437,12 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q012_</Name>
+							<Name>OUT.Q053_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q013_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8434,12 +8452,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q053_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q013_</Name>
+							<Name>OUT.Q054_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8454,7 +8467,12 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q054_</Name>
+							<Name>OUT.Q035_ST155_ultraschall_data_bit_3</Name>
+							<Comment><![CDATA[ Ultraschall 155.20 Data HEX8]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q055_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8464,22 +8482,7 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q055_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q035_ST155_ultraschall_data_bit_3</Name>
-							<Comment><![CDATA[ Ultraschall 155.20 Data HEX8]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
 							<Name>OUT.Q016_</Name>
-							<Comment><![CDATA[ ]]></Comment>
-							<Type>BIT</Type>
-						</Var>
-						<Var>
-							<Name>OUT.Q056_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -8489,12 +8492,17 @@ External Setpoint Generation:
 							<Type>BIT</Type>
 						</Var>
 						<Var>
-							<Name>OUT.Q037_</Name>
+							<Name>OUT.Q056_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
 						<Var>
 							<Name>OUT.Q017_</Name>
+							<Comment><![CDATA[ ]]></Comment>
+							<Type>BIT</Type>
+						</Var>
+						<Var>
+							<Name>OUT.Q037_</Name>
 							<Comment><![CDATA[ ]]></Comment>
 							<Type>BIT</Type>
 						</Var>
@@ -47302,6 +47310,10 @@ Bit1: Value smaller than Limit2]]></Comment>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^ST110_03Z">
 				<Link VarA="PlcTask Inputs^ST110_Axis.axis110_03Z.axis.NcToPlc" VarB="Outputs^ToPlc"/>
 				<Link VarA="PlcTask Outputs^ST110_Axis.axis110_03Z.axis.PlcToNc" VarB="Inputs^FromPlc"/>
+			</OwnerB>
+			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^ST110_04Z">
+				<Link VarA="PlcTask Inputs^ST110_Axis.axis110_04Z.axis.NcToPlc" VarB="Outputs^ToPlc"/>
+				<Link VarA="PlcTask Outputs^ST110_Axis.axis110_04Z.axis.PlcToNc" VarB="Inputs^FromPlc"/>
 			</OwnerB>
 			<OwnerB Name="TINC^NC-Task 1 SAF^Axes^ST110_10W">
 				<Link VarA="PlcTask Inputs^ST110_Axis.axis110_10W.axis.NcToPlc" VarB="Outputs^ToPlc"/>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST110_PnpVerPushPos_e" Id="{b3b83af0-6b1b-4eea-9360-841181a5f70e}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE ST110_PnpVerPushPos_e :
+(
+	down,
+	up,
+	_max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
