@@ -140,10 +140,11 @@ fb_axis145_01Y(enIN_State       := enIN_State,
                xIN_Reset        := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                wAxisState       :=
                fb_simu_axis145_01Y.wOUT_AxisState, // The simu fb gives the hardware state when we are not in simu
-               rOUT_ActPos => st145_axis.axis145_01Y.rActPos,
-               axisIN_REF  := ST145_Axis.axis145_01Y.axis);
+               rOUT_ActPos   => st145_axis.axis145_01Y.rActPos,
+               bOUT_AxisCntr => ST145_Axis.axis145_01Y.bCtrlHi,
+               axisIN_REF    := ST145_Axis.axis145_01Y.axis);
 
-fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+fb_simu_axis145_01Y(xIN_Enable          := FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                     bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
                     wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
                     udiIN_HomingTime_ms := 2000,
@@ -326,7 +327,7 @@ ST145_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST145_Pnp_e.INIT: (* Grundstellung ? *)
-    IF CONST.USE_SIMULATION THEN
+    IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
         iOUT_Step := ST145_Pnp_e.Init_VerticalsUp;
     ELSE
         iOUT_Step := ST145_Pnp_e.Init_HomeVerticals;

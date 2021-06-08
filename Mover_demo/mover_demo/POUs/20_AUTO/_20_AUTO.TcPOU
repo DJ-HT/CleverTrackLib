@@ -12,7 +12,7 @@ VAR_OUTPUT
 END_VAR
 VAR
     recipeHMI       : REFERENCE TO Recipe_21_101_t;                // recipe values shown on the HMI
-    iRecipeCopyDest : RecipeType_e := CONST.MAX_RECIPE_NUMBER - 1; // selected recipe to copy to
+    iRecipeCopyDest : RecipeType_e := RecipeType_e._max  ; // selected recipe to copy to
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -26,7 +26,7 @@ recipe    REF= PERS.recipeList[PERS.iRecipeCurrent];
 IF HMI.btCopyRecipe.rtrig THEN
     PERS.recipeList[iRecipeCopyDest] := PERS.recipeList[PERS.iRecipeCurrent];
     // reset the position of iRecipeCopyDest to tell the user the saving is done
-    iRecipeCopyDest := CONST.MAX_RECIPE_NUMBER - 1;
+    iRecipeCopyDest := RecipeType_e._max;
 END_IF
 
 IF HMI.btCopyAxisCfg.rtrig THEN
