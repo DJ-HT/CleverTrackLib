@@ -8,6 +8,8 @@ VAR_GLOBAL
     lrSpeedMover       : LREAL := 20.0;
     lrAccelMover       : LREAL; // is lrAccelMoverSlider^2
     lrAccelMoverSlider : LREAL := 0.4;
+	
+	axis_ref : ARRAY [0..Axis_e._max-1] OF AXIS_REF;
 END_VAR
 ]]></Declaration>
   </GVL>

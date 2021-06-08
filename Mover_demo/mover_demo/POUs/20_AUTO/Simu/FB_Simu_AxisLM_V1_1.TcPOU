@@ -1,22 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Simu_AxisLM_V1_1" Id="{1a013837-1d69-44d6-a88f-139af1be0919}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Simu_AxisLM_V1_1
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Simu_AxisLM_V1_1 EXTENDS FB_Simu_axis
 VAR_INPUT
-    xIN_Enable          : BOOL;          // When true, this FB simulate output signals
     bIN_AxisCntr        : BYTE;          // Axis Controlword
     wIN_AxisState       : WORD;          // Statuswort input, copy to output when fb is not enable
     udiIN_HomingTime_ms : UDINT := 2000; // homing time, expressed as millisecond
-
-    rIN_PosActual : REAL;
-    rIN_PosMax    : REAL;
-    rIN_PosMin    : REAL;
-    rIN_PixMax    : INT;
-    rIN_PixMin    : INT;
 END_VAR
 VAR_OUTPUT
     wOUT_AxisState : WORD; //Statuswort
-    rOUT_PixActual : INT;  // actual position of the axis in pixel
 END_VAR
 VAR
     _iStep                 : INT;   // current step
@@ -72,7 +64,13 @@ rOUT_PixActual := MAP_REAL_TO_INT(rValue    := rIN_PosActual,
                                   rFromLow  := rIN_PosMin,
                                   rToHigh   := rIN_PixMax,
                                   rToLow    := rIN_PixMin);
-]]></ST>
+(*
+IF xIN_Enable THEN
+    OUT_axis_ref := ADR(IN_axis_ref_simu);
+ELSE
+    OUT_axis_ref := ADR(IN_axis_ref);
+END_IF
+*)]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

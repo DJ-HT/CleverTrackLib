@@ -147,17 +147,19 @@ fb_axis180_01Y(enIN_State       := enIN_State,
                // The simu fb gives the hardware state when we are not in simu
                wAxisState  := fb_simu_axis180_01Y.wOUT_AxisState,
                rOUT_ActPos => st180_axis.axis180_01Y.rActPos,
-               axisIN_REF  := ST180_Axis.axis180_01Y.axis);
+               axisIN_REF  := SIMU.axis_ref[Axis_e.ST180_01Y]);
 
 fb_simu_axis180_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis180_01Y.bOUT_AxisCntr,
-                    wIN_AxisState       := ST180_Axis.axis180_01Y.wState,
-                    udiIN_HomingTime_ms := 2000,
                     rIN_PosActual       := fb_axis180_01Y.rOUT_ActPos,
                     rIN_PosMax          := ST180_Axis.const180_01Y.POS_MAX,
                     rIN_PosMin          := ST180_Axis.const180_01Y.POS_MIN,
                     rIN_PixMax          := 100,
-                    rIN_PixMin          := 0);
+                    rIN_PixMin          := 0,
+                    IN_axis_ref_simu    := SIMU.axis_ref[Axis_e.ST180_01Y],
+                    IN_axis_ref         := ST180_Axis.axis180_01Y.axis,
+                    bIN_AxisCntr        := fb_axis180_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST180_Axis.axis180_01Y.wState,
+                    udiIN_HomingTime_ms := 2000);
 
 fb_PnpVerAxis_02(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_02Z],
                  xIN_Init        := enIN_State = enState.StateINIT,
@@ -194,17 +196,19 @@ fb_axis180_02Z(enIN_State       := enIN_State,
                wAxisState       := fb_simu_axis180_02Z.wOUT_AxisState,
                bOUT_AxisCntr    => fb_simu_axis180_02Z.bIN_AxisCntr,
                rOUT_ActPos      => ST180_Axis.axis180_02Z.rActPos,
-               axisIN_REF       := ST180_Axis.axis180_02Z.axis);
+               axisIN_REF       := SIMU.axis_ref[Axis_e.ST180_02Z]);
 
 fb_simu_axis180_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis180_02Z.bOUT_AxisCntr,
-                    wIN_AxisState       := ST180_Axis.axis180_02Z.wState,
-                    udiIN_HomingTime_ms := 2000,
                     rIN_PosActual       := fb_axis180_02Z.rOUT_ActPos,
                     rIN_PosMax          := ST180_Axis.const180_02Z.POS_MAX,
                     rIN_PosMin          := ST180_Axis.const180_02Z.POS_MIN,
                     rIN_PixMax          := 80,
-                    rIN_PixMin          := 0);
+                    rIN_PixMin          := 0,
+                    IN_axis_ref_simu    := SIMU.axis_ref[Axis_e.ST180_02Z],
+                    IN_axis_ref         := ST180_Axis.axis180_02Z.axis,
+                    bIN_AxisCntr        := fb_axis180_02Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST180_Axis.axis180_02Z.wState,
+                    udiIN_HomingTime_ms := 2000);
 
 fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_10Z],
                  xIN_Init        := enIN_State = enState.StateINIT,
@@ -241,17 +245,19 @@ fb_axis180_10Z(enIN_State       := enIN_State,
                wAxisState       := fb_simu_axis180_10Z.wOUT_AxisState,
                bOUT_AxisCntr    => fb_simu_axis180_10Z.bIN_AxisCntr,
                rOUT_ActPos      => ST180_Axis.axis180_10Z.rActPos,
-               axisIN_REF       := ST180_Axis.axis180_10Z.axis);
+               axisIN_REF       := SIMU.axis_ref[Axis_e.ST180_10Z]);
 
 fb_simu_axis180_10Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis180_10Z.bOUT_AxisCntr,
-                    wIN_AxisState       := ST180_Axis.axis180_10Z.wState,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis180_10Z.rOUT_ActPos,
                     rIN_PosMax          := ST180_Axis.const180_10Z.POS_MAX,
                     rIN_PosMin          := ST180_Axis.const180_10Z.POS_MIN,
                     rIN_PixMax          := 80,
-                    rIN_PixMin          := 0);
+                    rIN_PixMin          := 0,
+                    IN_axis_ref_simu    := SIMU.axis_ref[Axis_e.ST180_10Z],
+                    IN_axis_ref         := ST180_Axis.axis180_10Z.axis,
+                    bIN_AxisCntr        := fb_axis180_10Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST180_Axis.axis180_10Z.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    rIN_PosActual       := fb_axis180_10Z.rOUT_ActPos);
 
 //////////////////////////////////
 fb_griperLeft(xIN_Reset    := xIN_Reset OR (ST180_Pnp_e.RESET = iOUT_Step),

@@ -63,7 +63,7 @@ VAR
     (* Bausteine *)
 
     // Application specific
-    fb_axis110_10W : FB_AxisRotTable_V1_1;
+    fb_axis110_10W : FB_AxisLMturn_V1_1;
     fb_feeder      : FB_Feeder2Sensors;
     fifo           : FB_Fifo(2);
     simu_feeder    : FB_Simu_Feeder; // simulation of a feeder
@@ -135,6 +135,7 @@ ELSE
     fb_axis110_10W.rIN_Position := 120.0;
 END_IF
 
+(*
 fb_axis110_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST110_10W,
@@ -166,6 +167,7 @@ fb_axis110_10W(enIN_State     := enIN_State,
                xIN_Reset        := xIN_Reset OR (ST110_Feeder_e.RESET = iOUT_Step),
                rOUT_ActPos      =>,
                axisIN_REF       := ST110_Axis.axis110_10W.axis);
+			   *)
 
 ST110_Axis.axis110_10W.rActPos := LREAL_TO_REAL(ST110_Axis.axis110_10W.axis.NcToPlc.ModuloActPos);
 

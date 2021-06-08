@@ -172,18 +172,21 @@ fb_axis145_10W(enIN_State     := enIN_State,
                    .wOUT_AxisState, // The simu fb gives us the hardware signal when we are not in simulation
                bOUT_AxisCntr => ST145_Axis.axis145_10W.bCtrlHi,
                rOUT_ActPos   =>,
-               axisIN_REF    := ST145_Axis.axis145_10W.axis);
+               axisIN_REF    := SIMU.axis_ref[Axis_e.ST145_10W]);
 
 ST145_Axis.axis145_10W.rActPos := LREAL_TO_REAL(ST145_Axis.axis145_10W.axis.NcToPlc.ModuloActPos);
 
 simu_axis145_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
-                 bIN_AxisCntr        := fb_axis145_10W.bOUT_AxisCntr,
-                 udiIN_HomingTime_ms := 1000,
                  rIN_PosActual       := fb_axis145_10W.rOUT_ActPos,
                  rIN_PosMax          := ST145_Axis.const145_10W.POS_MAX,
                  rIN_PosMin          := ST145_Axis.const145_10W.POS_MIN,
                  rIN_PixMax          := 0,
-                 rIN_PixMin          := 0);
+                 rIN_PixMin          := 0,
+                 IN_axis_ref_simu    := SIMU.axis_ref[Axis_e.ST145_10W],
+                 IN_axis_ref         := ST145_Axis.axis145_10W.axis,
+                 bIN_AxisCntr        := fb_axis145_10W.bOUT_AxisCntr,
+                 wIN_AxisState       := ST145_Axis.axis145_10W.wState,
+                 udiIN_HomingTime_ms := 1000);
 
 (*******************************************************************)
 (* OUTPUTS *)

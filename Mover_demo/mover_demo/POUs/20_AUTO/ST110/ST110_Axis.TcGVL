@@ -16,6 +16,7 @@ VAR_GLOBAL
     axis110_03Z : AxisBeckhoff_t;
     axis110_04Z : AxisBeckhoff_t;
     axis110_10W : AxisBeckhoff_t;
+    SIMU_axis110_01Y : AxisLinMot_t;
 END_VAR
 VAR_GLOBAL RETAIN
     // Recipe values are managed elsewhere

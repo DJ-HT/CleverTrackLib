@@ -1,16 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_Simu_AxisLIN_V1_1" Id="{6f3f35c2-88df-45cf-9274-41d0c42c68b0}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_Simu_AxisLIN_V1_1
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Simu_AxisLIN_V1_1 EXTENDS FB_Simu_axis
 VAR_INPUT
-    rIN_PosActual : REAL;
-    rIN_PosMax    : REAL;
-    rIN_PosMin    : REAL;
-    rIN_PixMax    : INT;
-    rIN_PixMin    : INT;
+
 END_VAR
 VAR_OUTPUT
-    rOUT_PixActual : INT; // actual relative position of the axis
 END_VAR
 VAR
 END_VAR
@@ -21,6 +16,13 @@ END_VAR
                                   rFromLow  := rIN_PosMin,
                                   rToHigh   := rIN_PixMax,
                                   rToLow    := rIN_PixMin);
+(*
+IF xIN_Enable THEN
+    OUT_axis_ref := ADR(IN_axis_ref_simu);
+ELSE
+    OUT_axis_ref := ADR(IN_axis_ref);
+END_IF
+*)
 ]]></ST>
     </Implementation>
   </POU>

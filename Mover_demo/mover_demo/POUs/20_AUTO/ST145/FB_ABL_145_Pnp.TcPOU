@@ -141,17 +141,19 @@ fb_axis145_01Y(enIN_State       := enIN_State,
                wAxisState       :=
                fb_simu_axis145_01Y.wOUT_AxisState, // The simu fb gives the hardware state when we are not in simu
                rOUT_ActPos => st145_axis.axis145_01Y.rActPos,
-               axisIN_REF  := ST145_Axis.axis145_01Y.axis);
+               axisIN_REF  := SIMU.axis_ref[Axis_e.ST145_01Y]);
 
 fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
-                    wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
-                    udiIN_HomingTime_ms := 2000,
                     rIN_PosActual       := fb_axis145_01Y.rOUT_ActPos,
                     rIN_PosMax          := ST145_Axis.const145_01Y.POS_MAX,
                     rIN_PosMin          := ST145_Axis.const145_01Y.POS_MIN,
                     rIN_PixMax          := 100,
-                    rIN_PixMin          := 0);
+                    rIN_PixMin          := 0,
+                    IN_axis_ref_simu    := SIMU.axis_ref[Axis_e.ST145_01Y],
+                    IN_axis_ref         := ST145_Axis.axis145_01Y.axis,
+                    bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
+                    udiIN_HomingTime_ms := 2000);
 
 fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_02Z],
               xIN_Init        := enIN_State = enState.StateINIT,
@@ -160,42 +162,15 @@ fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_0
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST145_PnpVerPos_e._max);
 
-fb_axis145_02Z(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st145_02Z,
-               xIN_Quit       := xIN_Quit,
-               axisIN_REF     := ST145_Axis.axis145_02Z.axis,
-               xIN_AX5000     := FALSE,
-               xIN_ENC_ABS    := TRUE, // TODO set accordingly
-               xIN_PARAMok    := TRUE,
-               xIN_FREE       := TRUE,
-               xIN_FREE_HOME  := TRUE,
-               rIN_POSMIN     := ST145_Axis.const145_02Z.POS_MIN,
-               rIN_POSMAX     := ST145_Axis.const145_02Z.POS_MAX,
-               rIN_VELOMAX    := ST145_Axis.const145_02Z.VELO_MAX,
-               rIN_VELOMANU   := ST145_Axis.const145_02Z.VELO_MANU,
-               rIN_VELOOPEN   := ST145_Axis.const145_02Z.POS_MAX / 4,
-               rIN_JogInc     := AXIS.rTeachIncAxis,
-               rIN_JogVelo    := AXIS.rTeachVelo,
-               xIN_HomeExe    :=,
-               xIN_HomeCalib  :=,
-               xIN_Execute    := (_20_AUTO.recipe.st145.xUseVerLeft OR (iOUT_Step < ST145_Pnp_e.READY)) AND
-                                 (fb_PnpVerAxis.xOUT_Execute),
-               xIN_HomeExe      := NOT CONST.USE_SIMULATION AND (ST145_Pnp_e.Init_HomeVerticals = iAktStep),
-               xIN_Relative     :=,
-               rIN_Position     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrPosition),
-               rIN_Velocity     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrVelocity),
-               rIN_Acceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrAccel),
-               rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
-               rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
-               xIN_Reset        := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               rOUT_ActPos      => st145_axis.axis145_02Z.rActPos);
+fb_axis145_02Z(axisIN_REF     := SIMU.axis_ref[Axis_e.ST145_02Z]);
 
 fb_simu_axis145_02Z(rIN_PosActual := fb_axis145_02Z.rOUT_ActPos,
                     rIN_PosMax    := ST145_Axis.const145_02Z.POS_MAX,
                     rIN_PosMin    := ST145_Axis.const145_02Z.POS_MIN,
                     rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+                    rIN_PixMin    := 0,
+                    IN_axis_ref_simu    := SIMU.axis_ref[Axis_e.ST145_02Z],
+                    IN_axis_ref         := ST145_Axis.axis145_02Z.axis);
 
 //////////////////////////////////
 fb_vakumGriperLeft(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Simu_axis" Id="{54f953b9-3230-461e-9d43-1dd942ce9e9a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK ABSTRACT FB_Simu_axis
+VAR_INPUT
+    xIN_Enable : BOOL; // When true, this FB simulate output signals
+
+    rIN_PosActual : REAL;
+    rIN_PosMax    : REAL;
+    rIN_PosMin    : REAL;
+    rIN_PixMax    : INT;
+    rIN_PixMin    : INT;
+
+    IN_axis_ref_simu : REFERENCE TO AXIS_REF; // link to the AXIS_REF simulated
+    IN_axis_ref      : REFERENCE TO AXIS_REF; // link to the real axis
+END_VAR
+VAR_OUTPUT
+    rOUT_PixActual : INT; // actual relative position of the axis
+    OUT_axis_ref_   : POINTER TO AXIS_REF;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
