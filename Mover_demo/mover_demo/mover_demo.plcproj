@@ -587,6 +587,9 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\FB_AUT_175.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST180\FB_ABL_180_Pnp.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -646,6 +649,26 @@
     <Compile Include="POUs\20_AUTO\TOOL\SortBubbleLREAL.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\FB_Laser_ABL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\if_SingleCmds.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\if_TruMark.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\TruMarkLaserStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\TruMark_SingleCmds.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\TruMark_Ethercat.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\_20_AUTO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -700,6 +723,8 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST175" />
+    <Folder Include="POUs\20_AUTO\Trumpf" />
     <Folder Include="POUs\20_AUTO\ST180" />
     <Folder Include="POUs\20_AUTO\ST145" />
     <Folder Include="POUs\20_AUTO\Simu" />
