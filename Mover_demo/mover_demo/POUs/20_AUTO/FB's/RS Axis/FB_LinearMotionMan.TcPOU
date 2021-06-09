@@ -69,7 +69,11 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF 0.0 = THIS^.OUT_MoveProfile.lrVelocity THEN
-    THIS^.OUT_MoveProfile.lrVelocity := THIS^.config.defProfile.lrVelocity;
+    IF THIS^.xIN_Init THEN
+        THIS^.OUT_MoveProfile.lrVelocity := THIS^.config.defProfile.lrVelocity * 0.5;
+    ELSE
+        THIS^.OUT_MoveProfile.lrVelocity := THIS^.config.defProfile.lrVelocity;
+    END_IF
 END_IF
 
 IF 0.0 = THIS^.OUT_MoveProfile.lrAccel THEN

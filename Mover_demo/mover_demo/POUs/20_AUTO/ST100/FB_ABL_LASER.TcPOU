@@ -211,7 +211,7 @@ ST100_Laser_e.waitOnMover: (*  *)
 ST100_Laser_e.proceedOperation_1: (*  *)
     IF xIN_NextStep AND (GetTick() - iStartProcessTimeMili) >= (iProcessTimeMili1) THEN
         iStartProcessTimeMili := GetTick();
-        iOUT_Step             := ST100_Laser_e.move_mover_to_next_piece;
+        iOUT_Step             := ST100_Laser_e.proceedOperation_2;
         _bBewegung            := FALSE;
     END_IF
 

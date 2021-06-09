@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <EnumerationTextList Name="ST145_Pnp_e" Id="{70f6ed33-469a-49d2-9229-880d3ad30ccd}">
-    <Declaration><![CDATA[TYPE ST145_Pnp_e :
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE ST145_Pnp_e :
 (
     RESET := 0, // Reset
 

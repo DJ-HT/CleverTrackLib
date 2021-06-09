@@ -30,6 +30,7 @@ VAR_INPUT
     // Application specific
     Mover              : REFERENCE TO FB_Mover;
     xIN_PceReadyToPick : BOOL; // the piece(s) is/are ready to picked
+    xIN_HorAxisFree    : BOOL; // TRUE when the vertical is up enough
 END_VAR
 VAR_OUTPUT
     (* standart Ausgänge *)
@@ -65,13 +66,13 @@ VAR
 
     (* Spezial *)
     fb_axis145_01Y : FB_AxisLM_V1_1;
-    fb_axis145_02Z : FB_AxisLIN_V1_1;
+    fb_axis145_02Z : FB_AxisLM_V1_1;
 
     fb_PnpHorAxis : FB_LinearMotionMan;
     fb_PnpVerAxis : FB_LinearMotionMan;
 
     fb_simu_axis145_01Y : FB_Simu_AxisLM_V1_1;
-    fb_simu_axis145_02Z : FB_Simu_AxisLIN_V1_1;
+    fb_simu_axis145_02Z : FB_Simu_AxisLM_V1_1;
 
     fb_vakumGriperLeft    : FB_ZylMo2El_V2_1;
     fb_vakumGriperRight   : FB_ZylMo2El_V2_1;
@@ -112,7 +113,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_01Y],
               xIN_Init        := enIN_State = enState.StateINIT,
               lrIN_CurrPos    := fb_axis145_01Y.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.01,
+              lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST145_PnpHorPos_e._max);
 
@@ -144,8 +145,7 @@ fb_axis145_01Y(enIN_State       := enIN_State,
                bOUT_AxisCntr => ST145_Axis.axis145_01Y.bCtrlHi,
                axisIN_REF    := ST145_Axis.axis145_01Y.axis);
 
-fb_simu_axis145_01Y(xIN_Enable :=
-                        PNP_SIMULATION AND CONST.USE_SIMULATION, //FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+fb_simu_axis145_01Y(xIN_Enable          := FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                     bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
                     wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
                     udiIN_HomingTime_ms := 2000,
@@ -158,32 +158,25 @@ fb_simu_axis145_01Y(xIN_Enable :=
 fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_02Z],
               xIN_Init        := enIN_State = enState.StateINIT,
               lrIN_CurrPos    := fb_axis145_02Z.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.01,
+              lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST145_PnpVerPos_e._max);
-
-fb_axis145_02Z(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st145_02Z,
-               xIN_Quit       := xIN_Quit,
-               axisIN_REF     := ST145_Axis.axis145_02Z.axis,
-               xIN_AX5000     := FALSE,
-               xIN_ENC_ABS    := TRUE, // TODO set accordingly
-               xIN_PARAMok    := TRUE,
-               xIN_FREE       := TRUE,
-               xIN_FREE_HOME  := TRUE,
-               rIN_POSMIN     := ST145_Axis.const145_02Z.POS_MIN,
-               rIN_POSMAX     := ST145_Axis.const145_02Z.POS_MAX,
-               rIN_VELOMAX    := ST145_Axis.const145_02Z.VELO_MAX,
-               rIN_VELOMANU   := ST145_Axis.const145_02Z.VELO_MANU,
-               rIN_VELOOPEN   := ST145_Axis.const145_02Z.POS_MAX / 4,
-               rIN_JogInc     := AXIS.rTeachIncAxis,
-               rIN_JogVelo    := AXIS.rTeachVelo,
-               xIN_HomeExe    :=,
-               xIN_HomeCalib  :=,
-               xIN_Execute    := (_20_AUTO.recipe.st145.xUseVerLeft OR (iOUT_Step < ST145_Pnp_e.READY)) AND
-                                 (fb_PnpVerAxis.xOUT_Execute),
-               xIN_HomeExe      := NOT CONST.USE_SIMULATION AND (ST145_Pnp_e.Init_HomeVerticals = iAktStep),
+			  
+fb_axis145_02Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st145_02Z,
+               xIN_Quit         := xIN_Quit,
+               xIN_PARAMok      := TRUE, (*TODO*)
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST145_Axis.const145_02Z.POS_MIN,
+               rIN_POSMAX       := ST145_Axis.const145_02Z.POS_MAX,
+               rIN_VELOMAX      := ST145_Axis.const145_02Z.VELO_MAX,
+               rIN_VELOMANU     := ST145_Axis.const145_02Z.VELO_MANU,
+               rIN_VELOOPEN     := ST145_Axis.const145_02Z.VELO_MANU / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               xIN_Execute      := fb_PnpVerAxis.xOUT_Execute,
+               xIN_Home         := ST145_Pnp_e.Init_HomeVerticals = iAktStep,
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrPosition),
                rIN_Velocity     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrVelocity),
@@ -191,13 +184,21 @@ fb_axis145_02Z(enIN_State     := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               rOUT_ActPos      => st145_axis.axis145_02Z.rActPos);
+               // The simu fb gives the hardware state when we are not in simu
+               wAxisState    := fb_simu_axis145_02Z.wOUT_AxisState,
+               rOUT_ActPos   => st145_axis.axis145_02Z.rActPos,
+               bOUT_AxisCntr => ST145_Axis.axis145_02Z.bCtrlHi,
+               axisIN_REF    := ST145_Axis.axis145_02Z.axis);
 
-fb_simu_axis145_02Z(rIN_PosActual := fb_axis145_02Z.rOUT_ActPos,
-                    rIN_PosMax    := ST145_Axis.const145_02Z.POS_MAX,
-                    rIN_PosMin    := ST145_Axis.const145_02Z.POS_MIN,
-                    rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+fb_simu_axis145_02Z(xIN_Enable          := FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis145_02Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST145_Axis.axis145_02Z.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    rIN_PosActual       := fb_axis145_02Z.rOUT_ActPos,
+                    rIN_PosMax          := ST145_Axis.const145_02Z.POS_MAX,
+                    rIN_PosMin          := ST145_Axis.const145_02Z.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
 
 //////////////////////////////////
 fb_vakumGriperLeft(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),
@@ -310,6 +311,20 @@ END_IF
 (* START *)
 rtSTART(CLK := xIN_Start);
 
+IF 0 = bOUT_Error THEN
+    IF fb_axis145_01Y.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_axis145_02Z.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_vakumGriperLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    ELSIF fb_vakumGriperRight.xOUT_ErrFlag THEN
+        bOUT_Error := 14;
+    END_IF
+ELSIF iOUT_Step < ST145_Pnp_e.ERROR THEN
+    iOUT_Step := ST145_Pnp_e.ERROR;
+END_IF
+
 (*******************************************************************)
 (* Schrittkette  *)
 (*******************************************************************)
@@ -329,19 +344,20 @@ ST145_Pnp_e.RESET: (* Schritt 0-99 *)
 (***** INIT *****)
 ST145_Pnp_e.INIT: (* Grundstellung ? *)
     IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
-        iOUT_Step := ST145_Pnp_e.Init_VerticalsUp;
+        iOUT_Step := ST145_Pnp_e.Init_HomeVerticals;
     ELSE
         iOUT_Step := ST145_Pnp_e.Init_HomeVerticals;
     END_IF;
 
 ST145_Pnp_e.Init_HomeVerticals:
-    fb_axis145_02Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_02Z].movesList[0].lrVelocity;
+    fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
 
-    IF fb_axis145_02Z.xOUT_DONE THEN
+    IF fb_axis145_02Z.xOUT_HOMED THEN
         iOUT_Step := ST145_Pnp_e.Init_VerticalsUp;
     END_IF
 
 ST145_Pnp_e.Init_VerticalsUp:
+    fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
     IF fb_vakumGriperLeft.xIN_AS OR fb_vakumGriperRight.xIN_AS THEN
         IF fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpFull).xOUT_InPos THEN
             IF fb_axis145_01Y.xOUT_READY OR fb_axis145_01Y.xOUT_HOMED THEN
@@ -361,13 +377,14 @@ ST145_Pnp_e.Init_VerticalsUp:
     END_IF
 
 ST145_Pnp_e.Init_HomeHorizontals:
-    fb_axis145_01Y.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_01Y].movesList[0].lrVelocity;
+    fb_axis145_01Y.rIN_Velocity := ST145_Axis.const145_01Y.VELO_MANU;
 
     IF fb_axis145_01Y.xOUT_HOMED THEN
         iOUT_Step := ST145_Pnp_e.Init_HorizontalsToTrack;
     END_IF
 
 ST145_Pnp_e.Init_HorizontalsToTrack:
+    fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
     IF fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.Init_check_if_pces_handled;
     END_IF
