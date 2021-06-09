@@ -344,6 +344,12 @@
     <Compile Include="POUs\20_AUTO\Simu\FB_Simu_Zyl2Pos.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\FB_ABL_LASER.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\FB_AUT_LASER.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST100\F_GetPercent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -384,6 +390,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST100\ST100_Modify_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\ST100_Laser_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST100\ST100_Unload_e.TcTLEO">

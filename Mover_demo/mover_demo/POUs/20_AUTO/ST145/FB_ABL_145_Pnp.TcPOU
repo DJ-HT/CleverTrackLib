@@ -144,7 +144,7 @@ fb_axis145_01Y(enIN_State       := enIN_State,
                bOUT_AxisCntr => ST145_Axis.axis145_01Y.bCtrlHi,
                axisIN_REF    := ST145_Axis.axis145_01Y.axis);
 
-fb_simu_axis145_01Y(xIN_Enable          := FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION, //FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                     bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
                     wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
                     udiIN_HomingTime_ms := 2000,
