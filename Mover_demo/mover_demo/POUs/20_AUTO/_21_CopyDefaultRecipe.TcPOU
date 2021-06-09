@@ -5,7 +5,8 @@
 VAR_INPUT
 END_VAR
 VAR
-	i : INT;
+    i  : INT;
+    ii : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -125,6 +126,13 @@ PERS.recipeList[0].st120.FeederConfigRight.StopDelay     := 6000;
 PERS.recipeList[0].st120.xUseVerLeft                     := TRUE;
 PERS.recipeList[0].st120.xUseVerRight                    := TRUE;
 
+// recipe ST125
+PERS.recipeList[0].st125.FeederConfig.InFilterDelay := 3000;
+PERS.recipeList[0].st125.FeederConfig.StartDelay    := 6000;
+PERS.recipeList[0].st125.FeederConfig.StopDelay     := 6000;
+PERS.recipeList[0].st125.xUseVerLeft                := TRUE;
+PERS.recipeList[0].st125.xUseVerRight               := TRUE;
+
 // recipe ST145
 PERS.recipeList[0].st145.FeederConfig.InFilterDelay := 3000;
 PERS.recipeList[0].st145.FeederConfig.StartDelay    := 6000;
@@ -135,6 +143,18 @@ PERS.recipeList[0].st145.xUseVerRight               := TRUE;
 // recipe ST180
 PERS.recipeList[0].st180.xUseVerLeft  := TRUE;
 PERS.recipeList[0].st180.xUseVerRight := TRUE;
+
+// ****************************************************************************** //
+
+// Cylinders
+FOR i := 0 TO TO_INT(StationList_e._max) - 1 BY 1 DO
+    FOR ii := 0 TO CONST.MAX_CYLINDER_PER_STATION - 1 BY 1 DO
+        PERS.recipeList[0].cylinder2Pos[i][ii].toAS_alarm_time := 3000;
+        PERS.recipeList[0].cylinder2Pos[i][ii].toGS_alarm_time := 3000;
+        PERS.recipeList[0].cylinder2Pos[i][ii].toAS_wait_time  := 0;
+        PERS.recipeList[0].cylinder2Pos[i][ii].toGS_wait_time  := 0;
+    END_FOR
+END_FOR
 ]]></ST>
     </Implementation>
   </POU>

@@ -138,13 +138,14 @@ fb_axis145_01Y(enIN_State       := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               wAxisState       :=
-               fb_simu_axis145_01Y.wOUT_AxisState, // The simu fb gives the hardware state when we are not in simu
+               // The simu fb gives the hardware state when we are not in simu
+               wAxisState    := fb_simu_axis145_01Y.wOUT_AxisState,
                rOUT_ActPos   => st145_axis.axis145_01Y.rActPos,
                bOUT_AxisCntr => ST145_Axis.axis145_01Y.bCtrlHi,
                axisIN_REF    := ST145_Axis.axis145_01Y.axis);
 
-fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION, //FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+fb_simu_axis145_01Y(xIN_Enable :=
+                        PNP_SIMULATION AND CONST.USE_SIMULATION, //FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                     bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
                     wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
                     udiIN_HomingTime_ms := 2000,

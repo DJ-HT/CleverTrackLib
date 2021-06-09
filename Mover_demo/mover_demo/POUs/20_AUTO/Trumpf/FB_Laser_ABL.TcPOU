@@ -9,13 +9,20 @@ VAR_OUTPUT
 END_VAR
 VAR
     iStep : INT := 0;
+	sDataTime : STRING(10);
 
     sLastName : STRING;
-    iLastNum  : INT;
+    sLastNum  : STRING(10);
+	
+	fb_time : NT_GetTime;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[CASE iStep OF
+      <ST><![CDATA[fb_time(NETID := '',
+        START :=,
+        TMOUT := T#1S);
+
+CASE iStep OF
 
 0: (* wait on start *)
     IF xIN_Start THEN
@@ -49,11 +56,22 @@ END_VAR
 
 1030: (* ON DONE*)
     IF if_SingleCmds.bReady THEN
-        iStep := 1100;
+        iStep := 1040;
     END_IF;
 
+1040: (* get time *)
+    fb_time.START := TRUE;
+    iStep         := 1050;
+
+1050: (* get time *)
+    fb_time.START := FALSE;
+
+    IF NOT fb_time.BUSY THEN
+        iStep := 1100;
+    END_IF
+
 1100: (* New FILE ? todo *)
-    IF 0 = FIND(sLastName,SIMU.sLaserFileName) THEN
+    IF 0 = FIND(sLastName, SIMU.sLaserFileName) OR (LEN(sLastName) <> LEN(SIMU.sLaserFileName)) THEN
         iStep := 1110;
     ELSE
         iStep := 1130;
@@ -77,19 +95,31 @@ END_VAR
     END_IF
 
 1130: (* New Var ? todo*)
-    IF iLastNum <> SIMU.iLaserFileNum THEN
+    // date format : Y1M1D1D2M2Y2-Sx
+    sDataTime[0] := F_ToASC(str := '0') + TO_BYTE((fb_time.TIMESTR.wYear MOD 100) / 10);  // Y1
+    sDataTime[1] := F_ToASC(str := '0') + TO_BYTE((fb_time.TIMESTR.wMonth MOD 100) / 10); // M1
+    sDataTime[2] := F_ToASC(str := '0') + TO_BYTE((fb_time.TIMESTR.wDay MOD 100) / 10);   // D1
+    sDataTime[3] := F_ToASC(str := '0') + TO_BYTE(fb_time.TIMESTR.wDay MOD 10);           // D2
+    sDataTime[4] := F_ToASC(str := '0') + TO_BYTE(fb_time.TIMESTR.wMonth MOD 10);         // M2
+    sDataTime[5] := F_ToASC(str := '0') + TO_BYTE(fb_time.TIMESTR.wYear MOD 10);          // Y2
+    sDataTime[6] := F_ToASC(str := '-');
+    sDataTime[7] := F_ToASC(str := 'S');
+    sDataTime[8] := F_ToASC(str := '1'); // TODO, team of the day
+    sDataTime[9] := 0;
+
+    IF 0 = FIND(sLastNum, sDataTime) OR (LEN(sLastNum) <> LEN(sDataTime)) THEN
         iStep := 1140;
     ELSE
         iStep := 1170;
     END_IF
 
+    MEMCPY(ADR(sLastNum), ADR(sDataTime), 10);
+
 1140: (* Set Var *)
     IF if_SingleCmds.bReady THEN
         if_SingleCmds.iStepNr := 35; // TLV - Set Variable
         // Variable name = 'Var1'	value = '3374'		Delimiter = ; --> will be replased with 0x00 in TruMark_Ethercat
-        if_SingleCmds.sInputValue := CONCAT('Var1;', TO_STRING(SIMU.iLaserFileNum));
-        iLastNum                  := SIMU.iLaserFileNum;
-        SIMU.iLaserFileNum        := SIMU.iLaserFileNum + 1;
+        if_SingleCmds.sInputValue := CONCAT('Var1;', TO_STRING(sDataTime));
 
         if_SingleCmds.bStart := TRUE;
         iStep                := 1150;

@@ -370,7 +370,7 @@ xOUT_Ready := (iOUT_Step = ST180_Pnp_e.READY) OR (iOUT_Step = ST180_Pnp_e.hor_mo
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
-xOUT_InitDone := (iOUT_Step = ST180_Pnp_e.READY) OR (iOUT_Step = ST180_Pnp_e.hor_move_to_extraction_pipe);
+xOUT_InitDone := (iOUT_Step = ST180_Pnp_e.READY) OR (iOUT_Step = ST180_Pnp_e.hor_move_to_extraction_pipe) OR (iOUT_Step = ST180_Pnp_e.DONE);
 // Aktueller Schritt			
 iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
 sOUT_Step := TO_STRING(iOUT_Step);
