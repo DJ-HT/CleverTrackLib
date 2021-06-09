@@ -24,9 +24,10 @@ recipeHMI REF= PERS.recipeList[PERS.iRecipeCurrent];
 recipe    REF= PERS.recipeList[PERS.iRecipeCurrent];
 
 IF HMI.btCopyRecipe.rtrig THEN
-    PERS.recipeList[iRecipeCopyDest] := PERS.recipeList[PERS.iRecipeCurrent];
+    // PERS.recipeList[iRecipeCopyDest] := PERS.recipeList[PERS.iRecipeCurrent];
     // reset the position of iRecipeCopyDest to tell the user the saving is done
-    iRecipeCopyDest := RecipeType_e._max;
+    // iRecipeCopyDest := RecipeType_e._max;
+	_21_CopyDefaultRecipe();
 END_IF
 
 IF HMI.btCopyAxisCfg.rtrig THEN

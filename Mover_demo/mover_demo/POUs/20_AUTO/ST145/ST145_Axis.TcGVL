@@ -3,8 +3,8 @@
   <GVL Name="ST145_Axis" Id="{9d19c34b-b097-4509-8aa0-2c316c9c6fdc}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
-    const145_01Y : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 650, VELO_MAX := 2000, VELO_MANU := 100);
-    const145_02Z : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 650, VELO_MAX := 2000, VELO_MANU := 50);
+    const145_01Y : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 200, VELO_MAX := 1000, VELO_MANU := 50);
+    const145_02Z : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 200, VELO_MAX := 1000, VELO_MANU := 50);
     const145_10W : AxisLinMotConst_t := (POS_MIN := 0, POS_MAX := 360, VELO_MAX := 360, VELO_MANU := 50);
 
 END_VAR
