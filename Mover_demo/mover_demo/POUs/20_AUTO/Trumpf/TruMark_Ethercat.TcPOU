@@ -19,16 +19,16 @@ VAR
 
 
 	// TLV Data Structure
-	awTlvPBxM2 AT %MW00: ARRAY [0..63] OF WORD;
+	awTlvPBxM2 AT %M*: ARRAY [0..63] OF WORD;
 	// To avoid PADDING in a structure it is recommended to declare multiple single variables
-	iTlvHandshake AT %MW00 : INT;
-	diTlvTag AT %MW01 : DINT;
-	diTlvLenght AT %MW03 : DINT;
-	abyTlvValues AT %MW05 : ARRAY [0..117] OF BYTE;
+	iTlvHandshake AT %M* : INT;
+	diTlvTag AT %M* : DINT;
+	diTlvLenght AT %M* : DINT;
+	abyTlvValues AT %M* : ARRAY [0..117] OF BYTE;
 	
 	// BIT Helper-Variables
-	awPBOM AT %MW122 : ARRAY [0..1] OF WORD;
-	dwPBOM AT %MW122 : DWORD;
+	awPBOM AT %M* : ARRAY [0..1] OF WORD;
+	dwPBOM AT %M* : DWORD;
 	
 	iStep 	: INT;	
 	t1 : TON;
