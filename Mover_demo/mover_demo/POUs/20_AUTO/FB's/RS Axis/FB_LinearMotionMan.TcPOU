@@ -36,7 +36,7 @@ VAR_INPUT
 END_VAR
 VAR_OUTPUT
     xOUT_Execute       : BOOL;            // execute flag for the motion FB
-    OUT_MoveProfile    : MoveProfile1D_t; // profile for the moteion FB
+    OUT_MoveProfile    : VectorMove1D_t; // profile for the moteion FB
     iOUT_CurrPosNumber : INT := 0;        // The current vector, either in execution or executed
     xOUT_InPos         : BOOL;            // Is on when 'lrIN_CurrPos' passed the trigger or correspond 
 END_VAR

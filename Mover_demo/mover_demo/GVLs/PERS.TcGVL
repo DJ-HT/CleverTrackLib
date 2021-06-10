@@ -59,12 +59,14 @@ VAR_GLOBAL RETAIN PERSISTENT
 
     //{attribute 'to_json'}
     //_20_AUTO.recipe : Recipe_21_101_t;
-	
 
     {attribute 'to_json'}
     recipeList : ARRAY[0..CONST.MAX_RECIPE_NUMBER] OF Recipe_21_101_t; // registery of recipe
+	
+    eRecipeCurrent : RecipeType_e; // selected recipe to be executed
+	
     {attribute 'to_json'}
-    iRecipeCurrent : RecipeType_e; // selected recipe to be executed
+    iRecipeCurrent : INT; // selected recipe to be executed
 
 END_VAR
 ]]></Declaration>
