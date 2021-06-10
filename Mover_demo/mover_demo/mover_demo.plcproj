@@ -582,10 +582,10 @@
     <Compile Include="POUs\20_AUTO\ST145\ST145_PnpVerPos_e.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST145\ST145_Pnp_e.TcTLEO">
+    <Compile Include="POUs\20_AUTO\ST145\ST145_Recipe_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST145\ST145_Recipe_t.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST145\ST145_Pnp_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST145\VISU_Recipe_ST145.TcVIS">
@@ -593,6 +593,29 @@
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST145\VISU_ST145.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\FB_ABL_150.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\FB_AUT_150.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\ST150_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\ST150_Uss_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\ST150_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\VISU_Recipe_ST150.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\VISU_ST150.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
@@ -732,6 +755,7 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST150" />
     <Folder Include="POUs\20_AUTO\ST175" />
     <Folder Include="POUs\20_AUTO\Trumpf" />
     <Folder Include="POUs\20_AUTO\ST180" />

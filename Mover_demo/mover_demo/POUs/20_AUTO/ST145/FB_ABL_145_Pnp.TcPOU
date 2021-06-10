@@ -285,10 +285,10 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
 xOUT_PickPiece := iOUT_Step = ST145_Pnp_e.Pnp_Hor_ToTrackPos;
 
 // TODO Valve should not be set when we are in simulation !
-IO_BOX.Q0200_12_ST145_vakum_greifer_links :=
+IO_BOX.Q0200_14_ST145_vakum_greifer_links :=
     fb_vakumGriperLeft.xOUT_VALVE; // AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q0201_12_ST145_vakum_greifer_rechts :=
+IO_BOX.Q0201_14_ST145_vakum_greifer_rechts :=
     fb_vakumGriperRight.xOUT_VALVE; // AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
