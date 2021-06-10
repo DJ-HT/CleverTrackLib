@@ -23,11 +23,13 @@ END_VAR
 recipeHMI REF= PERS.recipeList[PERS.iRecipeCurrent];
 recipe    REF= PERS.recipeList[PERS.iRecipeCurrent];
 
+PERS.iRecipeCurrent := PERS.eRecipeCurrent;
+
 IF HMI.btCopyRecipe.rtrig THEN
     // PERS.recipeList[iRecipeCopyDest] := PERS.recipeList[PERS.iRecipeCurrent];
     // reset the position of iRecipeCopyDest to tell the user the saving is done
     // iRecipeCopyDest := RecipeType_e._max;
-	_21_CopyDefaultRecipe();
+    _21_CopyDefaultRecipe();
 END_IF
 
 IF HMI.btCopyAxisCfg.rtrig THEN
@@ -301,7 +303,8 @@ GVL.st185_aut(xIN_Init       := HMI.enState = enState.StateINIT,
               tIN_Timeout    := T#10S,
               xIN_On         := TRUE);
 
-GVL.st1xx_aut();]]></ST>
+GVL.st1xx_aut();
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

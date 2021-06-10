@@ -1476,6 +1476,44 @@ External Setpoint Generation:
 			</SubItem>
 		</DataType>
 		<DataType>
+			<Name GUID="{D5767748-3EB3-4442-1FC9-001B0BE92F7A}" AutoDeleteType="true">RecipeType_e</Name>
+			<BitSize>16</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
+			<EnumInfo>
+				<Text><![CDATA[Smart_Mini]]></Text>
+				<Enum>0</Enum>
+			</EnumInfo>
+			<EnumInfo>
+				<Text><![CDATA[_max]]></Text>
+				<Enum>1</Enum>
+				<Comment><![CDATA[ Smart := 1,
+ Blue := 2,
+ Smart_Kristall := 3,
+ Pro_Smart := 4,
+ Pro_Blue := 5,
+ Pro_Smart_Kristall := 6,
+ Pro_Smart_Maxi := 7,
+ Pro_Smart_Maxi_Kristall := 8,]]></Comment>
+			</EnumInfo>
+			<Properties>
+				<Property>
+					<Name>textlistenumeration</Name>
+				</Property>
+				<Property>
+					<Name>qualified_only</Name>
+				</Property>
+				<Property>
+					<Name>strict</Name>
+				</Property>
+				<Property>
+					<Name>generate_implicit_init_function</Name>
+				</Property>
+			</Properties>
+			<Hides>
+				<Hide GUID="{4C166DD2-16EB-C115-038B-95F24B521734}"/>
+			</Hides>
+		</DataType>
+		<DataType>
 			<Name GUID="{5DA65DD7-CE95-D158-4254-80D11B9071C7}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..19] OF DINT</Name>
 			<BitSize>608</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000009}">DINT</BaseType>
@@ -1957,44 +1995,6 @@ External Setpoint Generation:
 				<BitSize>8</BitSize>
 				<BitOffs>0</BitOffs>
 			</SubItem>
-		</DataType>
-		<DataType>
-			<Name GUID="{D5767748-3EB3-4442-1FC9-001B0BE92F7A}" AutoDeleteType="true">RecipeType_e</Name>
-			<BitSize>16</BitSize>
-			<BaseType GUID="{18071995-0000-0000-0000-000000000006}">INT</BaseType>
-			<EnumInfo>
-				<Text><![CDATA[Smart_Mini]]></Text>
-				<Enum>0</Enum>
-			</EnumInfo>
-			<EnumInfo>
-				<Text><![CDATA[_max]]></Text>
-				<Enum>1</Enum>
-				<Comment><![CDATA[ Smart := 1,
- Blue := 2,
- Smart_Kristall := 3,
- Pro_Smart := 4,
- Pro_Blue := 5,
- Pro_Smart_Kristall := 6,
- Pro_Smart_Maxi := 7,
- Pro_Smart_Maxi_Kristall := 8,]]></Comment>
-			</EnumInfo>
-			<Properties>
-				<Property>
-					<Name>textlistenumeration</Name>
-				</Property>
-				<Property>
-					<Name>qualified_only</Name>
-				</Property>
-				<Property>
-					<Name>strict</Name>
-				</Property>
-				<Property>
-					<Name>generate_implicit_init_function</Name>
-				</Property>
-			</Properties>
-			<Hides>
-				<Hide GUID="{4C166DD2-16EB-C115-038B-95F24B521734}"/>
-			</Hides>
 		</DataType>
 		<DataType>
 			<Name GUID="{A95E4D60-597C-2A3F-8E4A-A0564CC93A3C}" IecBaseType="true" AutoDeleteType="true">ARRAY [0..4] OF UDINT</Name>
@@ -10095,6 +10095,12 @@ External Setpoint Generation:
 					<Vars VarGrpType="8" AreaNo="4">
 						<Name>PlcTask Retains</Name>
 						<Var>
+							<Name>PERS.eRecipeCurrent</Name>
+							<Comment><![CDATA[ selected recipe to be executed]]></Comment>
+							<Type GUID="{D5767748-3EB3-4442-1FC9-001B0BE92F7A}">RecipeType_e</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
 							<Name>PERS.udiTempOK</Name>
 							<Comment><![CDATA[ Temporary Counter  OK ]]></Comment>
 							<Type>UDINT</Type>
@@ -12461,12 +12467,6 @@ External Setpoint Generation:
 					</Vars>
 					<Vars VarGrpType="8" ContextId="2" AreaNo="36">
 						<Name>Task_fileMan Retains</Name>
-						<Var>
-							<Name>PERS.eRecipeCurrent</Name>
-							<Comment><![CDATA[ selected recipe to be executed]]></Comment>
-							<Type GUID="{D5767748-3EB3-4442-1FC9-001B0BE92F7A}">RecipeType_e</Type>
-							<InOut>7</InOut>
-						</Var>
 						<Var>
 							<Name>PERS.udiTotalOK</Name>
 							<Comment><![CDATA[ Total Counter  OK ]]></Comment>
