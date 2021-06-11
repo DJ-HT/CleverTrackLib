@@ -114,6 +114,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_01Y],
               xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis115_01Y.rOUT_ActPos,
               lrIN_Delta_mm   := 0.01,
               iIN_CurrentStep := iOUT_Step,
@@ -158,6 +159,7 @@ fb_simu_axis115_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_02Z],
                xIN_Init        := enIN_State = enState.StateINIT,
+               xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis115_02Z.rOUT_ActPos,
                lrIN_Delta_mm   := 0.01,
                iIN_CurrentStep := iOUT_Step,
@@ -203,6 +205,8 @@ fb_simu_axis115_02Z(rIN_PosActual := fb_axis115_02Z.rOUT_ActPos,
                     rIN_PixMin    := 0);
 
 fb_PnpVerAxisR(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_03Z],
+               xIN_Init        := enIN_State = enState.StateINIT,
+               xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis115_03Z.rOUT_ActPos,
                lrIN_Delta_mm   := 0.01,
                iIN_CurrentStep := iOUT_Step,
@@ -234,7 +238,7 @@ fb_axis115_03Z(enIN_State     := enIN_State,
                axisIN_REF       := ST115_Axis.axis115_03Z.axis,
                xIN_AX5000       := FALSE,
                xIN_ENC_ABS      := TRUE,
-               rOUT_ActPos => ST115_Axis.axis115_03Z.rActPos); // TODO set accordingly
+               rOUT_ActPos      => ST115_Axis.axis115_03Z.rActPos); // TODO set accordingly
 
 fb_simu_axis115_03Z(rIN_PosActual := fb_axis115_03Z.rOUT_ActPos,
                     rIN_PosMax    := ST115_Axis.const115_03Z.POS_MAX,

@@ -117,6 +117,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_01Y],
               xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis110_01Y.rOUT_ActPos,
               lrIN_Delta_mm   := 0.01,
               iIN_CurrentStep := iOUT_Step,
@@ -161,6 +162,7 @@ fb_simu_axis110_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_02Z],
                xIN_Init        := enIN_State = enState.StateINIT,
+               xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis110_02Z.rOUT_ActPos,
                lrIN_Delta_mm   := 0.01,
                iIN_CurrentStep := iOUT_Step,
@@ -207,6 +209,7 @@ fb_simu_axis110_02Z(rIN_PosActual := fb_axis110_02Z.rOUT_ActPos,
 
 fb_PnpVerAxisR(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_03Z],
                xIN_Init        := enIN_State = enState.StateINIT,
+               xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis110_03Z.rOUT_ActPos,
                lrIN_Delta_mm   := 0.01,
                iIN_CurrentStep := iOUT_Step,
@@ -248,6 +251,7 @@ fb_simu_axis110_03Z(rIN_PosActual := fb_axis110_03Z.rOUT_ActPos,
 
 fb_PnpVerAxisU(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_04Z],
                xIN_Init        := enState.StateINIT = enIN_State,
+               xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := ST110_Axis.axis110_04Z.rActPos,
                lrIN_Delta_mm   := 0.01,
                iIN_CurrentStep := iOUT_Step,
@@ -597,7 +601,7 @@ ST110_Pnp_e.PnP_Ver_ShuttleUp:
        NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.UpEmpty).xOUT_InPos OR
        NOT _20_AUTO.recipe.st110.xUseVerRight) AND
-       fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos  THEN
+       fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
     END_IF;
 

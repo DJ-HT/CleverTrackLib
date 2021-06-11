@@ -10,6 +10,7 @@ TYPE ST110_Feeder_e :
     INIT := 100, // Initialisieren 
     Init_home_table,
     Init_simu_home_table,
+    Init_table_go_to_zero,
     Init_reset_search_index,
     Init_set_table_pos,
     Init_see_if_piece_there,

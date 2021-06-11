@@ -731,6 +731,7 @@
     <Compile Include="VISUs\VISU_main.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+      <CompilerDefines>VISU_NO_EXCEPTION_HANDLING</CompilerDefines>
     </Compile>
     <Compile Include="VISU_TASK.TcTTO">
       <SubType>Code</SubType>

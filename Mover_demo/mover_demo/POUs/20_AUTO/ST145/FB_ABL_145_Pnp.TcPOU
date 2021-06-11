@@ -112,6 +112,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_01Y],
               xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis145_01Y.rOUT_ActPos,
               lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
@@ -157,11 +158,12 @@ fb_simu_axis145_01Y(xIN_Enable          := FALSE, // PNP_SIMULATION AND CONST.US
 
 fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_02Z],
               xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis145_02Z.rOUT_ActPos,
               lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST145_PnpVerPos_e._max);
-			  
+
 fb_axis145_02Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st145_02Z,
@@ -358,6 +360,7 @@ ST145_Pnp_e.Init_HomeVerticals:
 
 ST145_Pnp_e.Init_VerticalsUp:
     fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
+
     IF fb_vakumGriperLeft.xIN_AS OR fb_vakumGriperRight.xIN_AS THEN
         IF fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpFull).xOUT_InPos THEN
             IF fb_axis145_01Y.xOUT_READY OR fb_axis145_01Y.xOUT_HOMED THEN
@@ -385,6 +388,7 @@ ST145_Pnp_e.Init_HomeHorizontals:
 
 ST145_Pnp_e.Init_HorizontalsToTrack:
     fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
+
     IF fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.Init_check_if_pces_handled;
     END_IF

@@ -117,6 +117,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_01Y],
               xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis180_01Y.rOUT_ActPos,
               lrIN_Delta_mm   := 0.01,
               iIN_CurrentStep := iOUT_Step,
@@ -161,6 +162,7 @@ fb_simu_axis180_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_PnpVerAxis_02(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_02Z],
                  xIN_Init        := enIN_State = enState.StateINIT,
+                 xIN_Reset       := xIN_Reset,
                  lrIN_CurrPos    := fb_axis180_02Z.rOUT_ActPos,
                  lrIN_Delta_mm   := 0.01,
                  iIN_CurrentStep := iOUT_Step,
@@ -208,6 +210,7 @@ fb_simu_axis180_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_10Z],
                  xIN_Init        := enIN_State = enState.StateINIT,
+                 xIN_Reset       := xIN_Reset,
                  lrIN_CurrPos    := fb_axis180_10Z.rOUT_ActPos,
                  lrIN_Delta_mm   := 0.01,
                  iIN_CurrentStep := iOUT_Step,
@@ -370,7 +373,10 @@ xOUT_Ready := (iOUT_Step = ST180_Pnp_e.READY) OR (iOUT_Step = ST180_Pnp_e.hor_mo
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
-xOUT_InitDone := (iOUT_Step = ST180_Pnp_e.READY) OR (iOUT_Step = ST180_Pnp_e.hor_move_to_extraction_pipe) OR (iOUT_Step = ST180_Pnp_e.DONE);
+xOUT_InitDone := (iOUT_Step = ST180_Pnp_e.READY) OR
+                 (iOUT_Step = ST180_Pnp_e.hor_move_to_extraction_pipe) OR
+                 (iOUT_Step = ST180_Pnp_e.DONE);
+
 // Aktueller Schritt			
 iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
 sOUT_Step := TO_STRING(iOUT_Step);

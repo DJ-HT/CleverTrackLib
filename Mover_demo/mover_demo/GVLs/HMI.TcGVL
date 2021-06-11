@@ -52,6 +52,11 @@ VAR_GLOBAL
      * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: Rotative cylinder left
      * [4]: Rotative cylinder right
      *)
+	 
+	 
+    btArST150 : ARRAY[0..20] OF structButton; (*	0 : Start USS
+	                                                1 : Reset US
+											   *)
 
     (*******************************************************************)
     (* ALARME  *)
