@@ -231,12 +231,12 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
 
                     IF fb_json.HasMember(json_st110, 'xUseVerLeft') THEN
                         json_value                               := fb_json.FindMember(json_st110, 'xUseVerLeft');
-                        PERS.recipeList[i + 0].st110.xUseVerLeft := TO_BOOL(fb_json.GetBool(json_value));
+                        PERS.recipeList[i + 0].st110.xUseVerLeft := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st110, 'xUseVerRight') THEN
                         json_value                                := fb_json.FindMember(json_st110, 'xUseVerRight');
-                        PERS.recipeList[i + 0].st110.xUseVerRight := TO_BOOL(fb_json.GetBool(json_value));
+                        PERS.recipeList[i + 0].st110.xUseVerRight := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st110, 'FeederConfig') THEN
@@ -273,12 +273,12 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
 
                     IF fb_json.HasMember(json_st115, 'xUseVerLeft') THEN
                         json_value                               := fb_json.FindMember(json_st115, 'xUseVerLeft');
-                        PERS.recipeList[i + 0].st115.xUseVerLeft := TO_BOOL(fb_json.GetBool(json_value));
+                        PERS.recipeList[i + 0].st115.xUseVerLeft := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st115, 'xUseVerRight') THEN
                         json_value                                := fb_json.FindMember(json_st115, 'xUseVerRight');
-                        PERS.recipeList[i + 0].st115.xUseVerRight := TO_BOOL(fb_json.GetBool(json_value));
+                        PERS.recipeList[i + 0].st115.xUseVerRight := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st115, 'FeederConfig') THEN
@@ -315,12 +315,12 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
 
                     IF fb_json.HasMember(json_st120, 'xUseVerLeft') THEN
                         json_value                               := fb_json.FindMember(json_st120, 'xUseVerLeft');
-                        PERS.recipeList[i + 0].st120.xUseVerLeft := TO_BOOL(fb_json.GetBool(json_value));
+                        PERS.recipeList[i + 0].st120.xUseVerLeft := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st120, 'xUseVerRight') THEN
                         json_value                                := fb_json.FindMember(json_st120, 'xUseVerRight');
-                        PERS.recipeList[i + 0].st120.xUseVerRight := TO_BOOL(fb_json.GetBool(json_value));
+                        PERS.recipeList[i + 0].st120.xUseVerRight := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st120, 'FeederConfigLeft') THEN
@@ -386,13 +386,13 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                     IF fb_json.HasMember(json_st125, 'xUseVerLeft') THEN
                         json_value := fb_json.FindMember(json_st125, 'xUseVerLeft');
                         PERS.recipeList[i + 0].st125.xUseVerLeft
-                            := TO_BOOL(fb_json.GetBool(json_value));
+                            := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st125, 'xUseVerRight') THEN
                         json_value := fb_json.FindMember(json_st125, 'xUseVerRight');
                         PERS.recipeList[i + 0].st125.xUseVerRight
-                            := TO_BOOL(fb_json.GetBool(json_value));
+                            := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st125, 'FeederConfig') THEN
@@ -430,13 +430,13 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
                     IF fb_json.HasMember(json_st145, 'xUseVerLeft') THEN
                         json_value := fb_json.FindMember(json_st145, 'xUseVerLeft');
                         PERS.recipeList[i + 0].st145.xUseVerLeft
-                            := TO_BOOL(fb_json.GetBool(json_value));
+                            := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st145, 'xUseVerRight') THEN
                         json_value := fb_json.FindMember(json_st145, 'xUseVerRight');
                         PERS.recipeList[i + 0].st145.xUseVerRight
-                            := TO_BOOL(fb_json.GetBool(json_value));
+                            := (fb_json.GetBool(json_value));
                     END_IF
 
                     IF fb_json.HasMember(json_st145, 'FeederConfig') THEN
@@ -474,12 +474,12 @@ IF fb_json.HasMember(json_head, 'recipeList') THEN
 
                 IF fb_json.HasMember(json_st180, 'xUseVerLeft') THEN
                     json_value                               := fb_json.FindMember(json_st180, 'xUseVerLeft');
-                    PERS.recipeList[i + 0].st180.xUseVerLeft := TO_BOOL(fb_json.GetBool(json_value));
+                    PERS.recipeList[i + 0].st180.xUseVerLeft := (fb_json.GetBool(json_value));
                 END_IF
 
                 IF fb_json.HasMember(json_st180, 'xUseVerRight') THEN
                     json_value                                := fb_json.FindMember(json_st180, 'xUseVerRight');
-                    PERS.recipeList[i + 0].st180.xUseVerRight := TO_BOOL(fb_json.GetBool(json_value));
+                    PERS.recipeList[i + 0].st180.xUseVerRight := (fb_json.GetBool(json_value));
                 END_IF
             END_IF
         END_FOR
@@ -492,5 +492,9 @@ IF fb_json.HasMember(json_head, 'iRecipeCurrent') THEN
 END_IF
 ]]></ST>
     </Implementation>
+    <LineIds Name="ReadJsonDom">
+      <LineId Id="3" Count="449" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>
