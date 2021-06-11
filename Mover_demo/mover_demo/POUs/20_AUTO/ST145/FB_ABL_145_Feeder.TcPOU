@@ -177,6 +177,7 @@ fb_axis145_10W(enIN_State     := enIN_State,
 ST145_Axis.axis145_10W.rActPos := LREAL_TO_REAL(ST145_Axis.axis145_10W.axis.NcToPlc.ModuloActPos);
 
 simu_axis145_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                 wIN_AxisState       := ST145_Axis.axis145_10W.wState,
                  bIN_AxisCntr        := fb_axis145_10W.bOUT_AxisCntr,
                  udiIN_HomingTime_ms := 1000,
                  rIN_PosActual       := fb_axis145_10W.rOUT_ActPos,
