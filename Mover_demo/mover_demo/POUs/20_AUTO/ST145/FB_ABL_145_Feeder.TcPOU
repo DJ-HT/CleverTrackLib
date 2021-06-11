@@ -171,7 +171,7 @@ fb_axis145_10W(enIN_State     := enIN_State,
                wAxisState       := simu_axis145_10W
                    .wOUT_AxisState, // The simu fb gives us the hardware signal when we are not in simulation
                bOUT_AxisCntr => ST145_Axis.axis145_10W.bCtrlHi,
-               rOUT_ActPos   =>,
+               rOUT_ActPos   => , // leave empty, rActPos must be set using the modulo
                axisIN_REF    := ST145_Axis.axis145_10W.axis);
 
 ST145_Axis.axis145_10W.rActPos := LREAL_TO_REAL(ST145_Axis.axis145_10W.axis.NcToPlc.ModuloActPos);
