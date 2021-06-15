@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Crc="819185798" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{172289a5-9ac2-4a7f-966e-8765b862db39}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TwinCAT3SafePlcProject</RootNamespace>
+    <AssemblyName>TwinCAT3SafePlcProject</AssemblyName>
+    <FileUpgradeFlags />
+    <UpgradeBackupLocation />
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetSystem>EL6900</TargetSystem>
+    <ProgrammingLanguage>Graphical Editor</ProgrammingLanguage>
+    <Worker>mk</Worker>
+    <IntProjName>Advaltech19101Safety</IntProjName>
+    <IsNewCreated>false</IsNewCreated>
+    <SPlcProjVersion>1.4.0.0</SPlcProjVersion>
+    <NextSdsId>313</NextSdsId>
+    <Name>SAFETY20119</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 1.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 10.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 11.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 12.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 13.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 14.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 15.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 16.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 17.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 18.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 19.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 2.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 20.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 21.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 22.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 23.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 24.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 25.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 26.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 27.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 28.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 29.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 3.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 30.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 31.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 32.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 33.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 34.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 35.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 36.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 37.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 38.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 39.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 4.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 40.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 41.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 42.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 43.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 44.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 45.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 46.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 47.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 48.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 49.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 5.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 50.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 51.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 52.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 53.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 54.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 55.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 56.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 6.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 7.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 8.sds" />
+    <None Include="Gr001_Input\Alias Devices\ALL_IN 9.sds" />
+    <None Include="Gr001_Input\Alias Devices\OtherErr.sds" />
+    <None Include="Gr001_Input\Alias Devices\ComErr.sds" />
+    <None Include="Gr001_Input\Alias Devices\FbErr.sds" />
+    <None Include="Gr001_Input\Alias Devices\141D5 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr001_Input\Alias Devices\140D3 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr001_Input\Alias Devices\140D5 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr001_Input\Alias Devices\140D7 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr001_Input\Alias Devices\140D9 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr001_Input\Alias Devices\141D1 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr001_Input\Alias Devices\141D3 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr001_Input\Alias Devices\140D1 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr001_Input\Gr001_Input.sal" />
+    <None Include="Gr001_Input\Gr001_Input.sal.diagram">
+      <DependentUpon>Gr001_Input\Gr001_Input.sal</DependentUpon>
+      <Visible>false</Visible>
+    </None>
+    <None Include="Gr002_NotHalt\Alias Devices\ErrAck.sds" />
+    <None Include="Gr002_NotHalt\Alias Devices\ResetES.sds" />
+    <None Include="Gr002_NotHalt\Alias Devices\Run.sds" />
+    <None Include="Gr002_NotHalt\Alias Devices\ComErr.sds" />
+    <None Include="Gr002_NotHalt\Alias Devices\FbErr.sds" />
+    <None Include="Gr002_NotHalt\Alias Devices\OtherErr.sds" />
+    <None Include="Gr002_NotHalt\Alias Devices\ESout.sds" />
+    <None Include="Gr002_NotHalt\Alias Devices\ESdelOut.sds" />
+    <None Include="Gr002_NotHalt\Gr002_NotHalt.sal" />
+    <None Include="Gr002_NotHalt\Gr002_NotHalt.sal.diagram">
+      <Visible>false</Visible>
+      <DependentUpon>Gr002_NotHalt\Gr002_NotHalt.sal</DependentUpon>
+    </None>
+    <None Include="Gr003_Tuer\Alias Devices\ErrAck.sds" />
+    <None Include="Gr003_Tuer\Alias Devices\Run.sds" />
+    <None Include="Gr003_Tuer\Alias Devices\ComErr.sds" />
+    <None Include="Gr003_Tuer\Alias Devices\FbErr.sds" />
+    <None Include="Gr003_Tuer\Alias Devices\OtherErr.sds" />
+    <None Include="Gr003_Tuer\Alias Devices\MonOut.sds" />
+    <None Include="Gr003_Tuer\Alias Devices\MonDelOut.sds" />
+    <None Include="Gr003_Tuer\Gr003_Tuer.sal" />
+    <None Include="Gr003_Tuer\Gr003_Tuer.sal.diagram">
+      <Visible>false</Visible>
+      <DependentUpon>Gr003_Tuer\Gr003_Tuer.sal</DependentUpon>
+    </None>
+    <None Include="Gr004_Axis\Alias Devices\ErrAck.sds" />
+    <None Include="Gr004_Axis\Alias Devices\Run.sds" />
+    <None Include="Gr004_Axis\Alias Devices\ComErr.sds" />
+    <None Include="Gr004_Axis\Alias Devices\FbErr.sds" />
+    <None Include="Gr004_Axis\Alias Devices\OtherErr.sds" />
+    <None Include="Gr004_Axis\Alias Devices\Term 48 %28AX5805%29 - Module 1 %28Safety Process Data, 2 axis%29.sds" />
+    <None Include="Gr004_Axis\Alias Devices\Term 50 %28AX5805%29 - Module 1 %28Safety Process Data, 2 axis%29.sds" />
+    <None Include="Gr004_Axis\Alias Devices\Term 52 %28AX5805%29 - Module 1 %28Safety Process Data, 2 axis%29.sds" />
+    <None Include="Gr004_Axis\Alias Devices\Term 88 %28AX5805%29 - Module 1 %28Safety Process Data, 2 axis%29.sds" />
+    <None Include="Gr004_Axis\Gr004_Axis.sal" />
+    <None Include="Gr004_Axis\Gr004_Axis.sal.diagram">
+      <Visible>false</Visible>
+      <DependentUpon>Gr004_Axis\Gr004_Axis.sal</DependentUpon>
+    </None>
+    <None Include="Gr005_Output\Alias Devices\ErrAck.sds" />
+    <None Include="Gr005_Output\Alias Devices\Run.sds" />
+    <None Include="Gr005_Output\Alias Devices\ComErr.sds" />
+    <None Include="Gr005_Output\Alias Devices\FbErr.sds" />
+    <None Include="Gr005_Output\Alias Devices\OtherErr.sds" />
+    <None Include="Gr005_Output\Alias Devices\Term 12 %28EL2904%29 - Module 1 %28FSOES%29.sds" />
+    <None Include="Gr005_Output\Alias Devices\Term 13 %28EL2904%29 - Module 1 %28FSOES%29.sds" />
+    <None Include="Gr005_Output\Alias Devices\Term 14 %28EL2904%29 - Module 1 %28FSOES%29.sds" />
+    <None Include="Gr005_Output\Alias Devices\Term 15 %28EL2904%29 - Module 1 %28FSOES%29.sds" />
+    <None Include="Gr005_Output\Alias Devices\Term 16 %28EL2904%29 - Module 1 %28FSOES%29.sds" />
+    <None Include="Gr005_Output\Alias Devices\Term 17 %28EL2904%29 - Module 1 %28FSOES%29.sds" />
+    <None Include="Gr005_Output\Alias Devices\Term 39 %28EL2904%29 - Module 1 %28FSOES%29.sds" />
+    <None Include="Gr005_Output\Alias Devices\Term 40 %28EL2904%29 - Module 1 %28FSOES%29.sds" />
+    <None Include="Gr005_Output\Gr005_Output.sal" />
+    <None Include="Gr005_Output\Gr005_Output.sal.diagram">
+      <Visible>false</Visible>
+      <DependentUpon>Gr005_Output\Gr005_Output.sal</DependentUpon>
+    </None>
+    <None Include="Gr010_InputB\Alias Devices\ErrorAcknowledgement.sds" />
+    <None Include="Gr010_InputB\Alias Devices\Run.sds" />
+    <None Include="Gr010_InputB\Alias Devices\Term 32 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr010_InputB\Alias Devices\Term 33 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr010_InputB\Alias Devices\Term 34 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr010_InputB\Alias Devices\Term 35 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr010_InputB\Alias Devices\Term 36 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr010_InputB\Alias Devices\Term 37 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
+    <None Include="Gr010_InputB\Gr010_InputB.sal" />
+    <None Include="Gr010_InputB\Gr010_InputB.sal.diagram">
+      <Visible>false</Visible>
+      <DependentUpon>Gr010_InputB\Gr010_InputB.sal</DependentUpon>
+    </None>
+    <None Include="TargetSystemConfig.xml">
+      <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Gr001_Input" />
+    <Folder Include="Gr001_Input\Alias Devices" />
+    <Folder Include="Gr002_NotHalt" />
+    <Folder Include="Gr002_NotHalt\Alias Devices" />
+    <Folder Include="Gr003_Tuer" />
+    <Folder Include="Gr003_Tuer\Alias Devices" />
+    <Folder Include="Gr004_Axis" />
+    <Folder Include="Gr004_Axis\Alias Devices" />
+    <Folder Include="Gr005_Output" />
+    <Folder Include="Gr005_Output\Alias Devices" />
+    <Folder Include="Gr010_InputB" />
+    <Folder Include="Gr010_InputB\Alias Devices" />
+    <None Include="Gr001_Input\Alias Devices\ErrAck.sds" />
+    <None Include="Gr001_Input\Alias Devices\Run.sds" />
+  </ItemGroup>
+  <ProjectExtensions />
+</Project>
