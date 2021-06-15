@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Crc="2233837829" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project Crc="3775908040" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
@@ -16,7 +16,7 @@
     <IntProjName>Advaltech19101Safety</IntProjName>
     <IsNewCreated>false</IsNewCreated>
     <SPlcProjVersion>1.4.0.0</SPlcProjVersion>
-    <NextSdsId>314</NextSdsId>
+    <NextSdsId>317</NextSdsId>
     <Name>SAFETY20119</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -155,6 +155,9 @@
       <Visible>false</Visible>
       <DependentUpon>Gr005_Output\Gr005_Output.sal</DependentUpon>
     </None>
+    <None Include="Gr010_InputB\Alias Devices\OtherErr.sds" />
+    <None Include="Gr010_InputB\Alias Devices\FbErr.sds" />
+    <None Include="Gr010_InputB\Alias Devices\ComErr.sds" />
     <None Include="Gr010_InputB\Alias Devices\ErrorAcknowledgement.sds" />
     <None Include="Gr010_InputB\Alias Devices\Run.sds" />
     <None Include="Gr010_InputB\Alias Devices\10140D1 %28EL1918%29 - Module 1 %28FSOE%29.sds" />
