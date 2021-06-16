@@ -90,91 +90,91 @@ VAR_OUTPUT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[////--------------------------------------------------------------------------
-////SAFETY BAUSTEINE AUFRUFEN
-////--------------------------------------------------------------------------	
-//_FB_Gr001Input(tIN_ResetTime := T#500MS);
-//_FB_Gr002NotHalt(tIN_ResetTime := T#500MS);
-//_FB_Gr003Tuer(tIN_ResetTime := T#500MS);
-//_FB_Gr004Axis(tIN_ResetTime := T#500MS);
-//_FB_Gr005Output(tIN_ResetTime := T#500MS);
-//_FB_Gr010InputB(tIN_ResetTime := T#500MS);
-//
-////BAUSTEIN ERROR
-//xOUT_SafetyError := _FB_Gr001Input.xIN_ComErr OR //Gruppe Input
-//                    _FB_Gr001Input.xIN_FBErr OR
-//                    _FB_Gr001Input.xIN_OtherErr OR
-//                    _FB_Gr002NotHalt.xIN_ComErr OR //Gruppe Not-Halt
-//                    _FB_Gr002NotHalt.xIN_FBErr OR
-//                    _FB_Gr002NotHalt.xIN_OtherErr OR
-//                    _FB_Gr003Tuer.xIN_ComErr OR //Gruppe Tür
-//                    _FB_Gr003Tuer.xIN_FBErr OR
-//                    _FB_Gr003Tuer.xIN_OtherErr OR
-//                    _FB_Gr004Axis.xIN_ComErr OR //Gruppe Achsen
-//                    _FB_Gr004Axis.xIN_FBErr OR
-//                    _FB_Gr004Axis.xIN_OtherErr OR
-//                    _FB_Gr005Output.xIN_ComErr OR //Gruppe Output
-//                    _FB_Gr005Output.xIN_FBErr OR
-//                    _FB_Gr005Output.xIN_OtherErr OR
-//                    _FB_Gr001Input.xIN_ComErr OR //Gruppe InputB
-//                    _FB_Gr001Input.xIN_FBErr OR
-//                    _FB_Gr001Input.xIN_OtherErr;
-//
-////--------------------------------------------------------------------------
-////NOT-AUS / ENERGIE ZUUSAMMENFASSUNG
-////--------------------------------------------------------------------------	
-//xOUT_ESdelOut := xIN_ESdelOut;
-//xOUT_ESOut    := xIN_ESOut;
-//
-//xOUT_MonDelOut := xIN_MonDelOut;
-//xOUT_MonOut    := xIN_MonOut;
-//
-////--------------------------------------------------------------------------
-////NOT-AUS - TÜREN für HMI, TASTEN NICHT ENTRIEGELT	
-////--------------------------------------------------------------------------	
-////XOUT_ST1 := xArIN_Input5[0] AND xArIN_Input5[1]; //Türe1
-////XOUT_ST2 := xArIN_Input5[2] AND
-////            xArIN_Input5[3] AND
-////            xArIN_Input5[4] AND
-////            xArIN_Input5[5]; //Türe2
-//
-////XOUT_HTA := xArIN_Input6[0] AND xArIN_Input6[1]; //Hubtüre A
-////XOUT_HTB := xArIN_Input6[2] AND xArIN_Input6[3]; //Hubtüre B
-////XOUT_HTC := xArIN_Input6[4] AND xArIN_Input6[5]; //Hubtüre C
-////XOUT_HTD := xArIN_Input6[6] AND xArIN_Input6[7]; //Hubtüre D
-////
-////XOUT_ESA := xArIN_Input1[0] AND xArIN_Input1[1]; //NOT-AUS A
-////XOUT_ESB := xArIN_Input1[2] AND xArIN_Input1[3]; //NOT-AUS A
-////XOUT_ESC := xArIN_Input1[4] AND xArIN_Input1[5]; //NOT-AUS A
-////XOUT_ESD := xArIN_Input1[6] AND xArIN_Input1[7]; //NOT-AUS A
-////XOUT_ESH := xArIN_Input2[6] AND xArIN_Input2[7]; //NOT-AUS A
-////XOUT_ESP := xArIN_Input3[2] AND xArIN_Input3[3]; //NOT-AUS A
-////
-////xOUT_NotAusBetaetigt := XOUT_ESA AND
-////                        XOUT_ESB AND
-////                        XOUT_ESC AND
-////                        XOUT_ESD AND
-////                        XOUT_ESH AND
-////                        XOUT_ESP;
-//
-////--------------------------------------------------------------------------
-////RESET + Einrichten	
-////--------------------------------------------------------------------------
-//xOUT_ResetES    := HMI.Tast_BL;
-//xOUT_Einrichten := xArIN_Input3[1];
-//
-////--------------------------------------------------------------------------
-////Tür Verriegelung	
-////--------------------------------------------------------------------------
-//// OUT.Q020_T1_VERR  := (HMI.enState > enState.StateSTEP);
-//// OUT.Q021_T2L_VERR := OUT.Q020_T1_VERR;
-//// OUT.Q022_T2R_VERR := OUT.Q020_T1_VERR;
+      <ST><![CDATA[//--------------------------------------------------------------------------
+//SAFETY BAUSTEINE AUFRUFEN
+//--------------------------------------------------------------------------	
+_FB_Gr001Input(tIN_ResetTime := T#500MS);
+_FB_Gr002NotHalt(tIN_ResetTime := T#500MS);
+_FB_Gr003Tuer(tIN_ResetTime := T#500MS);
+_FB_Gr004Axis(tIN_ResetTime := T#500MS);
+_FB_Gr005Output(tIN_ResetTime := T#500MS);
+_FB_Gr010InputB(tIN_ResetTime := T#500MS);
 
-xOUT_ESout     := TRUE;
-xOUT_ESdelOut  := TRUE;
-xOUT_MonOut    := TRUE;
-xOUT_MonDelOut := TRUE;
-xOUT_Einrichten := FALSE;  // true when doors are open]]></ST>
+//BAUSTEIN ERROR
+xOUT_SafetyError := _FB_Gr001Input.xIN_ComErr OR //Gruppe Input
+                    _FB_Gr001Input.xIN_FBErr OR
+                    _FB_Gr001Input.xIN_OtherErr OR
+                    _FB_Gr002NotHalt.xIN_ComErr OR //Gruppe Not-Halt
+                    _FB_Gr002NotHalt.xIN_FBErr OR
+                    _FB_Gr002NotHalt.xIN_OtherErr OR
+                    _FB_Gr003Tuer.xIN_ComErr OR //Gruppe Tür
+                    _FB_Gr003Tuer.xIN_FBErr OR
+                    _FB_Gr003Tuer.xIN_OtherErr OR
+                    _FB_Gr004Axis.xIN_ComErr OR //Gruppe Achsen
+                    _FB_Gr004Axis.xIN_FBErr OR
+                    _FB_Gr004Axis.xIN_OtherErr OR
+                    _FB_Gr005Output.xIN_ComErr OR //Gruppe Output
+                    _FB_Gr005Output.xIN_FBErr OR
+                    _FB_Gr005Output.xIN_OtherErr OR
+                    _FB_Gr001Input.xIN_ComErr OR //Gruppe InputB
+                    _FB_Gr001Input.xIN_FBErr OR
+                    _FB_Gr001Input.xIN_OtherErr;
+
+//--------------------------------------------------------------------------
+//NOT-AUS / ENERGIE ZUUSAMMENFASSUNG
+//--------------------------------------------------------------------------	
+xOUT_ESdelOut := xIN_ESdelOut;
+xOUT_ESOut    := xIN_ESOut;
+
+xOUT_MonDelOut := xIN_MonDelOut;
+xOUT_MonOut    := xIN_MonOut;
+
+//--------------------------------------------------------------------------
+//NOT-AUS - TÜREN für HMI, TASTEN NICHT ENTRIEGELT	
+//--------------------------------------------------------------------------	
+//XOUT_ST1 := xArIN_Input5[0] AND xArIN_Input5[1]; //Türe1
+//XOUT_ST2 := xArIN_Input5[2] AND
+//            xArIN_Input5[3] AND
+//            xArIN_Input5[4] AND
+//            xArIN_Input5[5]; //Türe2
+
+//XOUT_HTA := xArIN_Input6[0] AND xArIN_Input6[1]; //Hubtüre A
+//XOUT_HTB := xArIN_Input6[2] AND xArIN_Input6[3]; //Hubtüre B
+//XOUT_HTC := xArIN_Input6[4] AND xArIN_Input6[5]; //Hubtüre C
+//XOUT_HTD := xArIN_Input6[6] AND xArIN_Input6[7]; //Hubtüre D
+//
+//XOUT_ESA := xArIN_Input1[0] AND xArIN_Input1[1]; //NOT-AUS A
+//XOUT_ESB := xArIN_Input1[2] AND xArIN_Input1[3]; //NOT-AUS A
+//XOUT_ESC := xArIN_Input1[4] AND xArIN_Input1[5]; //NOT-AUS A
+//XOUT_ESD := xArIN_Input1[6] AND xArIN_Input1[7]; //NOT-AUS A
+//XOUT_ESH := xArIN_Input2[6] AND xArIN_Input2[7]; //NOT-AUS A
+//XOUT_ESP := xArIN_Input3[2] AND xArIN_Input3[3]; //NOT-AUS A
+//
+//xOUT_NotAusBetaetigt := XOUT_ESA AND
+//                        XOUT_ESB AND
+//                        XOUT_ESC AND
+//                        XOUT_ESD AND
+//                        XOUT_ESH AND
+//                        XOUT_ESP;
+
+//--------------------------------------------------------------------------
+//RESET + Einrichten	
+//--------------------------------------------------------------------------
+xOUT_ResetES    := HMI.Tast_BL;
+xOUT_Einrichten := xArIN_Input3[1];
+
+//--------------------------------------------------------------------------
+//Tür Verriegelung	
+//--------------------------------------------------------------------------
+// OUT.Q020_T1_VERR  := (HMI.enState > enState.StateSTEP);
+// OUT.Q021_T2L_VERR := OUT.Q020_T1_VERR;
+// OUT.Q022_T2R_VERR := OUT.Q020_T1_VERR;
+
+//xOUT_ESout     := TRUE;
+//xOUT_ESdelOut  := TRUE;
+//xOUT_MonOut    := TRUE;
+//xOUT_MonDelOut := TRUE;
+//xOUT_Einrichten := FALSE;  // true when doors are open]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

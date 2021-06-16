@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<safetyApplication Crc="3901667817" xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.3.0.0" Id="24453ca8-7642-4d5b-a6c2-5c7b20ff0b92" name="" mapState="false" mapDiag="false" groupOrderId="0" passificationAllowed="false" temporaryDeactivationAllowed="false" permamentDeactivationAllowed="false" xmlid="0" analogFBOutputReplacementValues="Zero" verifyAnalogFBInputsIfStart="false" userFbId="00000000-0000-0000-0000-000000000000" xmlns="http://schemas.microsoft.com/dsltools/SafetyApplicationLanguage">
+<safetyApplication Crc="3270412705" xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.3.0.0" Id="24453ca8-7642-4d5b-a6c2-5c7b20ff0b92" name="" mapState="false" mapDiag="false" groupOrderId="0" passificationAllowed="false" temporaryDeactivationAllowed="false" permamentDeactivationAllowed="false" xmlid="0" analogFBOutputReplacementValues="Zero" verifyAnalogFBInputsIfStart="false" userFbId="00000000-0000-0000-0000-000000000000" xmlns="http://schemas.microsoft.com/dsltools/SafetyApplicationLanguage">
   <comments>
     <comment Id="040042a5-0590-442a-818a-d0bb05f693e5" text="- 140D1 -&#xD;&#xA;Not-Halt A K1&#xD;&#xA;Not-Halt A K2&#xD;&#xA;Not-Halt B K1&#xD;&#xA;Not-Halt B K2&#xD;&#xA;Not-Halt C K1&#xD;&#xA;Not-Halt C K2&#xD;&#xA;Not-Halt D K1&#xD;&#xA;Not-Halt D K2&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- 140D3 -&#xD;&#xA;Panel 1 Not-Halt K1&#xD;&#xA;Panel 1 Not-Halt K2&#xD;&#xA;Panel 1 Zustimmt. K1&#xD;&#xA;Panel 1 Zustimmt. K2&#xD;&#xA;Panel 2 Not-Halt K1&#xD;&#xA;Panel 2 Not-Halt K2&#xD;&#xA;Panel 2 Zustimmt. K1&#xD;&#xA;Panel 2 Zustimmt. K2&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- 140D5 -&#xD;&#xA;Einrichten aktiv&#xD;&#xA;RK Not-Halt&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- 140D7 -&#xD;&#xA;RK Linmot Achsen A&#xD;&#xA;RK Quick STOP Linmot A&#xD;&#xA;RK Quick STOP Linmot A&#xD;&#xA;RK N-A Ultraschall 1&#xD;&#xA;RK F Ultraschall 1&#xD;&#xA;RK N-A Ultraschall 2&#xD;&#xA;RK F Ultraschall 2 &#x9;&#xD;&#xA;Reserve&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- 140D9 -&#xD;&#xA;Hubtüre 1 K1&#xD;&#xA;Hubtüre 1 K2&#xD;&#xA;Hubtüre 2 K1&#xD;&#xA;Hubtüre 2 K2&#xD;&#xA;Hubtüre 3 K1&#xD;&#xA;Hubtüre 3 K2&#xD;&#xA;Hubtüre 4 K1&#xD;&#xA;Hubtüre 4 K2&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- 141D1 -&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- 141D3 -&#xD;&#xA;Not-Halt K1 Displaypanel&#xD;&#xA;Not-Halt K2 Displaypanel&#xD;&#xA;Türgummi 1&#xD;&#xA;Turgummi 2&#xD;&#xA;Türgummi 3&#xD;&#xA;Türgummi 4&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;- 141D5 -&#xD;&#xA;RK SuperTrak 1+2&#xD;&#xA;RK SuperTrak 3+4&#xD;&#xA;RK SuperTrak 5+6&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;Reserve&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;" currentNetworkOrderId="0">
       <networks>
@@ -351,58 +351,22 @@
               </inPorts>
               <outPorts>
                 <functionBlockHasOutPorts Id="f2247f85-b03a-46f9-b709-7a16c5af22b9">
-                  <outPort Id="788ec1c7-4591-441a-a35e-16c046e39a03" name="DecOut1" portName="DecOut1" portNum="3" objectIndex="8" varId="17" filter="7" portDataType="1" replacementValue="0">
-                    <functionBlockPortReferences>
-                      <globalReferenceLink Id="ce55f2f7-fe88-45cf-a0d2-bed9b691fa9c">
-                        <functionBlockPortReference Id="0ad90368-0168-4bb8-bd9b-c1cd329164d8" portId="e65f20ef-ac1b-47f9-807e-a8fddcfdec98" lastKnownPath="Gr003_Tuer.TUEREN.FBMonST1.MonIn1" />
-                      </globalReferenceLink>
-                    </functionBlockPortReferences>
-                  </outPort>
+                  <outPort Id="788ec1c7-4591-441a-a35e-16c046e39a03" name="DecOut1" portName="DecOut1" portNum="3" objectIndex="8" varId="17" filter="7" portDataType="1" replacementValue="0" />
                 </functionBlockHasOutPorts>
                 <functionBlockHasOutPorts Id="304e3e2d-f17c-4c82-ba9f-c12b0f20b879">
-                  <outPort Id="f07e0f27-f740-47a8-bbf1-2d9b231e947f" name="DecOut2" portName="DecOut2" portNum="4" objectIndex="9" varId="18" filter="7" portDataType="1" replacementValue="0">
-                    <functionBlockPortReferences>
-                      <globalReferenceLink Id="f5f9a4fa-42db-4ed7-8774-261c2790dfc4">
-                        <functionBlockPortReference Id="88845686-2fa7-4943-add5-2462c6df5f76" portId="dddf3b26-1c3d-45ac-be00-395a5b6b7f39" lastKnownPath="Gr003_Tuer.TUEREN.FBMonST1.MonIn2" />
-                      </globalReferenceLink>
-                    </functionBlockPortReferences>
-                  </outPort>
+                  <outPort Id="f07e0f27-f740-47a8-bbf1-2d9b231e947f" name="DecOut2" portName="DecOut2" portNum="4" objectIndex="9" varId="18" filter="7" portDataType="1" replacementValue="0" />
                 </functionBlockHasOutPorts>
                 <functionBlockHasOutPorts Id="9f51f4c4-c334-4db2-b872-7b825a207734">
-                  <outPort Id="785a84f3-4d90-4bb6-a12a-4b6173eabfef" name="DecOut3" portName="DecOut3" portNum="5" objectIndex="10" varId="19" filter="7" portDataType="1" replacementValue="0">
-                    <functionBlockPortReferences>
-                      <globalReferenceLink Id="164061f4-dab3-4a50-acae-75f9f117100f">
-                        <functionBlockPortReference Id="ae3202c7-da4e-4910-bb53-6a66e8b47d8a" portId="28bd75d5-3e9d-4713-8b74-e10585528503" lastKnownPath="Gr003_Tuer.TUEREN.FBMonST2.MonIn1" />
-                      </globalReferenceLink>
-                    </functionBlockPortReferences>
-                  </outPort>
+                  <outPort Id="785a84f3-4d90-4bb6-a12a-4b6173eabfef" name="DecOut3" portName="DecOut3" portNum="5" objectIndex="10" varId="19" filter="7" portDataType="1" replacementValue="0" />
                 </functionBlockHasOutPorts>
                 <functionBlockHasOutPorts Id="af30e8d2-0751-49c8-bad6-725f77c831ef">
-                  <outPort Id="b466ad0a-180b-4525-85f6-ffa825c9e9ee" name="DecOut4" portName="DecOut4" portNum="6" objectIndex="11" varId="20" filter="7" portDataType="1" replacementValue="0">
-                    <functionBlockPortReferences>
-                      <globalReferenceLink Id="b92320a3-cda4-47d7-89be-e1a51cc5cb14">
-                        <functionBlockPortReference Id="61b4ad01-f2b9-4457-98e5-afc09e05b011" portId="7315321f-fb8e-445f-af41-51767d43ee4f" lastKnownPath="Gr003_Tuer.TUEREN.FBMonST2.MonIn2" />
-                      </globalReferenceLink>
-                    </functionBlockPortReferences>
-                  </outPort>
+                  <outPort Id="b466ad0a-180b-4525-85f6-ffa825c9e9ee" name="DecOut4" portName="DecOut4" portNum="6" objectIndex="11" varId="20" filter="7" portDataType="1" replacementValue="0" />
                 </functionBlockHasOutPorts>
                 <functionBlockHasOutPorts Id="fa6d963d-905f-485c-93d6-fc068122334d">
-                  <outPort Id="e8dbeea0-5bea-4788-91a7-f60b1be433dd" name="DecOut5" portName="DecOut5" portNum="7" objectIndex="12" varId="21" filter="7" portDataType="1" replacementValue="0">
-                    <functionBlockPortReferences>
-                      <globalReferenceLink Id="f449335f-6d0b-4b95-bee6-65ced2424f7b">
-                        <functionBlockPortReference Id="b2d08b10-5768-4c9c-b4eb-87a3716f2a29" portId="c8f2dc2f-a483-4c68-9c82-cd792670f75b" lastKnownPath="Gr003_Tuer.TUEREN.FBMonST2.MonIn3" />
-                      </globalReferenceLink>
-                    </functionBlockPortReferences>
-                  </outPort>
+                  <outPort Id="e8dbeea0-5bea-4788-91a7-f60b1be433dd" name="DecOut5" portName="DecOut5" portNum="7" objectIndex="12" varId="21" filter="7" portDataType="1" replacementValue="0" />
                 </functionBlockHasOutPorts>
                 <functionBlockHasOutPorts Id="5190c6e9-6469-483b-8239-11035f0de3ff">
-                  <outPort Id="263016dd-d36f-4825-ac2a-3ee3e3f9974b" name="DecOut6" portName="DecOut6" portNum="8" objectIndex="13" varId="22" filter="7" portDataType="1" replacementValue="0">
-                    <functionBlockPortReferences>
-                      <globalReferenceLink Id="aac5aca3-5c43-467b-a8eb-b569372c6b7a">
-                        <functionBlockPortReference Id="4742ca5e-bf84-4da9-b181-f8a7ba0be6ff" portId="04b60184-a1a9-4e5b-9e4d-ce16700d371e" lastKnownPath="Gr003_Tuer.TUEREN.FBMonST2.MonIn4" />
-                      </globalReferenceLink>
-                    </functionBlockPortReferences>
-                  </outPort>
+                  <outPort Id="263016dd-d36f-4825-ac2a-3ee3e3f9974b" name="DecOut6" portName="DecOut6" portNum="8" objectIndex="13" varId="22" filter="7" portDataType="1" replacementValue="0" />
                 </functionBlockHasOutPorts>
                 <functionBlockHasOutPorts Id="6e4778fb-f775-46f1-b04c-b59a4a694da9">
                   <outPort Id="9d01b2a6-876c-4864-9c56-e357101715d9" name="DecOut7" portName="DecOut7" portNum="9" objectIndex="14" varId="23" filter="7" portDataType="1" replacementValue="0" />
@@ -2127,10 +2091,10 @@
           <variableHasSourceUsages Id="43922db3-4a58-4b10-857b-ec6e923e2937">
             <variableUsages Id="cd9514df-2a92-466f-a8f7-6a569e7fe345">
               <usages>
-                <variableUsagesHasUsages Id="eb20a5a5-4d9a-448e-9f6c-1e69c04def5c">
-                  <fbPortUsage Id="3db18559-4f11-40ca-9eb8-4d6bdf926c13">
+                <variableUsagesHasUsages Id="56f66d9d-ce95-48cb-a4ce-0aa7d6d9f618">
+                  <fbPortUsage Id="0a98e4fd-0e12-4ef1-a1d2-9b1334d89239">
                     <functionBlockPort>
-                      <fbPortUsageReferencesFunctionBlockPort Id="5fe69ef0-eb62-4d78-b661-52c247b4ac46">
+                      <fbPortUsageReferencesFunctionBlockPort Id="c4a8d1c8-e948-434a-95fa-916a733b97b0">
                         <outPortMoniker name="//Network1/FBDecouple121/DecOut3" />
                       </fbPortUsageReferencesFunctionBlockPort>
                     </functionBlockPort>
