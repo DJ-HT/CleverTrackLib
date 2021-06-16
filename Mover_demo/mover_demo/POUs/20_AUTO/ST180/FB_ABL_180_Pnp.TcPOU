@@ -119,7 +119,7 @@ fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_0
               xIN_Init        := enIN_State = enState.StateINIT,
               xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis180_01Y.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.01,
+              lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST180_PnpHorPos_e._max);
 
@@ -164,7 +164,7 @@ fb_PnpVerAxis_02(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  xIN_Init        := enIN_State = enState.StateINIT,
                  xIN_Reset       := xIN_Reset,
                  lrIN_CurrPos    := fb_axis180_02Z.rOUT_ActPos,
-                 lrIN_Delta_mm   := 0.01,
+                 lrIN_Delta_mm   := 0.5,
                  iIN_CurrentStep := iOUT_Step,
                  iIN_moveNumber  := ST180_PnpVerPos_e._max);
 
@@ -212,7 +212,7 @@ fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  xIN_Init        := enIN_State = enState.StateINIT,
                  xIN_Reset       := xIN_Reset,
                  lrIN_CurrPos    := fb_axis180_10Z.rOUT_ActPos,
-                 lrIN_Delta_mm   := 0.01,
+                 lrIN_Delta_mm   := 0.5,
                  iIN_CurrentStep := iOUT_Step,
                  iIN_moveNumber  := ST180_PnpVerPos_e._max);
 
