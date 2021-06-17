@@ -81,7 +81,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -118,6 +118,18 @@ fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_0
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST145_PnpHorPos_e._max);
 
+fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST145_01Y]),
+                    pIN_axisHW          := ADR(ST145_Axis.axis145_01Y.axis),
+                    rIN_PosActual       := fb_axis145_01Y.rOUT_ActPos,
+                    rIN_PosMax          := ST145_Axis.const145_01Y.POS_MAX,
+                    rIN_PosMin          := ST145_Axis.const145_01Y.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
+
 fb_axis145_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st145_01Y,
@@ -144,17 +156,7 @@ fb_axis145_01Y(enIN_State       := enIN_State,
                wAxisState    := fb_simu_axis145_01Y.wOUT_AxisState,
                rOUT_ActPos   => st145_axis.axis145_01Y.rActPos,
                bOUT_AxisCntr => ST145_Axis.axis145_01Y.bCtrlHi,
-               axisIN_REF    := ST145_Axis.axis145_01Y.axis);
-
-fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION, //FALSE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis145_01Y.bOUT_AxisCntr,
-                    wIN_AxisState       := ST145_Axis.axis145_01Y.wState,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis145_01Y.rOUT_ActPos,
-                    rIN_PosMax          := ST145_Axis.const145_01Y.POS_MAX,
-                    rIN_PosMin          := ST145_Axis.const145_01Y.POS_MIN,
-                    rIN_PixMax          := 100,
-                    rIN_PixMin          := 0);
+               axisIN_REF    := fb_simu_axis145_01Y.pOUT_axisRef^);
 
 fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_02Z],
               xIN_Init        := enIN_State = enState.StateINIT,
@@ -163,6 +165,18 @@ fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_0
               lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST145_PnpVerPos_e._max);
+
+fb_simu_axis145_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis145_02Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST145_Axis.axis145_02Z.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST145_02Z]),
+                    pIN_axisHW          := ADR(ST145_Axis.axis145_02Z.axis),
+                    rIN_PosActual       := fb_axis145_02Z.rOUT_ActPos,
+                    rIN_PosMax          := ST145_Axis.const145_02Z.POS_MAX,
+                    rIN_PosMin          := ST145_Axis.const145_02Z.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
 
 fb_axis145_02Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
@@ -190,17 +204,7 @@ fb_axis145_02Z(enIN_State       := enIN_State,
                wAxisState    := fb_simu_axis145_02Z.wOUT_AxisState,
                rOUT_ActPos   => st145_axis.axis145_02Z.rActPos,
                bOUT_AxisCntr => ST145_Axis.axis145_02Z.bCtrlHi,
-               axisIN_REF    := ST145_Axis.axis145_02Z.axis);
-
-fb_simu_axis145_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION, // PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis145_02Z.bOUT_AxisCntr,
-                    wIN_AxisState       := ST145_Axis.axis145_02Z.wState,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis145_02Z.rOUT_ActPos,
-                    rIN_PosMax          := ST145_Axis.const145_02Z.POS_MAX,
-                    rIN_PosMin          := ST145_Axis.const145_02Z.POS_MIN,
-                    rIN_PixMax          := 100,
-                    rIN_PixMin          := 0);
+               axisIN_REF    := fb_simu_axis145_02Z.pOUT_axisRef^);
 
 //////////////////////////////////
 fb_vakumGriperLeft(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),
@@ -288,10 +292,10 @@ xOUT_PickPiece := iOUT_Step = ST145_Pnp_e.Pnp_Hor_ToTrackPos;
 
 // TODO Valve should not be set when we are in simulation !
 IO_BOX.Q0200_14_ST145_vakum_greifer_links :=
-    fb_vakumGriperLeft.xOUT_VALVE; // AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+    fb_vakumGriperLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 IO_BOX.Q0201_14_ST145_vakum_greifer_rechts :=
-    fb_vakumGriperRight.xOUT_VALVE; // AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+    fb_vakumGriperRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)

@@ -146,9 +146,10 @@ fb_axis180_01Y(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                // The simu fb gives the hardware state when we are not in simu
-               wAxisState  := fb_simu_axis180_01Y.wOUT_AxisState,
-               rOUT_ActPos => st180_axis.axis180_01Y.rActPos,
-               axisIN_REF  := ST180_Axis.axis180_01Y.axis);
+               wAxisState    := fb_simu_axis180_01Y.wOUT_AxisState,
+               bOUT_AxisCntr => st180_axis.axis180_01Y.bCtrlHi,
+               rOUT_ActPos   => st180_axis.axis180_01Y.rActPos,
+               axisIN_REF    := SIMU.axis_ref[Axis_e.ST180_01Y]);
 
 fb_simu_axis180_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
                     bIN_AxisCntr        := fb_axis180_01Y.bOUT_AxisCntr,
@@ -196,7 +197,7 @@ fb_axis180_02Z(enIN_State       := enIN_State,
                wAxisState       := fb_simu_axis180_02Z.wOUT_AxisState,
                bOUT_AxisCntr    => fb_simu_axis180_02Z.bIN_AxisCntr,
                rOUT_ActPos      => ST180_Axis.axis180_02Z.rActPos,
-               axisIN_REF       := ST180_Axis.axis180_02Z.axis);
+               axisIN_REF       := SIMU.axis_ref[Axis_e.ST180_02Z]);
 
 fb_simu_axis180_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
                     bIN_AxisCntr        := fb_axis180_02Z.bOUT_AxisCntr,
@@ -244,7 +245,7 @@ fb_axis180_10Z(enIN_State       := enIN_State,
                wAxisState       := fb_simu_axis180_10Z.wOUT_AxisState,
                bOUT_AxisCntr    => fb_simu_axis180_10Z.bIN_AxisCntr,
                rOUT_ActPos      => ST180_Axis.axis180_10Z.rActPos,
-               axisIN_REF       := ST180_Axis.axis180_10Z.axis);
+               axisIN_REF       := SIMU.axis_ref[Axis_e.ST180_10Z]);
 
 fb_simu_axis180_10Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
                     bIN_AxisCntr        := fb_axis180_10Z.bOUT_AxisCntr,

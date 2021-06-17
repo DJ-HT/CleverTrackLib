@@ -174,8 +174,9 @@ VAR_GLOBAL
 
     //-5501
     (* feeder ST145 *)
-    Q2400_ST145_freigabe_wf AT %Q* : BOOL; // 0: Freigabe WF
-    I2401_ST145_maximum_wf  AT %I* : BOOL; // 1: Maximum WF
+    Q2400_ST145_freigabe_REO AT %Q* : BOOL; // 0: Freigabe REO
+    I2401_ST145_maximum_wf   AT %I* : BOOL; // 1: Maximum WF
+    Q2402_ST145_reigabe_wf   AT %Q* : BOOL; // 2: Freigabe WF
 
     (* IO-Link Boxen 191A2 *)
     (*******************************************************************)
@@ -212,37 +213,37 @@ VAR_GLOBAL
 
     //-10202B1
     (* Ventilbat. 202 B - 16 slots *)
-    Q5200_14_                               AT %Q* : BOOL; // 
+    Q5200_14_ AT %Q* : BOOL; // 
     Q5200_12_ST115_greifer_links            AT %Q* : BOOL; // Greifer links ST115
-    Q5201_14_                               AT %Q* : BOOL; // 
+    Q5201_14_ AT %Q* : BOOL; // 
     Q5201_12_ST115_greifer_rechts           AT %Q* : BOOL; // Greifer rechts ST115
-    Q5202_14_                               AT %Q* : BOOL; // 
+    Q5202_14_ AT %Q* : BOOL; // 
     Q5202_12_ST120_greifer_links            AT %Q* : BOOL; // Greifer links ST120
-    Q5203_14_                               AT %Q* : BOOL; // 
+    Q5203_14_ AT %Q* : BOOL; // 
     Q5203_12_ST120_greifer_rechts           AT %Q* : BOOL; // Greifer rechts ST120
-    Q5204_14_                               AT %Q* : BOOL; // 
+    Q5204_14_ AT %Q* : BOOL; // 
     Q5204_12_ST120_schwenken_links          AT %Q* : BOOL; // Schwenken links ST120
-    Q5205_14_                               AT %Q* : BOOL; // 
+    Q5205_14_ AT %Q* : BOOL; // 
     Q5205_12_ST120_schwenken_rechts         AT %Q* : BOOL; // Schwenken rechts ST120
-    Q5206_14_                               AT %Q* : BOOL; // 
+    Q5206_14_ AT %Q* : BOOL; // 
     Q5206_12_ST125_greifer_filterhut_links  AT %Q* : BOOL; // Greifer Filterhut links ST125
-    Q5207_14_                               AT %Q* : BOOL; // 
+    Q5207_14_ AT %Q* : BOOL; // 
     Q5207_12_ST125_greifer_filterhut_rechts AT %Q* : BOOL; // Greifer Filterhut rechts ST125
-    Q5208_14_                               AT %Q* : BOOL; // 
+    Q5208_14_ AT %Q* : BOOL; // 
     Q5208_12_ST125_handling_solerohr_links  AT %Q* : BOOL; // Handling Solerohr links ST125
-    Q5209_14_                               AT %Q* : BOOL; // 
+    Q5209_14_ AT %Q* : BOOL; // 
     Q5209_12_ST125_handling_solerohr_rechts AT %Q* : BOOL; // Handling Solerohr rechts ST125
-    Q5210_14_                               AT %Q* : BOOL; // 
+    Q5210_14_ AT %Q* : BOOL; // 
     Q5210_12_ST125_greifer_solerohr_links   AT %Q* : BOOL; // Greifer Solerohr links ST125
-    Q5211_14_                               AT %Q* : BOOL; // 
+    Q5211_14_ AT %Q* : BOOL; // 
     Q5211_12_ST125_greifer_solerohr_rechts  AT %Q* : BOOL; // Greifer Solerohr rechts ST125
-    Q5212_14_                               AT %Q* : BOOL; // 
+    Q5212_14_ AT %Q* : BOOL; // 
     Q5212_12_                               AT %Q* : BOOL; // 
-    Q5213_14_                               AT %Q* : BOOL; // 
+    Q5213_14_ AT %Q* : BOOL; // 
     Q5213_12_                               AT %Q* : BOOL; // 
-    Q5214_14_                               AT %Q* : BOOL; // 
+    Q5214_14_ AT %Q* : BOOL; // 
     Q5214_12_                               AT %Q* : BOOL; // 
-    Q5215_14_                               AT %Q* : BOOL; // 
+    Q5215_14_ AT %Q* : BOOL; // 
     Q5215_12_                               AT %Q* : BOOL; // 
 
     //-10203B1
@@ -260,38 +261,38 @@ VAR_GLOBAL
 
     //-10204B1
     (* Ventilbat. 204 B - 12 slots *)
-    Q5400_14_                                 AT %Q* : BOOL; // 
+    Q5400_14_ AT %Q* : BOOL; // 
     Q5400_12_ST180_greifer_patrone_links      AT %Q* : BOOL; // Greifer Patrone links ST180
-    Q5401_14_                                 AT %Q* : BOOL; // 
+    Q5401_14_ AT %Q* : BOOL; // 
     Q5401_12_ST180_greifer_patrone_rechts     AT %Q* : BOOL; // Grefier Patrone rechts ST180
-    Q5402_14_                                 AT %Q* : BOOL; // 
+    Q5402_14_ AT %Q* : BOOL; // 
     Q5402_12_ST180_niederhalter_deckel_links  AT %Q* : BOOL; // Niederhalter Deckel links ST180
-    Q5403_14_                                 AT %Q* : BOOL; // 
+    Q5403_14_ AT %Q* : BOOL; // 
     Q5403_12_ST180_Niederhalter_deckel_rechts AT %Q* : BOOL; // Niederhalter Deckel rechts ST180
-    Q5404_14_                                 AT %Q* : BOOL; // 
+    Q5404_14_ AT %Q* : BOOL; // 
     Q5404_12_ST185_greifer_patrone_links      AT %Q* : BOOL; // Greifer Patrone links ST185
-    Q5405_14_                                 AT %Q* : BOOL; // 
+    Q5405_14_ AT %Q* : BOOL; // 
     Q5405_12_ST185_greifer_patrone_rechts     AT %Q* : BOOL; // Greifer Patrone rechts ST185
-    Q5406_14_                                 AT %Q* : BOOL; // 
+    Q5406_14_ AT %Q* : BOOL; // 
     Q5406_12_ST185_niederhalter_deckel_links  AT %Q* : BOOL; // Niederhalter Deckel links ST185
-    Q5407_14_                                 AT %Q* : BOOL; // 
+    Q5407_14_ AT %Q* : BOOL; // 
     Q5407_12_ST185_Niederhalter_deckel_rechts AT %Q* : BOOL; // Niederhalter Deckel rechts ST185
-    Q5408_14_                                 AT %Q* : BOOL; // 
+    Q5408_14_ AT %Q* : BOOL; // 
     Q5408_12_                                 AT %Q* : BOOL; // 
-    Q5409_14_                                 AT %Q* : BOOL; // 
+    Q5409_14_ AT %Q* : BOOL; // 
     Q5409_12_                                 AT %Q* : BOOL; // 
-    Q5410_14_                                 AT %Q* : BOOL; // 
+    Q5410_14_ AT %Q* : BOOL; // 
     Q5410_12_                                 AT %Q* : BOOL; // 
-    Q5411_14_                                 AT %Q* : BOOL; // 
+    Q5411_14_ AT %Q* : BOOL; // 
     Q5411_12_                                 AT %Q* : BOOL; // 
 
     //-10950B1
     (* Vakuumsch. Greifer 110.05 *)
-    I5500_ST110_vakumkontrolle_links AT %I* : BOOL; // Vakuumsch. Greifer 110.05
+    I5500_ST110_vakumkontrolle_links AT %I* : INT; // Vakuumsch. Greifer 110.05
 
     //-10950B3
     (* Vakuumsch. Greifer 110.06 *)
-    I5600_ST110_vakumkontrolle_rechts AT %I* : BOOL; // Vakuumsch. Greifer 110.05
+    I5600_ST110_vakumkontrolle_rechts AT %I* : INT; // Vakuumsch. Greifer 110.05
 
     (* IO-Link Boxen 10120A5.2 *)
     (*******************************************************************)
@@ -385,7 +386,7 @@ VAR_GLOBAL
     Q8000_ST110_freigabe_wf              AT %Q* : BOOL; // 0: Freigabe WF ST110
     I8001_ST110_maximum                  AT %I* : BOOL; // 1: Maximum WF ST110
     I8002_ST110_alarm_forderband         AT %I* : BOOL; // 2: Alarm Förderband ST110
-    Q8003_ST110_forderband_ein           AT %I* : BOOL; // q3: Förderband ein ST110
+    Q8003_ST110_forderband_ein           AT %Q* : BOOL; // q3: Förderband ein ST110
     I8004_ST110_farbsensor_lagekontrolle AT %I* : BOOL; // 4: Farbsensor Lagekontrolle
 
     //-15502
@@ -393,14 +394,14 @@ VAR_GLOBAL
     Q8100_ST115_freigabe_wf      AT %Q* : BOOL; // q0: Freigabe WF ST115
     I8101_ST115_maximum          AT %I* : BOOL; // 1: Maximum WF ST115
     I8102_ST115_alarm_forderband AT %I* : BOOL; // 2: Alarm Förderband ST115
-    Q8103_ST115_forderband_ein   AT %I* : BOOL; // q3: Förderband ein ST115
+    Q8103_ST115_forderband_ein   AT %Q* : BOOL; // q3: Förderband ein ST115
 
     //-15503
     (* feeder links ST120 - 8x IO *)
-    I8200_ST120_alarm_forderband               AT %I* : BOOL; //  0: Alarm Förderband ST115
-    Q8201_ST120_forderband_ein                 AT %Q* : BOOL; // q1: Förderband ein
-    I8202_ST120_alarm_forderband               AT %I* : BOOL; //  2: Alarm Förderband
-    Q8203_ST120_forderband_ein                 AT %Q* : BOOL; // q3: Förderband ein
+    I8200_ST120_alarm_forderband_l             AT %I* : BOOL; //  0: Alarm Förderband ST115
+    Q8201_ST120_forderband_ein_l               AT %Q* : BOOL; // q1: Förderband ein
+    I8202_ST120_alarm_forderband_r             AT %I* : BOOL; //  2: Alarm Förderband
+    Q8203_ST120_forderband_ein_r               AT %Q* : BOOL; // q3: Förderband ein
     I8204_ST120_hublader_links_unten           AT %I* : BOOL; //  4: Hublader links unten
     I8205_ST120_hublader_links_oben            AT %I* : BOOL; //  5: Hublader links oben
     I8206_ST120_hublader_links_niveaukontrolle AT %I* : BOOL; //  6: Hublader links Nivaukontrolle

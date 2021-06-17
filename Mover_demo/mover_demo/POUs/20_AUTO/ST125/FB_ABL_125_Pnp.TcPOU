@@ -127,6 +127,18 @@ fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_0
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST125_PnpHorPos_e._max);
 
+fb_simu_axis125_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis125_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST125_Axis.axis125_01Y.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST125_01Y]),
+                    pIN_axisHW          := ADR(ST125_Axis.axis125_01Y.axis),
+                    rIN_PosActual       := fb_axis125_01Y.rOUT_ActPos,
+                    rIN_PosMax          := ST125_Axis.const125_01Y.POS_MAX,
+                    rIN_PosMin          := ST125_Axis.const125_01Y.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
+
 fb_axis125_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st125_01Y,
@@ -150,19 +162,10 @@ fb_axis125_01Y(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST125_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                // the simu fb gives the hardware signal when the simulation is disabled
-               wAxisState  := fb_simu_axis125_01Y.wOUT_AxisState,
-               rOUT_ActPos => ST125_Axis.axis125_01Y.rActPos,
-               axisIN_REF  := ST125_Axis.axis125_01Y.axis);
-
-fb_simu_axis125_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis125_01Y.bOUT_AxisCntr,
-                    wIN_AxisState       := ST125_Axis.axis125_01Y.wState,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis125_01Y.rOUT_ActPos,
-                    rIN_PosMax          := ST125_Axis.const125_01Y.POS_MAX,
-                    rIN_PosMin          := ST125_Axis.const125_01Y.POS_MIN,
-                    rIN_PixMax          := 100,
-                    rIN_PixMin          := 0);
+               wAxisState    := fb_simu_axis125_01Y.wOUT_AxisState,
+               bOUT_AxisCntr => ST125_Axis.axis125_01Y.bCtrlHi,
+               rOUT_ActPos   => ST125_Axis.axis125_01Y.rActPos,
+               axisIN_REF    := fb_simu_axis125_01Y.pOUT_axisRef^);
 
 fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_02Z],
               xIN_Init        := enIN_State = enState.StateINIT,
@@ -172,11 +175,19 @@ fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_0
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST125_PnpVerPos_e._max);
 
+fb_simu_axis125_02Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    rIN_PosActual := fb_axis125_02Z.rOUT_ActPos,
+                    pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST125_02Z]),
+                    pIN_axisHW    := ADR(ST125_Axis.axis125_02Z.axis),
+                    rIN_PosMax    := ST125_Axis.const125_02Z.POS_MAX,
+                    rIN_PosMin    := ST125_Axis.const125_02Z.POS_MIN,
+                    rIN_PixMax    := 80,
+                    rIN_PixMin    := 0);
+
 fb_axis125_02Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st125_02Z,
                xIN_Quit       := xIN_Quit,
-               axisIN_REF     := ST125_Axis.axis125_02Z.axis,
                xIN_AX5000     := FALSE,
                xIN_ENC_ABS    := TRUE, // TODO set accordingly
                xIN_PARAMok    := TRUE,
@@ -201,13 +212,8 @@ fb_axis125_02Z(enIN_State     := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST125_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               rOUT_ActPos      => st125_axis.axis125_02Z.rActPos);
-
-fb_simu_axis125_02Z(rIN_PosActual := fb_axis125_02Z.rOUT_ActPos,
-                    rIN_PosMax    := ST125_Axis.const125_02Z.POS_MAX,
-                    rIN_PosMin    := ST125_Axis.const125_02Z.POS_MIN,
-                    rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+               rOUT_ActPos      => ST125_Axis.axis125_02Z.rActPos,
+               axisIN_REF       := fb_simu_axis125_02Z.pOUT_axisRef^);
 
 //////////////////////////////////
 fb_gripperFilterhutLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),

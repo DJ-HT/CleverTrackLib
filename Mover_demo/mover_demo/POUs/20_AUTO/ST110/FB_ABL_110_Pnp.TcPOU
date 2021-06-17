@@ -83,10 +83,10 @@ VAR
     simu_gripperLeft  : FB_Simu_Zyl2Pos;
     fb_gripperRight   : FB_ZylMo2El_V2_1;
     simu_gripperRight : FB_Simu_Zyl2Pos;
-
+	
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -119,9 +119,21 @@ fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_0
               xIN_Init        := enIN_State = enState.StateINIT,
               xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis110_01Y.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.01,
+              lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST110_PnpHorPos_e._max);
+
+fb_simu_axis110_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis110_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST110_Axis.axis110_01Y.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST110_01Y]),
+                    pIN_axisHW          := ADR(ST110_Axis.axis110_01Y.axis),
+                    rIN_PosActual       := fb_axis110_01Y.rOUT_ActPos,
+                    rIN_PosMax          := ST110_Axis.const110_01Y.POS_MAX,
+                    rIN_PosMin          := ST110_Axis.const110_01Y.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
 
 fb_axis110_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
@@ -146,33 +158,32 @@ fb_axis110_01Y(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                // the simu fb gives the hardware signal when not in simulation
-               wAxisState  := fb_simu_axis110_01Y.wOUT_AxisState,
-               rOUT_ActPos => ST110_Axis.axis110_01Y.rActPos,
-               axisIN_REF  := ST110_Axis.axis110_01Y.axis);
-
-fb_simu_axis110_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis110_01Y.bOUT_AxisCntr,
-                    wIN_AxisState       := ST110_Axis.axis110_01Y.wState,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis110_01Y.rOUT_ActPos,
-                    rIN_PosMax          := ST110_Axis.const110_01Y.POS_MAX,
-                    rIN_PosMin          := ST110_Axis.const110_01Y.POS_MIN,
-                    rIN_PixMax          := 100,
-                    rIN_PixMin          := 0);
+               wAxisState    := fb_simu_axis110_01Y.wOUT_AxisState,
+               rOUT_ActPos   => ST110_Axis.axis110_01Y.rActPos,
+               bOUT_AxisCntr => ST110_Axis.axis110_01Y.bCtrlHi,
+               axisIN_REF    := fb_simu_axis110_01Y.pOUT_axisRef^);
 
 fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_02Z],
                xIN_Init        := enIN_State = enState.StateINIT,
                xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis110_02Z.rOUT_ActPos,
-               lrIN_Delta_mm   := 0.01,
+               lrIN_Delta_mm   := 0.1,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST110_PnpVerPos_e._max);
+
+fb_simu_axis110_02Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    rIN_PosActual := fb_axis110_02Z.rOUT_ActPos,
+                    pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST110_02Z]),
+                    pIN_axisHW    := ADR(ST110_Axis.axis110_02Z.axis),
+                    rIN_PosMax    := ST110_Axis.const110_02Z.POS_MAX,
+                    rIN_PosMin    := ST110_Axis.const110_02Z.POS_MIN,
+                    rIN_PixMax    := 80,
+                    rIN_PixMin    := 0);
 
 fb_axis110_02Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST110_02Z,
                xIN_Quit       := xIN_Quit,
-               axisIN_REF     := ST110_Axis.axis110_02Z.axis,
                xIN_AX5000     := TRUE,
                xIN_ENC_ABS    := TRUE, // TODO set accordingly
                xIN_PARAMok    := TRUE,
@@ -189,7 +200,7 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                xIN_HomeCalib  :=,
                xIN_Execute    := (_20_AUTO.recipe.st110.xUseVerLeft OR (iOUT_Step < ST110_Pnp_e.READY)) AND
                                  (fb_PnpVerAxisL.xOUT_Execute),
-               xIN_HomeExe      := ST110_Pnp_e.Init_HomeVertical_02_03 = iOUT_Step,
+               xIN_HomeExe      :=,
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrPosition),
                rIN_Velocity     := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrVelocity),
@@ -197,23 +208,26 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-
                // output
-               rOUT_ActPos => ST110_Axis.axis110_02Z.rActPos);
-
-fb_simu_axis110_02Z(rIN_PosActual := fb_axis110_02Z.rOUT_ActPos,
-                    rIN_PosMax    := ST110_Axis.const110_02Z.POS_MAX,
-                    rIN_PosMin    := ST110_Axis.const110_02Z.POS_MIN,
-                    rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+               rOUT_ActPos => ST110_Axis.axis110_02Z.rActPos,
+               axisIN_REF  := fb_simu_axis110_02Z.pOUT_axisRef^);
 
 fb_PnpVerAxisR(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_03Z],
                xIN_Init        := enIN_State = enState.StateINIT,
                xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis110_03Z.rOUT_ActPos,
-               lrIN_Delta_mm   := 0.01,
+               lrIN_Delta_mm   := 0.1,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST110_PnpVerPos_e._max);
+
+fb_simu_axis110_03Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    rIN_PosActual := fb_axis110_03Z.rOUT_ActPos,
+                    pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST110_03Z]),
+                    pIN_axisHW    := ADR(ST110_Axis.axis110_03Z.axis),
+                    rIN_PosMax    := ST110_Axis.const110_03Z.POS_MAX,
+                    rIN_PosMin    := ST110_Axis.const110_03Z.POS_MIN,
+                    rIN_PixMax    := 80,
+                    rIN_PixMin    := 0);
 
 fb_axis110_03Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
@@ -230,7 +244,7 @@ fb_axis110_03Z(enIN_State     := enIN_State,
                rIN_JogInc     := AXIS.rTeachIncAxis,
                xIN_Execute    := (_20_AUTO.recipe.st110.xUseVerRight OR (iOUT_Step < ST110_Pnp_e.READY)) AND
                                  (fb_PnpVerAxisR.xOUT_Execute),
-               xIN_HomeExe      := ST110_Pnp_e.Init_HomeVertical_02_03 = iOUT_Step,
+               xIN_HomeExe      :=,
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrPosition),
                rIN_Velocity     := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrVelocity),
@@ -238,28 +252,32 @@ fb_axis110_03Z(enIN_State     := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-               axisIN_REF       := ST110_Axis.axis110_03Z.axis,
+               axisIN_REF       := fb_simu_axis110_03Z.pOUT_axisRef^,
                xIN_AX5000       := TRUE,
                xIN_ENC_ABS      := TRUE,
-               rOUT_ActPos      => ST110_Axis.axis110_03Z.rActPos); // TODO set accordingly
-
-fb_simu_axis110_03Z(rIN_PosActual := fb_axis110_03Z.rOUT_ActPos,
-                    rIN_PosMax    := ST110_Axis.const110_03Z.POS_MAX,
-                    rIN_PosMin    := ST110_Axis.const110_03Z.POS_MIN,
-                    rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+               rOUT_ActPos      => ST110_Axis.axis110_03Z.rActPos,
+               axisIN_REF       := fb_simu_axis110_03Z.pOUT_axisRef^);
 
 fb_PnpVerAxisU(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_04Z],
                xIN_Init        := enState.StateINIT = enIN_State,
                xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := ST110_Axis.axis110_04Z.rActPos,
-               lrIN_Delta_mm   := 0.01,
+               lrIN_Delta_mm   := 0.1,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST110_PnpVerPushPos_e._max);
 
+fb_simu_axis110_04Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    rIN_PosActual := ST110_Axis.axis110_04Z.rActPos,
+                    pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST110_04Z]),
+                    pIN_axisHW    := ADR(ST110_Axis.axis110_04Z.axis),
+                    rIN_PosMax    := ST110_Axis.const110_04Z.POS_MAX,
+                    rIN_PosMin    := ST110_Axis.const110_04Z.POS_MIN,
+                    rIN_PixMax    := 80,
+                    rIN_PixMin    := 0);
+
 fb_axis110_04Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.ST110_03Z,
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.ST110_04Z,
                xIN_Quit         := xIN_Quit,
                xIN_AX5000       := TRUE,
                xIN_ENC_ABS      := TRUE,
@@ -273,7 +291,7 @@ fb_axis110_04Z(enIN_State       := enIN_State,
                rIN_VELOOPEN     := ST110_Axis.const110_04Z.VELO_MANU / 4,
                rIN_JogInc       := AXIS.rTeachIncAxis,
                rIN_JogVelo      := AXIS.rTeachVelo,
-               xIN_HomeExe      := ST110_Pnp_e.Init_HomeVertical_04 = iOUT_Step,
+               xIN_HomeExe      :=,
                xIN_HomeCalib    := FALSE,
                xIN_Execute      := fb_PnpVerAxisU.xOUT_Execute,
                xIN_Relative     := FALSE,
@@ -284,13 +302,7 @@ fb_axis110_04Z(enIN_State       := enIN_State,
                rIN_Jerk         := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrJerk),
                xIN_Reset        := xIN_Reset,
                rOUT_ActPos      => ST110_Axis.axis110_04Z.rActPos,
-               axisIN_REF       := ST110_Axis.axis110_04Z.axis);
-
-fb_simu_axis110_04Z(rIN_PosActual := ST110_Axis.axis110_04Z.rActPos,
-                    rIN_PosMax    := ST110_Axis.const110_04Z.POS_MAX,
-                    rIN_PosMin    := ST110_Axis.const110_04Z.POS_MIN,
-                    rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+               axisIN_REF       := fb_simu_axis110_04Z.pOUT_axisRef^);
 
 // pneumatics
 
@@ -312,12 +324,14 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
                                               [ST110_Cylinders_e.VakuumgreiferLinks].toGS_wait_time));
 
-simu_gripperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                 xIN_inGS   := NOT IO_BOX.I5500_ST110_vakumkontrolle_links,
-                 xIN_inAS   := IO_BOX.I5500_ST110_vakumkontrolle_links,
-                 xIN_valve  := fb_gripperLeft.xOUT_VALVE,
-                 tIN_GS_ms  := 0,    //ms
-                 tIN_AS_ms  := 200); //ms
+simu_gripperLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+                 xIN_inGS   := (IO_BOX.I5500_ST110_vakumkontrolle_links / (16#FFFF / 100)) <=
+                               _20_AUTO.recipe.st110.vakum_left_pc,
+                 xIN_inAS := (IO_BOX.I5500_ST110_vakumkontrolle_links / (16#FFFF / 100)) >
+                             _20_AUTO.recipe.st110.vakum_left_pc,
+                 xIN_valve := fb_gripperLeft.xOUT_VALVE,
+                 tIN_GS_ms := 0,    //ms
+                 tIN_AS_ms := 200); //ms
 
 fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                 xIN_Quit     := xIN_Quit,
@@ -337,12 +351,14 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                 tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
                                                [ST110_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
-simu_gripperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                  xIN_inGS   := NOT IO_BOX.I5600_ST110_vakumkontrolle_rechts,
-                  xIN_inAS   := IO_BOX.I5600_ST110_vakumkontrolle_rechts,
-                  xIN_valve  := fb_gripperRight.xOUT_VALVE,
-                  tIN_GS_ms  := 0,    //ms
-                  tIN_AS_ms  := 200); //ms
+simu_gripperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+                  xIN_inGS   := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / (16#FFFF / 100)) <=
+                                _20_AUTO.recipe.st110.vakum_right_pc,
+                  xIN_inAS := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / (16#FFFF / 100)) >
+                              _20_AUTO.recipe.st110.vakum_right_pc,
+                  xIN_valve := fb_gripperRight.xOUT_VALVE,
+                  tIN_GS_ms := 0,    //ms
+                  tIN_AS_ms := 200); //ms
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -415,36 +431,14 @@ ST110_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST110_Pnp_e.INIT: (* Grundstellung ? *)
-    IF CONST.USE_SIMULATION THEN
-        iOUT_Step := ST110_Pnp_e.Init_VerticalUp_04;
-    ELSE
-        iOUT_Step := ST110_Pnp_e.Init_HomeVertical_04;
-    END_IF;
-
-ST110_Pnp_e.Init_HomeVertical_04:
-    fb_axis110_04Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_04Z].defProfile.lrVelocity;
-
-    IF fb_axis110_04Z.xOUT_DONE THEN
-        iOUT_Step := ST110_Pnp_e.Init_VerticalUp_04;
-    END_IF
+    iOUT_Step := ST110_Pnp_e.Init_VerticalUp_04;
 
 ST110_Pnp_e.Init_VerticalUp_04:
     fb_axis110_04Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_04Z].defProfile.lrVelocity;
 
     IF fb_PnpVerAxisL.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos THEN
-        IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
-            iOUT_Step := ST110_Pnp_e.Init_VerticalUp_02_03;
-        ELSE
-            iOUT_Step := ST110_Pnp_e.Init_HomeVertical_02_03;
-        END_IF
-    END_IF
-
-ST110_Pnp_e.Init_HomeVertical_02_03:
-    fb_axis110_02Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_02Z].defProfile.lrVelocity;
-    fb_axis110_03Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_03Z].defProfile.lrVelocity;
-
-    IF fb_axis110_02Z.xOUT_DONE AND fb_axis110_03Z.xOUT_DONE THEN
         iOUT_Step := ST110_Pnp_e.Init_VerticalUp_02_03;
+
     END_IF
 
 ST110_Pnp_e.Init_VerticalUp_02_03:

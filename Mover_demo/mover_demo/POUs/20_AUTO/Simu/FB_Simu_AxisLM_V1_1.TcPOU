@@ -8,6 +8,9 @@ VAR_INPUT
     wIN_AxisState       : WORD;          // Statuswort input, copy to output when fb is not enable
     udiIN_HomingTime_ms : UDINT := 2000; // homing time, expressed as millisecond
 
+    pIN_axisSimu : POINTER TO AXIS_REF; // simulation axis ref, without hardware connection
+    pIN_axisHW   : POINTER TO AXIS_REF; // hardware axis ref, the one wich is connected to hardware
+
     rIN_PosActual : REAL;
     rIN_PosMax    : REAL;
     rIN_PosMin    : REAL;
@@ -15,8 +18,9 @@ VAR_INPUT
     rIN_PixMin    : INT;
 END_VAR
 VAR_OUTPUT
-    wOUT_AxisState : WORD; //Statuswort
-    rOUT_PixActual : INT;  // actual position of the axis in pixel
+    wOUT_AxisState : WORD;                //Statuswort
+    rOUT_PixActual : INT;                 // actual position of the axis in pixel
+    pOUT_axisRef   : POINTER TO AXIS_REF; // current axis ref used
 END_VAR
 VAR
     _iStep                 : INT;   // current step
@@ -62,9 +66,12 @@ END_VAR
 
     END_CASE
 
+    pOUT_axisRef := pIN_axisSimu;
+
 ELSE
     wOUT_AxisState := wIN_AxisState;
     _iStep         := 0;
+    pOUT_axisRef   := pIN_axisHW;
 END_IF
 
 rOUT_PixActual := MAP_REAL_TO_INT(rValue    := rIN_PosActual,

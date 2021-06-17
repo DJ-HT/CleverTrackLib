@@ -81,7 +81,7 @@ END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -150,6 +150,18 @@ ELSE
 
 END_IF
 
+simu_axis145_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                 wIN_AxisState       := ST145_Axis.axis145_10W.wState,
+                 bIN_AxisCntr        := fb_axis145_10W.bOUT_AxisCntr,
+                 udiIN_HomingTime_ms := 1000,
+                 pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST145_10W]),
+                 pIN_axisHW          := ADR(ST145_Axis.axis145_10W.axis),
+                 rIN_PosActual       := fb_axis145_10W.rOUT_ActPos,
+                 rIN_PosMax          := ST145_Axis.const145_10W.POS_MAX,
+                 rIN_PosMin          := ST145_Axis.const145_10W.POS_MIN,
+                 rIN_PixMax          := 0,
+                 rIN_PixMin          := 0);
+
 fb_axis145_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st145_10W,
@@ -178,23 +190,13 @@ fb_axis145_10W(enIN_State     := enIN_State,
                rIN_PosManu      := AXIS.rTeachPos,
                xIN_Home         := ST145_feeder_e.Init_home_table = iOUT_Step,
                xIN_Reset        := xIN_Reset OR ST145_feeder_e.RESET = iOUT_Step,
-               wAxisState       := simu_axis145_10W
-                   .wOUT_AxisState, // The simu fb gives us the hardware signal when we are not in simulation
+               // The simu fb gives us the hardware signal when we are not in simulation
+               wAxisState    := simu_axis145_10W.wOUT_AxisState,
                bOUT_AxisCntr => ST145_Axis.axis145_10W.bCtrlHi,
                rOUT_ActPos   =>, // leave empty, rActPos must be set using the modulo
-               axisIN_REF    := ST145_Axis.axis145_10W.axis);
+               axisIN_REF    := simu_axis145_10W.pOUT_axisRef^);
 
-ST145_Axis.axis145_10W.rActPos := LREAL_TO_REAL(ST145_Axis.axis145_10W.axis.NcToPlc.ModuloActPos);
-
-simu_axis145_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
-                 wIN_AxisState       := ST145_Axis.axis145_10W.wState,
-                 bIN_AxisCntr        := fb_axis145_10W.bOUT_AxisCntr,
-                 udiIN_HomingTime_ms := 1000,
-                 rIN_PosActual       := fb_axis145_10W.rOUT_ActPos,
-                 rIN_PosMax          := ST145_Axis.const145_10W.POS_MAX,
-                 rIN_PosMin          := ST145_Axis.const145_10W.POS_MIN,
-                 rIN_PixMax          := 0,
-                 rIN_PixMin          := 0);
+ST145_Axis.axis145_10W.rActPos := LREAL_TO_REAL(simu_axis145_10W.pOUT_axisRef^.NcToPlc.ModuloActPos);
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -220,7 +222,9 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 xOUT_Wait := (iOUT_Step = ST145_Feeder_e.DONE);
 
 // TODO add simulation constant to prevent the output to be set
-IO_BOX.Q2400_ST145_freigabe_wf := fb_feeder.xOUT_EnableFeeder; // AND SIMULATION CONSTANT
+IO_BOX.Q2402_ST145_reigabe_wf   := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q2400_ST145_freigabe_REO := ((iOUT_Step = ST145_Feeder_e.wait_on_a_piece) OR IO_BOX.Q2402_ST145_reigabe_wf) AND
+                                   NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)
