@@ -395,16 +395,16 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST180_Pnp_e.hor_to_track_pos);
 
 // TODO Valve should not be set when we are in simulation !
-IO_BOX.Q5400_12_ST180_greifer_patrone_links :=
+IO_BOX.Q5400_14_ST180_greifer_patrone_links :=
     fb_griperLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q5401_12_ST180_greifer_patrone_rechts :=
+IO_BOX.Q5401_14_ST180_greifer_patrone_rechts :=
     fb_griperRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q5402_12_ST180_niederhalter_deckel_links :=
+IO_BOX.Q5402_14_ST180_niederhalter_deckel_links :=
     fb_clampLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q5403_12_ST180_Niederhalter_deckel_rechts :=
+IO_BOX.Q5403_14_ST180_Niederhalter_deckel_rechts :=
     fb_clampRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)

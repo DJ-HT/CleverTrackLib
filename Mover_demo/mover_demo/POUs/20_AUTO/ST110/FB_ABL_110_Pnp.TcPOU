@@ -86,7 +86,7 @@ VAR
 	
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -325,9 +325,9 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                                               [ST110_Cylinders_e.VakuumgreiferLinks].toGS_wait_time));
 
 simu_gripperLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
-                 xIN_inGS   := (IO_BOX.I5500_ST110_vakumkontrolle_links / (16#FFFF / 100)) <=
+                 xIN_inGS   := (IO_BOX.I5500_ST110_vakumkontrolle_links / TO_INT(16#FFFF / 100)) <=
                                _20_AUTO.recipe.st110.vakum_left_pc,
-                 xIN_inAS := (IO_BOX.I5500_ST110_vakumkontrolle_links / (16#FFFF / 100)) >
+                 xIN_inAS := (IO_BOX.I5500_ST110_vakumkontrolle_links / TO_INT(16#FFFF / 100)) >
                              _20_AUTO.recipe.st110.vakum_left_pc,
                  xIN_valve := fb_gripperLeft.xOUT_VALVE,
                  tIN_GS_ms := 0,    //ms
@@ -352,9 +352,9 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                                                [ST110_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
 simu_gripperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
-                  xIN_inGS   := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / (16#FFFF / 100)) <=
+                  xIN_inGS   := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / TO_INT(16#FFFF / 100)) <=
                                 _20_AUTO.recipe.st110.vakum_right_pc,
-                  xIN_inAS := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / (16#FFFF / 100)) >
+                  xIN_inAS := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / TO_INT(16#FFFF / 100)) >
                               _20_AUTO.recipe.st110.vakum_right_pc,
                   xIN_valve := fb_gripperRight.xOUT_VALVE,
                   tIN_GS_ms := 0,    //ms
@@ -570,6 +570,7 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
        NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_InPos OR
        NOT _20_AUTO.recipe.st110.xUseVerRight) AND
+       fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos AND
        fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
     END_IF;
@@ -580,7 +581,8 @@ ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
        (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
-       NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
+       NOT _20_AUTO.recipe.st110.xUseVerRight) AND
+       fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.Vacum_off;
     END_IF;
 

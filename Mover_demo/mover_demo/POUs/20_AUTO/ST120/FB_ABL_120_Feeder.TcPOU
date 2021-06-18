@@ -90,7 +90,7 @@ VAR CONSTANT
     BAND_SIZE_FOR_TUBE_LEFT  : INT := 3; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
     BAND_SIZE_FOR_TUBE_RIGHT : INT := 2; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -175,28 +175,37 @@ simu_pivotRight(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
 
 fb_feederLeft(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
                             _20_AUTO.recipe.st120.xUseVerLeft,
-              xIN_PieceInEnd      := NOT simu_fifoLeft.IsEmpty(),
-              xIN_PieceMax        := (simu_fifoLeft.GetLen() >= BAND_SIZE_FOR_TUBE_LEFT),
-              diIN_SignlFilter_ms := _20_AUTO.recipe.st120.FeederConfigLeft.InFilterDelay,
-              diIN_StartDelay_ms  := _20_AUTO.recipe.st120.FeederConfigLeft.StartDelay,
-              diIN_StopDelay_ms   := _20_AUTO.recipe.st120.FeederConfigLeft.StopDelay,
-              diIN_EmptyDelay_ms  := _20_AUTO.recipe.st120.FeederConfigLeft.EmptyDelay);
-
+              xIN_PieceInEnd            := simu_feederLeft.xOUT_NewPiece,
+              xIN_PieceMax              := IO_BOX.I8304_ST120_maxi_zufurung_links,
+              xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+              refIN_SimulatedFifo       := simu_fifoLeft,
+              iIN_FifoSetMaxSensorValue := BAND_SIZE_FOR_TUBE_LEFT,
+              diIN_SignlFilter_ms       := _20_AUTO.recipe.st120.FeederConfigLeft.InFilterDelay,
+              diIN_StartDelay_ms        := _20_AUTO.recipe.st120.FeederConfigLeft.StartDelay,   
+              diIN_StopDelay_ms         := _20_AUTO.recipe.st120.FeederConfigLeft.StopDelay,    
+              diIN_EmptyDelay_ms        := _20_AUTO.recipe.st120.FeederConfigLeft.EmptyDelay);
+			  
+			  
 fb_feederRight(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
-                             _20_AUTO.recipe.st120.xUseVerRight,
-               xIN_PieceInEnd      := NOT simu_fifoRight.IsEmpty(),
-               xIN_PieceMax        := (simu_fifoRight.GetLen() >= BAND_SIZE_FOR_TUBE_RIGHT),
-               diIN_SignlFilter_ms := _20_AUTO.recipe.st120.FeederConfigRight.InFilterDelay,
-               diIN_StartDelay_ms  := _20_AUTO.recipe.st120.FeederConfigRight.StartDelay,
-               diIN_StopDelay_ms   := _20_AUTO.recipe.st120.FeederConfigRight.StopDelay,
-               diIN_EmptyDelay_ms  := _20_AUTO.recipe.st120.FeederConfigRight.EmptyDelay);
+                            _20_AUTO.recipe.st120.xUseVerRight,
+              xIN_PieceInEnd            := simu_feederRight.xOUT_NewPiece,
+              xIN_PieceMax              := IO_BOX.I8305_ST120_maxi_zufurung_rechts,
+              xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+              refIN_SimulatedFifo       := simu_fifoRight,
+              iIN_FifoSetMaxSensorValue := BAND_SIZE_FOR_TUBE_RIGHT,
+              diIN_SignlFilter_ms       := _20_AUTO.recipe.st120.FeederConfigRight.InFilterDelay,
+              diIN_StartDelay_ms        := _20_AUTO.recipe.st120.FeederConfigRight.StartDelay,   
+              diIN_StopDelay_ms         := _20_AUTO.recipe.st120.FeederConfigRight.StopDelay,    
+              diIN_EmptyDelay_ms        := _20_AUTO.recipe.st120.FeederConfigRight.EmptyDelay);
 
-simu_feederLeft(xIN_Enable         := fb_feederLeft.xOUT_EnableFeeder,
+simu_feederLeft(xIN_Enable         := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                xIN_PceSensor      := IO_BOX.I6404_ST120_teil_in_vereizelung_links,
                 tIN_NewPieceTime   := 500,
                 iIN_WaitTimeMin_ms := 1000,
                 iIN_WaitTimeMax_ms := 1500);
 
-simu_feederRight(xIN_Enable         := fb_feederRight.xOUT_EnableFeeder,
+simu_feederRight(xIN_Enable         := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                 xIN_PceSensor      := IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts,
                  tIN_NewPieceTime   := 500,
                  iIN_WaitTimeMin_ms := 1000,
                  iIN_WaitTimeMax_ms := 1500);
@@ -247,20 +256,12 @@ fb_hubladerRight(xIN_Reset    := xIN_Reset OR (ST120_Feeder_e.RESET = iOUT_Step)
 simu_hubladerRight(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
                    xIN_inGS   := IO_BOX.I8300_ST120_hublader_rechts_unten,
                    xIN_inAS   := IO_BOX.I8301_ST120_hublader_rechts_oben,
-				   xIN_valve := fb_hubladerRight.xOUT_VALVE,
+                   xIN_valve  := fb_hubladerRight.xOUT_VALVE,
                    tIN_GS_ms  := 800,  //ms
                    tIN_AS_ms  := 800); //ms
 
 rtPutPieceLeft(CLK := simu_hubladerLeft.xOUT_inAS);
 rtPutPieceRight(CLK := simu_hubladerRight.xOUT_inAS);
-
-IF rtPutPieceLeft.Q AND NOT simu_fifoLeft.IsFull() THEN
-    simu_fifoLeft.Put(1);
-END_IF
-
-IF rtPutPieceRight.Q AND NOT simu_fifoRight.IsFull() THEN
-    simu_fifoRight.Put(1);
-END_IF
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -285,6 +286,53 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST120_Feeder_e.DONE);
 
+// 
+// I6400_ST120_schwenken_links_in_vertikal   
+// I6401_ST120_schwenken_links_in_horizontal 
+// I6402_ST120_schwenken_rechts_in_vertikal  
+// I6403_ST120_schwenken_rechts_in_horizontal
+// I6404_ST120_teil_in_vereizelung_links     
+// I6405_ST120_teil_in_vereinzelung_rechts   
+// 
+// 
+// I8200_ST120_alarm_forderband_l            
+// I8202_ST120_alarm_forderband_r            
+//                   
+// I8206_ST120_hublader_links_niveaukontrolle           
+// I8302_ST120_hublader_rechts_niveaukontrolle    
+//             
+// I8304_ST120_mini_maxi_knotrolle_zufurung_links 
+// I8305_ST120_mini_maxi_knotrolle_zufurung_rechts
+
+// I7400_ST120_kraftsensor_links
+// I7500_ST120_kraftsensor_rechts
+// I6300_ST120_greifer_links_geschlossen 
+// I6301_ST120_greifer_links_offen       
+// I6302_ST120_greifer_rechts_geschlossen
+// I6303_ST120_greifer_rechts_offen 
+// IO_BOX.Q5202_12_ST120_greifer_links    := fb_pivotLeft.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+// IO_BOX.Q5203_12_ST120_greifer_rechts   := fb_pivotLeft.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q5204_14_ST120_schwenken_links :=
+    fb_pivotLeft.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q5205_14_ST120_schwenken_rechts :=
+    fb_pivotRight.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q8207_ST120_hublader_links_valve :=
+    fb_hubladerLeft.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q8303_ST120_hublader_rechts_valve :=
+    fb_hubladerRight.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q8201_ST120_forderband_ein_l :=
+    (IO_BOX.Q8207_ST120_hublader_links_valve OR NOT IO_BOX.I6404_ST120_teil_in_vereizelung_links) AND
+    NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q8203_ST120_forderband_ein_r :=
+    (IO_BOX.Q8303_ST120_hublader_rechts_valve OR NOT IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) AND
+    NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)
@@ -305,6 +353,21 @@ END_IF
 (* START *)
 rtSTART(CLK := xIN_Start);
 
+(* error management *)
+IF 0 = bOUT_Error THEN
+    IF fb_pivotLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_pivotRight.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_hubladerLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    ELSIF fb_hubladerRight.xOUT_ErrFlag THEN
+        bOUT_Error := 14;
+    END_IF
+ELSIF iOUT_Step < ST120_Feeder_e.ERROR THEN
+    iOUT_Step := ST120_Feeder_e.ERROR;
+END_IF
+
 (*******************************************************************)
 (* Schrittkette  *)
 (*******************************************************************)
@@ -323,15 +386,16 @@ ST120_Feeder_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST120_Feeder_e.INIT: (* Grundstellung ? *)
-    IF CONST.USE_SIMULATION THEN
-        iOUT_Step := ST120_Feeder_e.Init_pneumatics;
-    ELSE
+    IF xIN_PnpGripperOpen AND xIN_PnpNotOnTheWay THEN
         iOUT_Step := ST120_Feeder_e.Init_pneumatics;
     END_IF;
 
 ST120_Feeder_e.Init_pneumatics:
     // TODO check all the sensors
-    IF TRUE THEN
+    IF ((_20_AUTO.recipe.st120.xUseVerLeft AND fb_pivotLeft.xOUT_inAS) OR
+       (NOT _20_AUTO.recipe.st120.xUseVerLeft AND fb_pivotLeft.xOUT_inGS)) AND
+       ((_20_AUTO.recipe.st120.xUseVerRight AND fb_pivotRight.xOUT_inAS) OR
+       (NOT _20_AUTO.recipe.st120.xUseVerRight AND fb_pivotRight.xOUT_inGS)) THEN
         iOUT_Step := ST120_Feeder_e.READY;
     END_IF
 
@@ -348,21 +412,26 @@ ST120_Feeder_e.START: (*  *)
     END_IF;
 
 ST120_Feeder_e.wait_tube_presence:
-    IF CONST.USE_SIMULATION AND
-       ((NOT _20_AUTO.recipe.st120.xUseVerLeft OR (simu_fifoLeft.GetLen() >= BAND_SIZE_FOR_TUBE_LEFT)) AND
-       (NOT _20_AUTO.recipe.st120.xUseVerRight OR (simu_fifoRight.GetLen() >= BAND_SIZE_FOR_TUBE_RIGHT))) THEN
-        iOUT_Step := ST120_Feeder_e.wait_pnp_ready;
+    IF (FEEDER_SIMULATION AND CONST.USE_SIMULATION) THEN
+        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR (simu_fifoLeft.GetLen() >= BAND_SIZE_FOR_TUBE_LEFT)) AND
+           (NOT _20_AUTO.recipe.st120.xUseVerRight OR (simu_fifoRight.GetLen() >= BAND_SIZE_FOR_TUBE_RIGHT)) THEN
+            iOUT_Step := ST120_Feeder_e.wait_pnp_ready;
+        END_IF
+
+    ELSE
+        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR IO_BOX.I6404_ST120_teil_in_vereizelung_links) AND
+           (NOT _20_AUTO.recipe.st120.xUseVerRight OR IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) THEN
+            iOUT_Step := ST120_Feeder_e.wait_pnp_ready;
+        END_IF
     END_IF
 
 ST120_Feeder_e.wait_pnp_ready:
     IF xIN_PnpGripperOpen THEN
-        iOUT_Step       := ST120_Feeder_e.rotate_to_pnp;
-        simu_start_tick := GetTick();
+        iOUT_Step := ST120_Feeder_e.rotate_to_pnp;
     END_IF
 
 ST120_Feeder_e.rotate_to_pnp:
-    // TODO implement the sensor here
-    IF CONST.USE_SIMULATION AND ((GetTick() - simu_start_tick) > 500) THEN
+    IF fb_pivotLeft.xOUT_inGS AND fb_pivotRight.xOUT_inGS THEN
         iOUT_Step := ST120_Feeder_e.wait_pce_picked;
     END_IF
 
@@ -381,13 +450,11 @@ ST120_Feeder_e.wait_pce_picked:
 
 ST120_Feeder_e.wait_pnp_move_out_with_the_piece:
     IF xIN_PnpNotOnTheWay THEN
-        iOUT_Step       := ST120_Feeder_e.rotate_to_feeder;
-        simu_start_tick := GetTick();
+        iOUT_Step := ST120_Feeder_e.rotate_to_feeder;
     END_IF
 
 ST120_Feeder_e.rotate_to_feeder:
-    // TODO implement the sensor here
-    IF CONST.USE_SIMULATION AND ((GetTick() - simu_start_tick) > 500) THEN
+    IF fb_pivotLeft.xOUT_inAS AND fb_pivotRight.xOUT_inAS THEN
         iOUT_Step := ST120_Feeder_e.DONE;
     END_IF
 
