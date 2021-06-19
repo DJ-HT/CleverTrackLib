@@ -9,7 +9,7 @@ VAR_GLOBAL CONSTANT
 END_VAR
 VAR_GLOBAL
     axis120_01Y : AxisLinMot_t;
-    axis120_02Z : AxisBeckhoff_t;
+    axis120_02Z : AxisLinMot_t;
 END_VAR
 VAR_GLOBAL RETAIN
     // Recipe values are managed elsewhere

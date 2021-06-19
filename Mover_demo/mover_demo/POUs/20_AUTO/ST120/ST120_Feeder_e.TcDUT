@@ -9,6 +9,8 @@ TYPE ST120_Feeder_e :
 
     INIT := 100, // Initialisieren 
     Init_pneumatics,
+	Init_pivot_to_feeder,
+	Init_pivot_to_pnp,
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch

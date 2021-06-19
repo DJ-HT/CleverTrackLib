@@ -13,6 +13,10 @@ TYPE ST120_Pnp_e :
     Init_VerticalsUp,
     Init_HomeHorizontals,
     Init_HorizontalsToTrack,
+    Init_adjust_left_clamp,
+    Init_open_left_clamp,
+    Init_adjust_right_clamp,
+    Init_open_right_clamp,
     Init_check_if_pces_handled,
 
     READY := 999,  // READY to Start, Init Done 
@@ -22,7 +26,7 @@ TYPE ST120_Pnp_e :
     PnP_Hor_ToRotTablePos,
     PnP_WaitOnFeeder,
     PnP_Ver_RotTableDown,
-    Gripper_open,
+    Gripper_close,
     PnP_Ver_RotTableUp,
     PnP_Hor_ToTrackPos,
     waitOnMover,     // wait until the mover is there
@@ -30,7 +34,7 @@ TYPE ST120_Pnp_e :
 
     PnP_Ver_ShuttleDown,
     PnP_Ver_ShuttleTorqueControl,
-    Gripper_close,
+    Gripper_open,
     PnP_Ver_ShuttleUp,
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
@@ -75,6 +79,26 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"Init_adjust_left_clamp"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_open_left_clamp"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_adjust_right_clamp"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_open_right_clamp"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"Init_check_if_pces_handled"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -110,7 +134,7 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Gripper_open"</v>
+              <v n="TextID">"Gripper_close"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
@@ -145,7 +169,7 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Gripper_close"</v>
+              <v n="TextID">"Gripper_open"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

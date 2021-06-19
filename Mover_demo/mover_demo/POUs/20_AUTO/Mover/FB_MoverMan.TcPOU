@@ -250,7 +250,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     // this only needed because the mover doesn't update themself automatically
     _MoverList[mv_i]();
 
-    IF HMI.enState = enState.StateAUTO THEN
+    IF HMI.enState = enState.StateAUTO OR HMI.enState = enState.StateSTEP THEN
 
         CASE _MoverList[mv_i].State OF
 
@@ -347,7 +347,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 // If there is no station (waiting position)
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
-            	_MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
 
             ELSE
                 _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);
