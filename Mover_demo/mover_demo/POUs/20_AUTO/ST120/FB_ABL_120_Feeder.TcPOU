@@ -90,7 +90,7 @@ VAR CONSTANT
     BAND_SIZE_FOR_TUBE_LEFT  : INT := 3; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
     BAND_SIZE_FOR_TUBE_RIGHT : INT := 2; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
 
-    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -399,12 +399,7 @@ ST120_Feeder_e.INIT: (* Grundstellung ? *)
 ST120_Feeder_e.Init_pneumatics:
     // TODO check all the sensors
     IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
-        IF ((_20_AUTO.recipe.st120.xUseVerLeft AND fb_pivotLeft.xOUT_inAS) OR
-           (NOT _20_AUTO.recipe.st120.xUseVerLeft AND fb_pivotLeft.xOUT_inGS)) AND
-           ((_20_AUTO.recipe.st120.xUseVerRight AND fb_pivotRight.xOUT_inAS) OR
-           (NOT _20_AUTO.recipe.st120.xUseVerRight AND fb_pivotRight.xOUT_inGS)) THEN
-            iOUT_Step := ST120_Feeder_e.READY;
-        END_IF
+        iOUT_Step := ST120_Feeder_e.Init_pivot_to_feeder;
     ELSE
         IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND IO_BOX.I6404_ST120_teil_in_vereizelung_links) OR
            (NOT _20_AUTO.recipe.st120.xUseVerRight AND IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) THEN
