@@ -388,6 +388,7 @@ VAR_GLOBAL
     I8002_ST110_alarm_forderband         AT %I* : BOOL; // 2: Alarm Förderband ST110
     Q8003_ST110_forderband_ein           AT %Q* : BOOL; // q3: Förderband ein ST110
     I8004_ST110_farbsensor_lagekontrolle AT %I* : BOOL; // 4: Farbsensor Lagekontrolle
+    Q8005_ST110_blow_piece               AT %Q* : BOOL; // q5: blow top black pieces into the feeder
 
     //-15502
     (* feeder ST115 - 8x IO *)

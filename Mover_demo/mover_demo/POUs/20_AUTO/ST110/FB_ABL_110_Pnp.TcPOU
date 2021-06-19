@@ -86,7 +86,7 @@ VAR
 	
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -392,6 +392,9 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST110_Pnp_e.PnP_Ver_ShuttleUp);
 
 xOUT_PickPiece := iOUT_Step = ST110_Pnp_e.PnP_Hor_ToTrackPos;
+
+OUT.Q104_ST110_vacum_on_left  := fb_gripperLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+OUT.Q105_ST110_vacum_on_right := fb_gripperRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)

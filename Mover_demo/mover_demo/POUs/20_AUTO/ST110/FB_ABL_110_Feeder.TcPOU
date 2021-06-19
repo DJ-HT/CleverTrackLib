@@ -78,13 +78,13 @@ VAR
                                  or after an alarm *)
 
     tof_color_sensor : TOF;
-    simu_blow        : BOOL; // todo remove when the hardware will be used
+    ton_blow_piece   : TON;
 
 END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -235,7 +235,11 @@ IO_BOX.Q8003_ST110_forderband_ein :=
 tof_color_sensor(IN := IO_BOX.I8004_ST110_farbsensor_lagekontrolle,
                  PT := DINT_TO_TIME(_20_AUTO.recipe.st110.blowPieceTof_ms));
 
-simu_blow := tof_color_sensor.Q;
+ton_blow_piece(IN := NOT ton_blow_piece.Q, PT := T#100MS);
+
+IO_BOX.Q8005_ST110_blow_piece := FALSE;// fb_feeder.xOUT_EnableFeeder AND
+                                 // NOT tof_color_sensor.Q AND
+                                 // (ton_blow_piece.ET < (ton_blow_piece.PT / 2));
 
 (*******************************************************************)
 (* Ablauf *)
