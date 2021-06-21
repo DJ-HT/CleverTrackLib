@@ -84,7 +84,7 @@ END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
