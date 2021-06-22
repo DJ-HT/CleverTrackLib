@@ -557,6 +557,17 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\FB_AUT_130.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\ST130_Axis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\VISU_ST130.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST145\FB_ABL_145_Feeder.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -753,6 +764,7 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST130" />
     <Folder Include="POUs\20_AUTO\ST150" />
     <Folder Include="POUs\20_AUTO\ST175" />
     <Folder Include="POUs\20_AUTO\Trumpf" />
