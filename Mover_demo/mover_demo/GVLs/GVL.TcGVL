@@ -13,24 +13,25 @@ VAR_GLOBAL
     //ST02
     xFG_ST02akWT : BOOL; // WT anwesend
 
-    _Process1  : FB_AUT_LOAD;   // Laden Filtergehäuse
-    _Process2  : FB_AUT_110;    // Laden RFID-Ring
-    _Process3  : FB_AUT_115;    // Laden kristal
-    _Process4  : FB_AUT_120;    // Laden Solerohr
-    _Process5  : FB_AUT_125;    // Laden filterhut
-    _Process6  : FB_AUT_MODIFY; // Dosieren A
-    _Process7  : FB_AUT_MODIFY; // Dosieren B
-    _Process8  : FB_AUT_MODIFY; // Niveaukontrolle
-    _Process9  : FB_AUT_LOAD;   // Laden Patronendeckel
-    _Process10 : FB_AUT_MODIFY; // Utralson A
-    _Process11 : FB_AUT_MODIFY; // Ultrason B
-    _Process12 : FB_AUT_MODIFY; // Prüfig A
-    _Process13 : FB_AUT_MODIFY; // Prüfig B
-    _Process14 : FB_AUT_MODIFY; // Program RFID
-    _Process15 : FB_AUT_MODIFY; // Laser A
-    _Process16 : FB_AUT_MODIFY; // Laser B
-    _Process17 : FB_AUT_UNLOAD; // Entladen schlecht
-    _Process18 : FB_AUT_UNLOAD; // Entladen gut
+    st105_aut : FB_AUT_LOAD;   // Laden Filtergehäuse
+    st110_aut : FB_AUT_110;    // Laden RFID-Ring
+    st115_aut : FB_AUT_115;    // Laden kristal
+    st120_aut : FB_AUT_120;    // Laden Solerohr
+    st125_aut : FB_AUT_125;    // Laden filterhut
+    st130_aut : FB_AUT_MODIFY; // Dosieren A
+    st135_aut : FB_AUT_MODIFY; // Dosieren B
+    st140_aut : FB_AUT_MODIFY; // Niveaukontrolle
+    st145_aut : FB_AUT_145;    // Laden Patronendeckel
+    st150_aut : FB_AUT_MODIFY; // Utralson A
+    st155_aut : FB_AUT_MODIFY; // Ultrason B
+    st160_aut : FB_AUT_MODIFY; // Prüfig A
+    st165_aut : FB_AUT_MODIFY; // Prüfig B
+    st170_aut : FB_AUT_MODIFY; // Program RFID
+    st175_aut : FB_AUT_MODIFY; // Laser A
+    st176_aut : FB_AUT_MODIFY; // Laser B
+    st180_aut : FB_AUT_180;    // Entladen schlecht
+    st185_aut : FB_AUT_UNLOAD; // Entladen gut
+    st1xx_aut : FB_AUT_175;    // test laser trumpf
 
 END_VAR
 ]]></Declaration>

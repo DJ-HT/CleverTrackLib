@@ -52,8 +52,7 @@ xNextStep := (enIN_State > StateSTEP) OR
              ((enIN_State = StateMANU) AND xManuCycle);
 
 //RESET
-xReset := ((enIN_State < StateREADY) AND (enIN_State <> StateINIT)) OR
-          ((enIN_State = StateMANU) AND NOT xManuCycle);
+xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
 
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
@@ -67,7 +66,6 @@ fb_Pnp(xIN_Reset          := xReset,
        xIN_NextStep       := xNextStep,
        xIN_AlarmAktiv     := xIN_AlarmAktiv,
        xIN_DryCycle       := xIN_DryCycle,
-       xIN_Reset          := HMI.btArMain[7].on,
        xIN_RestartCYCL    := enIN_State = enState.StateAUTO, // only restart when the mover has move out
        enIN_State         := enIN_State,
        tIN_Timeout        := tIN_Timeout,
@@ -75,7 +73,7 @@ fb_Pnp(xIN_Reset          := xReset,
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := ST120_Feeder_e.wait_pce_picked = fb_Feeder.iOUT_Step);
 
-fb_Feeder(xIN_Reset       := xReset OR HMI.btArMain[7].on,
+fb_Feeder(xIN_Reset       := xReset,
           xIN_Init        := xIN_Init,
           xIN_Quit        := xIN_Quit,
           xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
@@ -100,7 +98,7 @@ fb_Feeder(xIN_Reset       := xReset OR HMI.btArMain[7].on,
 (* OUTPUT *)
 (*******************************************************************)
 xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
-xOUT_Ready    := xOUT_InitDone;
+xOUT_Ready    := fb_Pnp.xOUT_Ready AND fb_Feeder.xOUT_Ready;
 xOUT_Done     := fb_Pnp.xOUT_Done AND fb_Feeder.xOUT_Done;
 xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
 xOUT_Wait     := fb_Pnp.xOUT_Wait OR fb_Feeder.xOUT_Wait;
@@ -219,7 +217,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Pnp.iOUT_Step = ST115_Pnp_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Pnp.iOUT_Step = ST120_Pnp_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>

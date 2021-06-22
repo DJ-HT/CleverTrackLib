@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="_21_CopyDefaultRecipe" Id="{5a2d1f5c-4d65-4a40-ae93-0ca61ec62ff8}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION _21_CopyDefaultRecipe : BOOL
+VAR_INPUT
+END_VAR
+VAR
+    i  : INT;
+    ii : INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+FOR i := 0 TO TO_INT(LinearAxis_e._max) - 1 BY 1 DO
+    PERS.recipeList[0].linearAxis[i].defProfile.lrVelocity := 100;
+    PERS.recipeList[0].linearAxis[i].defProfile.lrAccel    := 5000;
+    PERS.recipeList[0].linearAxis[i].defProfile.lrDecel    := 5000;
+    PERS.recipeList[0].linearAxis[i].defProfile.lrJerk     := 500000;
+END_FOR
+
+// ST110
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_01Y].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_01Y].movesList[1].lrPosition := 100;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_02Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_02Z].movesList[1].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_02Z].movesList[2].lrPosition := 2;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_02Z].movesList[3].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_02Z].movesList[4].lrPosition := 80;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_03Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_03Z].movesList[1].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_03Z].movesList[2].lrPosition := 2;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_03Z].movesList[3].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_03Z].movesList[4].lrPosition := 80;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_04Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST110_04Z].movesList[1].lrPosition := 50;
+
+// ST115
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_01Y].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_01Y].movesList[1].lrPosition := 100;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_02Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_02Z].movesList[1].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_02Z].movesList[2].lrPosition := 2;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_02Z].movesList[3].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_02Z].movesList[4].lrPosition := 80;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_03Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_03Z].movesList[1].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_03Z].movesList[2].lrPosition := 2;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_03Z].movesList[3].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_03Z].movesList[4].lrPosition := 80;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_04Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST115_04Z].movesList[1].lrPosition := 50;
+
+// ST120
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST120_01Y].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST120_01Y].movesList[1].lrPosition := 100;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST120_02Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST120_02Z].movesList[1].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST120_02Z].movesList[2].lrPosition := 2;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST120_02Z].movesList[3].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST120_02Z].movesList[4].lrPosition := 80;
+
+// ST125
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_01Y].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_01Y].movesList[1].lrPosition := 100;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_02Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_02Z].movesList[1].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_02Z].movesList[2].lrPosition := 2;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_02Z].movesList[3].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_02Z].movesList[4].lrPosition := 80;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_02Z].movesList[5].lrPosition := 50;
+
+// ST145
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST145_01Y].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST145_01Y].movesList[1].lrPosition := 100;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST145_02Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST145_02Z].movesList[1].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST145_02Z].movesList[2].lrPosition := 2;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST145_02Z].movesList[3].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST145_02Z].movesList[4].lrPosition := 80;
+
+// ST180
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_01Y].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_01Y].movesList[1].lrPosition := 100;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_02Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_02Z].movesList[1].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_02Z].movesList[2].lrPosition := 2;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_02Z].movesList[3].lrPosition := 50;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_02Z].movesList[4].lrPosition := 80;
+
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_10Z].movesList[0].lrPosition := 10;
+PERS.recipeList[0].linearAxis[LinearAxis_e.ST180_10Z].movesList[1].lrPosition := 50;
+
+// ****************************************************************************** //
+
+// recipe ST110
+PERS.recipeList[0].st110.FeederConfig.InFilterDelay := 3000;
+PERS.recipeList[0].st110.FeederConfig.StartDelay    := 6000;
+PERS.recipeList[0].st110.FeederConfig.StopDelay     := 6000;
+PERS.recipeList[0].st110.xUseVerLeft                := TRUE;
+PERS.recipeList[0].st110.xUseVerRight               := TRUE;
+
+// recipe ST115
+PERS.recipeList[0].st115.FeederConfig.InFilterDelay := 3000;
+PERS.recipeList[0].st115.FeederConfig.StartDelay    := 6000;
+PERS.recipeList[0].st115.FeederConfig.StopDelay     := 6000;
+PERS.recipeList[0].st115.xUseVerLeft                := TRUE;
+PERS.recipeList[0].st115.xUseVerRight               := TRUE;
+
+// recipe ST120
+PERS.recipeList[0].st120.FeederConfigLeft.InFilterDelay  := 3000;
+PERS.recipeList[0].st120.FeederConfigLeft.StartDelay     := 6000;
+PERS.recipeList[0].st120.FeederConfigLeft.StopDelay      := 6000;
+PERS.recipeList[0].st120.FeederConfigRight.InFilterDelay := 3000;
+PERS.recipeList[0].st120.FeederConfigRight.StartDelay    := 6000;
+PERS.recipeList[0].st120.FeederConfigRight.StopDelay     := 6000;
+PERS.recipeList[0].st120.xUseVerLeft                     := TRUE;
+PERS.recipeList[0].st120.xUseVerRight                    := TRUE;
+
+// recipe ST125
+PERS.recipeList[0].st125.FeederConfig.InFilterDelay := 3000;
+PERS.recipeList[0].st125.FeederConfig.StartDelay    := 6000;
+PERS.recipeList[0].st125.FeederConfig.StopDelay     := 6000;
+PERS.recipeList[0].st125.xUseVerLeft                := TRUE;
+PERS.recipeList[0].st125.xUseVerRight               := TRUE;
+
+// recipe ST145
+PERS.recipeList[0].st145.FeederConfig.InFilterDelay := 3000;
+PERS.recipeList[0].st145.FeederConfig.StartDelay    := 6000;
+PERS.recipeList[0].st145.FeederConfig.StopDelay     := 6000;
+PERS.recipeList[0].st145.xUseVerLeft                := TRUE;
+PERS.recipeList[0].st145.xUseVerRight               := TRUE;
+
+// recipe ST180
+PERS.recipeList[0].st180.xUseVerLeft  := TRUE;
+PERS.recipeList[0].st180.xUseVerRight := TRUE;
+
+// ****************************************************************************** //
+
+// Cylinders
+FOR i := 0 TO TO_INT(StationList_e._max) - 1 BY 1 DO
+    FOR ii := 0 TO CONST.MAX_CYLINDER_PER_STATION - 1 BY 1 DO
+        PERS.recipeList[0].cylinder2Pos[i][ii].toAS_alarm_time := 3000;
+        PERS.recipeList[0].cylinder2Pos[i][ii].toGS_alarm_time := 3000;
+        PERS.recipeList[0].cylinder2Pos[i][ii].toAS_wait_time  := 0;
+        PERS.recipeList[0].cylinder2Pos[i][ii].toGS_wait_time  := 0;
+    END_FOR
+END_FOR
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

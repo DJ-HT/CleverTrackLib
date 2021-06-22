@@ -51,8 +51,7 @@ xNextStep := (enIN_State > StateSTEP) OR
              ((enIN_State = StateMANU) AND xManuCycle);
 
 //RESET
-xReset := ((enIN_State < StateREADY) AND (enIN_State <> StateINIT)) OR
-          ((enIN_State = StateMANU) AND NOT xManuCycle);
+xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
 
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)

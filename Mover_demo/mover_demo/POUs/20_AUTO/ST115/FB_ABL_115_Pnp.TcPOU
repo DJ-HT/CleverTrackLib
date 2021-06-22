@@ -40,7 +40,7 @@ VAR_OUTPUT
     xOUT_Timeout  : BOOL;        // Timeout FB 
     xOUT_InitDone : BOOL;        // initialisierung fertig
     xOUT_Wait     : BOOL;        // Wartet auf Bedingung
-    iOUT_Step     : ST110_Pnp_e; // Aktueller Schritt 
+    iOUT_Step     : ST115_Pnp_e; // Aktueller Schritt 
     sOUT_Step     : STRING;      // Aktueller Schritt but in string format
     bOUT_Error    : BYTE;        // Fehlernummer
 
@@ -52,9 +52,9 @@ END_VAR
 VAR
     (* Standard *)
     (* Schritt *)
-    iLastStep : ST110_Pnp_e; // Merker letzter Schritt 
-    iPreStep  : ST110_Pnp_e; // Schritt zurück nach Alarm 
-    iAktStep  : ST110_Pnp_e; // aktueller Schritt
+    iLastStep : ST115_Pnp_e; // Merker letzter Schritt 
+    iPreStep  : ST115_Pnp_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST115_Pnp_e; // aktueller Schritt
 
     // Trigger Starten 
     rtSTART : R_TRIG;
@@ -75,9 +75,15 @@ VAR
     fb_simu_axis115_01Y : FB_Simu_AxisLM_V1_1;
     fb_simu_axis115_02Z : FB_Simu_AxisLIN_V1_1;
     fb_simu_axis115_03Z : FB_Simu_AxisLIN_V1_1;
+	
+    fb_gripperLeft    : FB_ZylMo2El_V2_1;
+    simu_gripperLeft  : FB_Simu_Zyl2Pos;
+    fb_gripperRight   : FB_ZylMo2El_V2_1;
+    simu_gripperRight : FB_Simu_Zyl2Pos;
 
 END_VAR
 VAR CONSTANT
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -107,14 +113,28 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (* Bausteine *)
 (*******************************************************************)
 fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_01Y],
+              xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis115_01Y.rOUT_ActPos,
               lrIN_Delta_mm   := 0.01,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST115_PnpHorPos_e._max);
 
+fb_simu_axis115_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis115_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST115_Axis.axis115_01Y.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST115_01Y]),
+                    pIN_axisHW          := ADR(ST115_Axis.axis115_01Y.axis),
+                    rIN_PosActual       := fb_axis115_01Y.rOUT_ActPos,
+                    rIN_PosMax          := ST115_Axis.const115_01Y.POS_MAX,
+                    rIN_PosMin          := ST115_Axis.const115_01Y.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
+
 fb_axis115_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := FALSE,
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.ST115_01Y,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -133,29 +153,34 @@ fb_axis115_01Y(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
-               xIN_Reset        := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               axisIN_REF       := ST115_Axis.axis115_01Y.axis);
-
-fb_simu_axis115_01Y(bIN_AxisCntr        := fb_axis115_01Y.bOUT_AxisCntr,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis115_01Y.rOUT_ActPos,
-                    rIN_PosMax          := ST115_Axis.const115_01Y.POS_MAX,
-                    rIN_PosMin          := ST115_Axis.const115_01Y.POS_MIN,
-                    rIN_PixMax          := 100,
-                    rIN_PixMin          := 0,
-                    wOUT_AxisState      => fb_axis115_01Y.wAxisState);
+               xIN_Reset        := (ST115_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               // the simu fb gives the hardware signal when the simulation is disabled
+               wAxisState    := fb_simu_axis115_01Y.wOUT_AxisState,
+               bOUT_AxisCntr => ST115_Axis.axis115_01Y.bCtrlHi,
+               rOUT_ActPos   => ST115_Axis.axis115_01Y.rActPos,
+               axisIN_REF    := fb_simu_axis115_01Y.pOUT_axisRef^);
 
 fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_02Z],
+               xIN_Init        := enIN_State = enState.StateINIT,
+               xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis115_02Z.rOUT_ActPos,
                lrIN_Delta_mm   := 0.01,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST115_PnpVerPos_e._max);
 
+fb_simu_axis115_02Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    rIN_PosActual := fb_axis115_02Z.rOUT_ActPos,
+                    pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST115_02Z]),
+                    pIN_axisHW    := ADR(ST115_Axis.axis115_02Z.axis),
+                    rIN_PosMax    := ST115_Axis.const115_02Z.POS_MAX,
+                    rIN_PosMin    := ST115_Axis.const115_02Z.POS_MIN,
+                    rIN_PixMax    := 80,
+                    rIN_PixMin    := 0);
+
 fb_axis115_02Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := FALSE,
+               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST115_02Z,
                xIN_Quit       := xIN_Quit,
-               axisIN_REF     := ST115_Axis.axis115_02Z.axis,
                xIN_AX5000     := FALSE,
                xIN_ENC_ABS    := TRUE, // TODO set accordingly
                xIN_PARAMok    := TRUE,
@@ -167,7 +192,7 @@ fb_axis115_02Z(enIN_State     := enIN_State,
                rIN_VELOMANU   := ST115_Axis.const115_02Z.VELO_MANU,
                rIN_VELOOPEN   := ST115_Axis.const115_02Z.POS_MAX / 4,
                rIN_JogInc     := AXIS.rTeachIncAxis,
-               rIN_JogVelo    :=,
+               rIN_JogVelo    := AXIS.rTeachVelo,
                xIN_HomeExe    :=,
                xIN_HomeCalib  :=,
                xIN_Execute    := (_20_AUTO.recipe.st115.xUseVerLeft OR (iOUT_Step < ST115_Pnp_e.READY)) AND
@@ -180,29 +205,30 @@ fb_axis115_02Z(enIN_State     := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-
                // output
-               xOUT_ErrFlag =>,
-               xOUT_READY   =>,
-               xOUT_DONE    =>,
-               bOUT_Error   =>,
-               rOUT_ActPos  =>);
-
-fb_simu_axis115_02Z(rIN_PosActual := fb_axis115_02Z.rOUT_ActPos,
-                    rIN_PosMax    := ST115_Axis.const115_02Z.POS_MAX,
-                    rIN_PosMin    := ST115_Axis.const115_02Z.POS_MIN,
-                    rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+               rOUT_ActPos => ST115_Axis.axis115_02Z.rActPos,
+               axisIN_REF  := fb_simu_axis115_02Z.pOUT_axisRef^);
 
 fb_PnpVerAxisR(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_03Z],
+               xIN_Init        := enIN_State = enState.StateINIT,
+               xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis115_03Z.rOUT_ActPos,
                lrIN_Delta_mm   := 0.01,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST115_PnpVerPos_e._max);
 
+fb_simu_axis115_03Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    rIN_PosActual := fb_axis115_03Z.rOUT_ActPos,
+                    rIN_PosMax    := ST115_Axis.const115_03Z.POS_MAX,
+                    rIN_PosMin    := ST115_Axis.const115_03Z.POS_MIN,
+                    pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST115_03Z]),
+                    pIN_axisHW    := ADR(ST115_Axis.axis115_03Z.axis),
+                    rIN_PixMax    := 80,
+                    rIN_PixMin    := 0);
+
 fb_axis115_03Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := FALSE,
+               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST115_03Z,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE, (*TODO*)
                xIN_FREE       := TRUE,
@@ -223,15 +249,60 @@ fb_axis115_03Z(enIN_State     := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               axisIN_REF       := ST115_Axis.axis115_03Z.axis,
                xIN_AX5000       := FALSE,
-               xIN_ENC_ABS      := TRUE); // TODO set accordingly
+               xIN_ENC_ABS      := TRUE,
+               rOUT_ActPos      => ST115_Axis.axis115_03Z.rActPos, // TODO set accordingl
+               axisIN_REF       := fb_simu_axis115_03Z.pOUT_axisRef^);
 
-fb_simu_axis115_03Z(rIN_PosActual := fb_axis115_03Z.rOUT_ActPos,
-                    rIN_PosMax    := ST115_Axis.const115_03Z.POS_MAX,
-                    rIN_PosMin    := ST115_Axis.const115_03Z.POS_MIN,
-                    rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
+               xIN_Quit     := xIN_Quit,
+               xIN_Manu     := enState.StateMANU = enIN_State,
+               pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST115][1]),
+               xIN_GS       := simu_gripperLeft.xOUT_inGS,
+               xIN_AS       := simu_gripperLeft.xOUT_inAS,
+               xIN_FREE     := TRUE,
+               xINtoGS      := ST115_Pnp_e.Gripper_close = iOUT_Step,
+               xINtoAS      := _20_AUTO.recipe.st115.xUseVerLeft AND (ST115_Pnp_e.Gripper_open = iOUT_Step),
+               tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
+                                                [ST115_Cylinders_e.GreiferLinks].toAS_alarm_time),
+               tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
+                                             [ST115_Cylinders_e.GreiferLinks].toGS_alarm_time),
+               tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
+                                              [ST115_Cylinders_e.GreiferLinks].toAS_wait_time),
+               tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
+                                              [ST115_Cylinders_e.GreiferLinks].toGS_wait_time));
+
+simu_gripperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                 xIN_inGS   := IO_BOX.I6100_ST115_greifer_links_offen,
+                 xIN_inAS   := IO_BOX.I6101_ST115_greifer_links_geschlossen,
+                 xIN_valve  := fb_gripperLeft.xOUT_VALVE,
+                 tIN_GS_ms  := 200,  //ms
+                 tIN_AS_ms  := 200); //ms
+
+fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
+                xIN_Quit     := xIN_Quit,
+                xIN_Manu     := enState.StateMANU = enIN_State,
+                pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST115][2]),
+                xIN_GS       := simu_gripperRight.xOUT_inGS,
+                xIN_AS       := simu_gripperRight.xOUT_inAS,
+                xIN_FREE     := TRUE,
+                xINtoGS      := ST115_Pnp_e.Gripper_close = iOUT_Step,
+                xINtoAS      := _20_AUTO.recipe.st115.xUseVerRight AND (ST115_Pnp_e.Gripper_open = iOUT_Step),
+                tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
+                                                 [ST115_Cylinders_e.GreiferRechts].toAS_alarm_time),
+                tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
+                                              [ST115_Cylinders_e.GreiferRechts].toGS_alarm_time),
+                tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
+                                               [ST115_Cylinders_e.GreiferRechts].toAS_wait_time),
+                tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST115]
+                                               [ST115_Cylinders_e.GreiferRechts].toGS_wait_time));
+
+simu_gripperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                  xIN_inGS   := IO_BOX.I6200_ST115_greifer_rechts_offen,
+                  xIN_inAS   := IO_BOX.I6201_ST115_greifer_rechts_geschlossen,
+                  xIN_valve  := fb_gripperRight.xOUT_VALVE,
+                  tIN_GS_ms  := 200,  //ms
+                  tIN_AS_ms  := 200); //ms
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -247,7 +318,7 @@ xOUT_Ready := (iOUT_Step = ST115_Pnp_e.READY);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
-xOUT_InitDone := (iOUT_Step = ST115_Pnp_e.READY);
+xOUT_InitDone := (iOUT_Step = ST115_Pnp_e.READY) OR (iOUT_Step = ST115_Pnp_e.waitOnMover);
 // Aktueller Schritt			
 iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
 sOUT_Step := TO_STRING(iOUT_Step);
@@ -264,7 +335,7 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          ST115_Pnp_e.PnP_Ver_ShuttleDown,
                                          ST115_Pnp_e.PnP_Ver_ShuttleUp);
 
-xOUT_PickPiece := iOUT_Step = ST115_Pnp_e.Vacum_on;
+xOUT_PickPiece := iOUT_Step = ST115_Pnp_e.PnP_Hor_ToTrackPos;
 
 (*******************************************************************)
 (* Ablauf *)
@@ -319,17 +390,28 @@ ST115_Pnp_e.Init_HomeVerticals:
     END_IF
 
 ST115_Pnp_e.Init_VerticalsUp:
-    IF fb_PnpVerAxisL.MoveTo(ST115_PnpVerPos_e.UpEmpty).xOUT_InPos AND
-       fb_PnpVerAxisR.MoveTo(ST115_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
-        IF fb_axis115_01Y.xOUT_READY OR fb_axis115_01Y.xOUT_HOMED THEN
-            iOUT_Step := ST115_Pnp_e.Init_HorizontalsToTrack;
-        ELSE
-            iOUT_Step := ST115_Pnp_e.Init_HomeHorizontals;
+    IF fb_gripperLeft.xIN_AS OR fb_gripperRight.xIN_AS THEN
+        IF fb_PnpVerAxisL.MoveTo(ST115_PnpVerPos_e.UpFull).xOUT_InPos AND
+           fb_PnpVerAxisR.MoveTo(ST115_PnpVerPos_e.UpFull).xOUT_InPos THEN
+            IF fb_axis115_01Y.xOUT_READY OR fb_axis115_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST115_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST115_Pnp_e.Init_HomeHorizontals;
+            END_IF
+        END_IF
+    ELSE
+        IF fb_PnpVerAxisL.MoveTo(ST115_PnpVerPos_e.UpEmpty).xOUT_InPos AND
+           fb_PnpVerAxisR.MoveTo(ST115_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
+            IF fb_axis115_01Y.xOUT_READY OR fb_axis115_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST115_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST115_Pnp_e.Init_HomeHorizontals;
+            END_IF
         END_IF
     END_IF
 
 ST115_Pnp_e.Init_HomeHorizontals:
-    fb_axis115_01Y.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_01Y].movesList[0].lrVelocity;
+    fb_axis115_01Y.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_01Y].defProfile.lrVelocity;
 
     IF fb_axis115_01Y.xOUT_HOMED THEN
         iOUT_Step := ST115_Pnp_e.Init_HorizontalsToTrack;
@@ -337,7 +419,37 @@ ST115_Pnp_e.Init_HomeHorizontals:
 
 ST115_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST115_PnpHorPos_e.GS).xOUT_InPos THEN
+        iOUT_Step := ST115_Pnp_e.Init_check_if_pces_handled;
+    END_IF
+
+ST115_Pnp_e.Init_check_if_pces_handled:
+    IF (NOT _20_AUTO.recipe.st115.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) OR
+       (NOT _20_AUTO.recipe.st115.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
+        // ERROR: a piece is present in an unused gripper
+        bOUT_Error := 1;
+        iOUT_Step  := ST115_Pnp_e.ERROR;
+
+    ELSIF _20_AUTO.recipe.st115.xUseVerLeft AND
+          NOT fb_gripperLeft.xOUT_inAS AND
+          _20_AUTO.recipe.st115.xUseVerRight AND
+          fb_gripperRight.xOUT_inAS THEN
+        // ERROR:  Initialisation failed. A piece is missing in the left griper.
+        bOUT_Error := 2;
+        iOUT_Step  := ST115_Pnp_e.ERROR;
+
+    ELSIF _20_AUTO.recipe.st115.xUseVerLeft AND
+          fb_gripperLeft.xOUT_inAS AND
+          _20_AUTO.recipe.st115.xUseVerRight AND
+          NOT fb_gripperRight.xOUT_inAS THEN
+        // ERROR:  Initialisation failed. A piece is missing in the right griper.
+        bOUT_Error := 3;
+        iOUT_Step  := ST115_Pnp_e.ERROR;
+
+    ELSIF NOT fb_gripperLeft.xOUT_inAS AND NOT fb_gripperRight.xOUT_inAS THEN
         iOUT_Step := ST115_Pnp_e.READY;
+
+    ELSE
+        iOUT_Step := ST115_Pnp_e.waitOnMover;
     END_IF
 
 (***** READY / INIT DONE *****)
@@ -368,11 +480,13 @@ ST115_Pnp_e.PnP_Ver_RotTableDown:
        NOT _20_AUTO.recipe.st115.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST115_PnpVerPos_e.DownEmpty).xOUT_InPos OR
        NOT _20_AUTO.recipe.st115.xUseVerRight) THEN
-        iOUT_Step := ST115_Pnp_e.Vacum_on;
+        iOUT_Step := ST115_Pnp_e.Gripper_open;
     END_IF;
 
-ST115_Pnp_e.Vacum_on:
-    IF xIN_NextStep AND NOT fb_axis115_02Z.xOUT_DONE AND NOT fb_axis115_03Z.xOUT_DONE THEN
+ST115_Pnp_e.Gripper_open:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st115.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st115.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
         iOUT_Step := ST115_Pnp_e.PnP_Ver_RotTableUp;
     END_IF;
 
@@ -413,11 +527,11 @@ ST115_Pnp_e.PnP_Ver_ShuttleTorqueControl:
        NOT _20_AUTO.recipe.st115.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST115_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT _20_AUTO.recipe.st115.xUseVerRight) THEN
-        iOUT_Step := ST115_Pnp_e.Vacum_off;
+        iOUT_Step := ST115_Pnp_e.Gripper_close;
     END_IF;
 
-ST115_Pnp_e.Vacum_off:
-    IF xIN_NextStep THEN
+ST115_Pnp_e.Gripper_close:
+    IF xIN_NextStep AND fb_gripperLeft.xOUT_inGS AND fb_gripperRight.xOUT_inGS THEN
         iOUT_Step := ST115_Pnp_e.PnP_Ver_ShuttleUp;
     END_IF;
 

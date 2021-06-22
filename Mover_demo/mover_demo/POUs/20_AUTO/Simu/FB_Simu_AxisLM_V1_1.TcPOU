@@ -3,8 +3,13 @@
   <POU Name="FB_Simu_AxisLM_V1_1" Id="{1a013837-1d69-44d6-a88f-139af1be0919}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Simu_AxisLM_V1_1
 VAR_INPUT
-    bIN_AxisCntr        : BYTE;          ///Axis Controlword
+    xIN_Enable          : BOOL;          // When true, this FB simulate output signals
+    bIN_AxisCntr        : BYTE;          // Axis Controlword
+    wIN_AxisState       : WORD;          // Statuswort input, copy to output when fb is not enable
     udiIN_HomingTime_ms : UDINT := 2000; // homing time, expressed as millisecond
+
+    pIN_axisSimu : POINTER TO AXIS_REF; // simulation axis ref, without hardware connection
+    pIN_axisHW   : POINTER TO AXIS_REF; // hardware axis ref, the one wich is connected to hardware
 
     rIN_PosActual : REAL;
     rIN_PosMax    : REAL;
@@ -13,8 +18,9 @@ VAR_INPUT
     rIN_PixMin    : INT;
 END_VAR
 VAR_OUTPUT
-    wOUT_AxisState : WORD; //Statuswort
-    rOUT_PixActual : INT;  // actual position of the axis in pixel
+    wOUT_AxisState : WORD;                //Statuswort
+    rOUT_PixActual : INT;                 // actual position of the axis in pixel
+    pOUT_axisRef   : POINTER TO AXIS_REF; // current axis ref used
 END_VAR
 VAR
     _iStep                 : INT;   // current step
@@ -24,40 +30,49 @@ VAR CONSTANT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[CASE _iStep OF
-0: // GET Ctrl-Bit 
-    wOUT_AxisState := 16#0;
+      <ST><![CDATA[IF xIN_Enable THEN
+    CASE _iStep OF
+    0: // GET Ctrl-Bit 
+        wOUT_AxisState := 16#0;
 
-    IF bIN_AxisCntr.3 THEN
-        _iStep := 10;
-    END_IF
+        IF bIN_AxisCntr.3 THEN
+            _iStep := 10;
+        END_IF
 
-10: // SET Status Bit #8
-    wOUT_AxisState.7       := TRUE;
-    _udiStartHomingTime_ms := GetTick();
-    _iStep                 := 20;
+    10: // SET Status Bit #8
+        wOUT_AxisState.7       := TRUE;
+        _udiStartHomingTime_ms := GetTick();
+        _iStep                 := 20;
 
-20: // Perform homing
-    IF (GetTick() - _udiStartHomingTime_ms) > udiIN_HomingTime_ms THEN
-        wOUT_AxisState.7 := FALSE;
-        _iStep           := 30;
-    END_IF
+    20: // Perform homing
+        IF (GetTick() - _udiStartHomingTime_ms) > udiIN_HomingTime_ms THEN
+            wOUT_AxisState.7 := FALSE;
+            _iStep           := 30;
+        END_IF
 
-30: // GET Ctrl-bit
-    IF NOT bIN_AxisCntr.3 THEN
-        _iStep := 40;
-    END_IF
+    30: // GET Ctrl-bit
+        IF NOT bIN_AxisCntr.3 THEN
+            _iStep := 40;
+        END_IF
 
-40: // Status Bit #13
-    wOUT_AxisState.12 := TRUE;
-    _iStep            := 50;
+    40: // Status Bit #13
+        wOUT_AxisState.12 := TRUE;
+        _iStep            := 50;
 
-50: // ready, wait homing signal
-    IF bIN_AxisCntr.3 THEN
-        _iStep := 0;
-    END_IF
+    50: // ready, wait homing signal
+        IF bIN_AxisCntr.3 THEN
+            _iStep := 0;
+        END_IF
 
-END_CASE
+    END_CASE
+
+    pOUT_axisRef := pIN_axisSimu;
+
+ELSE
+    wOUT_AxisState := wIN_AxisState;
+    _iStep         := 0;
+    pOUT_axisRef   := pIN_axisHW;
+END_IF
 
 rOUT_PixActual := MAP_REAL_TO_INT(rValue    := rIN_PosActual,
                                   rFromHigh := rIN_PosMax,

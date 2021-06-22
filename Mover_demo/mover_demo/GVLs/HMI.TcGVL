@@ -20,6 +20,8 @@ VAR_GLOBAL
     xWait     : BOOL;    //ALLE FBs warten
     xAIRon    : BOOL;    //Luftdruck IO
     xSPC      : BOOL;    //SPC angewählt
+	
+	Tast_BL : BOOL; // ... 
 
     (*******************************************************************)
     (* Buttons *)
@@ -38,12 +40,25 @@ VAR_GLOBAL
 													9: START
 													10: ...
 												*)
-    //Manuel Station 1
-    btArManu120 : ARRAY[0..10] OF structButton; (*	
-													0: Zyklus	
-													1: Rotative cylinder left
-													2: Rotative cylinder right
-													*)
+    //Manual pneumatics
+    // see below for button button instance 
+    btManuCylinders : ARRAY[0..StationList_e._max] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF structButton;
+    (*
+     * [StationList_e.ST110]
+     * [0]: Zyklus [1]: Vacum Gripper left [2]: Vacum Gripper right
+     *
+     * [StationList_e.ST115]
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right
+     *
+     * [StationList_e.ST120]
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: Rotative cylinder left
+     * [4]: Rotative cylinder right
+     *)
+	 
+	 
+    btArST150 : ARRAY[0..20] OF structButton; (*	0 : Start USS
+	                                                1 : Reset US
+											   *)
 
     (*******************************************************************)
     (* ALARME  *)
@@ -59,6 +74,12 @@ VAR_GLOBAL
     iSelectAxisCopy : LinearAxis_e := LinearAxis_e._max;
     btCopyAxisCfg   : structButton;
 
+    iSelectCylinder     : StationList_e := StationList_e.ST105;
+    iSelectCylinderCopy : StationList_e := StationList_e._max;
+    btCopyCylinderCfg   : structButton;
+
+    iSelectJogAxis : Axis_e;
+
     (*******************************************************************)
     (* Cycle Time [STATION]*)
     (*******************************************************************)
@@ -68,8 +89,9 @@ VAR_GLOBAL
     (*******************************************************************)
     (* Recipe HMI management *)
     (*******************************************************************)
-    btCopyRecipe : structButton;
-    movesName    : ARRAY[0..LinearAxis_e._max - 1] OF ARRAY[0..CONST.MAX_VECTOR_LIST] OF STRING;
+    btCopyRecipe  : structButton;
+    movesNames    : ARRAY[0..LinearAxis_e._max - 1] OF ARRAY[0..CONST.MAX_VECTOR_LIST] OF STRING;
+    cylinderNames : ARRAY[0..StationList_e._max - 1] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF STRING;
 
     (*******************************************************************)
     (* Diverses *)

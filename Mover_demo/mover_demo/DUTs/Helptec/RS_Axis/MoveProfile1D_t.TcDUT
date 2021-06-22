@@ -2,9 +2,13 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <DUT Name="MoveProfile1D_t" Id="{a927e1fc-73c5-41fa-ae1e-b1b2d2fe83ad}">
     <Declaration><![CDATA[// Specify a 1D mouvement, the position only represents a point in the 1D space
-TYPE MoveProfile1D_t EXTENDS MoveProfile_t:
+TYPE MoveProfile1D_t :
 STRUCT
-    lrPosition  : LREAL;         // Position to go
+    lrVelocity : REAL;  // Velocity to position
+    lrAccel    : REAL;  // acceleration to position
+    lrDecel    : REAL;  // deceleration to position
+    lrJerk     : REAL;  // jerk to position
+    lrPosition : LREAL; // Position to go
 END_STRUCT
 END_TYPE
 ]]></Declaration>

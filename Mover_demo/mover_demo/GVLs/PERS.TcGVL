@@ -2,7 +2,7 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <GVL Name="PERS" Id="{fbf39650-67ca-4454-aedb-fafdd3046409}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-VAR_GLOBAL PERSISTENT
+VAR_GLOBAL RETAIN PERSISTENT
     (***********************************************************************************************)
     (* COUNTER *)
     (***********************************************************************************************)
@@ -59,12 +59,14 @@ VAR_GLOBAL PERSISTENT
 
     //{attribute 'to_json'}
     //_20_AUTO.recipe : Recipe_21_101_t;
-	
 
     {attribute 'to_json'}
     recipeList : ARRAY[0..CONST.MAX_RECIPE_NUMBER] OF Recipe_21_101_t; // registery of recipe
+	
+    eRecipeCurrent : RecipeType_e; // selected recipe to be executed
+	
     {attribute 'to_json'}
-    iRecipeCurrent : RecipeType_e; // selected recipe to be executed
+    iRecipeCurrent : INT; // selected recipe to be executed
 
 END_VAR
 ]]></Declaration>

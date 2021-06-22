@@ -3,17 +3,26 @@
   <POU Name="FB_Simu_AxisLIN_V1_1" Id="{6f3f35c2-88df-45cf-9274-41d0c42c68b0}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Simu_AxisLIN_V1_1
 VAR_INPUT
+    xIN_InSimu    : BOOL;
     rIN_PosActual : REAL;
-    rIN_PosMax    : REAL;
-    rIN_PosMin    : REAL;
-    rIN_PixMax    : INT;
-    rIN_PixMin    : INT;
+
+    pIN_axisSimu : POINTER TO AXIS_REF; // simulation axis ref, without hardware connection
+    pIN_axisHW   : POINTER TO AXIS_REF; // hardware axis ref, the one wich is connected to hardware
+
+    rIN_PosMax : REAL;
+    rIN_PosMin : REAL;
+    rIN_PixMax : INT;
+    rIN_PixMin : INT;
 END_VAR
 VAR_OUTPUT
-    rOUT_PixActual : INT; // actual relative position of the axis
+    rOUT_PixActual : INT;                 // actual relative position of the axis
+    pOUT_axisRef   : POINTER TO AXIS_REF; // current axis ref used
 END_VAR
 VAR
-	p_in : REAL;
+END_VAR
+
+VAR_IN_OUT
+    //xIN_InSimu    : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -22,6 +31,12 @@ END_VAR
                                   rFromLow  := rIN_PosMin,
                                   rToHigh   := rIN_PixMax,
                                   rToLow    := rIN_PixMin);
+
+IF xIN_InSimu THEN
+    pOUT_axisRef := pIN_axisSimu;
+ELSE
+    pOUT_axisRef := pIN_axisHW;
+END_IF
 ]]></ST>
     </Implementation>
   </POU>

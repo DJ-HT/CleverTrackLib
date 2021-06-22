@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="TruMarkLaserStatus" Id="{82e1da62-7cdb-478c-8321-bd80726f48b9}">
+    <Declaration><![CDATA[TYPE TruMarkLaserStatus :
+STRUCT
+	b0_Laser_On: BIT;
+	b1_Laser_Ready: BIT;
+	b2_SIK_Open: BIT;
+	b3_Shutter_Open: BIT;
+	b4_BeamExpander_IsInPos: BIT;
+	b5_LaserMonitoring: BIT;
+	b6_LaserMalfunction: BIT;
+	b7_PilotLaser_On: BIT;
+	b8_LaserWarningLamp_On: BIT;
+	b9_QSwTrigger_ON: BIT;
+	b10_SwOff_NotActivated: BIT;
+	b11_KeySwLaserDisable_Closed: BIT;
+	b12_EmergencyStop_Closed: BIT;
+	b13_LaserHeatingPhase_On: BIT;
+	b14_ControlUnit_On: BIT;
+	b15_Mark_Active: BIT;
+	b16_Conversion_Active: BIT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

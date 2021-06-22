@@ -28,22 +28,23 @@
 FUNCTION_BLOCK FB_LinearMotionMan
 VAR_INPUT
     config          : LinearMotionMan_Config_t;
+    xIN_Init        : BOOL;         // True when the machine is in initialization. This flag prevent the usage of triggers
+    xIN_Reset       : BOOL;         // reset the current step so this fb can move again when stuck
     lrIN_CurrPos    : REAL;         // current position of the axis
     lrIN_Delta_mm   : REAL := 0.01; // the accuracy of our position. Used to rise the xOUT_InPos flag
     iIN_CurrentStep : INT  := 0;    // current step from the step machine. This flag is used to prevent multiple move inside the same step
     iIN_moveNumber  : INT;          // number of moves for this linear motion, needs to be constant
 END_VAR
 VAR_OUTPUT
-    xOUT_Execute       : BOOL;            // execute flag for the motion FB
-    OUT_MoveProfile    : MoveProfile1D_t; // profile for the moteion FB
-    iOUT_CurrPosNumber : INT := 0;        // The current vector, either in execution or executed
-    xOUT_InPos         : BOOL;            // Is on when 'lrIN_CurrPos' passed the trigger or correspond 
+    xOUT_Execute       : BOOL;           // execute flag for the motion FB
+    OUT_MoveProfile    : VectorMove1D_t; // profile for the moteion FB
+    iOUT_CurrPosNumber : INT := 0;       // The current vector, either in execution or executed
+    xOUT_InPos         : BOOL;           // Is on when 'lrIN_CurrPos' passed the trigger or correspond 
 END_VAR
 VAR
     _IsMoving       : BOOL; // This flag is used so xOUT_Execute is true for at least one cycle
     _LastMovingStep : INT;  // This is used to prevent multiple move inside the same step
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[xOUT_InPos := THIS^.IsPosValid(iOUT_CurrPosNumber) AND
               (((lrIN_CurrPos >= (config.movesList[iOUT_CurrPosNumber].lrPosition - lrIN_Delta_mm)) AND
@@ -59,6 +60,10 @@ xOUT_Execute := NOT xOUT_InPos AND _IsMoving AND (iIN_CurrentStep = _LastMovingS
 IF _IsMoving THEN
     _IsMoving := NOT xOUT_InPos;
 END_IF
+
+IF xIN_Reset THEN
+    THIS^._LastMovingStep := -1;
+END_IF
 ]]></ST>
     </Implementation>
     <Method Name="AdjustMoveValues" Id="{64b3c058-b187-4b4f-bb24-d5e60d9198a1}">
@@ -68,7 +73,11 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF 0.0 = THIS^.OUT_MoveProfile.lrVelocity THEN
-    THIS^.OUT_MoveProfile.lrVelocity := THIS^.config.defProfile.lrVelocity;
+    IF THIS^.xIN_Init THEN
+        THIS^.OUT_MoveProfile.lrVelocity := THIS^.config.defProfile.lrVelocity * 0.5;
+    ELSE
+        THIS^.OUT_MoveProfile.lrVelocity := THIS^.config.defProfile.lrVelocity;
+    END_IF
 END_IF
 
 IF 0.0 = THIS^.OUT_MoveProfile.lrAccel THEN
@@ -166,7 +175,7 @@ END_CASE
 
 IF (triggerPos <= THIS^.lrIN_CurrPos) AND (THIS^.lrIN_CurrPos <= my_move.lrPosition) OR
    (triggerPos >= THIS^.lrIN_CurrPos) AND (THIS^.lrIN_CurrPos >= my_move.lrPosition) THEN
-    IsTriggerFired := TRUE;
+    IsTriggerFired := NOT THIS^.xIN_Init;
 END_IF
 ]]></ST>
       </Implementation>

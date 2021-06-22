@@ -40,7 +40,7 @@ VAR_OUTPUT
     xOUT_Timeout  : BOOL;        // Timeout FB 
     xOUT_InitDone : BOOL;        // initialisierung fertig
     xOUT_Wait     : BOOL;        // Wartet auf Bedingung
-    iOUT_Step     : ST110_Pnp_e; // Aktueller Schritt 
+    iOUT_Step     : ST125_Pnp_e; // Aktueller Schritt 
     sOUT_Step     : STRING;      // Aktueller Schritt but in string format
     bOUT_Error    : BYTE;        // Fehlernummer
 
@@ -52,9 +52,9 @@ END_VAR
 VAR
     (* Standard *)
     (* Schritt *)
-    iLastStep : ST110_Pnp_e; // Merker letzter Schritt 
-    iPreStep  : ST110_Pnp_e; // Schritt zurück nach Alarm 
-    iAktStep  : ST110_Pnp_e; // aktueller Schritt
+    iLastStep : ST125_Pnp_e; // Merker letzter Schritt 
+    iPreStep  : ST125_Pnp_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST125_Pnp_e; // aktueller Schritt
 
     // Trigger Starten 
     rtSTART : R_TRIG;
@@ -65,16 +65,32 @@ VAR
 
     (* Spezial *)
     fb_axis125_01Y : FB_AxisLM_V1_1;
-    fb_axis125_02Z : FB_AxisLIN_V1_1;
+    fb_axis125_02Z : FB_AxisLM_V1_1;
 
     fb_PnpHorAxis : FB_LinearMotionMan;
     fb_PnpVerAxis : FB_LinearMotionMan;
 
     fb_simu_axis125_01Y : FB_Simu_AxisLM_V1_1;
-    fb_simu_axis125_02Z : FB_Simu_AxisLIN_V1_1;
+    fb_simu_axis125_02Z : FB_Simu_AxisLM_V1_1;
+
+    fb_gripperFilterhutLeft    : FB_ZylMo2El_V2_1;
+    fb_gripperFilterhutRight   : FB_ZylMo2El_V2_1;
+    simu_gripperFilterhutLeft  : FB_Simu_Zyl2Pos;
+    simu_gripperFilterhutRight : FB_Simu_Zyl2Pos;
+
+    fb_handlingSolerohrLeft    : FB_ZylMo2El_V2_1;
+    fb_handlingSolerohrRight   : FB_ZylMo2El_V2_1;
+    simu_handlingSolerohrLeft  : FB_Simu_Zyl2Pos;
+    simu_handlingSolerohrRight : FB_Simu_Zyl2Pos;
+	
+    fb_gripperSolerohrLeft    : FB_ZylMo2El_V2_1;
+    fb_gripperSolerohrRight   : FB_ZylMo2El_V2_1;
+    simu_gripperSolerohrLeft  : FB_Simu_Zyl2Pos;
+    simu_gripperSolerohrRight : FB_Simu_Zyl2Pos;
 
 END_VAR
 VAR CONSTANT
+    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -104,14 +120,28 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (* Bausteine *)
 (*******************************************************************)
 fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_01Y],
+              xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis125_01Y.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.01,
+              lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST125_PnpHorPos_e._max);
 
+fb_simu_axis125_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis125_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST125_Axis.axis125_01Y.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST125_01Y]),
+                    pIN_axisHW          := ADR(ST125_Axis.axis125_01Y.axis),
+                    rIN_PosActual       := fb_axis125_01Y.rOUT_ActPos,
+                    rIN_PosMax          := ST125_Axis.const125_01Y.POS_MAX,
+                    rIN_PosMin          := ST125_Axis.const125_01Y.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
+
 fb_axis125_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := FALSE,
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st125_01Y,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -131,46 +161,47 @@ fb_axis125_01Y(enIN_State       := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST125_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               rOUT_ActPos      => st125_axis.axis125_01Y.rActPos,
-               axisIN_REF       := ST125_Axis.axis125_01Y.axis);
-
-fb_simu_axis125_01Y(bIN_AxisCntr        := fb_axis125_01Y.bOUT_AxisCntr,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis125_01Y.rOUT_ActPos,
-                    rIN_PosMax          := ST125_Axis.const125_01Y.POS_MAX,
-                    rIN_PosMin          := ST125_Axis.const125_01Y.POS_MIN,
-                    rIN_PixMax          := 100,
-                    rIN_PixMin          := 0,
-                    wOUT_AxisState      => fb_axis125_01Y.wAxisState);
+               // the simu fb gives the hardware signal when the simulation is disabled
+               wAxisState    := fb_simu_axis125_01Y.wOUT_AxisState,
+               bOUT_AxisCntr => ST125_Axis.axis125_01Y.bCtrlHi,
+               rOUT_ActPos   => ST125_Axis.axis125_01Y.rActPos,
+               axisIN_REF    := fb_simu_axis125_01Y.pOUT_axisRef^);
 
 fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_02Z],
+              xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis125_02Z.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.01,
+              lrIN_Delta_mm   := 0.5,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST125_PnpVerPos_e._max);
 
-fb_axis125_02Z(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := FALSE,
-               xIN_Quit       := xIN_Quit,
-               axisIN_REF     := ST125_Axis.axis125_02Z.axis,
-               xIN_AX5000     := FALSE,
-               xIN_ENC_ABS    := TRUE, // TODO set accordingly
-               xIN_PARAMok    := TRUE,
-               xIN_FREE       := TRUE,
-               xIN_FREE_HOME  := TRUE,
-               rIN_POSMIN     := ST125_Axis.const125_02Z.POS_MIN,
-               rIN_POSMAX     := ST125_Axis.const125_02Z.POS_MAX,
-               rIN_VELOMAX    := ST125_Axis.const125_02Z.VELO_MAX,
-               rIN_VELOMANU   := ST125_Axis.const125_02Z.VELO_MANU,
-               rIN_VELOOPEN   := ST125_Axis.const125_02Z.POS_MAX / 4,
-               rIN_JogInc     := AXIS.rTeachIncAxis,
-               rIN_JogVelo    :=,
-               xIN_HomeExe    :=,
-               xIN_HomeCalib  :=,
-               xIN_Execute    := (_20_AUTO.recipe.st125.xUseVerLeft OR (iOUT_Step < ST125_Pnp_e.READY)) AND
-                                 (fb_PnpVerAxis.xOUT_Execute),
-               xIN_HomeExe      := NOT CONST.USE_SIMULATION AND (ST125_Pnp_e.Init_HomeVerticals = iAktStep),
+fb_simu_axis125_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis125_02Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST125_Axis.axis125_02Z.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST125_02Z]),
+                    pIN_axisHW          := ADR(ST125_Axis.axis125_02Z.axis),
+                    rIN_PosActual       := fb_axis125_02Z.rOUT_ActPos,
+                    rIN_PosMax          := ST125_Axis.const125_02Z.POS_MAX,
+                    rIN_PosMin          := ST125_Axis.const125_02Z.POS_MIN,
+                    rIN_PixMax          := 80,
+                    rIN_PixMin          := 0);
+
+fb_axis125_02Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st125_02Z,
+               xIN_Quit         := xIN_Quit,
+               xIN_PARAMok      := TRUE, (*TODO*)
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST125_Axis.const125_02Z.POS_MIN,
+               rIN_POSMAX       := ST125_Axis.const125_02Z.POS_MAX,
+               rIN_VELOMAX      := ST125_Axis.const125_02Z.VELO_MAX,
+               rIN_VELOMANU     := ST125_Axis.const125_02Z.VELO_MANU,
+               rIN_VELOOPEN     := ST125_Axis.const125_02Z.VELO_MANU / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               xIN_Execute      := fb_PnpVerAxis.xOUT_Execute,
+               xIN_Home         := ST125_Pnp_e.Init_HomeVerticals = iAktStep,
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrPosition),
                rIN_Velocity     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrVelocity),
@@ -178,13 +209,171 @@ fb_axis125_02Z(enIN_State     := enIN_State,
                rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
                xIN_Reset        := (ST125_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               rOUT_ActPos      => st125_axis.axis125_02Z.rActPos);
+               // the simu fb gives the hardware signal when the simulation is disabled
+               wAxisState    := fb_simu_axis125_02Z.wOUT_AxisState,
+               bOUT_AxisCntr => ST125_Axis.axis125_02Z.bCtrlHi,
+               rOUT_ActPos   => ST125_Axis.axis125_02Z.rActPos,
+               axisIN_REF    := fb_simu_axis125_02Z.pOUT_axisRef^);
 
-fb_simu_axis125_02Z(rIN_PosActual := fb_axis125_02Z.rOUT_ActPos,
-                    rIN_PosMax    := ST125_Axis.const125_02Z.POS_MAX,
-                    rIN_PosMin    := ST125_Axis.const125_02Z.POS_MIN,
-                    rIN_PixMax    := 80,
-                    rIN_PixMin    := 0);
+//////////////////////////////////
+fb_gripperFilterhutLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
+                        xIN_Quit     := xIN_Quit,
+                        xIN_Manu     := enState.StateMANU = enIN_State,
+                        pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][1]),
+                        xIN_GS       := simu_gripperFilterhutLeft.xOUT_inGS,
+                        xIN_AS       := simu_gripperFilterhutLeft.xOUT_inAS,
+                        xIN_FREE     := TRUE,
+                        xINtoGS      := ST125_Pnp_e.Pnp_takeTubeCap = iOUT_Step,
+                        xINtoAS      := (ST125_Pnp_e.Pnp_putTubeCap = iOUT_Step) OR
+                                        (ST125_Pnp_e.Init_open_left_clamp = iOUT_Step),
+                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                      [ST125_Cylinders_e.GreiferFilterhutLinks].toAS_alarm_time),
+                        tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                      [ST125_Cylinders_e.GreiferFilterhutLinks].toGS_alarm_time),
+                        tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.GreiferFilterhutLinks].toAS_wait_time),
+                        tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.GreiferFilterhutLinks].toGS_wait_time));
+
+simu_gripperFilterhutLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+                          xIN_inGS   := IO_BOX.I6500_ST125_greiffer_filterhut_links_geschlossen,
+                          xIN_inAS   := IO_BOX.I6501_ST125_greiffer_filterhut_links_offen,
+                          xIN_valve  := fb_gripperFilterhutLeft.xOUT_VALVE,
+                          tIN_GS_ms  := 200,  //ms
+                          tIN_AS_ms  := 200); //ms
+
+fb_gripperFilterhutRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
+                         xIN_Quit     := xIN_Quit,
+                         xIN_Manu     := enState.StateMANU = enIN_State,
+                         pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][2]),
+                         xIN_GS       := simu_gripperFilterhutRight.xOUT_inGS,
+                         xIN_AS       := simu_gripperFilterhutRight.xOUT_inAS,
+                         xIN_FREE     := TRUE,
+                         xINtoGS      := ST125_Pnp_e.Pnp_takeTubeCap = iOUT_Step,
+                         xINtoAS      := ST125_Pnp_e.Pnp_putTubeCap = iOUT_Step OR
+                                         ST125_Pnp_e.Init_open_right_clamp = iOUT_Step,
+                         tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.GreiferFilterhutRechts].toAS_alarm_time),
+                         tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.GreiferFilterhutRechts].toGS_alarm_time),
+                         tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                        [ST125_Cylinders_e.GreiferFilterhutRechts].toAS_wait_time),
+                         tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                        [ST125_Cylinders_e.GreiferFilterhutRechts].toGS_wait_time));
+
+simu_gripperFilterhutRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+                           xIN_inGS   := IO_BOX.I6502_ST125_greiffer_filterhut_rechts_geschlossen,
+                           xIN_inAS   := IO_BOX.I6503_ST125_greiffer_filterhut_rechts_offen,
+                           xIN_valve  := fb_gripperFilterhutRight.xOUT_VALVE,
+                           tIN_GS_ms  := 200,  //ms
+                           tIN_AS_ms  := 200); //ms
+
+fb_handlingSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
+                        xIN_Quit     := xIN_Quit,
+                        xIN_Manu     := enState.StateMANU = enIN_State,
+                        pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][3]),
+                        xIN_GS       := simu_handlingSolerohrLeft.xOUT_inGS, // TODO use sensor
+                        xIN_AS       := simu_handlingSolerohrLeft.xOUT_inAS, // TODO use sensor
+                        xIN_FREE     := TRUE,
+                        xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step,
+                        xINtoAS      := _20_AUTO.recipe.st125.xUseVerLeft AND ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
+                        tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                         [ST125_Cylinders_e.HandlingSolerohrLinks].toAS_alarm_time),
+                        tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                      [ST125_Cylinders_e.HandlingSolerohrLinks].toGS_alarm_time),
+                        tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.HandlingSolerohrLinks].toAS_wait_time),
+                        tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.HandlingSolerohrLinks].toGS_wait_time));
+
+simu_handlingSolerohrLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                          xIN_inGS   := IO_BOX.I6600_ST125_solerhor_handling_links_unten,
+                          xIN_inAS   := IO_BOX.I6601_ST125_solerhor_handling_links_oben,
+                          xIN_valve  := fb_handlingSolerohrLeft.xOUT_VALVE,
+                          tIN_GS_ms  := 500,  //ms
+                          tIN_AS_ms  := 500); //ms
+
+fb_handlingSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
+                         xIN_Quit     := xIN_Quit,
+                         xIN_Manu     := enState.StateMANU = enIN_State,
+                         pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][4]),
+                         xIN_GS       := simu_handlingSolerohrRight.xOUT_inGS,
+                         xIN_AS       := simu_handlingSolerohrRight.xOUT_inAS,
+                         xIN_FREE     := TRUE,
+                         xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step,
+                         xINtoAS      :=
+                             _20_AUTO.recipe.st125.xUseVerRight AND ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
+                         tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.HandlingSolerohrRechts].toAS_alarm_time),
+                         tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.HandlingSolerohrRechts].toGS_alarm_time),
+                         tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                        [ST125_Cylinders_e.HandlingSolerohrRechts].toAS_wait_time),
+                         tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                        [ST125_Cylinders_e.HandlingSolerohrRechts].toGS_wait_time));
+
+simu_handlingSolerohrRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                           xIN_inGS   := IO_BOX.I6603_ST125_solerhor_handling_rechts_oben,
+                           xIN_inAS   := IO_BOX.I6602_ST125_solerhor_handling_rechts_unten,
+                           xIN_valve  := fb_handlingSolerohrRight.xOUT_VALVE,
+                           tIN_GS_ms  := 500,  //ms
+                           tIN_AS_ms  := 500); //ms
+
+fb_gripperSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
+                       xIN_Quit     := xIN_Quit,
+                       xIN_Manu     := enState.StateMANU = enIN_State,
+                       pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][5]),
+                       xIN_GS       := simu_gripperSolerohrLeft.xOUT_inGS, // TODO use sensor
+                       xIN_AS       := simu_gripperSolerohrLeft.xOUT_inAS, // TODO use sensor
+                       xIN_FREE     := TRUE,
+                       xINtoGS      := ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step,
+                       xINtoAS      := _20_AUTO.recipe.st125.xUseVerLeft AND
+                                       (ST125_Pnp_e.Pnp_Ver_ShuttleDown = iOUT_Step OR
+                                       ST125_Pnp_e.Pnp_Ver_ShuttleTorqueControl = iOUT_Step) AND
+                                       fb_handlingSolerohrLeft.xOUT_inAS,
+                       tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                     [ST125_Cylinders_e.GreiferSolerohrLinks].toAS_alarm_time),
+                       tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                     [ST125_Cylinders_e.GreiferSolerohrLinks].toGS_alarm_time),
+                       tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                      [ST125_Cylinders_e.GreiferSolerohrLinks].toAS_wait_time),
+                       tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                      [ST125_Cylinders_e.GreiferSolerohrLinks].toGS_wait_time));
+
+simu_gripperSolerohrLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                         xIN_inGS   := IO_BOX.I6605_ST125_greifer_solerohr_links_offen,
+                         xIN_inAS   := IO_BOX.I6604_ST125_greifer_solerohr_links_geschlossen,
+                         xIN_valve  := fb_gripperSolerohrLeft.xOUT_VALVE,
+                         tIN_GS_ms  := 300,  //ms
+                         tIN_AS_ms  := 300); //ms
+
+fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
+                        xIN_Quit     := xIN_Quit,
+                        xIN_Manu     := enState.StateMANU = enIN_State,
+                        pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST125][6]),
+                        xIN_GS       := simu_gripperSolerohrRight.xOUT_inGS,
+                        xIN_AS       := simu_gripperSolerohrRight.xOUT_inAS,
+                        xIN_FREE     := TRUE,
+                        xINtoGS      := ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step,
+                        xINtoAS      := _20_AUTO.recipe.st125.xUseVerRight AND
+                                        (ST125_Pnp_e.Pnp_Ver_ShuttleDown = iOUT_Step OR
+                                        ST125_Pnp_e.Pnp_Ver_ShuttleTorqueControl = iOUT_Step) AND
+                                        fb_handlingSolerohrRight.xOUT_inAS,
+                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                      [ST125_Cylinders_e.GreiferSolerohrRechts].toAS_alarm_time),
+                        tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                      [ST125_Cylinders_e.GreiferSolerohrRechts].toGS_alarm_time),
+                        tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.GreiferSolerohrRechts].toAS_wait_time),
+                        tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                       [ST125_Cylinders_e.GreiferSolerohrRechts].toGS_wait_time));
+
+simu_gripperSolerohrRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                          xIN_inGS   := IO_BOX.I6607_ST125_greifer_solerohr_rechts_offen,
+                          xIN_inAS   := IO_BOX.I6606_ST125_greifer_solerohr_rechts_geschlossen,
+                          xIN_valve  := fb_gripperSolerohrRight.xOUT_VALVE,
+                          tIN_GS_ms  := 300,  //ms
+                          tIN_AS_ms  := 300); //ms
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -200,7 +389,7 @@ xOUT_Ready := (iOUT_Step = ST125_Pnp_e.READY);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
-xOUT_InitDone := (iOUT_Step = ST125_Pnp_e.READY);
+xOUT_InitDone := (iOUT_Step = ST125_Pnp_e.READY) OR (iOUT_Step = ST125_Pnp_e.waitOnMover);
 // Aktueller Schritt			
 iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
 sOUT_Step := TO_STRING(iOUT_Step);
@@ -212,12 +401,52 @@ xOUT_Wait := (iOUT_Step = ST125_Pnp_e.DONE);
 xOUT_MoverFree := iOUT_Step >= ST125_Pnp_e.MOVER_FREE_OP AND iOUT_Step < ST125_Pnp_e.MOVER_NEEDED_OP;
 
 iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
-                                         ST125_Pnp_e.PnP_Hor_ToRotTablePos,
-                                         ST125_Pnp_e.PnP_Hor_ToTrackPos,
-                                         ST125_Pnp_e.PnP_Ver_ShuttleDown,
-                                         ST125_Pnp_e.PnP_Ver_ShuttleUp);
+                                         ST125_Pnp_e.Pnp_Hor_ToRotTablePos,
+                                         ST125_Pnp_e.Pnp_Hor_ToTrackPos,
+                                         ST125_Pnp_e.Pnp_Ver_ShuttleDown,
+                                         ST125_Pnp_e.SYNC_MOVER_LEAVE);
 
-xOUT_PickPiece := iOUT_Step = ST125_Pnp_e.Vacum_on;
+xOUT_PickPiece := iOUT_Step = ST125_Pnp_e.Pnp_Hor_ToTrackPos;
+
+IO_BOX.Q5206_14_ST125_greifer_filterhut_links :=
+    fb_gripperFilterhutLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q5207_14_ST125_greifer_filterhut_rechts :=
+    fb_gripperFilterhutRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q5208_14_ST125_handling_solerohr_links :=
+    fb_handlingSolerohrLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q5209_14_ST125_handling_solerohr_rechts :=
+    fb_handlingSolerohrRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q5210_14_ST125_greifer_solerohr_links :=
+    fb_gripperSolerohrLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q5211_14_ST125_greifer_solerohr_rechts :=
+    fb_gripperSolerohrRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis125_01Y.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_axis125_02Z.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_gripperFilterhutLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    ELSIF fb_gripperFilterhutRight.xOUT_ErrFlag THEN
+        bOUT_Error := 14;
+    ELSIF fb_handlingSolerohrLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 15;
+    ELSIF fb_handlingSolerohrRight.xOUT_ErrFlag THEN
+        bOUT_Error := 16;
+    ELSIF fb_gripperSolerohrLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 17;
+    ELSIF fb_gripperSolerohrRight.xOUT_ErrFlag THEN
+        bOUT_Error := 18;
+    END_IF
+ELSIF iOUT_Step < ST125_Pnp_e.ERROR THEN
+    iOUT_Step := ST125_Pnp_e.ERROR;
+END_IF
 
 (*******************************************************************)
 (* Ablauf *)
@@ -257,38 +486,101 @@ ST125_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST125_Pnp_e.INIT: (* Grundstellung ? *)
-    IF CONST.USE_SIMULATION THEN
+    IF fb_axis125_01Y.xOUT_HOMED THEN
         iOUT_Step := ST125_Pnp_e.Init_VerticalsUp;
     ELSE
         iOUT_Step := ST125_Pnp_e.Init_HomeVerticals;
     END_IF;
 
 ST125_Pnp_e.Init_HomeVerticals:
-    fb_axis125_02Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_02Z].movesList[0].lrVelocity;
-
-    IF fb_axis125_02Z.xOUT_DONE THEN
+    IF fb_axis125_02Z.xOUT_HOMED THEN
         iOUT_Step := ST125_Pnp_e.Init_VerticalsUp;
     END_IF
 
 ST125_Pnp_e.Init_VerticalsUp:
-    IF fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
-        IF fb_axis125_01Y.xOUT_READY OR fb_axis125_01Y.xOUT_HOMED THEN
-            iOUT_Step := ST125_Pnp_e.Init_HorizontalsToTrack;
-        ELSE
-            iOUT_Step := ST125_Pnp_e.Init_HomeHorizontals;
+    IF fb_gripperFilterhutLeft.xIN_AS OR fb_gripperFilterhutRight.xIN_AS THEN
+        IF fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpFull).xOUT_InPos THEN
+            IF fb_axis125_01Y.xOUT_READY OR fb_axis125_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST125_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST125_Pnp_e.Init_HomeHorizontals;
+            END_IF
+        END_IF
+    ELSE
+        IF fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
+            IF fb_axis125_01Y.xOUT_READY OR fb_axis125_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST125_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST125_Pnp_e.Init_HomeHorizontals;
+            END_IF
         END_IF
     END_IF
 
 ST125_Pnp_e.Init_HomeHorizontals:
-    fb_axis125_01Y.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_01Y].movesList[0].lrVelocity;
-
     IF fb_axis125_01Y.xOUT_HOMED THEN
         iOUT_Step := ST125_Pnp_e.Init_HorizontalsToTrack;
     END_IF
 
 ST125_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST125_PnpHorPos_e.GS).xOUT_InPos THEN
+        iOUT_Step := ST125_Pnp_e.Init_adjust_left_clamp;
+    END_IF
+
+ST125_Pnp_e.Init_adjust_left_clamp:
+    // a piece is in the griper when there is no GS signal
+    IF fb_gripperFilterhutLeft.xIN_AS OR NOT fb_gripperFilterhutLeft.xIN_GS THEN
+        iOUT_Step := ST125_Pnp_e.Init_adjust_right_clamp;
+    ELSE
+        iOUT_Step := ST125_Pnp_e.Init_open_left_clamp;
+    END_IF
+
+ST125_Pnp_e.Init_open_left_clamp:
+    IF fb_gripperFilterhutLeft.xIN_AS THEN
+        iOUT_Step := ST125_Pnp_e.Init_adjust_right_clamp;
+    END_IF
+
+ST125_Pnp_e.Init_adjust_right_clamp:
+    // a piece is in the griper when there is no GS signal
+    IF fb_gripperFilterhutRight.xIN_AS OR NOT fb_gripperFilterhutRight.xIN_GS THEN
+        iOUT_Step := ST125_Pnp_e.Init_check_if_pces_handled;
+    ELSE
+        iOUT_Step := ST125_Pnp_e.Init_open_right_clamp;
+    END_IF
+
+ST125_Pnp_e.Init_open_right_clamp:
+    IF fb_gripperFilterhutRight.xIN_AS THEN
+        iOUT_Step := ST125_Pnp_e.Init_check_if_pces_handled;
+    END_IF
+
+ST125_Pnp_e.Init_check_if_pces_handled:
+    IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND
+       NOT fb_gripperFilterhutLeft.xIN_GS AND
+       NOT fb_gripperFilterhutLeft.xIN_AS) OR
+       (NOT _20_AUTO.recipe.st120.xUseVerRight AND
+       NOT fb_gripperFilterhutRight.xIN_GS AND
+       NOT fb_gripperFilterhutRight.xIN_AS) THEN
+        // ERROR: a piece is present in an unused gripper
+        bOUT_Error := 1;
+        iOUT_Step  := ST125_Pnp_e.ERROR;
+
+        // if both are open, we don't make further checks
+    ELSIF fb_gripperFilterhutLeft.xOUT_inAS AND fb_gripperFilterhutRight.xOUT_inAS THEN
         iOUT_Step := ST125_Pnp_e.READY;
+
+    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperFilterhutLeft.xOUT_inAS) AND
+          (_20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperFilterhutRight.xOUT_inGS) THEN
+        // ERROR:  Initialisation failed. A piece is missing in the left griper.
+        bOUT_Error := 2;
+        iOUT_Step  := ST125_Pnp_e.ERROR;
+
+    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperFilterhutLeft.xOUT_inGS) AND
+          (_20_AUTO.recipe.st120.xUseVerRight AND fb_gripperFilterhutRight.xOUT_inAS) THEN
+        // ERROR:  Initialisation failed. A piece is missing in the right griper.
+        bOUT_Error := 3;
+        iOUT_Step  := ST125_Pnp_e.ERROR;
+
+    ELSE
+        iOUT_Step := ST125_Pnp_e.waitOnMover;
     END_IF
 
 (***** READY / INIT DONE *****)
@@ -300,62 +592,98 @@ ST125_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
 (***** START  ZYKLISCH *****)
 ST125_Pnp_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST125_Pnp_e.PnP_Hor_ToRotTablePos;
+        iOUT_Step := ST125_Pnp_e.Pnp_Hor_ToRotTablePos;
     END_IF;
 
-ST125_Pnp_e.PnP_Hor_ToRotTablePos:
+ST125_Pnp_e.Pnp_Hor_ToRotTablePos:
     IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST125_PnpHorPos_e.AS).xOUT_InPos THEN
-        iOUT_Step := ST125_Pnp_e.PnP_WaitOnFeeder;
+        iOUT_Step := ST125_Pnp_e.Pnp_WaitOnFeeder;
     END_IF
 
-ST125_Pnp_e.PnP_WaitOnFeeder:
+ST125_Pnp_e.Pnp_WaitOnFeeder:
     IF xIN_PceReadyToPick THEN
-        iOUT_Step := ST125_Pnp_e.PnP_Ver_RotTableDown;
+        iOUT_Step := ST125_Pnp_e.Pnp_Ver_RotTableDown;
     END_IF
 
-ST125_Pnp_e.PnP_Ver_RotTableDown:
+ST125_Pnp_e.Pnp_Ver_RotTableDown:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.DownEmpty).xOUT_InPos THEN
-        iOUT_Step := ST125_Pnp_e.Vacum_on;
+        iOUT_Step := ST125_Pnp_e.Pnp_takeTubeCap;
     END_IF;
 
-ST125_Pnp_e.Vacum_on:
-    IF xIN_NextStep AND NOT fb_axis125_02Z.xOUT_DONE THEN
-        iOUT_Step := ST125_Pnp_e.PnP_Ver_RotTableUp;
+ST125_Pnp_e.Pnp_takeTubeCap:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperFilterhutLeft.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperFilterhutRight.xOUT_inGS) THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_Ver_RotTableUp;
     END_IF;
 
-ST125_Pnp_e.PnP_Ver_RotTableUp:
+ST125_Pnp_e.Pnp_Ver_RotTableUp:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpFull).xOUT_InPos THEN
-        iOUT_Step := ST125_Pnp_e.PnP_Hor_ToTrackPos;
+        iOUT_Step := ST125_Pnp_e.Pnp_Hor_ToTrackPos;
     END_IF;
 
-ST125_Pnp_e.PnP_Hor_ToTrackPos:
+ST125_Pnp_e.Pnp_Hor_ToTrackPos:
     IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST125_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST125_Pnp_e.waitOnMover;
     END_IF
 
 ST125_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST125_Pnp_e.PnP_Ver_ShuttleDown;
+        iOUT_Step := ST125_Pnp_e.Pnp_HandlingDown;
     END_IF;
 
-ST125_Pnp_e.PnP_Ver_ShuttleDown:
+ST125_Pnp_e.Pnp_HandlingDown:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_handlingSolerohrLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_handlingSolerohrRight.xOUT_inAS) THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_Ver_ShuttleDown;
+    END_IF;
+
+ST125_Pnp_e.Pnp_Ver_ShuttleDown:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.DownFullQuick).xOUT_InPos THEN
-        iOUT_Step := ST125_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+        iOUT_Step := ST125_Pnp_e.Pnp_HandlingSolerohrMaintain;
     END_IF;
 
-// We need a fb that enables for us torque control. Here we just go a bit further
-ST125_Pnp_e.PnP_Ver_ShuttleTorqueControl:
+ST125_Pnp_e.Pnp_HandlingSolerohrMaintain:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inAS) THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_Ver_ShuttleTorqueControl;
+    END_IF;
+
+ST125_Pnp_e.Pnp_Ver_ShuttleTorqueControl:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos THEN
-        iOUT_Step := ST125_Pnp_e.Vacum_off;
+        iOUT_Step := ST125_Pnp_e.Pnp_putTubeCap;
     END_IF;
 
-ST125_Pnp_e.Vacum_off:
-    IF xIN_NextStep THEN
-        iOUT_Step := ST125_Pnp_e.PnP_Ver_ShuttleUp;
+ST125_Pnp_e.Pnp_putTubeCap:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperFilterhutLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperFilterhutRight.xOUT_inAS) THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling;
     END_IF;
 
-ST125_Pnp_e.PnP_Ver_ShuttleUp:
+ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling:
+    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpToHandling).xOUT_InPos THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_HandlingSolerohrRelease;
+    END_IF;
+
+ST125_Pnp_e.Pnp_HandlingSolerohrRelease:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inGS) THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_Ver_ShuttleFullUp;
+    END_IF;
+
+ST125_Pnp_e.Pnp_Ver_ShuttleFullUp:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_HandlingUp;
+    END_IF;
+
+ST125_Pnp_e.Pnp_HandlingUp:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_handlingSolerohrLeft.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_handlingSolerohrRight.xOUT_inGS) THEN
         iOUT_Step := ST125_Pnp_e.SYNC_MOVER_LEAVE;
     END_IF;
 

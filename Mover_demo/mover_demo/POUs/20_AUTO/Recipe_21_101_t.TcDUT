@@ -5,11 +5,15 @@
 TYPE Recipe_21_101_t :
 STRUCT
     linearAxis     : ARRAY[0..LinearAxis_e._max - 1] OF LinearMotionMan_Config_t;
-    stationOffsets : ARRAY[0..CONST.STATION_NUMBER-1] OF REAL;
+    cylinder2Pos   : ARRAY[0..StationList_e._max] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF Cylinder2Pos_config;
+    stationOffsets : ARRAY[0..CONST.STATION_NUMBER - 1] OF REAL;
     st110          : ST110_Recipe_t;
     st115          : ST115_Recipe_t;
     st120          : ST120_Recipe_t;
     st125          : ST125_Recipe_t;
+    st145          : ST145_Recipe_t;
+    st150          : ST150_Recipe_t;
+    st180          : ST180_Recipe_t;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

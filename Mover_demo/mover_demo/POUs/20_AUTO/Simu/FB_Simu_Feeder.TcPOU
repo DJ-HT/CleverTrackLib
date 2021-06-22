@@ -7,6 +7,7 @@
 FUNCTION_BLOCK FB_Simu_Feeder
 VAR_INPUT
     xIN_Enable         : BOOL; // enable the feeder
+    xIN_PceSensor      : BOOL; // physical piece sensor, when simu_fifo is disabled, xOUT_NewPiece taks this value
     tIN_NewPieceTime   : DINT;
     iIN_WaitTimeMin_ms : DINT;
     iIN_WaitTimeMax_ms : DINT;
@@ -18,7 +19,7 @@ VAR
     _rand          : DRAND;
     _enableClock   : BOOL  := FALSE;
     _startTime_ms  : UDINT := 0;
-    _timeToWait_ms : DINT := 0;
+    _timeToWait_ms : DINT  := 0;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -39,7 +40,7 @@ IF xIN_Enable AND THIS^.IsTimeElapsed() THEN
 
     xOUT_NewPiece := NOT xOUT_NewPiece;
 ELSIF NOT xIN_Enable THEN
-    xOUT_NewPiece := FALSE;
+    xOUT_NewPiece := xIN_PceSensor;
 END_IF
 ]]></ST>
     </Implementation>
