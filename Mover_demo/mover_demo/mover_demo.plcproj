@@ -92,9 +92,6 @@
     <Compile Include="DUTs\Piece_st.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GlobalTextList.TcGTLO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GVLs\AXIS.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -557,16 +554,9 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST130\FB_AUT_130.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\20_AUTO\ST130\ST130_Axis.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\ST130\VISU_ST130.TcVIS">
-      <SubType>Code</SubType>
-      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST145\FB_ABL_145_Feeder.TcPOU">
       <SubType>Code</SubType>
