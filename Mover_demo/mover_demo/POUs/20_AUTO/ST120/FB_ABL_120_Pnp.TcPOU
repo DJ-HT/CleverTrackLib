@@ -338,7 +338,11 @@ ST120_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST120_Pnp_e.INIT: (* Grundstellung ? *)
-    iOUT_Step := ST120_Pnp_e.Init_HomeVerticals;
+    IF fb_axis120_02Z.xOUT_HOMED THEN
+        iOUT_Step := ST120_Pnp_e.Init_VerticalsUp;
+    ELSE
+        iOUT_Step := ST120_Pnp_e.Init_HomeVerticals;
+    END_IF
 
 ST120_Pnp_e.Init_HomeVerticals:
     IF fb_axis120_02Z.xOUT_HOMED THEN
