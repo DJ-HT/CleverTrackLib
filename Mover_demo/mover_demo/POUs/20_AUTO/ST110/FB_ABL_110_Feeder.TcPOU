@@ -143,12 +143,6 @@ END_IF
 IF ST110_Feeder_e.Init_simu_home_table = iOUT_Step THEN
     fb_axis110_10W.rIN_Position := TO_REAL(120.0 - LMOD(ST110_Axis.axis110_10W.rActPos, 120.0));
 
-ELSIF ST110_Feeder_e.Init_home_table = iOUT_Step THEN
-    fb_axis110_10W.rIN_Position := TO_REAL(120.0 - LMOD(ST110_Axis.axis110_10W.rActPos, 120.0));
-
-ELSIF ST110_Feeder_e.Init_table_go_to_zero = iOUT_Step THEN
-    fb_axis110_10W.rIN_Position := 360 - ST110_Axis.axis110_10W.rActPos;
-
 ELSE
     fb_axis110_10W.rIN_Position := 120.0;
 
@@ -288,7 +282,7 @@ ST110_Feeder_e.Init_home_table:
         IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step := ST110_Feeder_e.Init_simu_home_table;
         ELSE
-            iOUT_Step := ST110_Feeder_e.Init_table_go_to_zero;
+            iOUT_Step := ST110_Feeder_e.Init_reset_search_index;
         END_IF
     END_IF
 
