@@ -61,6 +61,7 @@ VAR
     TON_Timeout : TON;
 
     (* Bausteine *)
+	btfb_feeder					: FB_BUTTON;
 
     // Application specific
     fb_axis110_10W               : FB_AxisLMturn_V1_1;
@@ -116,8 +117,19 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
+btfb_feeder(pbtIN := ADR(HMI.btManuCylinders[StationList_e.ST110][3]),
+				xINdis:= (enIN_State<>enState.StateMANU),
+				xINon:= ,
+				xINerr:= fb_feeder.xOUT_Empty);
 
-fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+IF btfb_feeder.pbtIN^.rtrig THEN
+	btfb_feeder.xINon := NOT btfb_feeder.xINon;
+ELSIF (enIN_State<>enState.StateMANU) THEN
+	btfb_feeder.xINon := FALSE;
+END_IF;
+
+fb_feeder(xIN_Enable                := ((enIN_State<=enState.StateAUTO) AND (enIN_State>=enState.StateSTEP)) 
+										OR btfb_feeder.xINon,
           xIN_PieceInEnd            := TRUE, // IO_BOX.I6000_ST110_teil_in_vereinzelung, 
           xIN_PieceMax              := IO_BOX.I8001_ST110_maximum,
           xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
@@ -388,7 +400,14 @@ END_CASE;
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_ABL_110_Feeder">
-      <LineId Id="3" Count="112" />
+      <LineId Id="3" Count="26" />
+      <LineId Id="389" Count="3" />
+      <LineId Id="394" Count="0" />
+      <LineId Id="393" Count="0" />
+      <LineId Id="395" Count="3" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="386" Count="0" />
+      <LineId Id="32" Count="83" />
       <LineId Id="384" Count="0" />
       <LineId Id="117" Count="181" />
       <LineId Id="2" Count="0" />

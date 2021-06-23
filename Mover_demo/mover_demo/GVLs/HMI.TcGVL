@@ -45,10 +45,10 @@ VAR_GLOBAL
     btManuCylinders : ARRAY[0..StationList_e._max] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF structButton;
     (*
      * [StationList_e.ST110]
-     * [0]: Zyklus [1]: Vacum Gripper left [2]: Vacum Gripper right
+     * [0]: Zyklus [1]: Vacum Gripper left [2]: Vacum Gripper right [3]: Feeder
      *
      * [StationList_e.ST115]
-     * [0]: Zyklus [1]: Gripper left [2]: Gripper right
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: Feeder
      *
      * [StationList_e.ST120]
      * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: Rotative cylinder left
