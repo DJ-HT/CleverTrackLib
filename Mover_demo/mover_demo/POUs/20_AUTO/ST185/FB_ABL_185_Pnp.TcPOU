@@ -283,8 +283,8 @@ fb_griperLeft(xIN_Reset    := xIN_Reset OR (ST185_Pnp_e.RESET = iOUT_Step),
                                              [ST185_Cylinders_e.Greifer_Patrone_Links].toGS_wait_time));
 
 simu_griperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                xIN_inGS   := IO_BOX.I9100_ST185_greifer_patrone_links_zu,
-                xIN_inAS   := IO_BOX.I9101_ST185_greifer_patrone_links_offen,
+                xIN_inGS   := IO_BOX.I9200_ST185_greifer_patrone_links_zu,
+                xIN_inAS   := IO_BOX.I9201_ST185_greifer_patrone_links_offen,
                 xIN_valve  := fb_griperLeft.xOUT_VALVE,
                 tIN_GS_ms  := 200,  //ms
                 tIN_AS_ms  := 200); //ms
@@ -308,8 +308,8 @@ fb_griperRight(xIN_Reset    := xIN_Reset OR (ST185_Pnp_e.RESET = iOUT_Step),
                                               [ST185_Cylinders_e.Greifer_Patrone_Rechts].toGS_wait_time));
 
 simu_griperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                 xIN_inGS   := IO_BOX.I9102_ST185_greifer_patrone_rechts_zu,
-                 xIN_inAS   := IO_BOX.I9103_ST185_greifer_patrone_rechts_offen,
+                 xIN_inGS   := IO_BOX.I9202_ST185_greifer_patrone_rechts_zu,
+                 xIN_inAS   := IO_BOX.I9203_ST185_greifer_patrone_rechts_offen,
                  xIN_valve  := fb_griperRight.xOUT_VALVE,
                  tIN_GS_ms  := 200,  //ms
                  tIN_AS_ms  := 200); //ms
@@ -334,8 +334,8 @@ fb_clampLeft(xIN_Reset    := xIN_Reset OR (ST185_Pnp_e.RESET = iOUT_Step),
                                             [ST185_Cylinders_e.Niederhalter_Deckel_Links].toGS_wait_time));
 
 simu_clampLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
-               xIN_inGS   := IO_BOX.I9104_ST185_niederhalter_deckel_links_oben,
-               xIN_inAS   := NOT IO_BOX.I9104_ST185_niederhalter_deckel_links_oben,
+               xIN_inGS   := IO_BOX.I9204_ST185_niederhalter_deckel_links_oben,
+               xIN_inAS   := NOT IO_BOX.I9204_ST185_niederhalter_deckel_links_oben,
                xIN_valve  := fb_clampLeft.xOUT_VALVE,
                tIN_GS_ms  := 200,  //ms
                tIN_AS_ms  := 200); //ms
@@ -360,8 +360,8 @@ fb_clampRight(xIN_Reset    := xIN_Reset OR (ST185_Pnp_e.RESET = iOUT_Step),
                                              [ST185_Cylinders_e.Niederhalter_Deckel_Rechts].toGS_wait_time));
 
 simu_clampRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                xIN_inGS   := IO_BOX.I9106_ST185_niederhalter_deckel_rechts_oben,
-                xIN_inAS   := NOT IO_BOX.I9106_ST185_niederhalter_deckel_rechts_oben,
+                xIN_inGS   := IO_BOX.I9206_ST185_niederhalter_deckel_rechts_oben,
+                xIN_inAS   := NOT IO_BOX.I9206_ST185_niederhalter_deckel_rechts_oben,
                 xIN_valve  := fb_clampRight.xOUT_VALVE,
                 tIN_GS_ms  := 200,  // ms
                 tIN_AS_ms  := 200); // ms
@@ -401,16 +401,16 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST185_Pnp_e.hor_to_track_pos);
 
 // TODO Valve should not be set when we are in simulation !
-IO_BOX.Q5400_14_ST185_greifer_patrone_links :=
+IO_BOX.Q5404_14_ST185_greifer_patrone_links :=
     fb_griperLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q5401_14_ST185_greifer_patrone_rechts :=
+IO_BOX.Q5405_14_ST185_greifer_patrone_rechts :=
     fb_griperRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q5402_14_ST185_niederhalter_deckel_links :=
+IO_BOX.Q5406_14_ST185_niederhalter_deckel_links :=
     fb_clampLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q5403_14_ST185_Niederhalter_deckel_rechts :=
+IO_BOX.Q5407_14_ST185_Niederhalter_deckel_rechts :=
     fb_clampRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
@@ -432,6 +432,26 @@ END_IF
 
 (* START *)
 rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis185_01Y.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_axis185_02Z.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_axis185_10Z.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    ELSIF fb_griperLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 14;
+    ELSIF fb_griperRight.xOUT_ErrFlag THEN
+        bOUT_Error := 15;
+    ELSIF fb_clampLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 16;
+    ELSIF fb_clampRight.xOUT_ErrFlag THEN
+        bOUT_Error := 17;
+    END_IF
+ELSIF iOUT_Step < ST185_Pnp_e.ERROR THEN
+    iOUT_Step := ST185_Pnp_e.ERROR;
+END_IF
 
 (*******************************************************************)
 (* Schrittkette  *)
@@ -504,29 +524,29 @@ ST185_Pnp_e.Init_HorizontalToTrack:
     END_IF
 
 ST185_Pnp_e.Init_check_if_pces_handled:
-    IF (NOT _20_AUTO.recipe.st185.xUseVerLeft AND fb_griperLeft.xOUT_inGS) OR
-       (NOT _20_AUTO.recipe.st185.xUseVerRight AND fb_griperRight.xOUT_inGS) THEN
+    IF (NOT _20_AUTO.recipe.st185.xUseVerLeft AND fb_griperLeft.xOUT_inAS) OR
+       (NOT _20_AUTO.recipe.st185.xUseVerRight AND fb_griperRight.xOUT_inAS) THEN
         // ERROR: a piece is present in an unused gripper
         bOUT_Error := 1;
         iOUT_Step  := ST185_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st185.xUseVerLeft AND
-          NOT fb_griperLeft.xOUT_inGS AND
+          NOT fb_griperLeft.xOUT_inAS AND
           _20_AUTO.recipe.st185.xUseVerRight AND
-          fb_griperRight.xOUT_inGS THEN
+          fb_griperRight.xOUT_inAS THEN
         // ERROR:  Initialisation failed. A piece is missing in the left griper.
         bOUT_Error := 2;
         iOUT_Step  := ST185_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st185.xUseVerLeft AND
-          fb_griperLeft.xOUT_inGS AND
+          fb_griperLeft.xOUT_inAS AND
           _20_AUTO.recipe.st185.xUseVerRight AND
-          NOT fb_griperRight.xOUT_inGS THEN
+          NOT fb_griperRight.xOUT_inAS THEN
         // ERROR:  Initialisation failed. A piece is missing in the right griper.
         bOUT_Error := 3;
         iOUT_Step  := ST185_Pnp_e.ERROR;
 
-    ELSIF NOT fb_griperLeft.xOUT_inGS AND NOT fb_griperRight.xOUT_inGS THEN
+    ELSIF NOT fb_griperLeft.xOUT_inAS AND NOT fb_griperRight.xOUT_inAS THEN
         iOUT_Step := ST185_Pnp_e.READY;
 
     ELSE
