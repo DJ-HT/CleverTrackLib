@@ -235,11 +235,8 @@ IO_BOX.Q8003_ST110_forderband_ein :=
 tof_color_sensor(IN := IO_BOX.I8004_ST110_farbsensor_lagekontrolle,
                  PT := DINT_TO_TIME(_20_AUTO.recipe.st110.blowPieceTof_ms));
 
-ton_blow_piece(IN := NOT ton_blow_piece.Q AND NOT tof_color_sensor.Q, PT := T#500MS);
-
 IO_BOX.Q8005_ST110_blow_piece := fb_feeder.xOUT_EnableFeeder AND
-                                 NOT tof_color_sensor.Q AND
-                                 (ton_blow_piece.ET < (ton_blow_piece.PT / 3)) AND
+                                 tof_color_sensor.Q AND
                                  NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
