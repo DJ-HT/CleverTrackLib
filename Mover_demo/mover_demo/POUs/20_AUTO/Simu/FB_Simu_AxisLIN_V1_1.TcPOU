@@ -19,6 +19,8 @@ VAR_OUTPUT
     pOUT_axisRef   : POINTER TO AXIS_REF; // current axis ref used
 END_VAR
 VAR
+	power_real_axis : MC_Power;
+	reset_real_axis : MC_Reset;
 END_VAR
 
 VAR_IN_OUT
@@ -34,6 +36,12 @@ END_VAR
 
 IF xIN_InSimu THEN
     pOUT_axisRef := pIN_axisSimu;
+    power_real_axis(Axis            := pIN_axisHW^,
+                    Enable_Positive := TRUE,
+                    Enable_Negative := TRUE);
+
+    reset_real_axis(Axis    := pIN_axisHW^,
+                    Execute := power_real_axis.Error);
 ELSE
     pOUT_axisRef := pIN_axisHW;
 END_IF

@@ -472,7 +472,7 @@ ST145_Pnp_e.Pnp_Hor_ToTrackPos:
     END_IF
 
 ST145_Pnp_e.waitOnMover: (*  *)
-    IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
+    IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST145] THEN
         iOUT_Step := ST145_Pnp_e.Pnp_Ver_ShuttleDown;
     END_IF;
 

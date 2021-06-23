@@ -20,8 +20,8 @@ VAR_GLOBAL
     xWait     : BOOL;    //ALLE FBs warten
     xAIRon    : BOOL;    //Luftdruck IO
     xSPC      : BOOL;    //SPC angewählt
-	
-	Tast_BL : BOOL; // ... 
+
+    Tast_BL : BOOL; // ... 
 
     (*******************************************************************)
     (* Buttons *)
@@ -54,11 +54,13 @@ VAR_GLOBAL
      * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: Rotative cylinder left
      * [4]: Rotative cylinder right
      *)
-	 
-	 
+
     btArST150 : ARRAY[0..20] OF structButton; (*	0 : Start USS
 	                                                1 : Reset US
 											   *)
+
+    btArForceCyclus     : ARRAY[0..StationList_e._max - 1] OF structButton;
+    bArForceCyclusState : ARRAY[0..StationList_e._max - 1] OF BOOL;
 
     (*******************************************************************)
     (* ALARME  *)

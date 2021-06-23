@@ -341,8 +341,6 @@ ST120_Pnp_e.INIT: (* Grundstellung ? *)
     iOUT_Step := ST120_Pnp_e.Init_HomeVerticals;
 
 ST120_Pnp_e.Init_HomeVerticals:
-    fb_axis120_02Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST120_02Z].movesList[0].lrVelocity;
-
     IF fb_axis120_02Z.xOUT_HOMED THEN
         iOUT_Step := ST120_Pnp_e.Init_VerticalsUp;
     END_IF
@@ -474,7 +472,7 @@ ST120_Pnp_e.PnP_Hor_ToTrackPos:
     END_IF
 
 ST120_Pnp_e.waitOnMover: (*  *)
-    IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
+    IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST120] THEN
         iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleDown;
     END_IF;
 

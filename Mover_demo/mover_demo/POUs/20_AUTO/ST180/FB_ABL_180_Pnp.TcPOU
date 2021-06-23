@@ -123,6 +123,18 @@ fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_0
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST180_PnpHorPos_e._max);
 
+fb_simu_axis180_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis180_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST180_Axis.axis180_01Y.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST180_01Y]),
+                    pIN_axisHW          := ADR(ST180_Axis.axis180_01Y.axis),
+                    rIN_PosActual       := ST180_Axis.axis180_01Y.rActPos,
+                    rIN_PosMax          := ST180_Axis.const180_01Y.POS_MAX,
+                    rIN_PosMin          := ST180_Axis.const180_01Y.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
+
 fb_axis180_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
                xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st180_01Y,
@@ -149,17 +161,7 @@ fb_axis180_01Y(enIN_State       := enIN_State,
                wAxisState    := fb_simu_axis180_01Y.wOUT_AxisState,
                bOUT_AxisCntr => st180_axis.axis180_01Y.bCtrlHi,
                rOUT_ActPos   => st180_axis.axis180_01Y.rActPos,
-               axisIN_REF    := SIMU.axis_ref[Axis_e.ST180_01Y]);
-
-fb_simu_axis180_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis180_01Y.bOUT_AxisCntr,
-                    wIN_AxisState       := ST180_Axis.axis180_01Y.wState,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis180_01Y.rOUT_ActPos,
-                    rIN_PosMax          := ST180_Axis.const180_01Y.POS_MAX,
-                    rIN_PosMin          := ST180_Axis.const180_01Y.POS_MIN,
-                    rIN_PixMax          := 100,
-                    rIN_PixMin          := 0);
+               axisIN_REF    := fb_simu_axis180_01Y.pOUT_axisRef^);
 
 fb_PnpVerAxis_02(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_02Z],
                  xIN_Init        := enIN_State = enState.StateINIT,
@@ -168,6 +170,18 @@ fb_PnpVerAxis_02(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  lrIN_Delta_mm   := 0.5,
                  iIN_CurrentStep := iOUT_Step,
                  iIN_moveNumber  := ST180_PnpVerPos_e._max);
+
+fb_simu_axis180_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis180_02Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST180_Axis.axis180_02Z.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST180_02Z]),
+                    pIN_axisHW          := ADR(ST180_Axis.axis180_02Z.axis),
+                    rIN_PosActual       := ST180_Axis.axis180_02Z.rActPos,
+                    rIN_PosMax          := ST180_Axis.const180_02Z.POS_MAX,
+                    rIN_PosMin          := ST180_Axis.const180_02Z.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
 
 fb_axis180_02Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
@@ -183,7 +197,7 @@ fb_axis180_02Z(enIN_State       := enIN_State,
                rIN_VELOOPEN     := ST180_Axis.const180_02Z.POS_MAX / 4,
                rIN_JogInc       := AXIS.rTeachIncAxis,
                xIN_Execute      := fb_PnpVerAxis_02.xOUT_Execute,
-               xIN_Relative     :=,
+               xIN_Relative     := FALSE,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
                rIN_Position     := TO_REAL(fb_PnpVerAxis_02.OUT_MoveProfile.lrPosition),
@@ -195,19 +209,9 @@ fb_axis180_02Z(enIN_State       := enIN_State,
                xIN_Home         := ST180_Pnp_e.Init_HomeVertical_02 = iOUT_Step,
                xIN_Reset        := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                wAxisState       := fb_simu_axis180_02Z.wOUT_AxisState,
-               bOUT_AxisCntr    => fb_simu_axis180_02Z.bIN_AxisCntr,
+               bOUT_AxisCntr    => ST180_Axis.axis180_02Z.bCtrlHi,
                rOUT_ActPos      => ST180_Axis.axis180_02Z.rActPos,
-               axisIN_REF       := SIMU.axis_ref[Axis_e.ST180_02Z]);
-
-fb_simu_axis180_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis180_02Z.bOUT_AxisCntr,
-                    wIN_AxisState       := ST180_Axis.axis180_02Z.wState,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis180_02Z.rOUT_ActPos,
-                    rIN_PosMax          := ST180_Axis.const180_02Z.POS_MAX,
-                    rIN_PosMin          := ST180_Axis.const180_02Z.POS_MIN,
-                    rIN_PixMax          := 80,
-                    rIN_PixMin          := 0);
+               axisIN_REF       := fb_simu_axis180_02Z.pOUT_axisRef^);
 
 fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_10Z],
                  xIN_Init        := enIN_State = enState.StateINIT,
@@ -216,6 +220,18 @@ fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  lrIN_Delta_mm   := 0.5,
                  iIN_CurrentStep := iOUT_Step,
                  iIN_moveNumber  := ST180_PnpVerPos_e._max);
+
+fb_simu_axis180_10Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis180_10Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST180_Axis.axis180_10Z.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST180_10Z]),
+                    pIN_axisHW          := ADR(ST180_Axis.axis180_10Z.axis),
+                    rIN_PosActual       := ST180_Axis.axis180_10Z.rActPos,
+                    rIN_PosMax          := ST180_Axis.const180_10Z.POS_MAX,
+                    rIN_PosMin          := ST180_Axis.const180_10Z.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
 
 fb_axis180_10Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis),
@@ -243,19 +259,9 @@ fb_axis180_10Z(enIN_State       := enIN_State,
                xIN_Home         := ST180_Pnp_e.Init_HomeVertical_10 = iOUT_Step,
                xIN_Reset        := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                wAxisState       := fb_simu_axis180_10Z.wOUT_AxisState,
-               bOUT_AxisCntr    => fb_simu_axis180_10Z.bIN_AxisCntr,
+               bOUT_AxisCntr    => ST180_Axis.axis180_10Z.bCtrlHi,
                rOUT_ActPos      => ST180_Axis.axis180_10Z.rActPos,
-               axisIN_REF       := SIMU.axis_ref[Axis_e.ST180_10Z]);
-
-fb_simu_axis180_10Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                    bIN_AxisCntr        := fb_axis180_10Z.bOUT_AxisCntr,
-                    wIN_AxisState       := ST180_Axis.axis180_10Z.wState,
-                    udiIN_HomingTime_ms := 2000,
-                    rIN_PosActual       := fb_axis180_10Z.rOUT_ActPos,
-                    rIN_PosMax          := ST180_Axis.const180_10Z.POS_MAX,
-                    rIN_PosMin          := ST180_Axis.const180_10Z.POS_MIN,
-                    rIN_PixMax          := 80,
-                    rIN_PixMin          := 0);
+               axisIN_REF       := fb_simu_axis180_10Z.pOUT_axisRef^);
 
 //////////////////////////////////
 fb_griperLeft(xIN_Reset    := xIN_Reset OR (ST180_Pnp_e.RESET = iOUT_Step),
@@ -445,15 +451,9 @@ ST180_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST180_Pnp_e.INIT: (* Grundstellung ? *)
-    IF CONST.USE_SIMULATION THEN
-        iOUT_Step := ST180_Pnp_e.Init_HomeVertical_02;
-    ELSE
-        iOUT_Step := ST180_Pnp_e.Init_HomeVertical_02;
-    END_IF;
+    iOUT_Step := ST180_Pnp_e.Init_HomeVertical_02;
 
 ST180_Pnp_e.Init_HomeVertical_02:
-    fb_axis180_02Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_02Z].defProfile.lrVelocity;
-
     IF fb_axis180_02Z.xOUT_HOMED THEN
         iOUT_Step := ST180_Pnp_e.Init_Vertical_02_Up;
     END_IF
@@ -468,8 +468,6 @@ ST180_Pnp_e.Init_Vertical_02_Up:
     END_IF
 
 ST180_Pnp_e.Init_HomeVertical_10:
-    fb_axis180_10Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_10Z].defProfile.lrVelocity;
-
     IF fb_axis180_10Z.xOUT_HOMED THEN
         iOUT_Step := ST180_Pnp_e.Init_Vertical_10_Down;
     END_IF
@@ -548,30 +546,34 @@ ST180_Pnp_e.START: (*  *)
     END_IF;
 
 ST180_Pnp_e.waitOnMover:
-    IF __ISVALIDREF(Mover) THEN
+    IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST180] THEN
         iOUT_Step := ST180_Pnp_e.lift_piece_and_down_to_pick;
     END_IF
 
 ST180_Pnp_e.lift_piece_and_down_to_pick:
-    IF fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.down_empty).xOUT_InPos AND
+    IF xIN_NextStep AND
+       fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.down_empty).xOUT_InPos AND
        fb_PnpVerAxis_10.MoveTo(ST180_PnpHorPos_e.AS).xOUT_InPos THEN
         iOUT_Step := ST180_Pnp_e.close_griper_pick_piece;
     END_IF
 
 ST180_Pnp_e.close_griper_pick_piece:
-    IF (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_griperLeft.xOUT_inGS) AND
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_griperLeft.xOUT_inGS) AND
        (NOT _20_AUTO.recipe.st180.xUseVerRight OR fb_griperRight.xOUT_inGS) THEN
         iOUT_Step := ST180_Pnp_e.clamp_down_maintain_piece;
     END_IF
 
 ST180_Pnp_e.clamp_down_maintain_piece:
-    IF (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_clampLeft.xOUT_inAS) AND
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_clampLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st180.xUseVerRight OR fb_clampRight.xOUT_inAS) THEN
         iOUT_Step := ST180_Pnp_e.take_out_piece_and_put_down_lifter;
     END_IF
 
 ST180_Pnp_e.take_out_piece_and_put_down_lifter:
-    IF fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_full).xOUT_InPos AND
+    IF xIN_NextStep AND
+       fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_full).xOUT_InPos AND
        fb_PnpVerAxis_10.MoveTo(ST180_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST180_Pnp_e.SYNC_MOVER_LEAVE;
     END_IF
@@ -583,34 +585,36 @@ ST180_Pnp_e.SYNC_MOVER_LEAVE:
     END_IF
 
 ST180_Pnp_e.hor_move_to_extraction_pipe:
-    IF fb_PnpHorAxis.MoveTo(ST180_PnpHorPos_e.AS).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST180_PnpHorPos_e.AS).xOUT_InPos THEN
         iOUT_Step := ST180_Pnp_e.ver_down_in_pipe;
     END_IF
 
 ST180_Pnp_e.ver_down_in_pipe:
-    IF fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.down_full).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.down_full).xOUT_InPos THEN
         iOUT_Step := ST180_Pnp_e.open_griper_put_piece;
     END_IF
 
 ST180_Pnp_e.open_griper_put_piece:
-    IF (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_griperLeft.xOUT_inAS) AND
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_griperLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st180.xUseVerRight OR fb_griperRight.xOUT_inAS) THEN
         iOUT_Step := ST180_Pnp_e.clamp_up_to_rest_position;
     END_IF
 
 ST180_Pnp_e.clamp_up_to_rest_position:
-    IF (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_clampLeft.xOUT_inGS) AND
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_clampLeft.xOUT_inGS) AND
        (NOT _20_AUTO.recipe.st180.xUseVerRight OR fb_clampRight.xOUT_inGS) THEN
         iOUT_Step := ST180_Pnp_e.ver_up_empty;
     END_IF
 
 ST180_Pnp_e.ver_up_empty:
-    IF fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_empty).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_empty).xOUT_InPos THEN
         iOUT_Step := ST180_Pnp_e.hor_to_track_pos;
     END_IF
 
 ST180_Pnp_e.hor_to_track_pos:
-    IF fb_PnpHorAxis.MoveTo(ST180_PnpHorPos_e.GS).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST180_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST180_Pnp_e.DONE;
     END_IF
 

@@ -90,7 +90,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -628,7 +628,7 @@ ST125_Pnp_e.Pnp_Hor_ToTrackPos:
     END_IF
 
 ST125_Pnp_e.waitOnMover: (*  *)
-    IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
+    IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST125] THEN
         iOUT_Step := ST125_Pnp_e.Pnp_HandlingDown;
     END_IF;
 
