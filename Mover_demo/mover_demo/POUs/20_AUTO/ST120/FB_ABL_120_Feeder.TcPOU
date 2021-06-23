@@ -332,11 +332,11 @@ IO_BOX.Q8303_ST120_hublader_rechts_valve :=
     fb_hubladerRight.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 IO_BOX.Q8201_ST120_forderband_ein_l :=
-    (fb_feederLeft.xOUT_EnableFeeder OR NOT IO_BOX.I6404_ST120_teil_in_vereizelung_links) AND
+    (enIN_State = enState.StateAUTO) AND
     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 IO_BOX.Q8203_ST120_forderband_ein_r :=
-    (fb_feederRight.xOUT_EnableFeeder OR NOT IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) AND
+    (enIN_State = enState.StateAUTO) AND
     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
