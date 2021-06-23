@@ -6,7 +6,7 @@
 TYPE RecipeType_e :
 (
     Smart_Mini := 0,
-    // Smart := 1,
+    Smart := 1,
     // Blue := 2,
     // Smart_Kristall := 3,
     // Pro_Smart := 4,
@@ -25,6 +25,11 @@ END_TYPE
             <o>
               <v n="TextID">"Smart_Mini"</v>
               <v n="TextDefault">"0"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Smart"</v>
+              <v n="TextDefault">"1"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

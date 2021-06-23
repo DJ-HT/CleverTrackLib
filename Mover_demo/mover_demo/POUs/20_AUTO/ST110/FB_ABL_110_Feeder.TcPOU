@@ -80,6 +80,7 @@ VAR
     tof_color_sensor : TOF;
     ton_blow_piece   : TON;
 
+	rTest : REAL;
 END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
@@ -387,7 +388,9 @@ END_CASE;
 ]]></ST>
     </Implementation>
     <LineIds Name="FB_ABL_110_Feeder">
-      <LineId Id="3" Count="295" />
+      <LineId Id="3" Count="112" />
+      <LineId Id="384" Count="0" />
+      <LineId Id="117" Count="181" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>
