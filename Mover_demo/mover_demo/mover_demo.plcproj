@@ -658,6 +658,38 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\FB_ABL_185_Pnp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\FB_AUT_185.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_Axis.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_PnpHorPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_PnpVerPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_Pnp_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\VISU_Recipe_ST185.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\VISU_ST185.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="POUs\20_AUTO\StationList_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -757,6 +789,7 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST185" />
     <Folder Include="POUs\20_AUTO\ST130" />
     <Folder Include="POUs\20_AUTO\ST150" />
     <Folder Include="POUs\20_AUTO\ST175" />
