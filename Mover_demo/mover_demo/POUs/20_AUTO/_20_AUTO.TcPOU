@@ -13,12 +13,44 @@ END_VAR
 VAR
     recipeHMI       : REFERENCE TO Recipe_21_101_t;                // recipe values shown on the HMI
     iRecipeCopyDest : RecipeType_e := RecipeType_e._max  ; // selected recipe to copy to
+	fb_axis130_01Z : FB_AxisLIN_V1_1;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//Alarm Allgemein
 //POU_ERR_000(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
 //POU_MSG_000(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArMSG[1]));
+
+fb_axis130_01Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.ST130_01Z,
+               xIN_Quit         := xIN_Quit,
+               xIN_AX5000       := TRUE,
+               xIN_ENC_ABS      := TRUE, // TODO set accordingly
+               xIN_PARAMok      := TRUE,
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST130_Axis.const130_01Z.POS_MIN,
+               rIN_POSMAX       := ST130_Axis.const130_01Z.POS_MAX,
+               rIN_VELOMAX      := ST130_Axis.const130_01Z.VELO_MAX,
+               rIN_VELOMANU     := ST130_Axis.const130_01Z.VELO_MANU,
+               rIN_VELOOPEN     := ST130_Axis.const130_01Z.POS_MAX / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               rIN_JogVelo      := AXIS.rTeachVelo,
+               xIN_HomeExe      := FALSE,
+               xIN_HomeCalib    := FALSE,
+               xIN_Execute      := FALSE,
+               xIN_HomeExe      :=,
+               xIN_Relative     :=,
+               rIN_Position     := 0,
+               rIN_Velocity     := 0,
+               rIN_Acceleration := 5000,
+               rIN_Deceleration := 5000,
+               rIN_Jerk         := 500000,
+               xIN_Reset        := (ST110_Pnp_e.RESET = HMI.enState),
+               // output
+               rOUT_ActPos => ST130_Axis.axis130_01Z.rActPos,
+               axisIN_REF  := ST130_Axis.axis130_01Z.axis);
 
 recipeHMI REF= PERS.recipeList[PERS.iRecipeCurrent];
 recipe    REF= PERS.recipeList[PERS.iRecipeCurrent];
