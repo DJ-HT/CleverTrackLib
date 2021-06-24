@@ -167,7 +167,7 @@ fb_PnpVerAxis_02(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  xIN_Init        := enIN_State = enState.StateINIT,
                  xIN_Reset       := xIN_Reset,
                  lrIN_CurrPos    := fb_axis180_02Z.rOUT_ActPos,
-                 lrIN_Delta_mm   := 0.5,
+                 lrIN_Delta_mm   := 0.75,
                  iIN_CurrentStep := iOUT_Step,
                  iIN_moveNumber  := ST180_PnpVerPos_e._max);
 
@@ -504,29 +504,29 @@ ST180_Pnp_e.Init_HorizontalToTrack:
     END_IF
 
 ST180_Pnp_e.Init_check_if_pces_handled:
-    IF (NOT _20_AUTO.recipe.st180.xUseVerLeft AND fb_griperLeft.xOUT_inGS) OR
-       (NOT _20_AUTO.recipe.st180.xUseVerRight AND fb_griperRight.xOUT_inGS) THEN
+    IF (NOT _20_AUTO.recipe.st180.xUseVerLeft AND fb_griperLeft.xOUT_inAS) OR
+       (NOT _20_AUTO.recipe.st180.xUseVerRight AND fb_griperRight.xOUT_inAS) THEN
         // ERROR: a piece is present in an unused gripper
         bOUT_Error := 1;
         iOUT_Step  := ST180_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st180.xUseVerLeft AND
-          NOT fb_griperLeft.xOUT_inGS AND
+          NOT fb_griperLeft.xOUT_inAS AND
           _20_AUTO.recipe.st180.xUseVerRight AND
-          fb_griperRight.xOUT_inGS THEN
+          fb_griperRight.xOUT_inAS THEN
         // ERROR:  Initialisation failed. A piece is missing in the left griper.
         bOUT_Error := 2;
         iOUT_Step  := ST180_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st180.xUseVerLeft AND
-          fb_griperLeft.xOUT_inGS AND
+          fb_griperLeft.xOUT_inAS AND
           _20_AUTO.recipe.st180.xUseVerRight AND
-          NOT fb_griperRight.xOUT_inGS THEN
+          NOT fb_griperRight.xOUT_inAS THEN
         // ERROR:  Initialisation failed. A piece is missing in the right griper.
         bOUT_Error := 3;
         iOUT_Step  := ST180_Pnp_e.ERROR;
 
-    ELSIF NOT fb_griperLeft.xOUT_inGS AND NOT fb_griperRight.xOUT_inGS THEN
+    ELSIF NOT fb_griperLeft.xOUT_inAS AND NOT fb_griperRight.xOUT_inAS THEN
         iOUT_Step := ST180_Pnp_e.READY;
 
     ELSE

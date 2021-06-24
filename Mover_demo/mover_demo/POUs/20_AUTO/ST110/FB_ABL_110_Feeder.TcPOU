@@ -84,7 +84,7 @@ END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -222,7 +222,7 @@ xOUT_Wait := (iOUT_Step = ST110_Feeder_e.DONE);
 // TODO add simulation constant to prevent the output to be set
 IO_BOX.Q8000_ST110_freigabe_wf    := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 IO_BOX.Q8003_ST110_forderband_ein :=
-    ((iOUT_Step = ST110_Feeder_e.wait_on_a_piece) OR IO_BOX.Q8000_ST110_freigabe_wf) AND
+    (enIN_State >= enState.StateLEER) AND
     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 // blow out
