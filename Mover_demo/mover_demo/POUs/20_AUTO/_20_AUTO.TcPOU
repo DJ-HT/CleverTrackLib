@@ -47,7 +47,7 @@ fb_axis130_01Z(enIN_State       := enIN_State,
                rIN_Acceleration := 5000,
                rIN_Deceleration := 5000,
                rIN_Jerk         := 500000,
-               xIN_Reset        := (ST110_Pnp_e.RESET = HMI.enState),
+               xIN_Reset        := (enState.StateINIT = HMI.enState),
                // output
                rOUT_ActPos => ST130_Axis.axis130_01Z.rActPos,
                axisIN_REF  := ST130_Axis.axis130_01Z.axis);

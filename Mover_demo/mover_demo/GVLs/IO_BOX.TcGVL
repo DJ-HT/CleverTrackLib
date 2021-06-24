@@ -419,8 +419,9 @@ VAR_GLOBAL
 
     //-15505
     (* feeder ST125 - 8x IO *)
-    Q8400_ST125_freigabe_wf AT %Q* : BOOL; // q0: Freigabe WF
-    I8401_ST125_maximum_wf  AT %I* : BOOL; //  1: Maximum WF
+    Q8400_ST125_freigabe_REO AT %Q* : BOOL; // q0: Freigabe REO
+    I8401_ST125_maximum_wf   AT %I* : BOOL; //  1: Maximum WF
+    Q8402_ST125_freigabe_wf  AT %Q* : BOOL; // q2: Freigabe WF
 
     (* IO-Link Boxen 10191A5 *)
     (*******************************************************************)

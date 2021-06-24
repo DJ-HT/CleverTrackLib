@@ -85,12 +85,15 @@ VAR
 
     simu_start_tick : UDINT; // simulation start tick, used to simulate movement
 
+    TON_PieceInPivotLeft  : TON;
+    TON_PieceInPivotRight : TON;
+
 END_VAR
 VAR CONSTANT
     BAND_SIZE_FOR_TUBE_LEFT  : INT := 3; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
     BAND_SIZE_FOR_TUBE_RIGHT : INT := 2; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -115,6 +118,12 @@ END_IF;
 (*******************************************************************)
 TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
             PT := tIN_Timeout);
+
+TON_PieceInPivotLeft(IN := IO_BOX.I6404_ST120_teil_in_vereizelung_links,
+                     PT := DINT_TO_TIME(_20_AUTO.recipe.st120.TON_PieceInSeperatorLeft));
+
+TON_PieceInPivotRight(IN := IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts,
+                      PT := DINT_TO_TIME(_20_AUTO.recipe.st120.TON_PieceInSeperatorRight));
 
 (*******************************************************************)
 (* Bausteine *)
@@ -301,24 +310,6 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST120_Feeder_e.DONE);
 
-// 
-// I6400_ST120_schwenken_links_in_vertikal   
-// I6401_ST120_schwenken_links_in_horizontal 
-// I6402_ST120_schwenken_rechts_in_vertikal  
-// I6403_ST120_schwenken_rechts_in_horizontal
-// I6404_ST120_teil_in_vereizelung_links     
-// I6405_ST120_teil_in_vereinzelung_rechts   
-// 
-// 
-// I8200_ST120_alarm_forderband_l            
-// I8202_ST120_alarm_forderband_r            
-//                   
-// I8206_ST120_hublader_links_niveaukontrolle           
-// I8302_ST120_hublader_rechts_niveaukontrolle    
-//             
-// I8304_ST120_mini_maxi_knotrolle_zufurung_links 
-// I8305_ST120_mini_maxi_knotrolle_zufurung_rechts
-
 IO_BOX.Q5204_14_ST120_schwenken_links :=
     fb_pivotLeft.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
@@ -407,6 +398,10 @@ ST120_Feeder_e.Init_pneumatics:
             bOUT_Error := 1;
             iOUT_Step  := ST120_Feeder_e.ERROR;
 
+        ELSIF (IO_BOX.I6401_ST120_schwenken_links_in_horizontal AND
+               IO_BOX.I6403_ST120_schwenken_rechts_in_horizontal) THEN
+            iOUT_Step := ST120_Feeder_e.Init_pivot_to_feeder;
+
         ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT IO_BOX.I6404_ST120_teil_in_vereizelung_links) AND
               (_20_AUTO.recipe.st120.xUseVerRight AND IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) THEN
             // ERROR:  Initialisation failed. A piece is missing in the left griper.
@@ -460,8 +455,8 @@ ST120_Feeder_e.wait_tube_presence:
         END_IF
 
     ELSE
-        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR IO_BOX.I6404_ST120_teil_in_vereizelung_links) AND
-           (NOT _20_AUTO.recipe.st120.xUseVerRight OR IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) THEN
+        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR TON_PieceInPivotLeft.Q) AND
+           (NOT _20_AUTO.recipe.st120.xUseVerRight OR TON_PieceInPivotRight.Q) THEN
             iOUT_Step := ST120_Feeder_e.wait_pnp_ready;
         END_IF
     END_IF

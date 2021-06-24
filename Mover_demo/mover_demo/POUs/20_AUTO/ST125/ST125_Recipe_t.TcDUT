@@ -1,7 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <DUT Name="ST125_Recipe_t" Id="{01370c0a-eb7d-4b76-9605-310d55798193}">
-    <Declaration><![CDATA[TYPE ST125_Recipe_t : ST110_Recipe_t;
+    <Declaration><![CDATA[TYPE ST125_Recipe_t :
+STRUCT
+    xUseVerLeft           : BOOL; // Is the left vertical picker element is used
+    xUseVerRight          : BOOL; // Is the right vertical picker element is used
+    FeederConfig          : FeederDelays_t;
+    diPieceGoodMaxHeight  : DINT; // Good piece maximum value (value is the output of the analog board)
+    diPieceGoodMinHeight  : DINT; // Good piece minimum value (value is the output of the analog board)
+    diPieceWrongMaxHeight : DINT; // Bad piece maximum value (value is the output of the analog board)
+    diPieceWrongMinHeight : DINT; // Bad piece minimum value (value is the output of the analog board)
+END_STRUCT
 END_TYPE
 ]]></Declaration>
   </DUT>

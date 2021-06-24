@@ -67,7 +67,7 @@ VAR
     fb_feeder                    : FB_Feeder2Sensors;
     fifo                         : FB_Fifo(3);
     simu_feeder                  : FB_Simu_Feeder; // simulation of a feeder
-    simu_fifo_feeder_to_rotTable : FB_Fifo(20);    // fifo to hold a piece
+    simu_fifo_feeder_to_rotTable : FB_Fifo(30);    // fifo to hold a piece
     rtPutPiece                   : R_TRIG;         // trigger to add a piece
 
     rtPick : R_TRIG; // r_trig signal from the pick and place machine
@@ -76,14 +76,14 @@ VAR
     iSearchIndex       : INT; (* Initialization index TO see how many element we have AT startup
                                  or after an alarm *)
 
-    tof_color_sensor : TOF;
-    simu_blow        : BOOL; // todo remove when the hardware will be used
+    xPieceInSeparator      : BOOL; // The piece is at the entry of the round table
+    xPieceWrongInSeparator : BOOL; // A piece is detected at the separator but it is the wrong one
 
 END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -116,18 +116,18 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 
 fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
-          xIN_PieceInEnd            := , //IO_BOX.I6001_ST125_teil_in_vereinzelung,
-          xIN_PieceMax              := , //IO_BOX.I8101_ST125_maximum,
+          xIN_PieceInEnd            := IO_BOX.I8401_ST125_maximum_wf,
+          xIN_PieceMax              := IO_BOX.I8401_ST125_maximum_wf,
           xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
           refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
-          iIN_FifoSetMaxSensorValue := 10,
+          iIN_FifoSetMaxSensorValue := 20,
           diIN_SignlFilter_ms       := _20_AUTO.recipe.st125.FeederConfig.InFilterDelay,
           diIN_StartDelay_ms        := _20_AUTO.recipe.st125.FeederConfig.StartDelay,
           diIN_StopDelay_ms         := _20_AUTO.recipe.st125.FeederConfig.StopDelay,
           diIN_EmptyDelay_ms        := _20_AUTO.recipe.st125.FeederConfig.EmptyDelay);
 
-simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
-            xIN_PceSensor      := fb_feeder.xIN_PieceInEnd,
+simu_feeder(xIN_Enable         := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+            xIN_PceSensor      := fb_feeder.xIN_PieceMax,
             tIN_NewPieceTime   := 500,
             iIN_WaitTimeMin_ms := 500,
             iIN_WaitTimeMax_ms := 1000);
@@ -141,12 +141,6 @@ END_IF
 
 IF ST125_Feeder_e.Init_simu_home_table = iOUT_Step THEN
     fb_axis125_10W.rIN_Position := TO_REAL(120.0 - LMOD(ST125_Axis.axis125_10W.rActPos, 120.0));
-
-ELSIF ST125_Feeder_e.Init_home_table = iOUT_Step THEN
-    fb_axis125_10W.rIN_Position := TO_REAL(120.0 - LMOD(ST125_Axis.axis125_10W.rActPos, 120.0));
-
-ELSIF ST125_Feeder_e.Init_table_go_to_zero = iOUT_Step THEN
-    fb_axis125_10W.rIN_Position := 360 - ST125_Axis.axis125_10W.rActPos;
 
 ELSE
     fb_axis125_10W.rIN_Position := 120.0;
@@ -187,8 +181,8 @@ fb_axis125_10W(enIN_State     := enIN_State,
                xIN_OFF          := FALSE,
                rIN_Position     :=, // Is set above
                rIN_Velocity     := TO_REAL(720.0),
-               rIN_Acceleration := TO_REAL(1440.0),
-               rIN_Deceleration := TO_REAL(7200.0),
+               rIN_Acceleration := TO_REAL(2160.0),
+               rIN_Deceleration := TO_REAL(2160.0),
                rIN_Jerk         := TO_REAL(720000.0),
                rIN_PosManu      := AXIS.rTeachPos,
                xIN_Home         := ST125_feeder_e.Init_home_table = iOUT_Step,
@@ -200,6 +194,12 @@ fb_axis125_10W(enIN_State     := enIN_State,
                axisIN_REF    := simu_axis125_10W.pOUT_axisRef^);
 
 ST125_Axis.axis125_10W.rActPos := LREAL_TO_REAL(simu_axis125_10W.pOUT_axisRef^.NcToPlc.ModuloActPos);
+
+xPieceInSeparator := (IN.AI21_ST125_piece_height < _20_AUTO.recipe.st125.diPieceGoodMaxHeight) AND
+                     (IN.AI21_ST125_piece_height > _20_AUTO.recipe.st125.diPieceGoodMinHeight);
+
+xPieceWrongInSeparator := (IN.AI21_ST125_piece_height < _20_AUTO.recipe.st125.diPieceWrongMaxHeight) AND
+                          (IN.AI21_ST125_piece_height > _20_AUTO.recipe.st125.diPieceWrongMinHeight);
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -224,16 +224,11 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST125_Feeder_e.DONE);
 
-// // TODO add simulation constant to prevent the output to be set
-// IO_BOX.Q8000_ST125_freigabe_wf    := fb_feeder.xOUT_EnableFeeder; // AND SIMULATION CONSTANT
-// IO_BOX.Q8003_ST125_forderband_ein :=
-//     (iOUT_Step <> ST125_Feeder_e.DONE) AND NOT fb_feeder.xIN_PieceInEnd; // AND SIMULATION CONSTANT
-// 
-// // blow out
-// tof_color_sensor(IN := IO_BOX.I8004_ST125_farbsensor_lagekontrolle,
-//                  PT := DINT_TO_TIME(_20_AUTO.recipe.st125.blowPieceTof_ms));
-// 
-// simu_blow := tof_color_sensor.Q;
+IO_BOX.Q8402_ST125_freigabe_wf := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q8400_ST125_freigabe_REO :=
+    (IO_BOX.Q8402_ST125_freigabe_wf OR (ST125_Feeder_e.wait_on_a_piece = iOUT_Step)) AND
+    NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)
@@ -284,7 +279,7 @@ ST125_Feeder_e.Init_home_table:
         IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step := ST125_Feeder_e.Init_simu_home_table;
         ELSE
-            iOUT_Step := ST125_Feeder_e.Init_table_go_to_zero;
+            iOUT_Step := ST125_Feeder_e.Init_reset_search_index;
         END_IF
     END_IF
 
@@ -293,6 +288,7 @@ ST125_Feeder_e.Init_simu_home_table:
         iOUT_Step := ST125_Feeder_e.Init_reset_search_index;
     END_IF
 
+// unused, done by the drive itself, see drive configuration
 ST125_Feeder_e.Init_table_go_to_zero:
     IF fb_axis125_10W.xOUT_DONE THEN
         iOUT_Step := ST125_Feeder_e.Init_reset_search_index;
@@ -342,7 +338,7 @@ ST125_Feeder_e.check_if_feeding_necessary:
 
 ST125_Feeder_e.wait_on_a_piece:
     IF (FEEDER_SIMULATION AND CONST.USE_SIMULATION AND NOT simu_fifo_feeder_to_rotTable.IsEmpty()) OR
-       (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND fb_feeder.xIN_PieceInEnd) THEN
+       (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND xPieceInSeparator) THEN
         iOUT_Step := ST125_Feeder_e.load_piece;
         simu_fifo_feeder_to_rotTable.Pop(1);
     END_IF

@@ -90,7 +90,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -235,7 +235,7 @@ fb_gripperFilterhutLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                        [ST125_Cylinders_e.GreiferFilterhutLinks].toGS_wait_time));
 
-simu_gripperFilterhutLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_gripperFilterhutLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                           xIN_inGS   := IO_BOX.I6500_ST125_greiffer_filterhut_links_geschlossen,
                           xIN_inAS   := IO_BOX.I6501_ST125_greiffer_filterhut_links_offen,
                           xIN_valve  := fb_gripperFilterhutLeft.xOUT_VALVE,
@@ -261,7 +261,7 @@ fb_gripperFilterhutRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_
                          tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                         [ST125_Cylinders_e.GreiferFilterhutRechts].toGS_wait_time));
 
-simu_gripperFilterhutRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_gripperFilterhutRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                            xIN_inGS   := IO_BOX.I6502_ST125_greiffer_filterhut_rechts_geschlossen,
                            xIN_inAS   := IO_BOX.I6503_ST125_greiffer_filterhut_rechts_offen,
                            xIN_valve  := fb_gripperFilterhutRight.xOUT_VALVE,
@@ -288,7 +288,7 @@ fb_handlingSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
 
 simu_handlingSolerohrLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                           xIN_inGS   := IO_BOX.I6600_ST125_solerhor_handling_links_unten,
-                          xIN_inAS   := IO_BOX.I6601_ST125_solerhor_handling_links_oben,
+                          xIN_inAS   := NOT IO_BOX.I6600_ST125_solerhor_handling_links_unten, //IO_BOX.I6601_ST125_solerhor_handling_links_oben,
                           xIN_valve  := fb_handlingSolerohrLeft.xOUT_VALVE,
                           tIN_GS_ms  := 500,  //ms
                           tIN_AS_ms  := 500); //ms

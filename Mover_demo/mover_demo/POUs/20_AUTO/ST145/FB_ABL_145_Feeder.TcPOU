@@ -275,7 +275,7 @@ ST145_Feeder_e.Init_home_table:
         IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step := ST145_Feeder_e.Init_simu_home_table;
         ELSE
-            iOUT_Step := ST145_Feeder_e.Init_table_go_to_zero;
+            iOUT_Step := ST145_Feeder_e.Init_reset_search_index;
         END_IF
     END_IF
 
@@ -284,6 +284,7 @@ ST145_Feeder_e.Init_simu_home_table:
         iOUT_Step := ST145_Feeder_e.Init_reset_search_index;
     END_IF
 
+// unused, zero position is done by the configuration of the drive
 ST145_Feeder_e.Init_table_go_to_zero:
     IF fb_axis145_10W.xOUT_DONE THEN
         iOUT_Step := ST145_Feeder_e.Init_reset_search_index;
