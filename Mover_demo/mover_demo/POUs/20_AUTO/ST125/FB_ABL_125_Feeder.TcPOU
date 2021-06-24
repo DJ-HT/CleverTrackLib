@@ -79,6 +79,11 @@ VAR
     xPieceInSeparator      : BOOL; // The piece is at the entry of the round table
     xPieceWrongInSeparator : BOOL; // A piece is detected at the separator but it is the wrong one
 
+    // This ton is used to ensure that the piece is completely inside
+    // the entry of the round table so we are sure that we mesure correctly the piece up to
+    // the top
+    TON_waitForControl : TON;
+
 END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
@@ -110,6 +115,15 @@ iCurrentTableIndex := iCurrentTableIndex MOD 3;
 (*******************************************************************)
 TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
             PT := tIN_Timeout);
+
+xPieceInSeparator := (IN.AI21_ST125_piece_height < _20_AUTO.recipe.st125.diPieceGoodMaxHeight) AND
+                     (IN.AI21_ST125_piece_height > _20_AUTO.recipe.st125.diPieceGoodMinHeight);
+
+xPieceWrongInSeparator := (IN.AI21_ST125_piece_height < _20_AUTO.recipe.st125.diPieceWrongMaxHeight) AND
+                          (IN.AI21_ST125_piece_height > _20_AUTO.recipe.st125.diPieceWrongMinHeight);
+
+TON_waitForControl(IN := xPieceInSeparator,
+                   PT := DINT_TO_TIME(_20_AUTO.recipe.st125.TON_WaitPieceTime));
 
 (*******************************************************************)
 (* Bausteine *)
@@ -195,12 +209,6 @@ fb_axis125_10W(enIN_State     := enIN_State,
 
 ST125_Axis.axis125_10W.rActPos := LREAL_TO_REAL(simu_axis125_10W.pOUT_axisRef^.NcToPlc.ModuloActPos);
 
-xPieceInSeparator := (IN.AI21_ST125_piece_height < _20_AUTO.recipe.st125.diPieceGoodMaxHeight) AND
-                     (IN.AI21_ST125_piece_height > _20_AUTO.recipe.st125.diPieceGoodMinHeight);
-
-xPieceWrongInSeparator := (IN.AI21_ST125_piece_height < _20_AUTO.recipe.st125.diPieceWrongMaxHeight) AND
-                          (IN.AI21_ST125_piece_height > _20_AUTO.recipe.st125.diPieceWrongMinHeight);
-
 (*******************************************************************)
 (* OUTPUTS *)
 (*******************************************************************)
@@ -227,7 +235,9 @@ xOUT_Wait := (iOUT_Step = ST125_Feeder_e.DONE);
 IO_BOX.Q8402_ST125_freigabe_wf := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 IO_BOX.Q8400_ST125_freigabe_REO :=
-    (IO_BOX.Q8402_ST125_freigabe_wf OR (ST125_Feeder_e.wait_on_a_piece = iOUT_Step)) AND
+    (IO_BOX.Q8402_ST125_freigabe_wf OR
+    (ST125_Feeder_e.wait_on_a_piece = iOUT_Step) OR
+    (ST125_Feeder_e.DONE = iOUT_Step AND NOT xPieceInSeparator)) AND
     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
@@ -338,7 +348,7 @@ ST125_Feeder_e.check_if_feeding_necessary:
 
 ST125_Feeder_e.wait_on_a_piece:
     IF (FEEDER_SIMULATION AND CONST.USE_SIMULATION AND NOT simu_fifo_feeder_to_rotTable.IsEmpty()) OR
-       (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND xPieceInSeparator) THEN
+       (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND TON_waitForControl.Q) THEN
         iOUT_Step := ST125_Feeder_e.load_piece;
         simu_fifo_feeder_to_rotTable.Pop(1);
     END_IF

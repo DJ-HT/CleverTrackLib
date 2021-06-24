@@ -10,6 +10,7 @@ STRUCT
     diPieceGoodMinHeight  : DINT; // Good piece minimum value (value is the output of the analog board)
     diPieceWrongMaxHeight : DINT; // Bad piece maximum value (value is the output of the analog board)
     diPieceWrongMinHeight : DINT; // Bad piece minimum value (value is the output of the analog board)
+    TON_WaitPieceTime     : DINT; // additionnal waiting time of a piece to ensure the mesure is done correctly
 END_STRUCT
 END_TYPE
 ]]></Declaration>
