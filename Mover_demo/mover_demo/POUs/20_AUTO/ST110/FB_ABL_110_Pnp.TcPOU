@@ -437,9 +437,7 @@ ST110_Pnp_e.INIT: (* Grundstellung ? *)
     iOUT_Step := ST110_Pnp_e.Init_VerticalUp_04;
 
 ST110_Pnp_e.Init_VerticalUp_04:
-    fb_axis110_04Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_04Z].defProfile.lrVelocity;
-
-    IF fb_PnpVerAxisL.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos THEN
+    IF fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.Init_VerticalUp_02_03;
 
     END_IF
