@@ -567,9 +567,9 @@ ST110_Pnp_e.waitOnMover: (*  *)
 
 ST110_Pnp_e.PnP_Ver_ShuttleDown:
     IF xIN_NextStep AND
-       (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_InPos OR
+       (NOT fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_Moving OR
        NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
-       (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_InPos OR
+       (NOT fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_Moving OR
        NOT _20_AUTO.recipe.st110.xUseVerRight) AND
        fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
@@ -586,7 +586,7 @@ ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
     END_IF;
 
 ST110_Pnp_e.Vacum_off:
-    IF xIN_NextStep AND simu_gripperLeft.xOUT_inGS AND simu_gripperRight.xOUT_inGS THEN
+    IF xIN_NextStep AND fb_gripperLeft.xOUT_inGS AND fb_gripperRight.xOUT_inGS THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleUp;
     END_IF;
 
