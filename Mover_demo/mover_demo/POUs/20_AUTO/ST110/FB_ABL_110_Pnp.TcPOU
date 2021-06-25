@@ -86,7 +86,7 @@ VAR
 	
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -167,7 +167,7 @@ fb_PnpVerAxisL(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_
                xIN_Init        := enIN_State = enState.StateINIT,
                xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis110_02Z.rOUT_ActPos,
-               lrIN_Delta_mm   := 0.1,
+               lrIN_Delta_mm   := 0.05,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST110_PnpVerPos_e._max);
 
@@ -216,7 +216,7 @@ fb_PnpVerAxisR(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_
                xIN_Init        := enIN_State = enState.StateINIT,
                xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := fb_axis110_03Z.rOUT_ActPos,
-               lrIN_Delta_mm   := 0.1,
+               lrIN_Delta_mm   := 0.05,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST110_PnpVerPos_e._max);
 
@@ -262,7 +262,7 @@ fb_PnpVerAxisU(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_
                xIN_Init        := enState.StateINIT = enIN_State,
                xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := ST110_Axis.axis110_04Z.rActPos,
-               lrIN_Delta_mm   := 0.1,
+               lrIN_Delta_mm   := 0.05,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST110_PnpVerPushPos_e._max);
 
@@ -561,7 +561,7 @@ ST110_Pnp_e.PnP_Hor_ToTrackPos:
     END_IF
 
 ST110_Pnp_e.waitOnMover: (*  *)
-    IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST110] THEN
+    IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST110]) THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleDown;
     END_IF;
 
@@ -571,7 +571,6 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
        NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_InPos OR
        NOT _20_AUTO.recipe.st110.xUseVerRight) AND
-       fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos AND
        fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
     END_IF;
@@ -582,8 +581,7 @@ ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
        (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
-       NOT _20_AUTO.recipe.st110.xUseVerRight) AND
-       fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos THEN
+       NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
         iOUT_Step := ST110_Pnp_e.Vacum_off;
     END_IF;
 

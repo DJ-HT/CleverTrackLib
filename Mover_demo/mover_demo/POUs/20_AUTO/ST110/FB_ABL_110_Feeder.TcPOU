@@ -77,14 +77,14 @@ VAR
     iSearchIndex       : INT; (* Initialization index TO see how many element we have AT startup
                                  or after an alarm *)
 
-    tof_color_sensor : TOF;
-    ton_blow_piece   : TON;
+    ton_wait_blow_piece : TON;
+    tof_color_sensor    : TOF;
 
 END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -111,6 +111,22 @@ iCurrentTableIndex := iCurrentTableIndex MOD 3;
 (*******************************************************************)
 TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
             PT := tIN_Timeout);
+
+// we use a set reset to be sure that the blower blow event if the time
+// is not elapsed
+IF IO_BOX.I8004_ST110_farbsensor_lagekontrolle THEN
+    ton_wait_blow_piece.IN := TRUE;
+
+ELSIF NOT IO_BOX.I8004_ST110_farbsensor_lagekontrolle AND ton_wait_blow_piece.Q THEN
+    ton_wait_blow_piece.IN := FALSE;
+
+END_IF
+
+ton_wait_blow_piece(IN :=, // see code above
+                    PT := DINT_TO_TIME(_20_AUTO.recipe.st110.waitBlowPieceTon_ms));
+
+tof_color_sensor(IN := ton_wait_blow_piece.Q,
+                 PT := DINT_TO_TIME(_20_AUTO.recipe.st110.blowPieceTof_ms));
 
 (*******************************************************************)
 (* Bausteine *)
@@ -226,8 +242,6 @@ IO_BOX.Q8003_ST110_forderband_ein :=
     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 // blow out
-tof_color_sensor(IN := IO_BOX.I8004_ST110_farbsensor_lagekontrolle,
-                 PT := DINT_TO_TIME(_20_AUTO.recipe.st110.blowPieceTof_ms));
 
 IO_BOX.Q8005_ST110_blow_piece := fb_feeder.xOUT_EnableFeeder AND
                                  tof_color_sensor.Q AND

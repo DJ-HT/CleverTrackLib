@@ -81,7 +81,7 @@ END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -275,7 +275,7 @@ ST145_Feeder_e.Init_home_table:
         IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step := ST145_Feeder_e.Init_simu_home_table;
         ELSE
-            iOUT_Step := ST145_Feeder_e.Init_reset_search_index;
+            iOUT_Step := ST145_Feeder_e.Init_table_go_to_zero;
         END_IF
     END_IF
 
