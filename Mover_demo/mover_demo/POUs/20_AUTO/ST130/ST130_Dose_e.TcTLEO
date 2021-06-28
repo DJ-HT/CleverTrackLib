@@ -11,10 +11,12 @@ ST130_Dose_e :
 
     INIT := 100, // Initialisieren 
     Init_HomeVertical_02,
-    Init_Vertical_02_at_position,
+    Init_Vertical_01Z_at_position,
     Init_HomeVertical_10,
     Init_Vertical_10_Down,
-    Init_Pneumatics,
+    Init_close_down_feeder,
+    Init_open_up_feeder,
+	Init_clamp_up,
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
@@ -22,10 +24,16 @@ ST130_Dose_e :
     waitOnMover,     // wait until the mover is there
     MOVER_NEEDED_OP, // Ab here, a mover in position is needed to perform the action
 
-	check_filterhut_presence, // when the shuttle is at position, we control the presence of the filterhut
-	lift_up_piece_in_workposition, // we lift the piece to place it in the funel
-	load_powder_and_vibrate, 
-	release_piece,
+    check_filterhut_presence,      // when the shuttle is at position, we control the presence of the filterhut
+	close_up_feeder,
+    lift_up_piece_in_workposition, // we lift the piece to place it in the funel
+	open_down_feeder,
+    load_powder_and_vibrate,
+    close_down_feeder,
+    release_piece_and_open_up_feeder,
+	open_up_feeder,
+	clamp_down,
+	clamp_up,
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
     MOVER_FREE_OP,    // here, operation without mover can be done.
@@ -61,7 +69,7 @@ check level NIO Box
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_Vertical_02_at_position"</v>
+              <v n="TextID">"Init_Vertical_01Z_at_position"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
@@ -76,7 +84,17 @@ check level NIO Box
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_Pneumatics"</v>
+              <v n="TextID">"Init_close_down_feeder"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_open_up_feeder"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_clamp_up"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
@@ -106,7 +124,17 @@ check level NIO Box
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"close_up_feeder"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"lift_up_piece_in_workposition"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"open_down_feeder"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
@@ -116,7 +144,27 @@ check level NIO Box
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"release_piece"</v>
+              <v n="TextID">"close_down_feeder"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"release_piece_and_open_up_feeder"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"open_up_feeder"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"clamp_down"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"clamp_up"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
