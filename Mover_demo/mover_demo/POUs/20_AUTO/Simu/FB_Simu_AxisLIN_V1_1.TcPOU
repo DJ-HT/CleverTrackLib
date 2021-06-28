@@ -37,6 +37,7 @@ END_VAR
 IF xIN_InSimu THEN
     pOUT_axisRef := pIN_axisSimu;
     power_real_axis(Axis            := pIN_axisHW^,
+                    Enable          := NOT power_real_axis.Error,
                     Enable_Positive := TRUE,
                     Enable_Negative := TRUE);
 
