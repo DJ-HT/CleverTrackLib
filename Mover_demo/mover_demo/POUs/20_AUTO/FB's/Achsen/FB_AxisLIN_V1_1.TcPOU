@@ -299,7 +299,7 @@ END_VAR
 			(enIN_State<StateREF) OR (enIN_State=StateREADY) OR						//STATE
 			(enIN_State=StateSTOP) OR (enIN_State=StateALARM) OR	
 			(	(enIN_State=StateMANU) AND (bJogMode=4) AND							//MANU MOVE
-					NOT _FB_btJOGneg.pbtIN^.press AND NOT _FB_btJOGneg.pbtIN^.press ) OR
+					NOT _FB_btJOGpos.pbtIN^.press AND NOT _FB_btJOGneg.pbtIN^.press ) OR
 			(	NOT xIN_Free AND ((enIN_State>StateINIT) OR	(bJogMode>2)) ) 		//FREE
 		);
 	_MC_Power.Enable := _02_SAFETY.xOUT_ESdelOut AND _02_SAFETY.xOUT_MonDelOut AND TOF_PowSafety.Q AND 
