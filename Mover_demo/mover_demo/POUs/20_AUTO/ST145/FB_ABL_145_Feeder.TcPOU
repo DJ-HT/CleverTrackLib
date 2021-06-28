@@ -163,8 +163,8 @@ simu_axis145_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATI
                  rIN_PixMin          := 0);
 
 fb_axis145_10W(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st145_10W,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST145_10W]),
+               xIN_DisButtons := ,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE,
                xIN_FREE       := NOT xIN_RotTableBlockedByPnp,

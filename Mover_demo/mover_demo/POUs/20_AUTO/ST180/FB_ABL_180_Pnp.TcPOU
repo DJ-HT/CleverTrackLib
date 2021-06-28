@@ -124,8 +124,8 @@ fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_0
               iIN_moveNumber  := ST180_PnpHorPos_e._max);
 
 fb_axis180_01Y(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st180_01Y,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST180_01Y]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -170,8 +170,8 @@ fb_PnpVerAxis_02(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  iIN_moveNumber  := ST180_PnpVerPos_e._max);
 
 fb_axis180_02Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st180_02Z,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST180_02Z]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,
@@ -218,8 +218,8 @@ fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  iIN_moveNumber  := ST180_PnpVerPos_e._max);
 
 fb_axis180_10Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st180_10Z,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST180_10Z]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,

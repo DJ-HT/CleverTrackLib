@@ -110,7 +110,7 @@ VAR
 	_FB_btMOVE		: FB_BUTTON;		//Button Move   
 	_FB_btJOGneg	: FB_BUTTON;		//Button Manu Move NEGATIVE
 	_FB_btJOGpos	: FB_BUTTON;		//Button Manu Move POSITIVE 
-	_FB_btHOME	: FB_BUTTON;			//Button Manu Homing 
+	_FB_btHOME		: FB_BUTTON;		//Button Manu Homing 
 	//Reset
 	iStepAxisReset	: INT;			//Step Ablauf Reset
 	iCountTryReset	: INT;				//Zähle Reset-Versuche
@@ -119,6 +119,7 @@ VAR
 	TON_WaitReset	: TON;				//Warte nach Reset
 	TON_ToutReset	: TON;				//Reset-Ablauf Timeout
 	TOF_PowSafety	: TOF;				//Achse PowerOFF über Safety
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -148,7 +149,6 @@ END_VAR
 						bCalibrationCam:= xIN_HomeCalib );
 						
 //***************************** Buttons ************************************
-	IF NOT xIN_DisButtons THEN
 		//	Jog Mode OFF 
 		_FB_btOFF(pbtIN:= ADR(parIN_Buttons^[0]),
 		xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
@@ -205,7 +205,7 @@ END_VAR
 			ELSIF _FB_btMOVE.pbtIN^.rtrig THEN
 				bJogMode := 4;
 			END_IF
-	END_IF	
+
 
 						
 //***************************** Velocity / ACC-DEC-JERK *******************
@@ -421,18 +421,5 @@ END_VAR
 	xOUT_DONE 	:= 	(NOT xIN_Relative AND _MC_MoveAbs.Done) OR
 					(xIN_Relative AND _MC_MoveRel.Done);]]></ST>
     </Implementation>
-    <LineIds Name="FB_AxisLIN_V1_1">
-      <LineId Id="3" Count="25" />
-      <LineId Id="417" Count="0" />
-      <LineId Id="29" Count="38" />
-      <LineId Id="436" Count="0" />
-      <LineId Id="452" Count="0" />
-      <LineId Id="437" Count="13" />
-      <LineId Id="434" Count="0" />
-      <LineId Id="418" Count="0" />
-      <LineId Id="69" Count="52" />
-      <LineId Id="137" Count="159" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

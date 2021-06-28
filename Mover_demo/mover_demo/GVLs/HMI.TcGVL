@@ -43,7 +43,10 @@ VAR_GLOBAL
     //Manual pneumatics
     // see below for button button instance 
     btManuCylinders : ARRAY[0..StationList_e._max] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF structButton;
-    (*
+    (* 
+	 * [StationList_e.ST105]
+     * [0]: Zyklus [1]: Robot get [2]: Robot set [3] Feeder
+	 *
      * [StationList_e.ST110]
      * [0]: Zyklus [1]: Vacum Gripper left [2]: Vacum Gripper right [3]: Feeder
      *

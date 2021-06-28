@@ -131,8 +131,8 @@ fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis145_01Y(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st145_01Y,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST145_01Y]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -179,8 +179,8 @@ fb_simu_axis145_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis145_02Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st145_02Z,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST145_02Z]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,

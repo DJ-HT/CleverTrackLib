@@ -136,8 +136,8 @@ fb_simu_axis110_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis110_01Y(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.ST110_01Y,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST110_01Y]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -181,8 +181,8 @@ fb_simu_axis110_02Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
                     rIN_PixMin    := 0);
 
 fb_axis110_02Z(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST110_02Z,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST110_02Z]),
+               xIN_DisButtons := ,
                xIN_Quit       := xIN_Quit,
                xIN_AX5000     := TRUE,
                xIN_ENC_ABS    := TRUE, // TODO set accordingly
@@ -230,8 +230,8 @@ fb_simu_axis110_03Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
                     rIN_PixMin    := 0);
 
 fb_axis110_03Z(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST110_03Z,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST110_03Z]),
+               xIN_DisButtons := ,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE, (*TODO*)
                xIN_FREE       := TRUE,
@@ -276,8 +276,8 @@ fb_simu_axis110_04Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
                     rIN_PixMin    := 0);
 
 fb_axis110_04Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.ST110_04Z,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST110_04Z]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_AX5000       := TRUE,
                xIN_ENC_ABS      := TRUE,
@@ -631,9 +631,5 @@ ST110_Pnp_e.ERROR: (* ERROR *) ;
 END_CASE;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_ABL_110_Pnp">
-      <LineId Id="3" Count="538" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

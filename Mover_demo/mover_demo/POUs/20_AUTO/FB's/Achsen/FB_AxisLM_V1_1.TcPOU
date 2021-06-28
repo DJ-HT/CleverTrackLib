@@ -182,7 +182,6 @@ END_VAR
 	
 
 //***************************** Buttons ************************************
-	IF NOT xIN_DisButtons THEN
 		//	Jog Mode OFF 
 		_FB_btOFF(pbtIN:= ADR(parIN_Buttons^[0]),
 		xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
@@ -238,7 +237,7 @@ END_VAR
 				ELSIF _FB_btMOVE.pbtIN^.rtrig THEN
 					bJogMode := 4;
 				END_IF
-	END_IF;
+
 						
 //***************************** Velocity / ACC-DEC-JERK *******************
 	(* Velocity *)
@@ -513,12 +512,5 @@ END_IF;
 					
 				]]></ST>
     </Implementation>
-    <LineIds Name="FB_AxisLM_V1_1">
-      <LineId Id="3" Count="22" />
-      <LineId Id="512" Count="0" />
-      <LineId Id="26" Count="39" />
-      <LineId Id="67" Count="287" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

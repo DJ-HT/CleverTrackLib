@@ -179,8 +179,8 @@ simu_axis115_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATI
                  rIN_PixMin          := 0);
 
 fb_axis115_10W(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st115_10W,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST115_10W]),
+               xIN_DisButtons := ,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE,
                xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
@@ -393,13 +393,5 @@ ST115_Feeder_e.ERROR: (* ERROR *) ;
 END_CASE;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_ABL_115_Feeder">
-      <LineId Id="3" Count="25" />
-      <LineId Id="379" Count="9" />
-      <LineId Id="29" Count="2" />
-      <LineId Id="390" Count="0" />
-      <LineId Id="32" Count="261" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

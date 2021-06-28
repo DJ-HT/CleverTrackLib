@@ -140,8 +140,8 @@ fb_simu_axis125_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis125_01Y(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st125_01Y,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST125_01Y]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -188,8 +188,8 @@ fb_simu_axis125_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis125_02Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st125_02Z,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST125_02Z]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -714,9 +714,5 @@ ST125_Pnp_e.ERROR: (* ERROR *) ;
 END_CASE;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_ABL_125_Pnp">
-      <LineId Id="3" Count="617" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
