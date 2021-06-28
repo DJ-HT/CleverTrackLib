@@ -89,7 +89,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    DOSE_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    DOSE_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -132,7 +132,7 @@ fb_simu_axis130_01Z(xIN_InSimu    := DOSE_SIMULATION AND CONST.USE_SIMULATION,
                     rIN_PosActual := ST130_Axis.axis130_01Z.rActPos,
                     rIN_PosMax    := ST130_Axis.const130_01Z.POS_MAX,
                     rIN_PosMin    := ST130_Axis.const130_01Z.POS_MIN,
-                    rIN_PixMax    := 100,
+                    rIN_PixMax    := 60,
                     rIN_PixMin    := 0);
 
 fb_axis130_01Z(enIN_State       := enIN_State,
