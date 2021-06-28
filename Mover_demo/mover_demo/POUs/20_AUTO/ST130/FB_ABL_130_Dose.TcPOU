@@ -87,9 +87,11 @@ VAR
     fb_viebrieren_kammer_links  : FB_ZylMo2El_V2_1;
     fb_viebrieren_kammer_rechts : FB_ZylMo2El_V2_1;
 
+    TON_load_mixture : TON;
+
 END_VAR
 VAR CONSTANT
-    DOSE_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    DOSE_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -114,6 +116,9 @@ END_IF;
 (*******************************************************************)
 TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
             PT := tIN_Timeout);
+
+TON_load_mixture(IN := ST130_Dose_e.load_powder_and_vibrate = iOUT_Step,
+                 PT := DINT_TO_TIME(_20_AUTO.recipe.st130.diLoadMixture_ms));
 
 (*******************************************************************)
 (* Bausteine *)
@@ -207,7 +212,7 @@ fb_axis130_10Z(enIN_State       := enIN_State,
                rIN_Deceleration := TO_REAL(fb_VerAxis_10.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_VerAxis_10.OUT_MoveProfile.lrJerk),
                rIN_PosManu      :=,
-               xIN_Home         := ST130_Dose_e.Init_HomeVertical_02 = iOUT_Step,
+               xIN_Home         := ST130_Dose_e.Init_HomeVertical_10 = iOUT_Step,
                xIN_Reset        := (ST130_Dose_e.RESET = iOUT_Step) OR xIN_Reset,
                wAxisState       := fb_simu_axis130_10Z.wOUT_AxisState,
                bOUT_AxisCntr    => ST130_Axis.axis130_10Z.bCtrlHi,
@@ -222,10 +227,11 @@ fb_Kammer_Offnen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iOUT_S
                        xIN_GS       := simu_Kammer_Offnen_Links.xOUT_inGS,
                        xIN_AS       := simu_Kammer_Offnen_Links.xOUT_inAS,
                        xIN_FREE     := TRUE,
-                       xINtoGS      := ST130_Dose_e.RESET = iOUT_Step,
-                       xINtoAS      := FALSE, // ST130_Dose_e.RESET = iOUT_Step,
-                       tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
-                                                        [ST130_Cylinders_e.Kammer_Offnen_Links].toAS_alarm_time),
+                       xINtoGS      := ST130_Dose_e.Init_open_up_feeder = iOUT_Step OR
+                                       ST130_Dose_e.close_up_feeder = iOUT_Step,
+                       xINtoAS   := _20_AUTO.recipe.st130.xUseVerLeft AND ST130_Dose_e.open_up_feeder = iOUT_Step,
+                       tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
+                                                     [ST130_Cylinders_e.Kammer_nachfullen_Links].toAS_alarm_time),
                        tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                      [ST130_Cylinders_e.Kammer_Offnen_Links].toGS_alarm_time),
                        tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
@@ -247,10 +253,11 @@ fb_Kammer_Offnen_Rechts(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iOUT_
                         xIN_GS       := simu_Kammer_Offnen_Rechts.xOUT_inGS,
                         xIN_AS       := simu_Kammer_Offnen_Rechts.xOUT_inAS,
                         xIN_FREE     := TRUE,
-                        xINtoGS      := ST130_Dose_e.RESET = iOUT_Step,
-                        xINtoAS      := FALSE, // _20_AUTO.recipe.st130.xUseVerRight AND ST130_Dose_e.open_griper_put_piece = iOUT_Step,
-                        tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
-                                                         [ST130_Cylinders_e.Kammer_Offnen_Rechts].toAS_alarm_time),
+                        xINtoGS      := ST130_Dose_e.Init_open_up_feeder = iOUT_Step OR
+                                        ST130_Dose_e.close_up_feeder = iOUT_Step,
+                        xINtoAS   := _20_AUTO.recipe.st130.xUseVerRight AND ST130_Dose_e.open_up_feeder = iOUT_Step,
+                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
+                                                      [ST130_Cylinders_e.Kammer_Offnen_Rechts].toAS_alarm_time),
                         tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                       [ST130_Cylinders_e.Kammer_Offnen_Rechts].toGS_alarm_time),
                         tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
@@ -272,11 +279,13 @@ fb_Kammer_nachfullen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iO
                            xIN_GS       := simu_Kammer_nachfullen_Links.xOUT_inGS,
                            xIN_AS       := simu_Kammer_nachfullen_Links.xOUT_inAS,
                            xIN_FREE     := TRUE,
-                           xINtoGS      := ST130_Dose_e.RESET = iOUT_Step,
-                           xINtoAS      := FALSE, // _20_AUTO.recipe.st130.xUseVerLeft AND (ST130_Dose_e.clamp_down_maintain_piece = iOUT_Step),
-                           tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
-                                                            [ST130_Cylinders_e.Kammer_nachfullen_Links]
-                                                            .toAS_alarm_time),
+                           xINtoGS      := ST130_Dose_e.Init_close_down_feeder = iOUT_Step OR
+                                           ST130_Dose_e.close_down_feeder = iOUT_Step,
+                           xINtoAS := _20_AUTO.recipe.st130.xUseVerLeft AND ST130_Dose_e.open_down_feeder = iOUT_Step,
+                           tIN_ErrAS
+                               := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
+                                                   [ST130_Cylinders_e.Kammer_nachfullen_Links]
+                                                   .toAS_alarm_time),
                            tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                          [ST130_Cylinders_e.Kammer_nachfullen_Links].toGS_alarm_time),
                            tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
@@ -298,11 +307,13 @@ fb_Kammer_nachfullen_Rechts(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = i
                             xIN_GS       := simu_Kammer_nachfullen_Rechts.xOUT_inGS,
                             xIN_AS       := simu_Kammer_nachfullen_Rechts.xOUT_inAS,
                             xIN_FREE     := TRUE,
-                            xINtoGS      := ST130_Dose_e.RESET = iOUT_Step,
-                            xINtoAS      := FALSE, //_20_AUTO.recipe.st130.xUseVerRight AND (ST130_Dose_e.clamp_down_maintain_piece = iOUT_Step),
-                            tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
-                                                             [ST130_Cylinders_e.Kammer_nachfullen_Rechts]
-                                                             .toAS_alarm_time),
+                            xINtoGS      := ST130_Dose_e.Init_close_down_feeder = iOUT_Step OR
+                                            ST130_Dose_e.close_down_feeder = iOUT_Step,
+                            xINtoAS :=
+                                _20_AUTO.recipe.st130.xUseVerRight AND ST130_Dose_e.open_down_feeder = iOUT_Step,
+                            tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
+                                                          [ST130_Cylinders_e.Kammer_nachfullen_Rechts]
+                                                          .toAS_alarm_time),
                             tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                           [ST130_Cylinders_e.Kammer_nachfullen_Rechts]
                                                           .toGS_alarm_time),
@@ -327,11 +338,12 @@ fb_viebrieren_kammer_links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iO
                            xIN_GS       := NOT fb_viebrieren_kammer_links.xOUT_VALVE, // no sensor here
                            xIN_AS       := fb_viebrieren_kammer_links.xOUT_VALVE,     // no sensor here
                            xIN_FREE     := TRUE,
-                           xINtoGS      := ST130_Dose_e.RESET = iOUT_Step,
-                           xINtoAS      := FALSE, //_20_AUTO.recipe.st130.xUseVerRight AND (ST130_Dose_e.clamp_down_maintain_piece = iOUT_Step),
-                           tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
-                                                            [ST130_Cylinders_e.Vibrieren_Kammer_Links]
-                                                            .toAS_alarm_time),
+                           xINtoGS      := ST130_Dose_e.load_powder_and_vibrate <> iOUT_Step,
+                           xINtoAS      := _20_AUTO.recipe.st130.xUseVerLeft AND
+                                           (ST130_Dose_e.load_powder_and_vibrate = iOUT_Step),
+                           tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
+                                                         [ST130_Cylinders_e.Vibrieren_Kammer_Links]
+                                                         .toAS_alarm_time),
                            tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                          [ST130_Cylinders_e.Vibrieren_Kammer_Links]
                                                          .toGS_alarm_time),
@@ -349,11 +361,12 @@ fb_viebrieren_kammer_rechts(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = i
                             xIN_GS       := NOT fb_viebrieren_kammer_rechts.xOUT_VALVE, // no sensor here
                             xIN_AS       := fb_viebrieren_kammer_rechts.xOUT_VALVE,     // no sensor here
                             xIN_FREE     := TRUE,
-                            xINtoGS      := ST130_Dose_e.RESET = iOUT_Step,
-                            xINtoAS      := FALSE, //_20_AUTO.recipe.st130.xUseVerRight AND (ST130_Dose_e.clamp_down_maintain_piece = iOUT_Step),
-                            tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
-                                                             [ST130_Cylinders_e.Vibrieren_Kammer_Rechts]
-                                                             .toAS_alarm_time),
+                            xINtoGS      := ST130_Dose_e.load_powder_and_vibrate <> iOUT_Step,
+                            xINtoAS      := _20_AUTO.recipe.st130.xUseVerRight AND
+                                            (ST130_Dose_e.load_powder_and_vibrate = iOUT_Step),
+                            tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
+                                                          [ST130_Cylinders_e.Vibrieren_Kammer_Rechts]
+                                                          .toAS_alarm_time),
                             tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                           [ST130_Cylinders_e.Vibrieren_Kammer_Rechts]
                                                           .toGS_alarm_time),
@@ -371,11 +384,12 @@ fb_Niederhalter_Patrone(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iOUT_
                         xIN_GS       := simu_Niederhalter_Patrone.xOUT_inGS,
                         xIN_AS       := simu_Niederhalter_Patrone.xOUT_inAS,
                         xIN_FREE     := TRUE,
-                        xINtoGS      := ST130_Dose_e.RESET = iOUT_Step,
-                        xINtoAS      := FALSE, //_20_AUTO.recipe.st130.xUseVerRight AND (ST130_Dose_e.clamp_down_maintain_piece = iOUT_Step),
-                        tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
-                                                         [ST130_Cylinders_e.Niederhalter_Patrone]
-                                                         .toAS_alarm_time),
+                        xINtoGS      := ST130_Dose_e.Init_clamp_up = iOUT_Step OR
+                                        ST130_Dose_e.clamp_up = iOUT_Step,
+                        xINtoAS   := ST130_Dose_e.clamp_down = iOUT_Step,
+                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
+                                                      [ST130_Cylinders_e.Niederhalter_Patrone]
+                                                      .toAS_alarm_time),
                         tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                       [ST130_Cylinders_e.Niederhalter_Patrone]
                                                       .toGS_alarm_time),
@@ -485,9 +499,9 @@ ST130_Dose_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST130_Dose_e.INIT: (* Grundstellung ? *)
-    iOUT_Step := ST130_Dose_e.Init_Vertical_02_at_position;
+    iOUT_Step := ST130_Dose_e.Init_Vertical_01Z_at_position;
 
-ST130_Dose_e.Init_Vertical_02_at_position:
+ST130_Dose_e.Init_Vertical_01Z_at_position:
     IF fb_VerAxis_01.MoveTo(ST130_DosierkammerPos_e.down_AS).xOUT_InPos THEN
         IF fb_axis130_10Z.xOUT_READY OR fb_axis130_10Z.xOUT_HOMED THEN
             iOUT_Step := ST130_Dose_e.Init_Vertical_10_Down;
@@ -503,13 +517,25 @@ ST130_Dose_e.Init_HomeVertical_10:
 
 ST130_Dose_e.Init_Vertical_10_Down:
     IF fb_VerAxis_10.MoveTo(ST130_PatroneAushebenPos_e.down_GS).xOUT_InPos THEN
-        iOUT_Step := ST130_Dose_e.Init_Pneumatics;
+        iOUT_Step := ST130_Dose_e.Init_close_down_feeder;
     END_IF
 
-ST130_Dose_e.Init_Pneumatics:
-    IF TRUE THEN
+ST130_Dose_e.Init_close_down_feeder:
+    IF (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_Offnen_Links.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_Offnen_Rechts.xOUT_inGS) THEN
         iOUT_Step := ST130_Dose_e.READY;
     END_IF
+
+ST130_Dose_e.Init_open_up_feeder:
+    IF (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_nachfullen_Links.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_nachfullen_Rechts.xOUT_inAS) THEN
+        iOUT_Step := ST130_Dose_e.Init_clamp_up;
+    END_IF
+	
+	ST130_Dose_e.Init_clamp_up:
+	IF fb_Niederhalter_Patrone.xOUT_inGS THEN
+        iOUT_Step := ST130_Dose_e.READY;
+	END_IF
 
 (***** READY / INIT DONE *****)
 ST130_Dose_e.READY:   (* Start AUTO:END:LEER:STEP *)
@@ -525,6 +551,64 @@ ST130_Dose_e.START: (*  *)
 
 ST130_Dose_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST130] THEN
+        iOUT_Step := ST130_Dose_e.check_filterhut_presence;
+    END_IF
+
+ST130_Dose_e.check_filterhut_presence:
+    IF xIN_NextStep AND TRUE THEN
+        iOUT_Step := ST130_Dose_e.close_up_feeder;
+    END_IF
+
+ST130_Dose_e.close_up_feeder:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_nachfullen_Links.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_nachfullen_Rechts.xOUT_inGS) THEN
+        iOUT_Step := ST130_Dose_e.lift_up_piece_in_workposition;
+    END_IF
+
+ST130_Dose_e.lift_up_piece_in_workposition:
+    IF xIN_NextStep AND fb_VerAxis_10.MoveTo(ST130_PatroneAushebenPos_e.up_AS).xOUT_InPos THEN
+        iOUT_Step := ST130_Dose_e.open_down_feeder;
+    END_IF
+
+ST130_Dose_e.open_down_feeder:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_Offnen_Links.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_Offnen_Rechts.xOUT_inAS) THEN
+        iOUT_Step := ST130_Dose_e.load_powder_and_vibrate;
+    END_IF
+
+ST130_Dose_e.load_powder_and_vibrate:
+    IF xIN_NextStep AND TON_load_mixture.Q THEN
+        iOUT_Step := ST130_Dose_e.close_down_feeder;
+    END_IF
+
+ST130_Dose_e.close_down_feeder:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_Offnen_Links.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_Offnen_Rechts.xOUT_inGS) THEN
+        iOUT_Step := ST130_Dose_e.release_piece_and_open_up_feeder;
+    END_IF
+
+ST130_Dose_e.release_piece_and_open_up_feeder:
+    IF xIN_NextStep AND fb_VerAxis_10.MoveTo(ST130_PatroneAushebenPos_e.down_GS).xOUT_InPos THEN
+        iOUT_Step := ST130_Dose_e.open_up_feeder;
+    END_IF
+
+ST130_Dose_e.open_up_feeder:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_nachfullen_Links.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_nachfullen_Rechts.xOUT_inAS) THEN
+        iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
+    END_IF
+
+ST130_Dose_e.clamp_down:
+    IF xIN_NextStep AND fb_Niederhalter_Patrone.xOUT_inAS THEN
+        iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
+    END_IF
+
+ST130_Dose_e.clamp_up:
+    IF xIN_NextStep AND fb_Niederhalter_Patrone.xOUT_inGS THEN
         iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
     END_IF
 
