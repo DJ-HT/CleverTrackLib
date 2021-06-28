@@ -58,6 +58,7 @@ VAR_INPUT
 	rIN_Acceleration: REAL :=0;			//Acc
 	rIN_Deceleration: REAL :=0;			//Dec
 	rIN_Jerk        : REAL :=0;			//Jerk
+	rIN_PosManu		: REAL :=0;			//Positionen für Manuellfahrt
 	//RESET
 	xIN_Reset		: BOOL := FALSE;	//Reset von Extern
 END_VAR
@@ -260,15 +261,17 @@ END_VAR
 			_MC_MoveRel.Execute:= xIN_Relative AND xIN_Execute;
 		//MANUELL
 		ELSIF (enIN_State=StateMANU) THEN
+			_MC_MoveAbs.Position:= rIN_PosManu;
+			_MC_MoveRel.Distance:= rIN_PosManu;
 			//*********************************************
 			//Move
 			IF (bJogMode=4) THEN
 				//Absolute
 				_MC_MoveAbs.Execute:= NOT xIN_Relative AND 
-					(_FB_btJOGneg.pbtIN^.press OR _FB_btJOGneg.pbtIN^.press);
+					(_FB_btJOGpos.pbtIN^.press OR _FB_btJOGneg.pbtIN^.press);
 				//Relative
 				_MC_MoveRel.Execute:= xIN_Relative AND 
-					(_FB_btJOGneg.pbtIN^.press OR _FB_btJOGneg.pbtIN^.press);
+					(_FB_btJOGpos.pbtIN^.press OR _FB_btJOGneg.pbtIN^.press);
 			//*********************************************
 			//Jog
 			ELSIF (bJogMode>0) THEN
@@ -282,6 +285,11 @@ END_VAR
 				_MC_Jog.JogForward := _FB_btJOGpos.pbtIN^.press;
 			END_IF;
 		END_IF;
+	ELSE
+		_MC_MoveAbs.Execute := FALSE;
+		_MC_MoveRel.Execute := FALSE;
+		_MC_Jog.JogBackwards := FALSE;
+		_MC_Jog.JogForward := FALSE;
 	END_IF;
 //*********************** STOP - STO - POWER ******************************	
 	xOFF := ((enIN_State<StateENGIZED) AND NOT (enIN_State=StateREF)) OR ((enIN_State=StateMANU) AND (bJogMode=0));

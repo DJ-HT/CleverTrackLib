@@ -16,8 +16,8 @@ VAR_GLOBAL
     bTeachAxisNr  : BYTE; // Zu Teachende Achse # (von HMI)
     bTeachInPos   : BYTE; // Achse in Position (Teachpos (99= nicht in Pos))
     bTeachPos     : ARRAY [0..Axis_e._max-1] OF BYTE; // Achse Teach Position (Anzufahrende Position #)
-    rTeachIncAxis : REAL; // Axis Inching Wert
-    rTeachVelo    : REAL; // Achse Geschwindigkeit (Anzeige)
+    rTeachIncAxis : REAL := 0.1; // Axis Inching Wert
+    rTeachVelo    : REAL := 10; // Achse Geschwindigkeit (Anzeige)
     rTeachPos     : REAL; // Achse Teach Position (Anzufahrende Position Wert)
     rTeachActPos  : REAL; // Achse AKTUELLE Position (AKTUEL
     rTeachPosMin  : REAL; // Achse PositionsminimumLER Position Wert)
