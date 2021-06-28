@@ -70,8 +70,7 @@ fb_Dose(xIN_Reset          := xReset,
        enIN_State         := enIN_State,
        tIN_Timeout        := tIN_Timeout,
        pxFG_Freigabe      := ADR(xDummy),
-       Mover              := THIS^.Mover,
-       xIN_PceReadyToPick := TRUE);
+       Mover              := THIS^.Mover);
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -200,7 +199,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Dose.iOUT_Step = ST180_Pnp_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Dose.iOUT_Step = ST130_Dose_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>
