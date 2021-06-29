@@ -83,6 +83,9 @@ VAR
     simu_gripperLeft  : FB_Simu_Zyl2Pos;
     fb_gripperRight   : FB_ZylMo2El_V2_1;
     simu_gripperRight : FB_Simu_Zyl2Pos;
+
+    fb_kraftLeft  : FB_WandlerForceSensor;
+    fb_kraftRight : FB_WandlerForceSensor;
 	
 END_VAR
 VAR CONSTANT
@@ -187,19 +190,21 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                xIN_AX5000     := TRUE,
                xIN_ENC_ABS    := TRUE, // TODO set accordingly
                xIN_PARAMok    := TRUE,
-               xIN_FREE       := TRUE,
-               xIN_FREE_HOME  := TRUE,
-               rIN_POSMIN     := ST110_Axis.const110_02Z.POS_MIN,
-               rIN_POSMAX     := ST110_Axis.const110_02Z.POS_MAX,
-               rIN_VELOMAX    := ST110_Axis.const110_02Z.VELO_MAX,
-               rIN_VELOMANU   := ST110_Axis.const110_02Z.VELO_MANU,
-               rIN_VELOOPEN   := ST110_Axis.const110_02Z.POS_MAX / 4,
-               rIN_JogInc     := AXIS.rTeachIncAxis,
-               rIN_JogVelo    := AXIS.rTeachVelo,
-               xIN_HomeExe    :=,
-               xIN_HomeCalib  :=,
-               xIN_Execute    := (_20_AUTO.recipe.st110.xUseVerLeft OR (iOUT_Step < ST110_Pnp_e.READY)) AND
-                                 (fb_PnpVerAxisL.xOUT_Execute),
+               xIN_FREE       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
+                                 fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw) AND
+                                 NOT (ST110_Pnp_e.PnP_Ver_quick_stop = iOUT_Step),
+               xIN_FREE_HOME := TRUE,
+               rIN_POSMIN    := ST110_Axis.const110_02Z.POS_MIN,
+               rIN_POSMAX    := ST110_Axis.const110_02Z.POS_MAX,
+               rIN_VELOMAX   := ST110_Axis.const110_02Z.VELO_MAX,
+               rIN_VELOMANU  := ST110_Axis.const110_02Z.VELO_MANU,
+               rIN_VELOOPEN  := ST110_Axis.const110_02Z.POS_MAX / 4,
+               rIN_JogInc    := AXIS.rTeachIncAxis,
+               rIN_JogVelo   := AXIS.rTeachVelo,
+               xIN_HomeExe   :=,
+               xIN_HomeCalib :=,
+               xIN_Execute   := (_20_AUTO.recipe.st110.xUseVerLeft OR (iOUT_Step < ST110_Pnp_e.READY)) AND
+                                (fb_PnpVerAxisL.xOUT_Execute),
                xIN_HomeExe      :=,
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrPosition),
@@ -234,16 +239,18 @@ fb_axis110_03Z(enIN_State     := enIN_State,
                xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.ST110_03Z,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE, (*TODO*)
-               xIN_FREE       := TRUE,
-               xIN_FREE_HOME  := TRUE,
-               rIN_POSMIN     := ST110_Axis.const110_03Z.POS_MIN,
-               rIN_POSMAX     := ST110_Axis.const110_03Z.POS_MAX,
-               rIN_VELOMAX    := ST110_Axis.const110_03Z.VELO_MAX,
-               rIN_VELOMANU   := ST110_Axis.const110_03Z.VELO_MANU,
-               rIN_VELOOPEN   := ST110_Axis.const110_03Z.VELO_MANU / 4,
-               rIN_JogInc     := AXIS.rTeachIncAxis,
-               xIN_Execute    := (_20_AUTO.recipe.st110.xUseVerRight OR (iOUT_Step < ST110_Pnp_e.READY)) AND
-                                 (fb_PnpVerAxisR.xOUT_Execute),
+               xIN_FREE       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
+                                 fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw) AND
+                                 NOT (ST110_Pnp_e.PnP_Ver_quick_stop = iOUT_Step),
+               xIN_FREE_HOME := TRUE,
+               rIN_POSMIN    := ST110_Axis.const110_03Z.POS_MIN,
+               rIN_POSMAX    := ST110_Axis.const110_03Z.POS_MAX,
+               rIN_VELOMAX   := ST110_Axis.const110_03Z.VELO_MAX,
+               rIN_VELOMANU  := ST110_Axis.const110_03Z.VELO_MANU,
+               rIN_VELOOPEN  := ST110_Axis.const110_03Z.VELO_MANU / 4,
+               rIN_JogInc    := AXIS.rTeachIncAxis,
+               xIN_Execute   := (_20_AUTO.recipe.st110.xUseVerRight OR (iOUT_Step < ST110_Pnp_e.READY)) AND
+                                (fb_PnpVerAxisR.xOUT_Execute),
                xIN_HomeExe      :=,
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrPosition),
@@ -359,6 +366,10 @@ simu_gripperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION
                   xIN_valve := fb_gripperRight.xOUT_VALVE,
                   tIN_GS_ms := 0,    //ms
                   tIN_AS_ms := 200); //ms
+
+// kraft sensor
+fb_kraftLeft();
+fb_kraftRight();
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -577,11 +588,24 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
 
 // We need a fb that enables for us torque control. Here we just go a bit further
 ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
-    IF xIN_NextStep AND
-       (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
+    IF (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
+        IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST110_Pnp_e.PnP_Ver_quick_stop;
+        ELSE
+            iOUT_Step := ST110_Pnp_e.ERROR;
+
+        END_IF
+
+    ELSIF fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw AND
+          fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw THEN
+        iOUT_Step := ST110_Pnp_e.PnP_Ver_quick_stop;
+    END_IF;
+
+ST110_Pnp_e.PnP_Ver_quick_stop:
+    IF xIN_NextStep THEN
         iOUT_Step := ST110_Pnp_e.Vacum_off;
     END_IF;
 

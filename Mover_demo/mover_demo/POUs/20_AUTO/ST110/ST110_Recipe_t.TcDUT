@@ -10,6 +10,8 @@ STRUCT
     blowPieceTof_ms     : DINT; // time to let the blower take away the piece
     vakum_left_pc       : INT;  // vacum limit for left pnp
     vakum_right_pc      : INT;  // vacum limit for right pnp
+    kraft_left_raw      : REAL;  // force limit for left pnp, raw value
+    kraft_right_raw     : REAL;  // force limit for right pnp, raw value
 END_STRUCT
 END_TYPE
 ]]></Declaration>

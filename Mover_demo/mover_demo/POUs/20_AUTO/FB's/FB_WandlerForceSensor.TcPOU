@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_WandlerForceSensor" Id="{281d9edb-46c5-41be-8c9f-670d4c9eb82a}" SpecialFunc="None">
+    <Declaration><![CDATA[// Abstraction function block to be used with force sensor 
+// Baumer DAB10-AI
+// Please link all the hardware input at output to their
+// physical data
+FUNCTION_BLOCK FB_WandlerForceSensor
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+    lrOUT_value : LREAL;
+END_VAR
+VAR
+    sined_exponent : SINT;
+
+    Process_Value           AT %I* : DINT;
+    Scale_Exponent          AT %I* : BYTE;
+    SSC1                    AT %I* : BOOL;
+    SSC2                    AT %I* : BOOL;
+    Quality                 AT %I* : BOOL;
+    Alarm                   AT %I* : BOOL;
+    Sample_and_Hold_Trigger AT %Q* : BOOL;
+    Teach_in_offser_taring  AT %Q* : BOOL;
+    Memory_Reset            AT %Q* : BOOL;
+    Teach_in_sensitivity    AT %Q* : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[sined_exponent := BYTE_TO_SINT(Scale_Exponent);
+
+lrOUT_value := Process_Value * EXPT(10, sined_exponent);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

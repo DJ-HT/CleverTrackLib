@@ -31,8 +31,8 @@ VAR
 END_VAR
 
 VAR CONSTANT
-    ROT_TABLE_FREE_MAX_Y : REAL := 200.0; // If Y and Z axis is more than this value, the feeder cannot move
-    ROT_TABLE_FREE_MAX_Z : REAL := 200.0; // If Z and Y axis is more than this value, the feeder cannot move
+    ROT_TABLE_FREE_MAX_Y : REAL := 100.0; // If Y and Z axis is more than this value, the feeder cannot move
+    ROT_TABLE_FREE_MAX_Z : REAL := 50.0; // If Z and Y axis is more than this value, the feeder cannot move
 END_VAR
 ]]></Declaration>
     <Implementation>

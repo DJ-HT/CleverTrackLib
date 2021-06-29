@@ -31,6 +31,7 @@ ST110_Pnp_e :
 
 	PnP_Ver_ShuttleDown,
 	PnP_Ver_ShuttleTorqueControl,
+	PnP_Ver_quick_stop,
 	Vacum_off,
 	PnP_Ver_ShuttleUp,
 	
@@ -142,6 +143,11 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"PnP_Ver_ShuttleTorqueControl"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"PnP_Ver_quick_stop"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
