@@ -471,16 +471,16 @@ IO_BOX.Q0104_12_ST130_vibrieren_kammer_rechts :=
 IO_BOX.Q0105_14_ST130_niederhalter_patrone :=
     fb_Niederhalter_Patrone.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
 
-_20_AUTO.recipe.st130.uiVibroUnderneath := LIMIT(0, _20_AUTO.recipe.st130.uiVibroUnderneath, 100);
+_20_AUTO.recipe.st130.uiVibroUnderneath := LIMIT(UINT#0, _20_AUTO.recipe.st130.uiVibroUnderneath, UINT#100);
 
 IF IO_BOX.Q0104_14_ST130_vibrieren_kammer_links AND (ST130_Dose_e.fill_kammer <> iOUT_Step) THEN
-    OUT.QA01_ST130_pressure_valve_left := (TO_UINT(16#FFFF) / 100) * _20_AUTO.recipe.st130.uiVibroUnderneath;
+    OUT.QA01_ST130_pressure_valve_left := (UINT#16#FFFF / UINT#100) * _20_AUTO.recipe.st130.uiVibroUnderneath;
 ELSE
     OUT.QA01_ST130_pressure_valve_left := 0;
 END_IF
 
 IF IO_BOX.Q0104_12_ST130_vibrieren_kammer_rechts AND (ST130_Dose_e.fill_kammer <> iOUT_Step) THEN
-    OUT.QA02_ST130_pressure_valve_right := (TO_UINT(16#FFFF) / 100) * _20_AUTO.recipe.st130.uiVibroUnderneath;
+    OUT.QA02_ST130_pressure_valve_right := (UINT#16#FFFF / UINT#100) * _20_AUTO.recipe.st130.uiVibroUnderneath;
 ELSE
     OUT.QA02_ST130_pressure_valve_right := 0;
 END_IF
