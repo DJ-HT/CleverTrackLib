@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<!-- HTML FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  05/12/21 12:54:21 -->
+	<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title>HMI</title>
+	<style type="text/css">
+
+		.SCViews {
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			-moz-user-select: none;
+			-khtml-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			z-index: 0;
+			position: relative;
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+		body {
+			padding: 0;
+			margin: 0;
+		}
+		iframe {
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+		html {overflow: auto}
+	</style>
+	<script type="text/javascript" src="pako_inflate_min.js"></script>
+	<script type="text/javascript" src="load.js"></script>
+</head>
+<body>
+	<div class="SCViews" id="SC_View_Middle"></div>
+	<script type="text/javascript">
+		window.addEventListener('load', function(){
+			BlobMngr = new CBlobManager();
+			Loader = new CLoader(
+				function(){
+					SpiderControl.InitFromTeq({
+						ViewID: "SC_View_Middle",
+						Width: 1024,
+						Height: 768,
+						TargetTypeNr: 103,
+						TargetPPOPrefix: "",
+						ZipMode: 0,
+						TeqJumpMode: 1,
+						Period: 500,
+						DebugLevel: 0,
+						MainTEQName: "110_ScreenHome.teq",
+						InitCoTEQName: "HMI.itq",
+						PPOInitFile: "HMI.tcr",
+						languageCSV: "de.csv",
+						staticCSV: "",
+						MsgBox: "MsgBox.teq",
+						DEC_SYMB: ".",
+						PM_AM: 0,
+						cgiFail: 1,
+						WARNDISPLAYTIME_UNTILCLEARMSGBOX: 0,
+						CGI_RELATIVTOROOT: "",
+						cgiOrderListMaxSize: 500,
+						LocalPPORefresh: 0,
+						customjsCallBacks: 0,
+						GENERATE_TIMESTAMP: "609bb3dd",
+						SpiderHTMLVersion: 22,
+						ResponsiveDesignMode: 0,
+						ZoomMode: "No Auto Zoom"
+					});
+				}
+			);
+		
+		}, false );
+
+	/* - DO NOT REMOVE THIS COMMENT - */ 
+
+/*
+
+<!-- HTML FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  05/12/21 12:54:21 -->
+<!--  [ LICENCE_NR : 531 **** LICENCE_USERNAME : PRESOLD **** LICENCE_PLCTYPE : BECKHOFF **** LICENCE_PLCRELEASE : EXTENDED ] -->
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<META NAME="GENERATOR" CONTENT="iniNet SpiderControl TM">
+	<TITLE>HMI</TITLE>
+</HEAD>
+<BODY bgcolor="#E9E9EA">
+<p>
+<APPLET ARCHIVE="IMasterBeckhoff7_02_00.jar" CODE="IMasterBeckhoff7_02_00.class" ALIGN="BOTTOM" WIDTH="1024" HEIGHT="768">
+<PARAM NAME="AppletName"   VALUE="HMI">
+<PARAM NAME="ProjectName"   VALUE="HMI">
+<PARAM NAME="TargetTypeNr"   VALUE="103">
+<PARAM NAME="TargetPPOPrefix"   VALUE="">
+<PARAM NAME="ZipMode"   VALUE="0">
+<PARAM NAME="TeqJumpMode"   VALUE="1">
+<PARAM NAME="Period"   VALUE="500">
+<PARAM NAME="FirstFileIndex"   VALUE="0">
+<PARAM NAME="LastFileIndex"   VALUE="38">
+<PARAM NAME="Main"   VALUE="0">
+<PARAM NAME="OrderPerView"   VALUE="on">
+<PARAM NAME="debug"   VALUE="off">
+<PARAM NAME="SpiderHTMLVersion"   VALUE="22">
+<PARAM NAME="ResponsiveDesignMode"   VALUE="0">
+<PARAM NAME="MainTEQName"   VALUE="110_ScreenHome.teq">
+<PARAM NAME="InitCoTEQName"   VALUE="HMI.itq">
+<PARAM NAME="InitPPOASCIIName"   VALUE="HMI.tcr">
+<PARAM NAME="IMASTERHTMLTAGSFILEName"   VALUE="de.csv">
+<PARAM NAME="StaticHTMLTagsFileName"   VALUE="">
+<PARAM NAME="MessageBox"   VALUE="MsgBox.teq">
+<PARAM NAME="encodeSpecialChar"   VALUE="on">
+<PARAM NAME="RUNTIMEACTIONMODE"   VALUE="CONSUMED ACTION">
+<PARAM NAME="BrowsingMode"   VALUE="DEFAULT">
+<PARAM NAME="MirrorPPOName"   VALUE="mirror">
+<PARAM NAME="XMLOPCWebserviceAdress"   VALUE="/UPnPDevice/TcPlcDataServiceDa.dll">
+<PARAM NAME="LANG_SYMB"   VALUE="EN">
+<PARAM NAME="DEC_SYMB"   VALUE=".">
+<PARAM NAME="PM_AM"   VALUE="0">
+<PARAM NAME="CGIFAILNBR_UNTILWARN"   VALUE="1">
+<PARAM NAME="WARNDISPLAYTIME_UNTILCLEARMSGBOX"   VALUE="0">
+<PARAM NAME="TEQDISPLAYFACTOR"   VALUE="1.000000">
+<PARAM NAME="GENERATE_TIMESTAMP"   VALUE="609bb3dd">
+<PARAM NAME="Day_NightColorMapFileName"   VALUE="">
+<PARAM NAME="ImagesPreloadList"   VALUE="">
+<PARAM NAME="EncodingPPO"   VALUE="">
+<PARAM NAME="CGI_RELATIVTOROOT"   VALUE="">
+<PARAM NAME="ZoomMode"   VALUE="No Auto Zoom">
+
+<!-- START BECKHOFF SPECIFIC TAGS -->
+
+<!-- END BECKHOFF SPECIFIC TAGS -->
+
+<!-- START TEQ FILES LIST -->
+<PARAM NAME="TEQ0NAME"   VALUE="10_ScreenHome.teq">
+<PARAM NAME="TEQ1NAME"   VALUE="110_ScreenHome.teq">
+<PARAM NAME="TEQ2NAME"   VALUE="120_Detail0.teq">
+<PARAM NAME="TEQ3NAME"   VALUE="131_Setup1.teq">
+<PARAM NAME="TEQ4NAME"   VALUE="21_Detail1.teq">
+<PARAM NAME="TEQ5NAME"   VALUE="22_Detail2.teq">
+<PARAM NAME="TEQ6NAME"   VALUE="23_Detail3.teq">
+<PARAM NAME="TEQ7NAME"   VALUE="24_Detail4.teq">
+<PARAM NAME="TEQ8NAME"   VALUE="25_Detail5.teq">
+<PARAM NAME="TEQ9NAME"   VALUE="30_Setup0.teq">
+<PARAM NAME="TEQ10NAME"   VALUE="40_Option.teq">
+<PARAM NAME="TEQ11NAME"   VALUE="51_Param1.teq">
+<PARAM NAME="TEQ12NAME"   VALUE="52_Param2.teq">
+<PARAM NAME="TEQ13NAME"   VALUE="53_Param3.teq">
+<PARAM NAME="TEQ14NAME"   VALUE="54_Param4.teq">
+<PARAM NAME="TEQ15NAME"   VALUE="55_Param5.teq">
+<PARAM NAME="TEQ16NAME"   VALUE="60_ScreenAl.teq">
+<PARAM NAME="TEQ17NAME"   VALUE="Alphapad.teq">
+<PARAM NAME="TEQ18NAME"   VALUE="bgAlarm.teq">
+<PARAM NAME="TEQ19NAME"   VALUE="bgAlarm2.teq">
+<PARAM NAME="TEQ20NAME"   VALUE="bgFooter.teq">
+<PARAM NAME="TEQ21NAME"   VALUE="bgFooter2.teq">
+<PARAM NAME="TEQ22NAME"   VALUE="bgHeader.teq">
+<PARAM NAME="TEQ23NAME"   VALUE="bgHeader2.teq">
+<PARAM NAME="TEQ24NAME"   VALUE="Keypad.teq">
+<PARAM NAME="TEQ25NAME"   VALUE="login.teq">
+<PARAM NAME="TEQ26NAME"   VALUE="login2.teq">
+<PARAM NAME="TEQ27NAME"   VALUE="logoff.teq">
+<PARAM NAME="TEQ28NAME"   VALUE="logoff2.teq">
+<PARAM NAME="TEQ29NAME"   VALUE="MsgBox.teq">
+<PARAM NAME="TEQ30NAME"   VALUE="Setup1.teq">
+<PARAM NAME="TEQ31NAME"   VALUE="Setup120.teq">
+<PARAM NAME="TEQ32NAME"   VALUE="Setup2.teq">
+<PARAM NAME="TEQ33NAME"   VALUE="Setup3.teq">
+<PARAM NAME="TEQ34NAME"   VALUE="Setup4.teq">
+<PARAM NAME="TEQ35NAME"   VALUE="Setup5.teq">
+<PARAM NAME="TEQ36NAME"   VALUE="Setup6.teq">
+<PARAM NAME="TEQ37NAME"   VALUE="Setup7.teq">
+<PARAM NAME="TEQ38NAME"   VALUE="Setup8.teq">
+<!-- END TEQ FILES LIST -->
+
+<!-- START HTML FILES LIST -->
+<!-- HTML_0 = "HMI2.html" -->
+<!-- END HTML FILES LIST -->
+
+<!-- START LANGUAGE FILES LIST -->
+<!-- LANG_0 = "de.csv" -->
+<!-- LANG_1 = "en.csv" -->
+<!-- LANG_2 = "es.csv" -->
+<!-- LANG_3 = "fr.csv" -->
+<!-- END LANGUAGE FILES LIST -->
+
+<!-- START OTHER RESOURCE FILES LIST -->
+<!-- PRJ_0 = "achtung.svg" -->
+<!-- PRJ_1 = "achtung_.svg" -->
+<!-- PRJ_2 = "alrcfg2.xml" -->
+<!-- PRJ_3 = "automat.svg" -->
+<!-- PRJ_4 = "automat_.svg" -->
+<!-- PRJ_5 = "automat_err.svg" -->
+<!-- PRJ_6 = "automat_on.svg" -->
+<!-- PRJ_7 = "b_li.svg" -->
+<!-- PRJ_8 = "b_re.svg" -->
+<!-- PRJ_9 = "band_li.svg" -->
+<!-- PRJ_10 = "band_li_err.svg" -->
+<!-- PRJ_11 = "band_li_on.svg" -->
+<!-- PRJ_12 = "band_li_on_.svg" -->
+<!-- PRJ_13 = "btn_simple_3.svg" -->
+<!-- PRJ_14 = "btn_simple_d_3.svg" -->
+<!-- PRJ_15 = "btn_simple_p_3.svg" -->
+<!-- PRJ_16 = "close_red.svg" -->
+<!-- PRJ_17 = "close_red_d.svg" -->
+<!-- PRJ_18 = "close_red_p.svg" -->
+<!-- PRJ_19 = "ein.svg" -->
+<!-- PRJ_20 = "ein_.svg" -->
+<!-- PRJ_21 = "ein_err.svg" -->
+<!-- PRJ_22 = "ein_on.svg" -->
+<!-- PRJ_23 = "ff.svg" -->
+<!-- PRJ_24 = "ff_.svg" -->
+<!-- PRJ_25 = "ff_err.svg" -->
+<!-- PRJ_26 = "ff_on.svg" -->
+<!-- PRJ_27 = "flagde.svg" -->
+<!-- PRJ_28 = "flages.svg" -->
+<!-- PRJ_29 = "flagfr.svg" -->
+<!-- PRJ_30 = "flaggb.svg" -->
+<!-- PRJ_31 = "greiferV.svg" -->
+<!-- PRJ_32 = "greiferV_.svg" -->
+<!-- PRJ_33 = "greiferV_err.svg" -->
+<!-- PRJ_34 = "greiferV_on.svg" -->
+<!-- PRJ_35 = "greiferVzu.svg" -->
+<!-- PRJ_36 = "greiferVzu_.svg" -->
+<!-- PRJ_37 = "greiferVzu_err.svg" -->
+<!-- PRJ_38 = "greiferVzu_on.svg" -->
+<!-- PRJ_39 = "Help-Tec_2f_bl.svg" -->
+<!-- PRJ_40 = "HMI.itq" -->
+<!-- PRJ_41 = "HMI.tcr" -->
+<!-- PRJ_42 = "home.svg" -->
+<!-- PRJ_43 = "home_.svg" -->
+<!-- PRJ_44 = "home_err.svg" -->
+<!-- PRJ_45 = "home_on.svg" -->
+<!-- PRJ_46 = "HTlogo.png" -->
+<!-- PRJ_47 = "image_3.svg" -->
+<!-- PRJ_48 = "leerfahren.svg" -->
+<!-- PRJ_49 = "leerfahren_.svg" -->
+<!-- PRJ_50 = "leerfahren_err.svg" -->
+<!-- PRJ_51 = "leerfahren_on.svg" -->
+<!-- PRJ_52 = "li.svg" -->
+<!-- PRJ_53 = "li_.svg" -->
+<!-- PRJ_54 = "li_err.svg" -->
+<!-- PRJ_55 = "li_on.svg" -->
+<!-- PRJ_56 = "loeschen.svg" -->
+<!-- PRJ_57 = "loeschen_.svg" -->
+<!-- PRJ_58 = "loeschen_err.svg" -->
+<!-- PRJ_59 = "loeschen_on.svg" -->
+<!-- PRJ_60 = "login.svg" -->
+<!-- PRJ_61 = "logout.svg" -->
+<!-- PRJ_62 = "lupe.svg" -->
+<!-- PRJ_63 = "lupe_.svg" -->
+<!-- PRJ_64 = "macroExtRepaints.xml" -->
+<!-- PRJ_65 = "manuell.svg" -->
+<!-- PRJ_66 = "manuell_.svg" -->
+<!-- PRJ_67 = "manuell_err.svg" -->
+<!-- PRJ_68 = "manuell_on.svg" -->
+<!-- PRJ_69 = "menu.svg" -->
+<!-- PRJ_70 = "motor.svg" -->
+<!-- PRJ_71 = "motor_.svg" -->
+<!-- PRJ_72 = "motor_err.svg" -->
+<!-- PRJ_73 = "motor_on.svg" -->
+<!-- PRJ_74 = "o.svg" -->
+<!-- PRJ_75 = "o_.svg" -->
+<!-- PRJ_76 = "o_err.svg" -->
+<!-- PRJ_77 = "o_on.svg" -->
+<!-- PRJ_78 = "option.svg" -->
+<!-- PRJ_79 = "option_.svg" -->
+<!-- PRJ_80 = "p_u.svg" -->
+<!-- PRJ_81 = "p_u_.svg" -->
+<!-- PRJ_82 = "p_u_err.svg" -->
+<!-- PRJ_83 = "p_u_on.svg" -->
+<!-- PRJ_84 = "parameter.svg" -->
+<!-- PRJ_85 = "parameter_.svg" -->
+<!-- PRJ_86 = "quit.svg" -->
+<!-- PRJ_87 = "quit_.svg" -->
+<!-- PRJ_88 = "quit_err.svg" -->
+<!-- PRJ_89 = "quit_on.svg" -->
+<!-- PRJ_90 = "re.svg" -->
+<!-- PRJ_91 = "re_.svg" -->
+<!-- PRJ_92 = "re_err.svg" -->
+<!-- PRJ_93 = "re_on.svg" -->
+<!-- PRJ_94 = "reset.svg" -->
+<!-- PRJ_95 = "reset_.svg" -->
+<!-- PRJ_96 = "reset_err.svg" -->
+<!-- PRJ_97 = "reset_on.svg" -->
+<!-- PRJ_98 = "rundtisch.svg" -->
+<!-- PRJ_99 = "rundtisch_.svg" -->
+<!-- PRJ_100 = "rundtisch_err.svg" -->
+<!-- PRJ_101 = "rundtisch_on.svg" -->
+<!-- PRJ_102 = "schritt.svg" -->
+<!-- PRJ_103 = "schritt_.svg" -->
+<!-- PRJ_104 = "schritt_err.svg" -->
+<!-- PRJ_105 = "schritt_on.svg" -->
+<!-- PRJ_106 = "scrl_dwn_1.svg" -->
+<!-- PRJ_107 = "scrl_up_1.svg" -->
+<!-- PRJ_108 = "setup.svg" -->
+<!-- PRJ_109 = "setup_.svg" -->
+<!-- PRJ_110 = "speichern.svg" -->
+<!-- PRJ_111 = "speichern_.svg" -->
+<!-- PRJ_112 = "start.svg" -->
+<!-- PRJ_113 = "start_.svg" -->
+<!-- PRJ_114 = "start_err.svg" -->
+<!-- PRJ_115 = "start_li.svg" -->
+<!-- PRJ_116 = "start_on.svg" -->
+<!-- PRJ_117 = "step_re.svg" -->
+<!-- PRJ_118 = "step_re_.svg" -->
+<!-- PRJ_119 = "step_re_err.svg" -->
+<!-- PRJ_120 = "step_re_on.svg" -->
+<!-- PRJ_121 = "stop.svg" -->
+<!-- PRJ_122 = "stop_.svg" -->
+<!-- PRJ_123 = "stop_err.svg" -->
+<!-- PRJ_124 = "stop_on.svg" -->
+<!-- PRJ_125 = "tuer_o.svg" -->
+<!-- PRJ_126 = "tuer_o_.svg" -->
+<!-- PRJ_127 = "tuer_o_err.svg" -->
+<!-- PRJ_128 = "tuer_o_on.svg" -->
+<!-- PRJ_129 = "u.svg" -->
+<!-- PRJ_130 = "u_.svg" -->
+<!-- PRJ_131 = "u_err.svg" -->
+<!-- PRJ_132 = "u_on.svg" -->
+<!-- PRJ_133 = "vakuum.svg" -->
+<!-- PRJ_134 = "vakuum_.svg" -->
+<!-- PRJ_135 = "vakuum_err.svg" -->
+<!-- PRJ_136 = "vakuum_on.svg" -->
+<!-- PRJ_137 = "verlassen.svg" -->
+<!-- PRJ_138 = "zyklusende.svg" -->
+<!-- PRJ_139 = "zyklusende_.svg" -->
+<!-- PRJ_140 = "zyklusende_err.svg" -->
+<!-- PRJ_141 = "zyklusende_on.svg" -->
+<!-- END OTHER RESOURCE FILES LIST -->
+
+Java Applet is not supported or enabled in your web-browser!
+</APPLET>
+</p>
+</BODY>
+</HTML>
+
+*/
+
+		</script>
+	</body>
+</html>

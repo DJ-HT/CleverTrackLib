@@ -61,6 +61,7 @@ VAR
     TON_Timeout : TON;
 
     (* Bausteine *)
+	btfb_feeder					: FB_BUTTON;
 
     // Application specific
     fb_axis110_10W               : FB_AxisLMturn_V1_1;
@@ -80,6 +81,7 @@ VAR
     tof_color_sensor : TOF;
     ton_blow_piece   : TON;
 
+	rTest : REAL;
 END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
@@ -115,8 +117,19 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
+btfb_feeder(pbtIN := ADR(HMI.btManuCylinders[StationList_e.ST110][3]),
+				xINdis:= (enIN_State<>enState.StateMANU),
+				xINon:= ,
+				xINerr:= fb_feeder.xOUT_Empty);
 
-fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+IF btfb_feeder.pbtIN^.rtrig THEN
+	btfb_feeder.xINon := NOT btfb_feeder.xINon;
+ELSIF (enIN_State<>enState.StateMANU) THEN
+	btfb_feeder.xINon := FALSE;
+END_IF;
+
+fb_feeder(xIN_Enable                := ((enIN_State<=enState.StateAUTO) AND (enIN_State>=enState.StateSTEP)) 
+										OR btfb_feeder.xINon,
           xIN_PieceInEnd            := TRUE, // IO_BOX.I6000_ST110_teil_in_vereinzelung, 
           xIN_PieceMax              := IO_BOX.I8001_ST110_maximum,
           xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
@@ -167,8 +180,8 @@ simu_axis110_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATI
                  rIN_PixMin          := 0);
 
 fb_axis110_10W(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := HMI.iSelectJogAxis <> Axis_e.st110_10W,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST110_10W]),
+               xIN_DisButtons := ,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE,
                xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
@@ -191,7 +204,6 @@ fb_axis110_10W(enIN_State     := enIN_State,
                rIN_Acceleration := TO_REAL(1440.0),
                rIN_Deceleration := TO_REAL(1440.0),
                rIN_Jerk         := TO_REAL(720000.0),
-               rIN_PosManu      := AXIS.rTeachPos,
                xIN_Home         := ST110_feeder_e.Init_home_table = iOUT_Step,
                xIN_Reset        := xIN_Reset OR ST110_feeder_e.RESET = iOUT_Step,
                // The simu fb gives us the hardware signal when we are not in simulation

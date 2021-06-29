@@ -31,7 +31,7 @@ IF HMI.btCopyRecipe.rtrig THEN
     // iRecipeCopyDest := RecipeType_e._max;
     _21_CopyDefaultRecipe();
 END_IF
-
+recipe.linearAxis[0].movesList[0].lrPosition;
 IF HMI.btCopyAxisCfg.rtrig THEN
     PERS.recipeList[PERS.iRecipeCurrent].linearAxis[HMI.iSelectAxisCopy] :=
         PERS.recipeList[PERS.iRecipeCurrent].linearAxis[HMI.iSelectAxis];
