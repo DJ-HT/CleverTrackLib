@@ -10,24 +10,7 @@ $;$
 .;.
 /;/
 0;0
-0: Zeit;0: Zeit
 1;1
-101.10;101.10
-101.11;101.11
-101.12;101.12
-101D07;101D07
-101X05;101X05
-101Z06;101Z06
-104.01;104.01
-104.02;104.02
-104.03;104.03
-104.04;104.04
-105.01;105.01
-105.02;105.02
-105.03;105.03
-105.04;105.04
-105.20;105.20
-105.21;105.21
 110.05;110.05
 110.06;110.06
 110.20;110.20
@@ -89,16 +72,15 @@ $;$
 145.20;145.20
 145Y01;145Y01
 145Z02;145Z02
-1: Energie;1: Energie
+150.01;150.01
+150.20;150.20
+155.01;155.01
+155.20;155.20
 2;2
 21.101;21.101
-2: Leistung;2: Leistung
 3;3
-3: Kontinuierlich;3: Kontinuierlich
 4;4
-4: Weg DIF;4: Weg DIF
 5;5
-5: Weg ABS;5: Weg ABS
 6;6
 7;7
 8;8
@@ -1555,8 +1537,6 @@ AUTOMAT [h] :;AUTOMAT [h] :
 AXIS AUSHEBEN\n105Z11;AXIS AUSHEBEN\n105Z11
 AXIS RST\n105W10;AXIS RST\n105W10
 AXIS;AXIS
-Achse: 101X05;Achse: 101X05
-Achse: 101Z06;Achse: 101Z06
 Achse: 110W10;Achse: 110W10
 Achse: 110Y01;Achse: 110Y01
 Achse: 110Z02;Achse: 110Z02
@@ -1578,9 +1558,9 @@ Achse: 135Z10;Achse: 135Z10
 Achse: 145W10;Achse: 145W10
 Achse: 145Y01;Achse: 145Y01
 Achse: 145Z02;Achse: 145Z02
-Amplitude;Amplitude
 Auftragsnr;Auftragsnr
 B;B
+Bereit;Bereit
 C;C
 CE;CE
 D;D
@@ -1593,12 +1573,10 @@ DETAIL 5;DETAIL 5
 Datum / xy ;Datum / xy 
 E;E
 EXIT;EXIT
-Energie max;Energie max
-Energie min;Energie min
-Energie;Energie
 F;F
 F1;F1
 F2;F2
+Fehler;Fehler
 Füllstand;Füllstand
 G;G
 H;H
@@ -1614,14 +1592,10 @@ LANG_SYMB;FR
 LEGENDE:;LEGENDE:
 LIST;LIST
 LOGIN;LOGIN
-Leistung max;Leistung max
-Leistung min;Leistung min
-Leistung;Leistung
 M;M
-Messverzögerung;Messverzögerung
-Mode overall;Mode overall
 N;N
 NUM;NUM
+Nullpos;Nullpos
 O;O
 OK;OK
 OPTION;OPTION
@@ -1657,18 +1631,14 @@ Pos 4: ;Pos 4:
 Pos 4: Ab Voll Kraft;Pos 4: Ab Voll Kraft
 Pos 5: ;Pos 5: 
 Pos 6: ;Pos 6: 
-Pos 7: ;Pos 7: 
 Q;Q
 R;R
-Rampenwert;Rampenwert
 S;S
 SETUP ST02;SETUP ST02
 ST101 GEHÄUSE LADEN;ST101 GEHÄUSE LADEN
 ST101/2;ST101/2
 ST103 GEWEBETRANSPORT;ST103 GEWEBETRANSPORT
 ST103/4;ST103/4
-ST104 SCHWEISSEN;ST104 SCHWEISSEN
-ST105 LASER SCHNEIDEN;ST105 LASER SCHNEIDEN
 ST105;ST105
 ST105/6;ST105/6
 ST107/8;ST107/8
@@ -1702,7 +1672,9 @@ ST140 NIVEAUMESSUNG;ST140 NIVEAUMESSUNG
 ST140;ST140
 ST145;ST145
 ST150;ST150
-ST155;ST155
+ST150/ST155 US-SCHWEISSEN A/B;ST150/ST155 US-SCHWEISSEN A/B
+ST15x;ST15x
+Schweisst;Schweisst
 State;State
 State@PPO_PLC1.HMI.enState@;State@PPO_PLC1.HMI.enState@
 StateColor\tIID\tTID\tAlarm Text\tOn\tOff\tACK;StateColor\tIID\tTID\tAlarm Text\tOn\tOff\tACK
@@ -1751,9 +1723,6 @@ q;q
 r;r
 s;s
 t;t
-tSchweissen max;tSchweissen max
-tSchweissen min;tSchweissen min
-tSchweissen;tSchweissen
 u;u
 v;v
 w;w
