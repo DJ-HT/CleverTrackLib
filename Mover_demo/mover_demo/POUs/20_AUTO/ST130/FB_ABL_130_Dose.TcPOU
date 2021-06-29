@@ -340,9 +340,10 @@ fb_viebrieren_kammer_links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iO
                            xIN_GS       := NOT fb_viebrieren_kammer_links.xOUT_VALVE, // no sensor here
                            xIN_AS       := fb_viebrieren_kammer_links.xOUT_VALVE,     // no sensor here
                            xIN_FREE     := TRUE,
-                           xINtoGS      := ST130_Dose_e.load_powder_and_vibrate <> iOUT_Step,
+                           xINtoGS      := NOT fb_viebrieren_kammer_links.xINtoAS,
                            xINtoAS      := _20_AUTO.recipe.st130.xUseVerLeft AND
-                                           (ST130_Dose_e.load_powder_and_vibrate = iOUT_Step),
+                                            (ST130_Dose_e.close_up_feeder <= iOUT_Step AND
+                                            ST130_Dose_e.load_powder_and_vibrate >= iOUT_Step),
                            tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                          [ST130_Cylinders_e.Vibrieren_Kammer_Links]
                                                          .toAS_alarm_time),
@@ -363,9 +364,10 @@ fb_viebrieren_kammer_rechts(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = i
                             xIN_GS       := NOT fb_viebrieren_kammer_rechts.xOUT_VALVE, // no sensor here
                             xIN_AS       := fb_viebrieren_kammer_rechts.xOUT_VALVE,     // no sensor here
                             xIN_FREE     := TRUE,
-                            xINtoGS      := ST130_Dose_e.load_powder_and_vibrate <> iOUT_Step,
+                            xINtoGS      := NOT fb_viebrieren_kammer_links.xINtoAS,
                             xINtoAS      := _20_AUTO.recipe.st130.xUseVerRight AND
-                                            (ST130_Dose_e.load_powder_and_vibrate = iOUT_Step),
+                                            (ST130_Dose_e.close_up_feeder <= iOUT_Step AND
+                                            ST130_Dose_e.load_powder_and_vibrate >= iOUT_Step),
                             tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                           [ST130_Cylinders_e.Vibrieren_Kammer_Rechts]
                                                           .toAS_alarm_time),
