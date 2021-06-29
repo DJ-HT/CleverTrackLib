@@ -20,7 +20,9 @@ ST130_Dose_e :
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
-
+  
+	fill_kammer, // we have to wait until the kammer is full 
+	
     waitOnMover,     // wait until the mover is there
     MOVER_NEEDED_OP, // Ab here, a mover in position is needed to perform the action
 
@@ -106,6 +108,11 @@ check level NIO Box
             <o>
               <v n="TextID">"START"</v>
               <v n="TextDefault">"1000"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"fill_kammer"</v>
+              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
