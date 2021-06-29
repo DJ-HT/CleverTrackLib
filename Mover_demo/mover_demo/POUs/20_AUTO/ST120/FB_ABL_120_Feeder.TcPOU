@@ -62,6 +62,8 @@ VAR
     TON_Timeout : TON;
 
     (* Bausteine *)
+	btfb_feederLeft					: FB_BUTTON;
+	btfb_feederRight				: FB_BUTTON;
 
     // Application specific^
     fb_pivotLeft    : FB_ZylMo2El_V2_1;
@@ -176,6 +178,18 @@ simu_pivotRight(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
                 xIN_valve  := fb_pivotRight.xOUT_VALVE,
                 tIN_GS_ms  := 500,  //ms
                 tIN_AS_ms  := 500); //ms
+				
+				
+btfb_feederLeft(pbtIN := ADR(HMI.btManuCylinders[StationList_e.ST120][7]),
+				xINdis:= (enIN_State<>enState.StateMANU),
+				xINon:= ,
+				xINerr:= fb_feederLeft.xOUT_Empty);
+
+IF btfb_feederLeft.pbtIN^.rtrig THEN
+	btfb_feederLeft.xINon := NOT btfb_feederLeft.xINon;
+ELSIF (enIN_State<>enState.StateMANU) THEN
+	btfb_feederLeft.xINon := FALSE;
+END_IF;
 
 fb_feederLeft(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
                             _20_AUTO.recipe.st120.xUseVerLeft,
@@ -190,6 +204,17 @@ fb_feederLeft(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enSt
               diIN_StartDelay_ms        := _20_AUTO.recipe.st120.FeederConfigLeft.StartDelay,
               diIN_StopDelay_ms         := _20_AUTO.recipe.st120.FeederConfigLeft.StopDelay,
               diIN_EmptyDelay_ms        := _20_AUTO.recipe.st120.FeederConfigLeft.EmptyDelay);
+	
+btfb_feederRight(pbtIN := ADR(HMI.btManuCylinders[StationList_e.ST120][8]),
+				xINdis:= (enIN_State<>enState.StateMANU),
+				xINon:= ,
+				xINerr:= fb_feederRight.xOUT_Empty);
+
+IF btfb_feederRight.pbtIN^.rtrig THEN
+	btfb_feederRight.xINon := NOT btfb_feederRight.xINon;
+ELSIF (enIN_State<>enState.StateMANU) THEN
+	btfb_feederRight.xINon := FALSE;
+END_IF;
 
 fb_feederRight(xIN_Enable := (enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP) AND
                              _20_AUTO.recipe.st120.xUseVerRight,
