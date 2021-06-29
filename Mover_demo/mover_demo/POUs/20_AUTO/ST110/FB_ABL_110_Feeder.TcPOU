@@ -204,7 +204,6 @@ fb_axis110_10W(enIN_State     := enIN_State,
                rIN_Acceleration := TO_REAL(1440.0),
                rIN_Deceleration := TO_REAL(1440.0),
                rIN_Jerk         := TO_REAL(720000.0),
-               rIN_PosManu      := AXIS.rTeachPos,
                xIN_Home         := ST110_feeder_e.Init_home_table = iOUT_Step,
                xIN_Reset        := xIN_Reset OR ST110_feeder_e.RESET = iOUT_Step,
                // The simu fb gives us the hardware signal when we are not in simulation

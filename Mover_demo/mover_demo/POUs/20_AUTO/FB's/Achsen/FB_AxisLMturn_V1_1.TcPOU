@@ -62,7 +62,7 @@ VAR_INPUT
 	///Jerk
 	rIN_Jerk: REAL := 0;
 	///Positionen für Manuellfahrt
-	rIN_PosManu: REAL;
+	rIN_PosManu: REAL;		//not used
 	///Homing
 	xIN_Home: BOOL;
 	///Reset von Extern
