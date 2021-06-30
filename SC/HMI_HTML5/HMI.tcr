@@ -1,11 +1,11 @@
-﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  06/30/21 08:42:58
+﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  06/30/21 09:25:31
 #!-- Spider Control PPO CSV File version 5 since Jan 2016 utf8 support in editor and server and clients 
 #!-- Spider Control PPO CSV File version 6 since July2020 init ppo val col support in editor and server and clients 
 #!-- Start PPO INIT File
 #!-- VERSION = 6
 #!-- TYPE = 1
-#!-- TS = 60dc1272
-#!-- N = 2240
+#!-- TS = 60dc1c6b
+#!-- N = 2258
 EMPTY_VAR_NAME;EMPTY_VAR_NAME; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Y01@];PLC1.AXIS.bInPos[@CO_AxisNo110Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Z02@];PLC1.AXIS.bInPos[@CO_AxisNo110Z02@]; ; ; ; ; ; ; ; ; ; ;
@@ -2173,16 +2173,34 @@ PLC1.IO_BOX.I8302_ST120_hublader_rechts_niveaukontrolle;PLC1.IO_BOX.I8302_ST120_
 PLC1.IO_BOX.I8401_ST125_maximum_wf;PLC1.IO_BOX.I8401_ST125_maximum_wf; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.dwArTimeST102[10];PLC1.PERS.dwArTimeST102[10]; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.iArrChain3stat[34];PLC1.PERS.iArrChain3stat[34]; ; ; ; ; ; ; ; ; ; ;
-PLC1.PERS.rHMI_T1_G1_Weg_ABS_Max;PLC1.PERS.rHMI_T1_G1_Weg_ABS_Max; ; ; ; ; ; ; ; ; ; ;
-PLC1.PERS.rHMI_T1_G1_Weg_ABS_Min;PLC1.PERS.rHMI_T1_G1_Weg_ABS_Min; ; ; ; ; ; ; ; ; ; ;
-PLC1.PERS.rTWIN1_G1_Weg_DIF_Max;PLC1.PERS.rTWIN1_G1_Weg_DIF_Max; ; ; ; ; ; ; ; ; ; ;
-PLC1.PERS.rTWIN1_G1_Weg_DIF_Min;PLC1.PERS.rTWIN1_G1_Weg_DIF_Min; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiCountHauto;PLC1.PERS.udiCountHauto; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiCountHon;PLC1.PERS.udiCountHon; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTempNOK;PLC1.PERS.udiTempNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTempOK;PLC1.PERS.udiTempOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalNOK;PLC1.PERS.udiTotalNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalOK;PLC1.PERS.udiTotalOK; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo110@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo110@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo110@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo110@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo115@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo115@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo115@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo115@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo120@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo120@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo120@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo120@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo125@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo125@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo125@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo125@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo130@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo130@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo130@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo130@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo135@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo135@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo135@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo135@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo140@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo140@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo140@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo140@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo145@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo145@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo145@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo145@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo150@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo150@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo150@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo150@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo155@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo155@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo155@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo155@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[0].movesList[0].lrPosition;PLC1._20_AUTO.recipe.linearAxis[0].movesList[0].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_AxisNo@].movesList[@CO_ListNo@].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_AxisNo@].movesList[@CO_ListNo@].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo110Y01@].movesList[0].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo110Y01@].movesList[0].lrPosition; ; ; ; ; ; ; ; ; ; ;
