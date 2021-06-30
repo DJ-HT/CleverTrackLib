@@ -402,11 +402,11 @@ END_IF
 
 IF CONST.BIND_WITH_TRACK THEN
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
-        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.0 :=
+        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.release :=
             _MoverList[mv_i].State = MoverState_e.MovingToStation;
 
-        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation := _MoverList[mv_i].Station.SuperTrackNumber;
-        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].iNextOffset  := 0;
+        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation   := _MoverList[mv_i].Station.SuperTrackNumber;
+        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].diNextOffset_um := 0;
     END_FOR
 END_IF
 

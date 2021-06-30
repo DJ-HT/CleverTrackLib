@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <DUT Name="CT_Track_Tc_to_BR_t" Id="{f85518ed-8a0e-4ded-9191-92f3f24274ff}">
-    <Declaration><![CDATA[TYPE CT_Track_Tc_to_BR_t :
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE CT_Track_Tc_to_BR_t :
 STRUCT
-    bCommand : BYTE; (* command bit field for the track system *)
+    bCommand : CT_Track_TC_to_BR_Command_t; (* command bit field for the track system *)
 END_STRUCT
 END_TYPE
 ]]></Declaration>

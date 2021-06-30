@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CT_Shuttle_Tc_To_BR_Command_t" Id="{8be8d801-e52a-46f4-9550-c816422a7d7e}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE CT_Shuttle_Tc_To_BR_Command_t :
+STRUCT
+    release    : BIT; // Move the shuttle to the next position
+    dirFarward : BIT; // Specify the farward direction (depends on the SuperTrak configuration)
+    dirReverse : BIT; // Specify the reverse direction (depends on the SuperTrak configuration) 
+    reserve4   : BIT; // 
+    reserve5   : BIT; // 
+    reserve6   : BIT; // 
+    reserve7   : BIT; // 
+    reserve8   : BIT; // 
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

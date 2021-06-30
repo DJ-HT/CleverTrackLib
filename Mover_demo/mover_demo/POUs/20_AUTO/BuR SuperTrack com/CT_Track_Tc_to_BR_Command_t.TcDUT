@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CT_Track_Tc_to_BR_Command_t" Id="{5ea264c9-daac-47fe-b432-f90058f082b2}">
+    <Declaration><![CDATA[// track command from twincat to BR PLC
+{attribute 'pack_mode' := '1'}
+TYPE CT_Track_Tc_to_BR_Command_t :
+STRUCT
+    {STweep.disable}
+    twincatReady                : BIT; // TRUE when the twincat PLC is ready to operate (not in error and cleverTrackLib is ok)
+    wholePathFree               : BIT; // TRUE wen all the station are in a position where all the mover can freely rotate on all the track
+    resetErrors                 : BIT; // rising edge of this signal will reset all current errors from the supertrack
+    enablePower                 : BIT; // enable power on the track, this will energized all shuttles and they will stay at current place
+    enableProcess               : BIT; // allow cleverTrackLib to take control of the release sequence
+    startMoverNumberingSequence : BIT; // tell BR PLC that we will start the number attribution sequence
+    setShuttleNumber            : BIT; // tell BR PLC that we will give the next available number to the current shuttle
+    releaseUnknownShuttle       : BIT; // tell BR PLC that we will pass this shuttle without attributing it a number
+	{STweep.Enable}
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

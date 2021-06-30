@@ -116,7 +116,7 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[IF CONST.BIND_WITH_TRACK THEN
-    CurrentPos := TO_LREAL(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._iID].diCurrentPos_um) / 1000.0;
+    CurrentPos := TO_LREAL(gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._iID].diCurrentPos_um) / 1000.0;
 ELSE
     CurrentPos := _CurrentPos;
 END_IF

@@ -8,7 +8,7 @@ VAR_GLOBAL CONSTANT
     (*******************************************************************)
 
     USE_SIMULATION  : BOOL := TRUE;
-    BIND_WITH_TRACK : BOOL := FALSE;
+    BIND_WITH_TRACK : BOOL := TRUE;
 
     STATION_NUMBER           : INT   := 19;
     MAX_GROUP                : INT   := 6;
