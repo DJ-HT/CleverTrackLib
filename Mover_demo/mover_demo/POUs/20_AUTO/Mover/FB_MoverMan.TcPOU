@@ -210,13 +210,60 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 CASE step OF
-0:
+
+0: // setup everything
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
         _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetStartStation(_MoverList[mv_i].MoverAxis.CurrentPos)^);
         _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
-        _MoverList[mv_i].MoveToStation();
     END_FOR
 
+    step := 5;
+
+5: // wait until the whole path is free
+
+    IF gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.wholePathFree THEN
+        step := 10;
+    END_IF
+10:
+    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enablePower := TRUE;
+
+    IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.powerOn THEN
+        step := 11;
+    END_IF
+
+11: // init all mover until they the first shuttle is found
+    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.startMoverNumberingSequence := TRUE;
+
+    IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.allIdSet THEN
+        step := 13;
+    END_IF
+
+    IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.unknownMoverAtTarget1 THEN
+        IF IO_BOX.I8604_ST101_first_shuttle_pin THEN
+            step := 12;
+        ELSE
+            gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.releaseUnknownShuttle := TRUE;
+        END_IF
+    ELSE
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.releaseUnknownShuttle := FALSE;
+    END_IF
+
+12: // set all id since the first is found
+    IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.unknownMoverAtTarget1 THEN
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.setShuttleNumber := TRUE;
+    ELSE
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.setShuttleNumber := FALSE;
+    END_IF
+
+    IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.allIdSet THEN
+        step := 13;
+    END_IF
+
+13: // stop id attrib sequence
+    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.startMoverNumberingSequence := FALSE;
+    step                                                                      := 14;
+
+14: // check parameter
     // TODO here we have clearly somthing that will not work
     // when using groups... Groups should use the first station to set the waiting position
     // of the whole group
@@ -224,15 +271,16 @@ CASE step OF
         ASSERT(0);
     END_IF
 
-    step := 1;
-1:
+    step := 15;
+
+15: //move every shuttle to the last station
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
         _MoverList[mv_i].SetStation(THIS^._StationList[CONST.STATION_NUMBER]);
         _MoverList[mv_i].MoveToStation();
     END_FOR
 
-    step := 2;
-2:
+    step := 16;
+16:
 // do nothing, init done
 
 END_CASE
@@ -400,13 +448,22 @@ END_IF
 
 // stop update simu mover **********************************************
 
+FOR mv_i := 1 TO CONST.STATION_NUMBER BY 1 DO
+    IF __ISVALIDREF(_MoverList[mv_i].Station) AND __ISVALIDREF(_20_AUTO.recipe) THEN
+        _MoverList[mv_i].Station.Offset := _20_AUTO.recipe.stationOffsets[mv_i];
+    END_IF
+END_FOR
+
 IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enableProcess THEN
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
-        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.release :=
-            _MoverList[mv_i].State = MoverState_e.MovingToStation;
+        IF __ISVALIDREF(_MoverList[mv_i].Station) THEN
+            gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.release :=
+                _MoverList[mv_i].State = MoverState_e.MovingToStation;
 
-        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation    := _MoverList[mv_i].Station.SuperTrackNumber;
-        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].diNextOffset_um := 0;
+            gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation    := _MoverList[mv_i].Station.SuperTrackNumber;
+            gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].diNextOffset_um :=
+                LREAL_TO_DINT(_MoverList[mv_i].Station.Offset * 1000);
+        END_IF
     END_FOR
 END_IF
 

@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <Visu Name="VISU_MoverDetail" Id="{3c60e503-48c2-4a6b-81a1-aaecffae9186}">
     <XmlArchive>
@@ -3026,10 +3027,10 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                                 <v>TL_ElementProperties.Points</v>
                                 <v>DescriptionUseFromParent</v>
                                 <v></v>
-                                <v>''NORMAL__COMMENT</v>
-                                <v> There is no more information than the parent provides</v>
                                 <v>DefaultArraySize</v>
                                 <v>500</v>
+                                <v>''NORMAL__COMMENT</v>
+                                <v> There is no more information than the parent provides</v>
                               </d>
                               <v n="ConvDone">true</v>
                             </o>
@@ -3082,6 +3083,8 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                         <o n="TypeNodeAttributes" t="TypeNodeAttributes2">
                           <v n="AttrFlags">81920UL</v>
                           <d n="TypeNodeAttributesData" t="CaseInsensitiveHashtable" ckt="String" cvt="String">
+                            <v>PolygonPoints</v>
+                            <v></v>
                             <v>DescriptionTextId</v>
                             <v>TL_ElementProperties.Desc_StaticLinePos</v>
                             <v>DisplayTextId</v>
@@ -3098,8 +3101,6 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                             <v>visu_elemdev</v>
                             <v>Storable</v>
                             <v>True</v>
-                            <v>PolygonPoints</v>
-                            <v></v>
                           </d>
                           <v n="ConvDone">true</v>
                         </o>
@@ -4945,7 +4946,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[0]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[0]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5125,7 +5126,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[1]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[1]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5305,7 +5306,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[2]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[2]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5485,7 +5486,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[3]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[3]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5665,7 +5666,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[4]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[4]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5845,7 +5846,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[5]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[5]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6025,7 +6026,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[6]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[6]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6205,7 +6206,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[7]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[7]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6385,7 +6386,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[8]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[8]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6565,7 +6566,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[9]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[9]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6874,7 +6875,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[10]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[10]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7054,7 +7055,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[17]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[17]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7234,7 +7235,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[16]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[16]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7414,7 +7415,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[15]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[15]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7594,7 +7595,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[14]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[14]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7774,7 +7775,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[13]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[13]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7954,7 +7955,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[12]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[12]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -8134,7 +8135,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[11]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[11]"</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>

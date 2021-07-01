@@ -423,6 +423,14 @@ VAR_GLOBAL
     I8401_ST125_maximum_wf   AT %I* : BOOL; //  1: Maximum WF
     Q8402_ST125_freigabe_wf  AT %Q* : BOOL; // q2: Freigabe WF
 
+    //-???
+    (* feeder ST101 - 8x I *)
+    I8600_ST101_homing_rotation_table    AT %I* : BOOL; // should not be here
+    I8601_ST101_shuttle_pin_config_pro   AT %I* : BOOL; // 2: shuttle pin config pro/maxi blocked in pro position
+    I8602_ST101_shuttle_pin_config_maxi  AT %I* : BOOL; // 3: shuttle pin config pro/maxi blocked in maxi position
+    I8603_ST101_shuttle_ring_pro_present AT %I* : BOOL; // 4: pro ring present on the shuttle
+    I8604_ST101_first_shuttle_pin        AT %I* : BOOL; // 5: sensor to detect the first shuttle
+
     (* IO-Link Boxen 10191A5 *)
     (*******************************************************************)
     //-5016

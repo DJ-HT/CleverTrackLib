@@ -5,11 +5,11 @@
 TYPE
 CT_Shuttle_BR_to_Tc_t :
 STRUCT
-    bStatus           : CT_Shuttle_BR_to_Tc_Status_t; // status flag	
-    diCurrentPos_um   : DINT;                          // current position, expressed as um
-    iCurrentVelo_mmps : INT;                           // current velocity in mm per second
-    bfallowingError   : BYTE;                          // fallowing error 
-    bShelfLentgh_mm   : INT;                           // shelf length in mm 
+    bStatus             : CT_Shuttle_BR_to_Tc_Status_t; // status flag	
+    diCurrentPos_um     : DINT;                         // current position, expressed as um
+    iCurrentVelo_mmps   : INT;                          // current velocity in mm per second
+    bDestinationStation : BYTE;                         // 0 = no station, else the destination station
+    bShelfLentgh_mm     : INT;                          // shelf length in mm 
 END_STRUCT
 END_TYPE
 ]]></Declaration>

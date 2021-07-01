@@ -106,10 +106,17 @@ END_VAR
       <Implementation>
         <ST><![CDATA[// we have to substract the piecholder offset to find the station position again
 IF CONST.BIND_WITH_TRACK THEN
-    IsInStationPos :=
-        THIS^.Station.Position.isInPos(gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
-                                       THIS^._AttachedTool.PosOffset -
-                                       THIS^.Station.Offset);
+    // IsInStationPos :=
+    //     THIS^.Station.Position.isInPos(gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
+    //                                    THIS^._AttachedTool.PosOffset -
+    //                                    THIS^.Station.Offset);
+    IF __ISVALIDREF(THIS^.Station) THEN
+        IsInStationPos :=
+            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.in_position;
+ 				// AND (gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bDestinationStation = THIS^.Station.SuperTrackNumber);
+    ELSE
+        IsInStationPos := FALSE;
+    END_IF
 ELSE
     IsInStationPos := THIS^.Station.Position
         .isInPos(THIS^.MoverAxis.CurrentPos - THIS^._AttachedTool.PosOffset - THIS^.Station.Offset);
