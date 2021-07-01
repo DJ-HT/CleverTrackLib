@@ -71,25 +71,25 @@ VAR
                                                              (8875, 1, 1)];
 
     _StationList : ARRAY[1..CONST.STATION_NUMBER] OF
-        FB_Station[(_PosList[1], GVL.st105_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[2], GVL.st110_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
-                   (_PosList[3], GVL.st115_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
-                   (_PosList[4], GVL.st120_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[5], GVL.st125_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[6], GVL.st130_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
-                   (_PosList[7], GVL.st135_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[8], GVL.st140_aut, 0, ApproachScenario_e.DoNotWait, 0),
-                   (_PosList[9], GVL.st145_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[10], GVL.st150_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1),
-                   (_PosList[11], GVL.st155_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 1),
-                   (_PosList[12], GVL.st160_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[13], GVL.st165_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[14], GVL.st170_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 2),
-                   (_PosList[15], 0, 0, ApproachScenario_e.DoNotWait, 3),
-                   (_PosList[16], GVL.st175_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[17], GVL.st176_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0),
-                   (_PosList[18], GVL.st180_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3),
-                   (_PosList[19], GVL.st185_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0)];
+        FB_Station[(_PosList[1], GVL.st105_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3, 5),
+                   (_PosList[2], GVL.st110_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1, 10),
+                   (_PosList[3], GVL.st115_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1, 15),
+                   (_PosList[4], GVL.st120_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 20),
+                   (_PosList[5], GVL.st125_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 25),
+                   (_PosList[6], GVL.st130_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 2, 30),
+                   (_PosList[7], GVL.st135_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 3, 35),
+                   (_PosList[8], GVL.st140_aut, 0, ApproachScenario_e.DoNotWait, 0, 40),
+                   (_PosList[9], GVL.st145_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 45),
+                   (_PosList[10], GVL.st150_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 1, 50),
+                   (_PosList[11], GVL.st155_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 1, 55),
+                   (_PosList[12], GVL.st160_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3, 60),
+                   (_PosList[13], GVL.st165_aut, -500, ApproachScenario_e.WaitOnFinishedProcess, 3, 65),
+                   (_PosList[14], GVL.st170_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 2, 70),
+                   (_PosList[15], 0, 0, ApproachScenario_e.DoNotWait, 3, 74),
+                   (_PosList[16], GVL.st175_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 75),
+                   (_PosList[17], GVL.st176_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 76),
+                   (_PosList[18], GVL.st180_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3, 80),
+                   (_PosList[19], GVL.st185_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 85)];
 
     _StationSet1 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
@@ -400,13 +400,24 @@ END_IF
 
 // stop update simu mover **********************************************
 
-IF CONST.BIND_WITH_TRACK THEN
+IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enableProcess THEN
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
         gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.release :=
             _MoverList[mv_i].State = MoverState_e.MovingToStation;
 
-        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation   := _MoverList[mv_i].Station.SuperTrackNumber;
+        gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation    := _MoverList[mv_i].Station.SuperTrackNumber;
         gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].diNextOffset_um := 0;
+    END_FOR
+END_IF
+
+// test if path is free
+IF CONST.BIND_WITH_TRACK THEN
+    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.wholePathFree := TRUE;
+
+    FOR mv_i := 1 TO CONST.STATION_NUMBER BY 1 DO
+        IF __ISVALIDREF(_StationList[mv_i].Process) AND_THEN NOT _StationList[mv_i].Process.xMoverPathFree THEN
+            gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.wholePathFree := FALSE;
+        END_IF
     END_FOR
 END_IF
 

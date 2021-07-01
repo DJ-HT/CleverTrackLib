@@ -9,7 +9,7 @@ STRUCT
     error       : BIT; // The track is in error
     powerOn     : BIT; // The shuttles are energized
     inOperation : BIT; // The track is now under control of CleverTrackLib
-    reserve5    : BIT; // 
+    allIdSet    : BIT; // All the ID's are set and verified
     reserve6    : BIT; // 
     reserve7    : BIT; // 
     reserve8    : BIT; // 

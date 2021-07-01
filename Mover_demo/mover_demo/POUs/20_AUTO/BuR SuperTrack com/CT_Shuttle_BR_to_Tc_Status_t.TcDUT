@@ -6,13 +6,13 @@ TYPE
 CT_Shuttle_BR_to_Tc_Status_t :
 STRUCT
     {STweep.disable}
+    reserve1               : BIT; // 
     recovering             : BIT; // 
     at_target              : BIT; // 
     in_position            : BIT; // 
     servo_enabled          : BIT; // 
     moving_to_load_target  : BIT; // 
     lost_position_feedback : BIT; // 
-    reserve7               : BIT; // 
     reserve8               : BIT; // 
     {STweep.Enable}
 END_STRUCT
