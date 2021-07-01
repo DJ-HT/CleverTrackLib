@@ -275,10 +275,11 @@ fb_handlingSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         xIN_GS       := simu_handlingSolerohrLeft.xOUT_inGS, // TODO use sensor
                         xIN_AS       := simu_handlingSolerohrLeft.xOUT_inAS, // TODO use sensor
                         xIN_FREE     := TRUE,
-                        xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step,
-                        xINtoAS      := _20_AUTO.recipe.st125.xUseVerLeft AND ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
-                        tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
-                                                         [ST125_Cylinders_e.HandlingSolerohrLinks].toAS_alarm_time),
+                        xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step OR
+                                        ST125_Pnp_e.Init_handling_up = iOUT_Step,
+                        xINtoAS   := _20_AUTO.recipe.st125.xUseVerLeft AND ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
+                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
+                                                      [ST125_Cylinders_e.HandlingSolerohrLinks].toAS_alarm_time),
                         tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                       [ST125_Cylinders_e.HandlingSolerohrLinks].toGS_alarm_time),
                         tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
@@ -300,8 +301,9 @@ fb_handlingSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_
                          xIN_GS       := simu_handlingSolerohrRight.xOUT_inGS,
                          xIN_AS       := simu_handlingSolerohrRight.xOUT_inAS,
                          xIN_FREE     := TRUE,
-                         xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step,
-                         xINtoAS      :=
+                         xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step OR
+                                         ST125_Pnp_e.Init_handling_up = iOUT_Step,
+                         xINtoAS :=
                              _20_AUTO.recipe.st125.xUseVerRight AND ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
                          tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                        [ST125_Cylinders_e.HandlingSolerohrRechts].toAS_alarm_time),
@@ -523,8 +525,13 @@ ST125_Pnp_e.Init_HomeHorizontals:
 
 ST125_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST125_PnpHorPos_e.GS).xOUT_InPos THEN
-        iOUT_Step := ST125_Pnp_e.Init_adjust_left_clamp;
+        iOUT_Step := ST125_Pnp_e.Init_handling_up;
     END_IF
+	
+ST125_Pnp_e.Init_handling_up:
+	IF fb_handlingSolerohrLeft.xOUT_inGS AND fb_handlingSolerohrRight.xOUT_inGS THEN
+        iOUT_Step := ST125_Pnp_e.Init_adjust_left_clamp;
+	END_IF
 
 ST125_Pnp_e.Init_adjust_left_clamp:
     // a piece is in the griper when there is no GS signal

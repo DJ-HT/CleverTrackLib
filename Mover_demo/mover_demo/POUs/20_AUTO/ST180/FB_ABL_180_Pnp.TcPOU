@@ -451,7 +451,11 @@ ST180_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST180_Pnp_e.INIT: (* Grundstellung ? *)
+IF fb_axis180_02Z.xOUT_HOMED THEN
+    iOUT_Step := ST180_Pnp_e.Init_Vertical_02_Up;
+ELSE
     iOUT_Step := ST180_Pnp_e.Init_HomeVertical_02;
+END_IF
 
 ST180_Pnp_e.Init_HomeVertical_02:
     IF fb_axis180_02Z.xOUT_HOMED THEN
@@ -460,7 +464,7 @@ ST180_Pnp_e.Init_HomeVertical_02:
 
 ST180_Pnp_e.Init_Vertical_02_Up:
     IF fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_full).xOUT_InPos THEN
-        IF fb_axis180_10Z.xOUT_READY OR fb_axis180_10Z.xOUT_HOMED THEN
+        IF fb_axis180_10Z.xOUT_HOMED THEN
             iOUT_Step := ST180_Pnp_e.Init_HorizontalToTrack;
         ELSE
             iOUT_Step := ST180_Pnp_e.Init_HomeVertical_10;

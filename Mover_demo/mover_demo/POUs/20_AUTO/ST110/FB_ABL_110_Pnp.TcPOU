@@ -86,10 +86,11 @@ VAR
 
     fb_kraftLeft  : FB_WandlerForceSensor;
     fb_kraftRight : FB_WandlerForceSensor;
-	
+
 END_VAR
 VAR CONSTANT
     PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    PNP_DONT_CHECK_KRAFT : BOOL := TRUE;  // don't care of kraft sensor
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -592,7 +593,7 @@ ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
        NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
        NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
-        IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
+        IF (PNP_SIMULATION AND CONST.USE_SIMULATION) OR PNP_DONT_CHECK_KRAFT THEN
             iOUT_Step := ST110_Pnp_e.PnP_Ver_quick_stop;
         ELSE
             iOUT_Step := ST110_Pnp_e.ERROR;
