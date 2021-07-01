@@ -112,8 +112,8 @@ IF CONST.BIND_WITH_TRACK THEN
     //                                    THIS^.Station.Offset);
     IF __ISVALIDREF(THIS^.Station) THEN
         IsInStationPos :=
-            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.in_position;
- 				// AND (gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bDestinationStation = THIS^.Station.SuperTrackNumber);
+            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.in_position AND
+            (gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bDestinationStation = THIS^.Station.SuperTrackNumber);
     ELSE
         IsInStationPos := FALSE;
     END_IF

@@ -450,7 +450,7 @@ END_IF
 
 FOR mv_i := 1 TO CONST.STATION_NUMBER BY 1 DO
     IF __ISVALIDREF(_MoverList[mv_i].Station) AND __ISVALIDREF(_20_AUTO.recipe) THEN
-        _MoverList[mv_i].Station.Offset := _20_AUTO.recipe.stationOffsets[mv_i];
+        _StationList[mv_i].Offset := _20_AUTO.recipe.stationOffsets[mv_i-1];
     END_IF
 END_FOR
 
