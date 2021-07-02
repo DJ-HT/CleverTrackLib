@@ -10,10 +10,10 @@ ST185_Pnp_e :
     RESET := 0, // Reset
 
     INIT := 100, // Initialisieren 
-    Init_HomeVertical_02,
-    Init_Vertical_02_Up,
     Init_HomeVertical_10,
     Init_Vertical_10_Down,
+    Init_HomeVertical_02,
+    Init_Vertical_02_Up,
     Init_HomeHorizontal,
     Init_HorizontalToTrack,
     Init_check_if_pces_handled,
@@ -65,22 +65,22 @@ check level NIO Box
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_HomeVertical_02"</v>
-              <v n="TextDefault">""</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"Init_Vertical_02_Up"</v>
-              <v n="TextDefault">""</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
               <v n="TextID">"Init_HomeVertical_10"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_Vertical_10_Down"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_HomeVertical_02"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_Vertical_02_Up"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

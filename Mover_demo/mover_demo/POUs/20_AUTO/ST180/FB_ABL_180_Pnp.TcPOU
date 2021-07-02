@@ -167,7 +167,7 @@ fb_PnpVerAxis_02(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  xIN_Init        := enIN_State = enState.StateINIT,
                  xIN_Reset       := xIN_Reset,
                  lrIN_CurrPos    := fb_axis180_02Z.rOUT_ActPos,
-                 lrIN_Delta_mm   := 0.75,
+                 lrIN_Delta_mm   := 1.5,
                  iIN_CurrentStep := iOUT_Step,
                  iIN_moveNumber  := ST180_PnpVerPos_e._max);
 
@@ -433,6 +433,26 @@ END_IF
 (* START *)
 rtSTART(CLK := xIN_Start);
 
+IF 0 = bOUT_Error THEN
+    IF fb_axis180_01Y.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_axis180_02Z.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_axis180_10Z.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    ELSIF fb_griperLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 14;
+    ELSIF fb_griperRight.xOUT_ErrFlag THEN
+        bOUT_Error := 15;
+    ELSIF fb_clampLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 16;
+    ELSIF fb_clampRight.xOUT_ErrFlag THEN
+        bOUT_Error := 17;
+    END_IF
+ELSIF iOUT_Step < ST180_Pnp_e.ERROR THEN
+    iOUT_Step := ST180_Pnp_e.ERROR;
+END_IF
+
 (*******************************************************************)
 (* Schrittkette  *)
 (*******************************************************************)
@@ -452,10 +472,24 @@ ST180_Pnp_e.RESET: (* Schritt 0-99 *)
 (***** INIT *****)
 ST180_Pnp_e.INIT: (* Grundstellung ? *)
 IF fb_axis180_02Z.xOUT_HOMED THEN
-    iOUT_Step := ST180_Pnp_e.Init_Vertical_02_Up;
+    iOUT_Step := ST180_Pnp_e.Init_Vertical_10_Down;
 ELSE
-    iOUT_Step := ST180_Pnp_e.Init_HomeVertical_02;
+    iOUT_Step := ST180_Pnp_e.Init_HomeVertical_10;
 END_IF
+
+ST180_Pnp_e.Init_HomeVertical_10:
+    IF fb_axis180_10Z.xOUT_HOMED THEN
+        iOUT_Step := ST180_Pnp_e.Init_Vertical_02_Up;
+    END_IF
+
+ST180_Pnp_e.Init_Vertical_10_Down:
+    IF fb_PnpVerAxis_10.MoveTo(ST180_PnpHorPos_e.GS).xOUT_InPos THEN
+        IF fb_axis180_10Z.xOUT_HOMED THEN
+            iOUT_Step := ST180_Pnp_e.Init_Vertical_02_Up;
+        ELSE
+            iOUT_Step := ST180_Pnp_e.Init_HomeVertical_02;
+        END_IF
+    END_IF
 
 ST180_Pnp_e.Init_HomeVertical_02:
     IF fb_axis180_02Z.xOUT_HOMED THEN
@@ -463,31 +497,17 @@ ST180_Pnp_e.Init_HomeVertical_02:
     END_IF
 
 ST180_Pnp_e.Init_Vertical_02_Up:
-    IF fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_full).xOUT_InPos THEN
-        IF fb_axis180_10Z.xOUT_HOMED THEN
-            iOUT_Step := ST180_Pnp_e.Init_HorizontalToTrack;
-        ELSE
-            iOUT_Step := ST180_Pnp_e.Init_HomeVertical_10;
-        END_IF
-    END_IF
-
-ST180_Pnp_e.Init_HomeVertical_10:
-    IF fb_axis180_10Z.xOUT_HOMED THEN
-        iOUT_Step := ST180_Pnp_e.Init_Vertical_10_Down;
-    END_IF
-
-ST180_Pnp_e.Init_Vertical_10_Down:
     IF fb_griperLeft.xIN_GS OR fb_griperRight.xIN_GS THEN
         IF fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_full).xOUT_InPos THEN
-            IF fb_axis180_01Y.xOUT_READY OR fb_axis180_01Y.xOUT_HOMED THEN
+            IF fb_axis180_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST180_Pnp_e.Init_HorizontalToTrack;
             ELSE
                 iOUT_Step := ST180_Pnp_e.Init_HomeHorizontal;
             END_IF
         END_IF
     ELSE
-        IF fb_PnpVerAxis_10.MoveTo(ST180_PnpHorPos_e.GS).xOUT_InPos THEN
-            IF fb_axis180_01Y.xOUT_READY OR fb_axis180_01Y.xOUT_HOMED THEN
+        IF fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_empty).xOUT_InPos THEN
+            IF fb_axis180_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST180_Pnp_e.Init_HorizontalToTrack;
             ELSE
                 iOUT_Step := ST180_Pnp_e.Init_HomeHorizontal;
@@ -496,8 +516,6 @@ ST180_Pnp_e.Init_Vertical_10_Down:
     END_IF
 
 ST180_Pnp_e.Init_HomeHorizontal:
-    fb_axis180_01Y.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_01Y].defProfile.lrVelocity;
-
     IF fb_axis180_01Y.xOUT_HOMED THEN
         iOUT_Step := ST180_Pnp_e.Init_HorizontalToTrack;
     END_IF

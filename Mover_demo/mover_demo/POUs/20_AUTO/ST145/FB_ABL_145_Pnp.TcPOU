@@ -81,7 +81,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -225,7 +225,7 @@ fb_vakumGriperLeft(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),
                    tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST145]
                                                   [ST145_Cylinders_e.VakuumgreiferLinks].toGS_wait_time));
 
-simu_vacumGriperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_vacumGriperLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                      xIN_inGS   := NOT IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left,
                      xIN_inAS   := IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left,
                      xIN_valve  := fb_vakumGriperLeft.xOUT_VALVE,
@@ -250,7 +250,6 @@ fb_vakumGriperRight(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step)
                     tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST145]
                                                    [ST145_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
-simu_vacumGriperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
 simu_vacumGriperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                       xIN_inGS   := NOT IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right,
                       xIN_inAS   := IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right,
