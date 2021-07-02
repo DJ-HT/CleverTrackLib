@@ -413,6 +413,9 @@ IO_BOX.Q5406_14_ST185_niederhalter_deckel_links :=
 IO_BOX.Q5407_14_ST185_Niederhalter_deckel_rechts :=
     fb_clampRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
+// safety pneumatics
+IO_BOX.Q5409_14_ST185_Break_axis_02Z := fb_simu_axis185_02Z.pIN_axisHW^.Status.Operational AND _02_SAFETY.xOUT_ESout;
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)
