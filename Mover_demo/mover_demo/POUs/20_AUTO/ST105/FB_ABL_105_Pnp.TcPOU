@@ -82,7 +82,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -194,20 +194,22 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
 
 xOUT_PickPiece := iOUT_Step = ST105_Pnp_e.pusher_down;
 
-fanuc_cmd.command_std.IMDSTP     := TRUE;
-fanuc_cmd.command_std.Hold       := TRUE;
-fanuc_cmd.command_std.SFSPD      := TRUE;
+fanuc_cmd.command_std.IMDSTP     := TRUE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+fanuc_cmd.command_std.Hold       := TRUE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+fanuc_cmd.command_std.SFSPD      := TRUE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 fanuc_cmd.command_std.FaultReset := xIN_Quit;
-fanuc_cmd.command_std.Start      := iOUT_Step = ST105_Pnp_e.Init_RobotRaiseStartFlag;
-fanuc_cmd.command_std.Enable     := TRUE;
+fanuc_cmd.command_std.Start      := iOUT_Step = ST105_Pnp_e.Init_RobotRaiseStartFlag AND
+                                    NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+fanuc_cmd.command_std.Enable := TRUE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 PickOffset_X_deci := _20_AUTO.recipe.st105.PickOffset_X_deci;
 PickOffset_Y_deci := _20_AUTO.recipe.st105.PickOffset_Y_deci;
 // add a constant to adjust the screw height of the rotative table
 PickUpPos_Z_deci := _20_AUTO.recipe.st105.PickUpPos_Z_deci + UINT#500;
 
-aut_cmd_to_robot.FG_Pick  := ST105_Pnp_e.Robot_Pick = iOUT_Step;
-aut_cmd_to_robot.FG_Place := ST105_Pnp_e.Robot_place = iOUT_Step;
+aut_cmd_to_robot.FG_Pick  := ST105_Pnp_e.Robot_Pick = iOUT_Step AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+aut_cmd_to_robot.FG_Place := ST105_Pnp_e.Robot_place = iOUT_Step AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 aut_cmd_to_robot.XOff     := _20_AUTO.recipe.st105.isPickOffset_X_neg;
 aut_cmd_to_robot.YOff     := _20_AUTO.recipe.st105.isPickOffset_Y_neg;
 aut_cmd_to_robot.ZOff     := _20_AUTO.recipe.st105.isPickUpPos_Z_neg;
@@ -276,7 +278,7 @@ ST105_Pnp_e.Init_RobotRaiseStartFlag:
     END_IF
 
 ST105_Pnp_e.Init_RobotFallStartFlag:
-    IF fanuc_status.PRG_Running THEN
+    IF fanuc_status.PRG_Running OR (PNP_SIMULATION AND CONST.USE_SIMULATION) THEN
         iOUT_Step := ST105_Pnp_e.Init_check_if_pces_handled;
     END_IF
 
@@ -304,7 +306,11 @@ ST105_Pnp_e.wait_on_feeder:
 
 ST105_Pnp_e.push_up_casing:
     IF xIN_NextStep AND fb_PnpVerAxisU.MoveTo(ST105_PnpVerPushPos_e.up).xOUT_InPos THEN
-        iOUT_Step := ST105_Pnp_e.Robot_Pick;
+        IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST105_Pnp_e.pusher_down;
+        ELSE
+            iOUT_Step := ST105_Pnp_e.Robot_Pick;
+        END_IF
     END_IF
 
 ST105_Pnp_e.Robot_Pick:
@@ -324,7 +330,11 @@ ST105_Pnp_e.pusher_down:
 
 ST105_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST105]) THEN
-        iOUT_Step := ST105_Pnp_e.Robot_place;
+        IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST105_Pnp_e.Robot_place;
+        END_IF
     END_IF;
 
 ST105_Pnp_e.Robot_place:
