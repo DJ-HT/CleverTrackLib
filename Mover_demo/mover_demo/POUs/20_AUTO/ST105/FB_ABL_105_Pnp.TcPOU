@@ -307,7 +307,9 @@ ST105_Pnp_e.wait_on_feeder:
 ST105_Pnp_e.push_up_casing:
     IF xIN_NextStep AND fb_PnpVerAxisU.MoveTo(ST105_PnpVerPushPos_e.up).xOUT_InPos THEN
         IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
-            iOUT_Step := ST105_Pnp_e.pusher_down;
+			IF fb_axis105_11Z.xOUT_DONE THEN // needed beacause we perform 2 movements one after the other
+            	iOUT_Step := ST105_Pnp_e.pusher_down;
+			END_IF
         ELSE
             iOUT_Step := ST105_Pnp_e.Robot_Pick;
         END_IF
