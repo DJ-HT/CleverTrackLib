@@ -92,7 +92,8 @@ fb_Feeder(xIN_Reset       := xReset,
           // special
           xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
           xIN_RotTableBlockedByPnp := fb_Pnp.iOUT_Step = ST105_Pnp_e.Robot_wait_picked_falling OR
-                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.Robot_Pick);
+                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.Robot_Pick OR
+                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.pusher_down);
 
 (*******************************************************************)
 (* Mover reset flags *)
