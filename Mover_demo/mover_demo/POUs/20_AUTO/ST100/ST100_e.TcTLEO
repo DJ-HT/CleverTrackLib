@@ -8,7 +8,10 @@ TYPE
 ST100_e :
 (
     RESET := 0,         // Reset
-    INIT := 100,        // Initialisieren 
+    INIT := 100,        // Initialisieren
+	
+	
+	
     READY := 999,       // READY to Start, Init Done 
     START := 1000,      // Start Zyklisch
     MOVER_FREE_OP,      // Ab here, operation without mover can be done
@@ -21,7 +24,17 @@ ST100_e :
     _max
 );
 END_TYPE
-]]></Declaration>
+
+
+// 0:  // setup everything
+// 5:  // wait until the whole path is free
+// 10: // turn power on
+// 11: // init all mover until they the first shuttle is found
+// 12: // set all id since the first is found
+// 13: // stop id attrib sequence                
+// 14: // check parameter
+// 15: //move every shuttle to the last station
+// 16: // do nothing, init done]]></Declaration>
     <XmlArchive>
       <Data>
         <o xml:space="preserve" t="TextListEnumerationTextListObject">

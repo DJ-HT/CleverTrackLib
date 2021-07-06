@@ -4,6 +4,7 @@
     <Declaration><![CDATA[{attribute 'qualified_only'}
 TYPE LinearAxis_e :
 (
+    ST105_11Z,
     ST110_01Y,
     ST110_02Z,
     ST110_03Z,
@@ -39,6 +40,11 @@ END_TYPE
       <Data>
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"ST105_11Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
             <o>
               <v n="TextID">"ST110_01Y"</v>
               <v n="TextDefault">""</v>

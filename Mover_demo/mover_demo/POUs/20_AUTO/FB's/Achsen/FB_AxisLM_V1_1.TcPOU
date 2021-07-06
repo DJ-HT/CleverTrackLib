@@ -367,7 +367,7 @@ IF xOUT_HOMED THEN
 		//AUTO
 		IF (enIN_State>StateALARM) OR (enIN_State=StateINIT) OR (enIN_State=StateREF) THEN
 			//Mode
-			bJogMode:=0;
+			bJogMode:=1;
 			//Position
 			//Absolute
 			_MC_MoveAbs.Execute:= NOT xIN_Relative AND xIN_Execute;

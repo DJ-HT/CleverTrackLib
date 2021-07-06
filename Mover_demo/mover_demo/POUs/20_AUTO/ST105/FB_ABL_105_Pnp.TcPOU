@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ABL_105_Pnp" Id="{0eea3df6-5312-4200-892c-1c3b34999a29}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ABL_105_Pnp
+(****************************************************************************************)
+(*	TITEL				RFID-Ring laden		    										*)
+(*	Status				ungetestet                         								*)
+(*	Beschrieb:			Ablaufbeschreibung												*)
+(*																						*)
+(*	Steps:	self-explained using enum													*)
+(***********************************Revisionen*******************************************)
+(*	see github blames																	*)
+(****************************************************************************************)
+
+VAR_INPUT
+    xIN_Reset       : BOOL;          // Schrittkette zurücksetzen 
+    xIN_Init        : BOOL;          // Initialisieren
+    xIN_Quit        : BOOL;          // Fehler quittieren 
+    xIN_Start       : BOOL;          // Startbefehl
+    xIN_Sperre      : BOOL;          // FB Sperren 
+    xIN_NextStep    : BOOL;          // Nächsten Schritt ausführen 
+    xIN_AlarmAktiv  : BOOL;          // Anlage hat Alarm
+    xIN_DryCycle    : BOOL;          // Fahren ohne Teile
+    xIN_RestartCYCL : BOOL;          // Zyklus erneut starten im STEP, END, LEERFAHREN
+    enIN_State      : enState;       // Status Anlage
+    tIN_Timeout     : TIME := T#10s; // Timout
+
+    pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
+
+    // Application specific
+    Mover              : REFERENCE TO FB_Mover;
+    xIN_PceReadyToPick : BOOL; // the piece(s) is/are ready to picked
+END_VAR
+VAR_OUTPUT
+    (* standart Ausgänge *)
+    xOUT_ErrFlag  : BOOL;        // Error Flag 
+    xOUT_Busy     : BOOL;        // Baustein befindet sich im Ablauf 
+    xOUT_Done     : BOOL;        // Baustein hat den Ablauf beendet 		
+    xOUT_Ready    : BOOL;        // Ready to begin, should be the same state as done	
+    xOUT_Timeout  : BOOL;        // Timeout FB 
+    xOUT_InitDone : BOOL;        // initialisierung fertig
+    xOUT_Wait     : BOOL;        // Wartet auf Bedingung
+    iOUT_Step     : ST105_Pnp_e; // Aktueller Schritt 
+    sOUT_Step     : STRING;      // Aktueller Schritt but in string format
+    bOUT_Error    : BYTE;        // Fehlernummer
+
+    iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
+    xOUT_MoverFree         : BOOL; // The mover is free to move
+    xOUT_PickPiece         : BOOL; // Set to true when a piece is picked
+
+END_VAR
+VAR
+    (* Standard *)
+    (* Schritt *)
+    iLastStep : ST105_Pnp_e; // Merker letzter Schritt 
+    iPreStep  : ST105_Pnp_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST105_Pnp_e; // aktueller Schritt
+
+    // Trigger Starten 
+    rtSTART : R_TRIG;
+    // Timer TimeOut 
+    TON_Timeout : TON;
+
+    (* Bausteine *)
+
+    (* Spezial *)
+    fb_axis105_11Z : FB_AxisLM_V1_1;
+
+    fb_PnpVerAxisU : FB_LinearMotionMan;
+
+    fb_simu_axis105_11Z : FB_Simu_AxisLM_V1_1;
+
+    fanuc_cmd    AT %Q* : Fanuc_hw_command_to_robot_t;
+    fanuc_status AT %I* : Fanuc_status_std_from_robot;
+
+    aut_cmd_to_robot      AT %Q* : ST105_Fanuc_command_t;
+    aut_status_from_robot AT %I* : ST105_Fanuc_status_t;
+
+    PickOffset_X_deci AT %Q* : UINT; // X offset of picking position
+    PickOffset_Y_deci AT %Q* : UINT; // Y offset of picking position
+    PickUpPos_Z_deci  AT %Q* : UINT; // Z traveling height from pick to place position
+
+END_VAR
+VAR CONSTANT
+    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Trigger  *)
+(*******************************************************************)
+(* Zurücksetzen *)
+IF xIN_RESET THEN
+    iPreStep  := ST105_Pnp_e.RESET;
+    iOUT_Step := ST105_Pnp_e.RESET;
+END_IF;
+
+(* Error Quittieren *)
+IF (bOUT_Error <> 0) AND xIN_Quit THEN
+    xOUT_ErrFlag := FALSE;
+    bOUT_Error   := 0;
+    iOUT_Step    := iPreStep;
+END_IF;
+
+(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
+            PT := tIN_Timeout);
+
+(*******************************************************************)
+(* Bausteine *)
+(*******************************************************************)
+fb_PnpVerAxisU(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST105_11Z],
+               xIN_Init        := enIN_State = enState.StateINIT,
+               xIN_Reset       := xIN_Reset,
+               lrIN_CurrPos    := fb_axis105_11Z.rOUT_ActPos,
+               lrIN_Delta_mm   := 0.5,
+               iIN_CurrentStep := iOUT_Step,
+               iIN_moveNumber  := ST105_PnpVerPushPos_e._max);
+
+fb_simu_axis105_11Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis105_11Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST105_Axis.axis105_11Z.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST105_11Z]),
+                    pIN_axisHW          := ADR(ST105_Axis.axis105_11Z.axis),
+                    rIN_PosActual       := ST105_Axis.axis105_11Z.rActPos,
+                    rIN_PosMax          := ST105_Axis.const105_11Z.POS_MAX,
+                    rIN_PosMin          := ST105_Axis.const105_11Z.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
+
+fb_axis105_11Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
+               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st185_10Z,
+               xIN_Quit         := xIN_Quit,
+               xIN_PARAMok      := TRUE,
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST185_Axis.const185_10Z.POS_MIN,
+               rIN_POSMAX       := ST185_Axis.const185_10Z.POS_MAX,
+               rIN_VELOMAX      := ST185_Axis.const185_10Z.VELO_MAX,
+               rIN_VELOMANU     := ST185_Axis.const185_10Z.VELO_MANU,
+               rIN_VELOOPEN     := ST185_Axis.const185_10Z.POS_MAX / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               xIN_Execute      := fb_PnpVerAxisU.xOUT_Execute,
+               xIN_Relative     :=,
+               xIN_STOP         :=,
+               xIN_OFF          :=,
+               rIN_Position     := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrPosition),
+               rIN_Velocity     := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrVelocity),
+               rIN_Acceleration := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrAccel),
+               rIN_Deceleration := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrDecel),
+               rIN_Jerk         := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrJerk),
+               rIN_PosManu      :=,
+               xIN_Home         := ST105_Pnp_e.Init_HomeVertical = iOUT_Step,
+               xIN_Reset        := (ST105_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState       := fb_simu_axis105_11Z.wOUT_AxisState,
+               bOUT_AxisCntr    => ST105_Axis.axis105_11Z.bCtrlHi,
+               rOUT_ActPos      => ST105_Axis.axis105_11Z.rActPos,
+               axisIN_REF       := fb_simu_axis105_11Z.pOUT_axisRef^);
+
+(*******************************************************************)
+(* OUTPUTS *)
+(*******************************************************************)
+// Error Flag 
+xOUT_ErrFlag := (bOUT_Error <> 0);
+// Baustein befindet sich im Ablauf 
+xOUT_Busy := (iOUT_Step > ST105_Pnp_e.READY) AND (iOUT_Step < ST105_Pnp_e.DONE);
+// Baustein hat den Ablauf beendet
+xOUT_Done := (iOUT_Step = ST105_Pnp_e.DONE);
+// Process ready
+xOUT_Ready := (iOUT_Step = ST105_Pnp_e.READY);
+// Timeout FB 				 		
+xOUT_Timeout := TON_Timeout.Q;
+// Itialisierung fertig			
+xOUT_InitDone := (iOUT_Step = ST105_Pnp_e.READY) OR (iOUT_Step = ST105_Pnp_e.waitOnMover);
+// Aktueller Schritt			
+iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
+sOUT_Step := TO_STRING(iOUT_Step);
+//Fehlernummer	 
+bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
+(* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
+xOUT_Wait := (iOUT_Step = ST105_Pnp_e.DONE);
+
+xOUT_MoverFree := iOUT_Step >= ST105_Pnp_e.MOVER_FREE_OP AND iOUT_Step < ST105_Pnp_e.MOVER_NEEDED_OP;
+
+iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
+                                         ST105_Pnp_e.wait_on_feeder,
+                                         ST105_Pnp_e.pusher_down,
+                                         ST105_Pnp_e.Robot_place,
+                                         ST105_Pnp_e.pusher_down);
+
+xOUT_PickPiece := iOUT_Step = ST105_Pnp_e.pusher_down;
+
+fanuc_cmd.command_std.IMDSTP     := TRUE;
+fanuc_cmd.command_std.Hold       := TRUE;
+fanuc_cmd.command_std.SFSPD      := TRUE;
+fanuc_cmd.command_std.FaultReset := xIN_Quit;
+fanuc_cmd.command_std.Start      := iOUT_Step = ST105_Pnp_e.Init_RobotRaiseStartFlag;
+fanuc_cmd.command_std.Enable     := TRUE;
+
+PickOffset_X_deci := _20_AUTO.recipe.st105.PickOffset_X_deci;
+PickOffset_Y_deci := _20_AUTO.recipe.st105.PickOffset_Y_deci;
+// add a constant to adjust the screw height of the rotative table
+PickUpPos_Z_deci := _20_AUTO.recipe.st105.PickUpPos_Z_deci + UINT#500;
+
+aut_cmd_to_robot.FG_Pick  := ST105_Pnp_e.Robot_Pick = iOUT_Step;
+aut_cmd_to_robot.FG_Place := ST105_Pnp_e.Robot_place = iOUT_Step;
+aut_cmd_to_robot.XOff     := _20_AUTO.recipe.st105.isPickOffset_X_neg;
+aut_cmd_to_robot.YOff     := _20_AUTO.recipe.st105.isPickOffset_Y_neg;
+aut_cmd_to_robot.ZOff     := _20_AUTO.recipe.st105.isPickUpPos_Z_neg;
+
+(*******************************************************************)
+(* Ablauf *)
+(*******************************************************************)
+
+(* Sperren *)
+IF xIN_Sperre THEN
+    iPreStep  := ST105_Pnp_e.RESET;
+    iOUT_Step := ST105_Pnp_e.RESET;
+    RETURN;
+END_IF;
+
+(* Schritt Merker *)
+IF iAktStep <> iOUT_Step THEN
+    iLastStep := iAktStep;
+    iAktStep  := iOUT_Step;
+END_IF
+
+(* START *)
+rtSTART(CLK := xIN_Start);
+
+(*******************************************************************)
+(* Schrittkette  *)
+(*******************************************************************)
+CASE iOUT_Step OF
+
+(***** RESET *****)
+ST105_Pnp_e.RESET: (* Schritt 0-99 *)
+    //Initialisierungen
+    //Start Init Ablauf
+    IF xIN_Init THEN
+        iOUT_Step := ST105_Pnp_e.INIT;
+        //Start Manu Ablauf
+    ELSIF enIN_State = StateMANU AND xIN_NextStep THEN
+        iOUT_Step := ST105_Pnp_e.INIT;
+    END_IF;
+
+(***** INIT *****)
+ST105_Pnp_e.INIT: (* Grundstellung ? *)
+    IF fb_axis105_11Z.xOUT_HOMED THEN
+        iOUT_Step := ST105_Pnp_e.Init_VerticalDown;
+    ELSE
+        iOUT_Step := ST105_Pnp_e.Init_HomeVertical;
+    END_IF
+
+ST105_Pnp_e.Init_HomeVertical:
+    IF fb_axis105_11Z.xOUT_HOMED THEN
+        iOUT_Step := ST105_Pnp_e.Init_VerticalDown;
+    END_IF
+
+ST105_Pnp_e.Init_VerticalDown:
+    IF fb_PnpVerAxisU.MoveTo(ST105_PnpVerPushPos_e.down).xOUT_InPos THEN
+        IF fanuc_status.PRG_Running THEN
+            iOUT_Step := ST105_Pnp_e.Init_check_if_pces_handled;
+        ELSE
+            iOUT_Step := ST105_Pnp_e.Init_RobotRaiseStartFlag;
+        END_IF
+    END_IF
+
+ST105_Pnp_e.Init_RobotRaiseStartFlag:
+    IF TRUE THEN // maybe a tempo or a flag from the robot is needed here
+        iOUT_Step := ST105_Pnp_e.Init_check_if_pces_handled;
+    END_IF
+
+ST105_Pnp_e.Init_RobotFallStartFlag:
+    IF fanuc_status.PRG_Running THEN
+        iOUT_Step := ST105_Pnp_e.Init_check_if_pces_handled;
+    END_IF
+
+ST105_Pnp_e.Init_check_if_pces_handled:
+    IF TRUE THEN
+        iOUT_Step := ST105_Pnp_e.READY;
+    END_IF
+
+(***** READY / INIT DONE *****)
+ST105_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
+    IF xIN_Start THEN //IF rtSTART.Q THEN
+        iOUT_Step := ST105_Pnp_e.START;
+    END_IF
+
+(***** START  ZYKLISCH *****)
+ST105_Pnp_e.START: (*  *)
+    IF xIN_NextStep AND pxFG_Freigabe^ THEN
+        iOUT_Step := ST105_Pnp_e.wait_on_feeder;
+    END_IF;
+
+ST105_Pnp_e.wait_on_feeder:
+    IF xIN_NextStep AND xIN_PceReadyToPick THEN
+        iOUT_Step := ST105_Pnp_e.push_up_casing;
+    END_IF
+
+ST105_Pnp_e.push_up_casing:
+    IF xIN_NextStep AND fb_PnpVerAxisU.MoveTo(ST105_PnpVerPushPos_e.up).xOUT_InPos THEN
+        iOUT_Step := ST105_Pnp_e.Robot_Pick;
+    END_IF
+
+ST105_Pnp_e.Robot_Pick:
+    IF xIN_NextStep AND aut_status_from_robot.Picked THEN
+        iOUT_Step := ST105_Pnp_e.Robot_wait_picked_falling;
+    END_IF
+
+ST105_Pnp_e.Robot_wait_picked_falling:
+    IF xIN_NextStep AND NOT aut_status_from_robot.Picked THEN
+        iOUT_Step := ST105_Pnp_e.pusher_down;
+    END_IF
+
+ST105_Pnp_e.pusher_down:
+    IF xIN_NextStep AND fb_PnpVerAxisU.MoveTo(ST105_PnpVerPushPos_e.down).xOUT_InPos THEN
+        iOUT_Step := ST105_Pnp_e.waitOnMover;
+    END_IF
+
+ST105_Pnp_e.waitOnMover: (*  *)
+    IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST105]) THEN
+        iOUT_Step := ST105_Pnp_e.Robot_place;
+    END_IF;
+
+ST105_Pnp_e.Robot_place:
+    IF xIN_NextStep AND aut_status_from_robot.Placed THEN
+        iOUT_Step := ST105_Pnp_e.Robot_wait_placed_falling;
+    END_IF
+
+ST105_Pnp_e.Robot_wait_placed_falling:
+    IF xIN_NextStep AND NOT aut_status_from_robot.Placed THEN
+        iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+    END_IF
+
+ST105_Pnp_e.SYNC_MOVER_LEAVE:
+    // The mover needs to be taken by MoverMan
+    IF NOT __ISVALIDREF(Mover) THEN
+        iOUT_Step := ST105_Pnp_e.DONE;
+    END_IF
+
+(***** DONE *****)
+ST105_Pnp_e.DONE: (* Letzter Schritt  *)
+    IF NOT xIN_AlarmAktiv THEN
+        //AUTO
+        IF (enIN_State = StateAUTO) AND xIN_RestartCYCL THEN
+            iOUT_Step := ST105_Pnp_e.START;
+            //STEP / END / LEERFAHREN restart
+        ELSIF (enIN_State < StateAUTO) AND (enIN_State >= enState.StateSTEP) AND xIN_RestartCYCL THEN
+            iOUT_Step := ST105_Pnp_e.START;
+            //STEP / END / LEERFAHREN fertig
+        ELSIF (enIN_State = StateREADY) THEN
+            iOUT_Step := ST105_Pnp_e.READY;
+        END_IF;
+    END_IF;
+
+(************ ERROR *************)
+ST105_Pnp_e.ERROR: (* ERROR *) ;
+
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -414,7 +414,7 @@ IO_BOX.Q5403_14_ST180_Niederhalter_deckel_rechts :=
     fb_clampRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 // safety pneumatics
-IO_BOX.Q5408_14_ST180_Break_axis_02Z := fb_simu_axis180_02Z.pIN_axisHW^.Status.Operational AND _02_SAFETY.xOUT_ESout;
+IO_BOX.Q5408_14_ST180_Break_axis_02Z := NOT fb_simu_axis180_02Z.pIN_axisHW^.Status.Error AND _02_SAFETY.xOUT_ESout;
 
 (*******************************************************************)
 (* Ablauf *)
@@ -474,7 +474,7 @@ ST180_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST180_Pnp_e.INIT: (* Grundstellung ? *)
-IF fb_axis180_02Z.xOUT_HOMED THEN
+IF fb_axis180_10Z.xOUT_HOMED THEN
     iOUT_Step := ST180_Pnp_e.Init_Vertical_10_Down;
 ELSE
     iOUT_Step := ST180_Pnp_e.Init_HomeVertical_10;
@@ -482,12 +482,12 @@ END_IF
 
 ST180_Pnp_e.Init_HomeVertical_10:
     IF fb_axis180_10Z.xOUT_HOMED THEN
-        iOUT_Step := ST180_Pnp_e.Init_Vertical_02_Up;
+        iOUT_Step := ST180_Pnp_e.Init_Vertical_10_Down;
     END_IF
 
 ST180_Pnp_e.Init_Vertical_10_Down:
     IF fb_PnpVerAxis_10.MoveTo(ST180_PnpHorPos_e.GS).xOUT_InPos THEN
-        IF fb_axis180_10Z.xOUT_HOMED THEN
+        IF fb_axis180_02Z.xOUT_HOMED THEN
             iOUT_Step := ST180_Pnp_e.Init_Vertical_02_Up;
         ELSE
             iOUT_Step := ST180_Pnp_e.Init_HomeVertical_02;
@@ -529,29 +529,29 @@ ST180_Pnp_e.Init_HorizontalToTrack:
     END_IF
 
 ST180_Pnp_e.Init_check_if_pces_handled:
-    IF (NOT _20_AUTO.recipe.st180.xUseVerLeft AND fb_griperLeft.xOUT_inAS) OR
-       (NOT _20_AUTO.recipe.st180.xUseVerRight AND fb_griperRight.xOUT_inAS) THEN
+    IF (NOT _20_AUTO.recipe.st180.xUseVerLeft AND fb_griperLeft.xOUT_inGS) OR
+       (NOT _20_AUTO.recipe.st180.xUseVerRight AND fb_griperRight.xOUT_inGS) THEN
         // ERROR: a piece is present in an unused gripper
         bOUT_Error := 1;
         iOUT_Step  := ST180_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st180.xUseVerLeft AND
-          NOT fb_griperLeft.xOUT_inAS AND
+          NOT fb_griperLeft.xOUT_inGS AND
           _20_AUTO.recipe.st180.xUseVerRight AND
-          fb_griperRight.xOUT_inAS THEN
+          fb_griperRight.xOUT_inGS THEN
         // ERROR:  Initialisation failed. A piece is missing in the left griper.
         bOUT_Error := 2;
         iOUT_Step  := ST180_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st180.xUseVerLeft AND
-          fb_griperLeft.xOUT_inAS AND
+          fb_griperLeft.xOUT_inGS AND
           _20_AUTO.recipe.st180.xUseVerRight AND
-          NOT fb_griperRight.xOUT_inAS THEN
+          NOT fb_griperRight.xOUT_inGS THEN
         // ERROR:  Initialisation failed. A piece is missing in the right griper.
         bOUT_Error := 3;
         iOUT_Step  := ST180_Pnp_e.ERROR;
 
-    ELSIF NOT fb_griperLeft.xOUT_inAS AND NOT fb_griperRight.xOUT_inAS THEN
+    ELSIF NOT fb_griperLeft.xOUT_inGS AND NOT fb_griperRight.xOUT_inGS THEN
         iOUT_Step := ST180_Pnp_e.READY;
 
     ELSE

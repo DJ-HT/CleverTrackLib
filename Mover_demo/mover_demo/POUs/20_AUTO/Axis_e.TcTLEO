@@ -6,37 +6,39 @@
 {attribute 'to_string'}
 TYPE Axis_e :
 (
-    ST110_01Y,  //  0
-    ST110_02Z,  //  1
-    ST110_03Z,  //  2
-    ST110_04Z,  //  3
-	ST110_10W,  //  4
-    ST115_01Y,  //  5
-    ST115_02Z,  //  6
-    ST115_03Z,  //  7
-    ST115_04Z,  //  8
-	ST115_10W,  //  9
-    ST120_01Y,  // 10
-    ST120_02Z,  // 11
-    ST125_01Y,  // 12
-    ST125_02Z,  // 13
-	ST125_10W,  // 14
-	ST130_01Z,  // 15
-	ST130_10Z,  // 16
-	ST135_01Z,  // 17
-	ST135_10Z,  // 18
-	ST145_01Y,  // 19
-	ST145_02Z,  // 20
-	ST145_10W,  // 21
-	ST160_01Z,  // 22
-	ST165_01Z,  // 23
-	ST170_01Z,  // 24
-	ST180_01Y,  // 25
-	ST180_02Z,  // 26
-	ST180_10Z,  // 27
-	ST185_01Y,  // 28
-	ST185_02Z,  // 29
-	ST185_10Z,  // 30
+	ST105_10W,  //  0
+	ST105_11Z,  //  1
+    ST110_01Y,  //  2
+    ST110_02Z,  //  3
+    ST110_03Z,  //  4
+    ST110_04Z,  //  5
+	ST110_10W,  //  6
+    ST115_01Y,  //  7
+    ST115_02Z,  //  8
+    ST115_03Z,  //  9
+    ST115_04Z,  // 10
+	ST115_10W,  // 11
+    ST120_01Y,  // 12
+    ST120_02Z,  // 13
+    ST125_01Y,  // 14
+    ST125_02Z,  // 15
+	ST125_10W,  // 16
+	ST130_01Z,  // 17
+	ST130_10Z,  // 18
+	ST135_01Z,  // 19
+	ST135_10Z,  // 20
+	ST145_01Y,  // 21
+	ST145_02Z,  // 22
+	ST145_10W,  // 23
+	ST160_01Z,  // 24
+	ST165_01Z,  // 25
+	ST170_01Z,  // 26
+	ST180_01Y,  // 27
+	ST180_02Z,  // 28
+	ST180_10Z,  // 29
+	ST185_01Y,  // 30
+	ST185_02Z,  // 31
+	ST185_10Z,  // 32
     _max
 );
 END_TYPE
@@ -45,6 +47,16 @@ END_TYPE
       <Data>
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"ST105_10W"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST105_11Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
             <o>
               <v n="TextID">"ST110_01Y"</v>
               <v n="TextDefault">""</v>

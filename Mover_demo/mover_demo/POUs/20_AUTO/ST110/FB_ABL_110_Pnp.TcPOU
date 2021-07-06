@@ -89,7 +89,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION       : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION       : BOOL := FALSE; // Set to TRUE to simulate this part of the program
     PNP_DONT_CHECK_KRAFT : BOOL := TRUE;  // don't care of kraft sensor
 END_VAR
 ]]></Declaration>
@@ -270,7 +270,7 @@ fb_PnpVerAxisU(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_
                xIN_Init        := enState.StateINIT = enIN_State,
                xIN_Reset       := xIN_Reset,
                lrIN_CurrPos    := ST110_Axis.axis110_04Z.rActPos,
-               lrIN_Delta_mm   := 0.05,
+               lrIN_Delta_mm   := 0.5,
                iIN_CurrentStep := iOUT_Step,
                iIN_moveNumber  := ST110_PnpVerPushPos_e._max);
 

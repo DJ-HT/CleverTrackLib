@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="ST105_Axis" Id="{35d0f9a4-d85e-401a-8c6a-27e040116204}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL CONSTANT
+    const105_11Z : AxisLinMotConst_t := (POS_MIN := 0, POS_MAX := 200, VELO_MAX := 1500, VELO_MANU := 50);
+    const105_10W : AxisLinMotConst_t := (POS_MIN := 0, POS_MAX := 360, VELO_MAX := 720, VELO_MANU := 50);
+
+END_VAR
+VAR_GLOBAL
+    axis105_11Z : AxisLinMot_t;
+    axis105_10W : AxisLinMot_t;
+END_VAR
+VAR_GLOBAL RETAIN
+    // Recipe values are managed elsewhere
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>
