@@ -414,7 +414,9 @@ IO_BOX.Q5403_14_ST180_Niederhalter_deckel_rechts :=
     fb_clampRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 // safety pneumatics
-IO_BOX.Q5408_14_ST180_Break_axis_02Z := NOT fb_simu_axis180_02Z.pIN_axisHW^.Status.Error AND _02_SAFETY.xOUT_ESout;
+IO_BOX.Q5408_14_ST180_Break_axis_02Z := NOT fb_simu_axis180_02Z.pIN_axisHW^.Status.Error AND
+                                        _02_SAFETY.xOUT_ESout AND
+                                        NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)
@@ -474,11 +476,11 @@ ST180_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST180_Pnp_e.INIT: (* Grundstellung ? *)
-IF fb_axis180_10Z.xOUT_HOMED THEN
-    iOUT_Step := ST180_Pnp_e.Init_Vertical_10_Down;
-ELSE
-    iOUT_Step := ST180_Pnp_e.Init_HomeVertical_10;
-END_IF
+    IF fb_axis180_10Z.xOUT_HOMED THEN
+        iOUT_Step := ST180_Pnp_e.Init_Vertical_10_Down;
+    ELSE
+        iOUT_Step := ST180_Pnp_e.Init_HomeVertical_10;
+    END_IF
 
 ST180_Pnp_e.Init_HomeVertical_10:
     IF fb_axis180_10Z.xOUT_HOMED THEN
