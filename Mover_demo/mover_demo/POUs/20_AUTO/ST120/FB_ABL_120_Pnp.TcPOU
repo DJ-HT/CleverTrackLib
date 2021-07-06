@@ -80,7 +80,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -91,14 +91,14 @@ END_VAR
 IF xIN_RESET THEN
     iPreStep  := ST120_Pnp_e.RESET;
     iOUT_Step := ST120_Pnp_e.RESET;
-END_IF;
+END_IF
 
 (* Error Quittieren *)
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
     iOUT_Step    := iPreStep;
-END_IF;
+END_IF
 
 (*******************************************************************)
 (* Timer *)
