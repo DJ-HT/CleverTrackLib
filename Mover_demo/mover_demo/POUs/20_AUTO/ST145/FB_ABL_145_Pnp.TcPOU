@@ -349,22 +349,18 @@ ST145_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST145_Pnp_e.INIT: (* Grundstellung ? *)
-    IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
+    IF fb_axis145_02Z.xOUT_HOMED THEN
         iOUT_Step := ST145_Pnp_e.Init_HomeVerticals;
     ELSE
-        iOUT_Step := ST145_Pnp_e.Init_HomeVerticals;
+        iOUT_Step := ST145_Pnp_e.Init_VerticalsUp;
     END_IF;
 
 ST145_Pnp_e.Init_HomeVerticals:
-    fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
-
     IF fb_axis145_02Z.xOUT_HOMED THEN
         iOUT_Step := ST145_Pnp_e.Init_VerticalsUp;
     END_IF
 
 ST145_Pnp_e.Init_VerticalsUp:
-    fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
-
     IF fb_vakumGriperLeft.xIN_AS OR fb_vakumGriperRight.xIN_AS THEN
         IF fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpFull).xOUT_InPos THEN
             IF fb_axis145_01Y.xOUT_READY OR fb_axis145_01Y.xOUT_HOMED THEN
