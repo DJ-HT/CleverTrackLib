@@ -88,8 +88,8 @@ VAR
                    (_PosList[15], 0, 0, ApproachScenario_e.DoNotWait, 3, 74),
                    (_PosList[16], GVL.st175_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 75),
                    (_PosList[17], GVL.st176_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 76),
-                   (_PosList[18], GVL.st180_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 3, 80),
-                   (_PosList[19], GVL.st185_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 0, 85)];
+                   (_PosList[18], GVL.st180_aut, -250, ApproachScenario_e.WaitOnFinishedProcess, 2, 80),
+                   (_PosList[19], GVL.st185_aut, 0, ApproachScenario_e.WaitOnFinishedProcess, 3, 85)];
 
     _StationSet1 :
         ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
@@ -101,10 +101,10 @@ VAR
                                                   -1,
                                                   0,
                                                   0,
-                                                  3,
-                                                  3,
                                                   0,
                                                   0,
+                                                  3,
+                                                  3,
                                                   0,
                                                   0,
                                                   4,
