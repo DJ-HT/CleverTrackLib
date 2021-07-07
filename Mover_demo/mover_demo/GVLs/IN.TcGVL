@@ -108,10 +108,14 @@ VAR_GLOBAL
 
     AI01_ST140_level_track_side AT %I* : UINT; // laser sensor used to measure powder level, placed at the track side
     AI02_ST140_level_door_side  AT %I* : UINT; // laser sensor used to measure powder level, placed at the door side
-    AI11_                       AT %I* : UINT;
-    AI12_                       AT %I* : UINT;
-    AI21_ST125_piece_height     AT %I* : UINT; // laser sensor value, detect pieces in round table
-    AI22_                       AT %I* : UINT;
+	
+    AI11_ST130_valve_feedback_left  AT %I* : UINT; // current flow of the proportional valve
+    AI12_ST130_valve_feedback_right AT %I* : UINT; // current flow of the proportional valve
+    AI13_ST135_valve_feedback_left  AT %I* : UINT; // current flow of the proportional valve
+    AI14_ST135_valve_feedback_right AT %I* : UINT; // current flow of the proportional valve
+	
+    AI21_ST125_piece_height AT %I* : UINT; // laser sensor value, detect pieces in round table
+    AI22_                   AT %I* : UINT;
 
 END_VAR
 ]]></Declaration>
