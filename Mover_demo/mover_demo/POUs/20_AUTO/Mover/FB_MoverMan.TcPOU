@@ -201,7 +201,8 @@ VAR
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
 VAR CONSTANT
-    MOVER_NUMBER : INT := 18;
+    MOVER_NUMBER     : INT  := 18;
+    TRACK_SIMULATION : BOOL := TRUE; // Set to true when supertrack is in simulation
 END_VAR
 VAR_STAT
     _iInstanceCounter : INT := 1; // instance counter
@@ -239,7 +240,7 @@ CASE step OF
     END_IF
 
     IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.unknownMoverAtTarget1 THEN
-        IF IO_BOX.I8604_ST101_first_shuttle_pin THEN
+        IF IO_BOX.I8604_ST101_first_shuttle_pin OR (TRACK_SIMULATION AND CONST.USE_SIMULATION) THEN
             step := 12;
         ELSE
             gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.releaseUnknownShuttle := TRUE;
@@ -256,6 +257,7 @@ CASE step OF
     END_IF
 
     IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.allIdSet THEN
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.setShuttleNumber := FALSE;
         step := 13;
     END_IF
 
