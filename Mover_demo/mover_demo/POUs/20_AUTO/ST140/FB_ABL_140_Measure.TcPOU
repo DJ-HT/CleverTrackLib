@@ -60,14 +60,14 @@ VAR
     TON_Timeout : TON;
 
     (* Bausteine *)
-    rMeasureLeftTrack_1 : REAL;
-    rMeasureLeftDoor_1  : REAL;
-    rMeasureLeftTrack_2 : REAL;
-    rMeasureLeftDoor_2  : REAL;
-    rMeasureLeftTrack_3 : REAL;
-    rMeasureLeftDoor_3  : REAL;
-    rMeasureLeftTrack_4 : REAL;
-    rMeasureLeftDoor_4  : REAL;
+    rMeasureTrack_1 : REAL;
+    rMeasureDoor_1  : REAL;
+    rMeasureTrack_2 : REAL;
+    rMeasureDoor_2  : REAL;
+    rMeasureTrack_3 : REAL;
+    rMeasureDoor_3  : REAL;
+    rMeasureTrack_4 : REAL;
+    rMeasureDoor_4  : REAL;
 
     visu_shuttle_x_position : LREAL; // position of the shuttle used in visu
 
@@ -197,22 +197,22 @@ ST140_Measure_e.START: (*  *)
 ST140_Measure_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST140] THEN
 
-        rMeasureLeftTrack_1 := REAL#0.0;
-        rMeasureLeftDoor_1  := REAL#0.0;
-        rMeasureLeftTrack_2 := REAL#0.0;
-        rMeasureLeftDoor_2  := REAL#0.0;
-        rMeasureLeftTrack_3 := REAL#0.0;
-        rMeasureLeftDoor_3  := REAL#0.0;
-        rMeasureLeftTrack_4 := REAL#0.0;
-        rMeasureLeftDoor_4  := REAL#0.0;
+        rMeasureTrack_1 := REAL#0.0;
+        rMeasureDoor_1  := REAL#0.0;
+        rMeasureTrack_2 := REAL#0.0;
+        rMeasureDoor_2  := REAL#0.0;
+        rMeasureTrack_3 := REAL#0.0;
+        rMeasureDoor_3  := REAL#0.0;
+        rMeasureTrack_4 := REAL#0.0;
+        rMeasureDoor_4  := REAL#0.0;
 
         iOUT_Step := ST140_Measure_e.Measure_right_1;
     END_IF
 
 ST140_Measure_e.Measure_right_1:
     IF xIN_NextStep AND TRUE THEN
-        rMeasureLeftTrack_1 := UINT_TO_REAL(IN.AI01_ST140_level_track_side) * 0.001;
-        rMeasureLeftDoor_1  := UINT_TO_REAL(IN.AI02_ST140_level_door_side) * 0.001;
+        rMeasureTrack_1 := UINT_TO_REAL(IN.AI01_ST140_level_track_side) * 0.001;
+        rMeasureDoor_1  := UINT_TO_REAL(IN.AI02_ST140_level_door_side) * 0.001;
         iOUT_Step           := ST140_Measure_e.Move_shuttle_to_pos_2;
     END_IF
 
@@ -227,8 +227,8 @@ ST140_Measure_e.Move_shuttle_to_pos_2:
 
 ST140_Measure_e.Measure_right_2:
     IF xIN_NextStep AND __ISVALIDREF(Mover) AND_THEN Mover.IsInStationPos() THEN
-        rMeasureLeftTrack_2 := UINT_TO_REAL(IN.AI01_ST140_level_track_side) * 0.001;
-        rMeasureLeftDoor_2  := UINT_TO_REAL(IN.AI02_ST140_level_door_side) * 0.001;
+        rMeasureTrack_2 := UINT_TO_REAL(IN.AI01_ST140_level_track_side) * 0.001;
+        rMeasureDoor_2  := UINT_TO_REAL(IN.AI02_ST140_level_door_side) * 0.001;
 
         IF _20_AUTO.recipe.st140.xIsTypeMiniOrSmart THEN
             iOUT_Step := ST140_Measure_e.Move_shuttle_to_pos_3;
@@ -248,8 +248,8 @@ ST140_Measure_e.Move_shuttle_to_pos_3:
 
 ST140_Measure_e.Measure_left_3:
     IF xIN_NextStep AND __ISVALIDREF(Mover) AND_THEN Mover.IsInStationPos() THEN
-        rMeasureLeftTrack_3 := UINT_TO_REAL(IN.AI01_ST140_level_track_side) * 0.001;
-        rMeasureLeftDoor_3  := UINT_TO_REAL(IN.AI02_ST140_level_door_side) * 0.001;
+        rMeasureTrack_3 := UINT_TO_REAL(IN.AI01_ST140_level_track_side) * 0.001;
+        rMeasureDoor_3  := UINT_TO_REAL(IN.AI02_ST140_level_door_side) * 0.001;
         iOUT_Step           := ST140_Measure_e.Move_shuttle_to_pos_4;
     END_IF
 
@@ -264,14 +264,35 @@ ST140_Measure_e.Move_shuttle_to_pos_4:
 
 ST140_Measure_e.Measure_left_4:
     IF xIN_NextStep AND __ISVALIDREF(Mover) AND_THEN Mover.IsInStationPos() THEN
-        rMeasureLeftTrack_4 := UINT_TO_REAL(IN.AI01_ST140_level_track_side) * 0.001;
-        rMeasureLeftDoor_4  := UINT_TO_REAL(IN.AI02_ST140_level_door_side) * 0.001;
+        rMeasureTrack_4 := UINT_TO_REAL(IN.AI01_ST140_level_track_side) * 0.001;
+        rMeasureDoor_4  := UINT_TO_REAL(IN.AI02_ST140_level_door_side) * 0.001;
         iOUT_Step           := ST140_Measure_e.SYNC_MOVER_LEAVE;
     END_IF
 
 ST140_Measure_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
+        IF // min test
+            rMeasureTrack_1 < _20_AUTO.recipe.st140.rMinHeightSensor OR
+            rMeasureTrack_2 < _20_AUTO.recipe.st140.rMinHeightSensor OR
+            rMeasureTrack_3 < _20_AUTO.recipe.st140.rMinHeightSensor OR
+            rMeasureTrack_4 < _20_AUTO.recipe.st140.rMinHeightSensor OR
+            rMeasureDoor_1 < _20_AUTO.recipe.st140.rMinHeightSensor OR
+            rMeasureDoor_2 < _20_AUTO.recipe.st140.rMinHeightSensor OR
+            rMeasureDoor_3 < _20_AUTO.recipe.st140.rMinHeightSensor OR
+            rMeasureDoor_4 < _20_AUTO.recipe.st140.rMinHeightSensor OR
+            // max test
+            rMeasureTrack_1 > _20_AUTO.recipe.st140.rMaxHeightSensor OR
+            rMeasureTrack_2 > _20_AUTO.recipe.st140.rMaxHeightSensor OR
+            rMeasureTrack_3 > _20_AUTO.recipe.st140.rMaxHeightSensor OR
+            rMeasureTrack_4 > _20_AUTO.recipe.st140.rMaxHeightSensor OR
+            rMeasureDoor_1 > _20_AUTO.recipe.st140.rMaxHeightSensor OR
+            rMeasureDoor_2 > _20_AUTO.recipe.st140.rMaxHeightSensor OR
+            rMeasureDoor_3 > _20_AUTO.recipe.st140.rMaxHeightSensor OR
+            rMeasureDoor_4 > _20_AUTO.recipe.st140.rMaxHeightSensor THEN
+            bOUT_Error := 1;
+        END_IF
+
         iOUT_Step := ST140_Measure_e.DONE;
     END_IF
 
