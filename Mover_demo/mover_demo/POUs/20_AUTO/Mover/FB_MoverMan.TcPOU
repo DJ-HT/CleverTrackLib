@@ -437,8 +437,8 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 END_IF
 
             END_IF
-			
-		MoverState_e.WaitRelativeMoveEnd:
+
+        MoverState_e.WaitRelativeMoveEnd:
             IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
@@ -480,6 +480,7 @@ END_IF
 
 // stop update simu mover **********************************************
 
+// start communication with B&R PLC ************************************
 FOR mv_i := 1 TO CONST.STATION_NUMBER BY 1 DO
     IF __ISVALIDREF(_MoverList[mv_i].Station) AND __ISVALIDREF(_20_AUTO.recipe) THEN
         _StationList[mv_i].Offset := _20_AUTO.recipe.stationOffsets[mv_i - 1];
@@ -496,10 +497,17 @@ IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enabl
 
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation    := _MoverList[mv_i].Station.SuperTrackNumber;
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].diNextOffset_um :=
-                LREAL_TO_DINT(_MoverList[mv_i].Station.Offset * 1000.0 + _MoverList[mv_i].MovingProcessOffset * 1000.0);
+                LREAL_TO_DINT(_MoverList[mv_i].Station.Offset * 1000.0 +
+                              _MoverList[mv_i].MovingProcessOffset * 1000.0);
+
+            // echo At_Target
+            gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.echo_At_Target :=
+                gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.at_target;
         END_IF
     END_FOR
 END_IF
+
+// stop communication with B&R PLC ************************************
 
 // test if path is free
 IF CONST.BIND_WITH_TRACK THEN

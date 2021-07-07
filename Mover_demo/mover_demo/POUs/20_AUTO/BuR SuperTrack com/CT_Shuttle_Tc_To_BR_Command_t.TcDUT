@@ -4,14 +4,14 @@
     <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
 TYPE CT_Shuttle_Tc_To_BR_Command_t :
 STRUCT
-    release    : BIT; // Move the shuttle to the next position
-    dirFarward : BIT; // Specify the farward direction (depends on the SuperTrak configuration)
-    dirReverse : BIT; // Specify the reverse direction (depends on the SuperTrak configuration) 
-    reserve4   : BIT; // 
-    reserve5   : BIT; // 
-    reserve6   : BIT; // 
-    reserve7   : BIT; // 
-    reserve8   : BIT; // 
+    release        : BIT; // Move the shuttle to the next position
+    dirFarward     : BIT; // Specify the farward direction (depends on the SuperTrak configuration)
+    dirReverse     : BIT; // Specify the reverse direction (depends on the SuperTrak configuration) 
+    echo_At_Target : BIT; // Echo signal for the At Position signal, this is to ensure the flag At Pos is not missed
+    reserve5       : BIT; // 
+    reserve6       : BIT; // 
+    reserve7       : BIT; // 
+    reserve8       : BIT; // 
 END_STRUCT
 END_TYPE
 ]]></Declaration>
