@@ -162,6 +162,12 @@ ELSE
     visu_shuttle_x_position := 0.0;
 END_IF
 
+IF 0 = bOUT_Error THEN
+    // put error conditions here
+ELSIF iOUT_Step < ST140_Measure_e.ERROR THEN
+    iOUT_Step := ST140_Measure_e.ERROR;
+END_IF
+
 (*******************************************************************)
 (* Schrittkette  *)
 (*******************************************************************)
