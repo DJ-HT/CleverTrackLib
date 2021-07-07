@@ -524,6 +524,7 @@ IF 0 = bOUT_Error THEN
         bOUT_Error := 25;
     ELSIF fb_viebrieren_kammer_rechts.xOUT_ErrFlag THEN
         bOUT_Error := 26;
+    END_IF
 ELSIF iOUT_Step < ST130_Dose_e.ERROR THEN
     iOUT_Step := ST130_Dose_e.ERROR;
 END_IF
