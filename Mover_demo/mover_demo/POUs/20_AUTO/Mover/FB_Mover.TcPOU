@@ -115,7 +115,7 @@ IF CONST.BIND_WITH_TRACK THEN
     //                                    THIS^.Station.Offset);
     IF __ISVALIDREF(THIS^.Station) THEN
         IsInStationPos :=
-            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.in_position AND
+            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.at_target AND
             (gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bDestinationStation = THIS^.Station.SuperTrackNumber);
     ELSE
         IsInStationPos := FALSE;
@@ -175,8 +175,10 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
     THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
-    THIS^._State := MoverState_e.MovingToStation;
-	THIS^._MovingProcessOffset := 0;
+    THIS^._MovingProcessOffset := 0;
+    THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
+ELSE
+    ASSERT(0); // should not be called when we are in operation !
 END_IF
 
 MoveToStation REF= THIS^;
@@ -196,10 +198,11 @@ END_VAR
     IF THIS^.Station.WaitPos <= (THIS^.Station.Position.lrWorkPosition - CONST.MAX_MOVER_SIZE) THEN
         THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
         THIS^._MovingProcessOffset := 0;
+        THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
     END_IF
+ELSE
+    ASSERT(0); // never use this command when we are in operation
 END_IF
-
-THIS^._State := MoverState_e.MovingToStation;
 
 MoveToWaitSpot REF= THIS^;
 ]]></ST>

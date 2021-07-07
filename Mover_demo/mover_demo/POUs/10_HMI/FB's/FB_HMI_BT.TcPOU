@@ -141,6 +141,18 @@ HMI.movesNames[LinearAxis_e.ST180_02Z][3] := TO_STRING("Ab Voll");
 HMI.movesNames[LinearAxis_e.ST180_10Z][0] := TO_STRING("Auf");
 HMI.movesNames[LinearAxis_e.ST180_10Z][1] := TO_STRING("Ab");
 
+// ST180
+HMI.movesNames[LinearAxis_e.ST185_01Y][0] := TO_STRING("Zurück");
+HMI.movesNames[LinearAxis_e.ST185_01Y][1] := TO_STRING("Vor");
+
+HMI.movesNames[LinearAxis_e.ST185_02Z][0] := TO_STRING("Auf Leer");
+HMI.movesNames[LinearAxis_e.ST185_02Z][1] := TO_STRING("Ab Leer");
+HMI.movesNames[LinearAxis_e.ST185_02Z][2] := TO_STRING("Auf Voll");
+HMI.movesNames[LinearAxis_e.ST185_02Z][3] := TO_STRING("Ab Voll");
+
+HMI.movesNames[LinearAxis_e.ST185_10Z][0] := TO_STRING("Auf");
+HMI.movesNames[LinearAxis_e.ST185_10Z][1] := TO_STRING("Ab");
+
 FOR i := 0 TO TO_INT(StationList_e._max) - 1 BY 1 DO
     FOR ii := 0 TO CONST.MAX_CYLINDER_PER_STATION - 1 BY 1 DO
         HMI.cylinderNames[i][ii] := ' - ';
@@ -174,6 +186,11 @@ HMI.cylinderNames[StationList_e.ST180][0] := TO_STRING(ST180_Cylinders_e.Greifer
 HMI.cylinderNames[StationList_e.ST180][1] := TO_STRING(ST180_Cylinders_e.Greifer_Patrone_Rechts);
 HMI.cylinderNames[StationList_e.ST180][2] := TO_STRING(ST180_Cylinders_e.Niederhalter_Deckel_Links);
 HMI.cylinderNames[StationList_e.ST180][3] := TO_STRING(ST180_Cylinders_e.Niederhalter_Deckel_Rechts);
+
+HMI.cylinderNames[StationList_e.ST185][0] := TO_STRING(ST185_Cylinders_e.Greifer_Patrone_Links);
+HMI.cylinderNames[StationList_e.ST185][1] := TO_STRING(ST185_Cylinders_e.Greifer_Patrone_Rechts);
+HMI.cylinderNames[StationList_e.ST185][2] := TO_STRING(ST185_Cylinders_e.Niederhalter_Deckel_Links);
+HMI.cylinderNames[StationList_e.ST185][3] := TO_STRING(ST185_Cylinders_e.Niederhalter_Deckel_Rechts);
 ]]></ST>
       </Implementation>
     </Method>

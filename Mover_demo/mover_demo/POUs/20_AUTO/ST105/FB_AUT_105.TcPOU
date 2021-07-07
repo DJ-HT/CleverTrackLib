@@ -115,18 +115,6 @@ xOUT_AlarmST  := xOUT_ErrFlag;
 // POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
 ]]></ST>
     </Implementation>
-    <Method Name="GiveMover" Id="{f062c941-bc60-4723-aacb-808ea7c54704}">
-      <Declaration><![CDATA[METHOD GiveMover : IProcessSampleMover
-VAR_INPUT
-	mover : REFERENCE TO FB_Mover;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF __ISVALIDREF(mover) THEN
-    THIS^.Mover REF= mover;
-END_IF
-]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="iCompletionPC" Id="{4eb8bcbd-1cf1-4c7c-9509-eabddf7ac3f6}">
       <Declaration><![CDATA[(* % of completion of the process *)
 PROPERTY iCompletionPC : INT
@@ -161,16 +149,6 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Method Name="TakeMover" Id="{ae82bbfe-8df5-46b2-b77c-c1ede5ecbe4e}">
-      <Declaration><![CDATA[METHOD TakeMover : IProcessSampleMover
-VAR_INPUT
-END_VAR
-
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[THIS^.Mover REF= 0;]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="xBusy" Id="{fa0456e5-6988-400c-97a1-fa64e0c59f92}">
       <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
       <Get Name="Get" Id="{beaa991e-a701-4513-b51f-bca22760eb03}">

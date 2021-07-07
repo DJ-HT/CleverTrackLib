@@ -87,7 +87,13 @@ VAR_INPUT
 	mover : REFERENCE TO FB_Mover;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^._Mover REF= mover;
+        <ST><![CDATA[IF __ISVALIDREF(THIS^._Mover) THEN
+    ASSERT(0); // we already have a mover, this is not permited
+ELSIF __ISVALIDREF(mover) THEN
+    THIS^._Mover REF= mover;
+ELSE
+    ASSERT(0); // the given mover is not valid
+END_IF
 ]]></ST>
       </Implementation>
     </Method>
@@ -192,8 +198,7 @@ END_VAR
       <Declaration><![CDATA[METHOD TakeMover : IProcessSampleMover
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[THIS^.Mover REF= 0;
-THIS^._xMoverShouldLeave := FALSE;]]></ST>
+        <ST><![CDATA[THIS^.Mover REF= 0;]]></ST>
       </Implementation>
     </Method>
     <Method Name="ToString" Id="{b8f24df3-0394-4666-b4ef-41086ff75475}">

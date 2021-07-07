@@ -364,6 +364,15 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 
             END_CASE
 
+        MoverState_e.WaitLeaveCurrentStation:
+            IF NOT CONST.BIND_WITH_TRACK THEN
+                _MoverList[mv_i].State := MoverState_e.MovingToStation;
+            ELSE
+                IF NOT gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.at_target THEN
+                    _MoverList[mv_i].State := MoverState_e.MovingToStation;
+                END_IF
+            END_IF
+
         MoverState_e.MovingToStation:
             IF _MoverList[mv_i].IsInStationPos() THEN
                 _MoverList[mv_i].State := MoverState_e.InStationPos;
@@ -382,7 +391,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                     _MoverList[mv_i].MoveToStation();
                 END_IF
 
-            ELSIF _MoverList[mv_i].MoverAxis.isInPos THEN
+            ELSIF _MoverList[mv_i].MoverAxis.isInPos AND NOT CONST.BIND_WITH_TRACK THEN
                 _MoverList[mv_i].MoveToStation();
             END_IF
 
@@ -399,13 +408,18 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 
             ELSE
                 IF __ISVALIDREF(_MoverList[mv_i].Station.Process.Mover) THEN
-                    ASSERT(0);
+                    // ASSERT(0); TODO we have to find why we are here so often.
+
+                    IF _MoverList[mv_i].Station.Process.xMoverShouldLeave THEN
+                        _MoverList[mv_i].Station.Process.TakeMover();
+                        ASSERT(0);
+
+                    ELSE
+                        _MoverList[mv_i].State := MoverState_e.OperationDone;
+                    END_IF
                 ELSE
                     _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);
-
-                    IF _MoverList[mv_i].Station.Process.xBusy THEN
-                        _MoverList[mv_i].State := MoverState_e.InOperation;
-                    END_IF
+                    _MoverList[mv_i].State := MoverState_e.InOperation;
                 END_IF
             END_IF
 
@@ -419,11 +433,12 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.OperationDone;
 
-            ELSE
-                IF _MoverList[mv_i].Station.Process.xMoverShouldLeave THEN
-                    _MoverList[mv_i].State := MoverState_e.OperationDone;
-                END_IF
+            ELSIF _MoverList[mv_i].Station.Process.xMoverShouldLeave THEN
+                _MoverList[mv_i].State := MoverState_e.OperationDone;
 
+            ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process.Mover) THEN
+                ASSERT(0);
+                _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);
             END_IF
 
         MoverState_e.PerformRelativeMove:
@@ -496,7 +511,8 @@ IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enabl
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
         IF __ISVALIDREF(_MoverList[mv_i].Station) THEN
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.release :=
-                ((_MoverList[mv_i].State = MoverState_e.MovingToStation) OR
+                ((THIS^._MoverList[mv_i].State = MoverState_e.WaitLeaveCurrentStation) OR
+                (_MoverList[mv_i].State = MoverState_e.MovingToStation) OR
                 (_MoverList[mv_i].State = MoverState_e.PerformRelativeMove)) AND
                 gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.at_target;
 
@@ -508,6 +524,7 @@ IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enabl
             // echo At_Target
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.echo_At_Target :=
                 gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.at_target;
+
             // echo at position
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.echo_in_pos :=
                 gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.in_position;
@@ -704,8 +721,9 @@ END_VAR
         <ST><![CDATA[IsAllMoverAtPosition := TRUE;
 
 FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
-    IF THIS^._MoverList[i].State = MoverState_e.MovingToStation OR
-       THIS^._MoverList[i].State = MoverState_e.InStationPos THEN
+    IF (THIS^._MoverList[i].State = MoverState_e.WaitLeaveCurrentStation) OR
+       (THIS^._MoverList[i].State = MoverState_e.MovingToStation) OR
+       (THIS^._MoverList[i].State = MoverState_e.InStationPos) THEN
         IsAllMoverAtPosition := FALSE;
         EXIT;
     END_IF
@@ -789,6 +807,7 @@ FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
     // we don't check the tests mover station, else it will be always true
     IF (iMoverNumber <> i) AND THIS^._MoverList[i].Station.Equals(THIS^._MoverList[iMoverNumber].Station) THEN
         IsMoverMovingToStation := IsMoverMovingToStation OR
+                                  (THIS^._MoverList[i].State = MoverState_e.WaitLeaveCurrentStation) OR
                                   (THIS^._MoverList[i].State = MoverState_e.MovingToStation) OR
                                   (THIS^._MoverList[i].State = MoverState_e.InStationPos);
 

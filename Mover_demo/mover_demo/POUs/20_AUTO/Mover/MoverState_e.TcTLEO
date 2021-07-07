@@ -7,13 +7,14 @@
 TYPE
 MoverState_e :
 (
-    OperationDone,       // The operation on the mover is done, a new station needs to be given
-    WaitOnNextStation,   // wait on the next station to be ready. The waiting depend on the scenario of the next station
-    MovingToStation,     // the mover is moving or try to move to the next station
-    InStationPos,        // The mover is currently at the station position (aka target pos.), waiting on the process to begin
-    InOperation,         // The attached process of the mover is running. The mover is not able to move
-    PerformRelativeMove, // Moving the mover when already in operation, go to WaitRelativeMoveEnd when mover actually moving
-    WaitRelativeMoveEnd, // Wait on the At_pos flag
+    OperationDone,           // The operation on the mover is done, a new station needs to be given
+    WaitOnNextStation,       // wait on the next station to be ready. The waiting depend on the scenario of the next station
+    WaitLeaveCurrentStation, // If we are bind with the track system, we will be sure that we have actualy leaved the curent station
+    MovingToStation,         // the mover is moving or try to move to the next station
+    InStationPos,            // The mover is currently AT the station position (aka target pos.), waiting on the process TO begin
+    InOperation,             // The attached process of the mover is running. The mover is not able to move
+    PerformRelativeMove,     // Moving the mover when already in operation, go to WaitRelativeMoveEnd when mover actually moving
+    WaitRelativeMoveEnd,     // Wait on the At_pos flag
     _MAX
 );
 END_TYPE
@@ -29,6 +30,11 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"WaitOnNextStation"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"WaitLeaveCurrentStation"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
