@@ -3026,10 +3026,10 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                                 <v>TL_ElementProperties.Points</v>
                                 <v>DescriptionUseFromParent</v>
                                 <v></v>
-                                <v>DefaultArraySize</v>
-                                <v>500</v>
                                 <v>''NORMAL__COMMENT</v>
                                 <v> There is no more information than the parent provides</v>
+                                <v>DefaultArraySize</v>
+                                <v>500</v>
                               </d>
                               <v n="ConvDone">true</v>
                             </o>
@@ -3082,8 +3082,6 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                         <o n="TypeNodeAttributes" t="TypeNodeAttributes2">
                           <v n="AttrFlags">81920UL</v>
                           <d n="TypeNodeAttributesData" t="CaseInsensitiveHashtable" ckt="String" cvt="String">
-                            <v>PolygonPoints</v>
-                            <v></v>
                             <v>DescriptionTextId</v>
                             <v>TL_ElementProperties.Desc_StaticLinePos</v>
                             <v>DisplayTextId</v>
@@ -3100,6 +3098,8 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                             <v>visu_elemdev</v>
                             <v>Storable</v>
                             <v>True</v>
+                            <v>PolygonPoints</v>
+                            <v></v>
                           </d>
                           <v n="ConvDone">true</v>
                         </o>
@@ -17929,8 +17929,8 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                 <v>2726648f-1f5e-4983-8547-1d06a2fa76b4</v>
                 <v>ContainsPoint</v>
                 <v>e6377f48-fc5b-4095-82d3-81fd6a23ad32</v>
-                <v>HasInputAccess</v>
-                <v>3f6ebca3-dd00-46d3-848f-45710aaa0fa2</v>
+                <v>SetStaticState</v>
+                <v>fefbfec9-fe72-4474-b2b7-6ff80b0663a9</v>
                 <v>HasInputAccessIntern</v>
                 <v>565529ee-eb6f-56a9-8c44-7d2ec7910b83</v>
                 <v>GetTooltip</v>
@@ -17949,8 +17949,6 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                 <v>6777d041-b57b-4e6a-be0d-15efc28f18a3</v>
                 <v>SetClientData</v>
                 <v>51c23308-670c-4bb3-b393-e09555b30866</v>
-                <v>HasVisibilityAccessIntern</v>
-                <v>107cf1fb-7552-521d-93c1-08738f8bfc4f</v>
                 <v>GetInstance</v>
                 <v>6dcf3430-5cab-42cd-be6a-af3aff1516ab</v>
                 <v>GetClientData</v>
@@ -17969,12 +17967,14 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                 <v>4581b24f-8f12-46b8-83d0-da1f92e58a49</v>
                 <v>Initialize</v>
                 <v>34c31b8b-d9c0-4f00-8c24-178b580037ce</v>
-                <v>Destruct</v>
-                <v>30622868-3049-4931-90cf-792e50054c50</v>
-                <v>SetStaticState</v>
-                <v>fefbfec9-fe72-4474-b2b7-6ff80b0663a9</v>
+                <v>HasInputAccess</v>
+                <v>3f6ebca3-dd00-46d3-848f-45710aaa0fa2</v>
+                <v>HasVisibilityAccessIntern</v>
+                <v>107cf1fb-7552-521d-93c1-08738f8bfc4f</v>
                 <v>GetSurroundingRect</v>
                 <v>177e7fc7-6c6e-46d2-971b-89d5a8532a72</v>
+                <v>ElementInfo</v>
+                <v>fa62a1be-d245-48d0-a296-63e3abf71f29</v>
                 <v>GetResult</v>
                 <v>6ba7ca58-0363-4cd2-a2fc-bef1b67784f6</v>
                 <v>GetLocalUsergroup</v>
@@ -17997,8 +17997,8 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                 <v>486453b6-a29c-409e-b2ba-dd9d110d285a</v>
                 <v>HandleInput</v>
                 <v>aa476480-7b10-4868-ac09-e9be8736f67c</v>
-                <v>ElementInfo</v>
-                <v>fa62a1be-d245-48d0-a296-63e3abf71f29</v>
+                <v>Destruct</v>
+                <v>30622868-3049-4931-90cf-792e50054c50</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{3c60e503-48c2-4a6b-81a1-aaecffae9186}</v>
@@ -18011,10 +18011,10 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
               <d n="FbMethods" t="CaseInsensitiveHashtable_1" ckt="String" cvt="Guid">
                 <v>FB_Init</v>
                 <v>0f0b2487-443f-4a2a-8f58-196779a3b0b3</v>
-                <v>FB_Exit</v>
-                <v>d0358755-2ffd-4c65-a07c-31b2610596b0</v>
                 <v>FB_Reinit</v>
                 <v>2428ad8f-791f-4fd1-910e-72beb236a43e</v>
+                <v>FB_Exit</v>
+                <v>d0358755-2ffd-4c65-a07c-31b2610596b0</v>
               </d>
               <v n="FbName">"NotImportant"</v>
               <v n="FbGuid">{277ad3da-968b-4a07-a4cb-017a2b8b11d9}</v>

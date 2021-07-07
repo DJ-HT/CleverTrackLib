@@ -13,14 +13,14 @@ VAR_GLOBAL
     //ST02
     xFG_ST02akWT : BOOL; // WT anwesend
 
-    st105_aut : FB_AUT_105;   // Laden Filtergehäuse
+    st105_aut : FB_AUT_105;    // Laden Filtergehäuse
     st110_aut : FB_AUT_110;    // Laden RFID-Ring
     st115_aut : FB_AUT_115;    // Laden kristal
     st120_aut : FB_AUT_120;    // Laden Solerohr
     st125_aut : FB_AUT_125;    // Laden filterhut
     st130_aut : FB_AUT_130;    // Dosieren A
     st135_aut : FB_AUT_MODIFY; // Dosieren B
-    st140_aut : FB_AUT_MODIFY; // Niveaukontrolle
+    st140_aut : FB_AUT_140;    // Niveaukontrolle
     st145_aut : FB_AUT_145;    // Laden Patronendeckel
     st150_aut : FB_AUT_MODIFY; // Utralson A
     st155_aut : FB_AUT_MODIFY; // Ultrason B

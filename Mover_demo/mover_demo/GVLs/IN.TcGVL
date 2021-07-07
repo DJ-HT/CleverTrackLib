@@ -106,12 +106,12 @@ VAR_GLOBAL
     I536_ AT %IX53.6 : BOOL; // 
     I537_ AT %IX53.7 : BOOL; // 
 
-    AI01_                   AT %I* : UINT;
-    AI02_                   AT %I* : UINT;
-    AI11_                   AT %I* : UINT;
-    AI12_                   AT %I* : UINT;
-    AI21_ST125_piece_height AT %I* : UINT; // laser sensor value, detect pieces in round table
-    AI22_                   AT %I* : UINT;
+    AI01_ST140_level_track_side AT %I* : UINT; // laser sensor used to measure powder level, placed at the track side
+    AI02_ST140_level_door_side  AT %I* : UINT; // laser sensor used to measure powder level, placed at the door side
+    AI11_                       AT %I* : UINT;
+    AI12_                       AT %I* : UINT;
+    AI21_ST125_piece_height     AT %I* : UINT; // laser sensor value, detect pieces in round table
+    AI22_                       AT %I* : UINT;
 
 END_VAR
 ]]></Declaration>
