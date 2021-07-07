@@ -7,8 +7,8 @@ STRUCT
     release        : BIT; // Move the shuttle to the next position
     dirFarward     : BIT; // Specify the farward direction (depends on the SuperTrak configuration)
     dirReverse     : BIT; // Specify the reverse direction (depends on the SuperTrak configuration) 
-    echo_At_Target : BIT; // Echo signal for the At Position signal, this is to ensure the flag At Pos is not missed
-    reserve5       : BIT; // 
+    echo_in_pos    : BIT; // Echo signal for the In Position signal, this is to ensure the flag In Pos is not missed
+    echo_at_target : BIT; // Echo signal for the At target signal, this is to ensure the flag At target is not missed
     reserve6       : BIT; // 
     reserve7       : BIT; // 
     reserve8       : BIT; // 

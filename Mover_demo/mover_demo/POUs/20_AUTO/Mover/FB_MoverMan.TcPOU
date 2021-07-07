@@ -258,7 +258,7 @@ CASE step OF
 
     IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.allIdSet THEN
         gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.setShuttleNumber := FALSE;
-        step := 13;
+        step                                                           := 13;
     END_IF
 
 13: // stop id attrib sequence
@@ -398,12 +398,15 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
 
             ELSE
-                _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);
+                IF __ISVALIDREF(_MoverList[mv_i].Station.Process.Mover) THEN
+                    ASSERT(0);
+                ELSE
+                    _MoverList[mv_i].Station.Process.GiveMover(_MoverList[mv_i]);
 
-                IF _MoverList[mv_i].Station.Process.xBusy THEN
-                    _MoverList[mv_i].State := MoverState_e.InOperation;
+                    IF _MoverList[mv_i].Station.Process.xBusy THEN
+                        _MoverList[mv_i].State := MoverState_e.InOperation;
+                    END_IF
                 END_IF
-
             END_IF
 
         MoverState_e.InOperation:
@@ -505,6 +508,9 @@ IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enabl
             // echo At_Target
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.echo_At_Target :=
                 gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.at_target;
+            // echo at position
+            gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.echo_in_pos :=
+                gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.in_position;
         END_IF
     END_FOR
 END_IF
