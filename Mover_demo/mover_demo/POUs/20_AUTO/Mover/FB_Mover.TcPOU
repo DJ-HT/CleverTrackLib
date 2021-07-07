@@ -14,6 +14,9 @@ VAR
 
     _State : MoverState_e := MoverState_e.WaitOnNextStation; // current mover state
 	
+	_MovingProcessOffset : LREAL; // added offset by the process, 
+                                  // used to compute the new position of the shuttle inside the station
+	
 	_iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
 VAR CONSTANT
@@ -143,6 +146,26 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="MoveRelativeInsideStation" Id="{e03e38bc-fe93-41b3-b2de-36cb4be61842}">
+      <Declaration><![CDATA[// When a mover is given to a process, this process is allowed to
+// use this command to move the shuttle
+METHOD PUBLIC MoveRelativeInsideStation : BOOL
+VAR_INPUT
+    offsetPosition : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MoveRelativeInsideStation := FALSE;
+
+IF (MoverState_e.InOperation = THIS^.State) AND
+   (ABS(offsetPosition + THIS^.Station.Offset + THIS^._MovingProcessOffset) < LREAL#500.0) THEN
+    THIS^.State                := MoverState_e.PerformRelativeMove;
+    THIS^._MovingProcessOffset := offsetPosition + THIS^._MovingProcessOffset;
+    MoveRelativeInsideStation  := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="MoveToStation" Id="{eca588ef-140f-424d-b8d0-9320c30f98a1}">
       <Declaration><![CDATA[// Move to the current set station. Can only move if the current process are running
 METHOD MoveToStation : REFERENCE TO FB_Mover
@@ -153,6 +176,7 @@ END_VAR
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
     THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
     THIS^._State := MoverState_e.MovingToStation;
+	THIS^._MovingProcessOffset := 0;
 END_IF
 
 MoveToStation REF= THIS^;
@@ -171,6 +195,7 @@ END_VAR
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
     IF THIS^.Station.WaitPos <= (THIS^.Station.Position.lrWorkPosition - CONST.MAX_MOVER_SIZE) THEN
         THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
+        THIS^._MovingProcessOffset := 0;
     END_IF
 END_IF
 
@@ -180,6 +205,17 @@ MoveToWaitSpot REF= THIS^;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="MovingProcessOffset" Id="{5efad44e-a624-4841-b07f-de69581e97e3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MovingProcessOffset : LREAL]]></Declaration>
+      <Get Name="Get" Id="{fe3c85cb-71f1-46e6-b2f6-c639c791b5e4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MovingProcessOffset := THIS^._MovingProcessOffset;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SetPieceHolder" Id="{3656c226-034e-4545-af0f-2c2902573b50}">
       <Declaration><![CDATA[// Set a specic piece holder. This will affect the station position offset
 METHOD SetPieceHolder : REFERENCE TO FB_Mover

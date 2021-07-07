@@ -421,6 +421,40 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 
             END_IF
 
+        MoverState_e.PerformRelativeMove:
+            IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
+                ASSERT(0);
+                _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
+                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+
+            ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+                ASSERT(0);
+                _MoverList[mv_i].State := MoverState_e.OperationDone;
+
+            ELSE
+                IF NOT _MoverList[mv_i].IsInStationPos() THEN
+                    _MoverList[mv_i].State := MoverState_e.WaitRelativeMoveEnd;
+                END_IF
+
+            END_IF
+			
+		MoverState_e.WaitRelativeMoveEnd:
+            IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
+                ASSERT(0);
+                _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
+                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+
+            ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+                ASSERT(0);
+                _MoverList[mv_i].State := MoverState_e.OperationDone;
+
+            ELSE
+                IF _MoverList[mv_i].IsInStationPos() THEN
+                    _MoverList[mv_i].State := MoverState_e.InOperation;
+                END_IF
+
+            END_IF
+
         END_CASE
     END_IF
 END_FOR
@@ -456,12 +490,13 @@ IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enabl
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
         IF __ISVALIDREF(_MoverList[mv_i].Station) THEN
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.release :=
-                _MoverList[mv_i].State = MoverState_e.MovingToStation AND
+                ((_MoverList[mv_i].State = MoverState_e.MovingToStation) OR
+                (_MoverList[mv_i].State = MoverState_e.PerformRelativeMove)) AND
                 gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.at_target;
 
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bNextStation    := _MoverList[mv_i].Station.SuperTrackNumber;
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].diNextOffset_um :=
-                LREAL_TO_DINT(_MoverList[mv_i].Station.Offset * 1000);
+                LREAL_TO_DINT(_MoverList[mv_i].Station.Offset * 1000.0 + _MoverList[mv_i].MovingProcessOffset * 1000.0);
         END_IF
     END_FOR
 END_IF
