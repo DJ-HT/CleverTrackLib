@@ -505,6 +505,29 @@ END_IF
 (* START *)
 rtSTART(CLK := xIN_Start);
 
+IF 0 = bOUT_Error THEN
+    IF fb_axis130_01Z.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_axis130_10Z.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_Kammer_Offnen_Links.xOUT_ErrFlag THEN
+        bOUT_Error := 20;
+    ELSIF fb_Kammer_Offnen_Rechts.xOUT_ErrFlag THEN
+        bOUT_Error := 21;
+    ELSIF fb_Kammer_nachfullen_Links.xOUT_ErrFlag THEN
+        bOUT_Error := 22;
+    ELSIF fb_Kammer_nachfullen_Rechts.xOUT_ErrFlag THEN
+        bOUT_Error := 23;
+    ELSIF fb_Niederhalter_Patrone.xOUT_ErrFlag THEN
+        bOUT_Error := 24;
+    ELSIF fb_viebrieren_kammer_links.xOUT_ErrFlag THEN
+        bOUT_Error := 25;
+    ELSIF fb_viebrieren_kammer_rechts.xOUT_ErrFlag THEN
+        bOUT_Error := 26;
+ELSIF iOUT_Step < ST130_Dose_e.ERROR THEN
+    iOUT_Step := ST130_Dose_e.ERROR;
+END_IF
+
 (*******************************************************************)
 (* Schrittkette  *)
 (*******************************************************************)
