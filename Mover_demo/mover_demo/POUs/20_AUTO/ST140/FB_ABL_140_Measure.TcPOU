@@ -69,6 +69,8 @@ VAR
     rMeasureLeftTrack_4 : REAL;
     rMeasureLeftDoor_4  : REAL;
 
+    visu_shuttle_x_position : LREAL; // position of the shuttle used in visu
+
 END_VAR
 VAR CONSTANT
     MEASURE_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
@@ -153,6 +155,12 @@ END_IF
 
 (* START *)
 rtSTART(CLK := xIN_Start);
+
+IF __ISVALIDREF(Mover) THEN
+    visu_shuttle_x_position := Mover.MovingProcessOffset;
+ELSE
+    visu_shuttle_x_position := 0.0;
+END_IF
 
 (*******************************************************************)
 (* Schrittkette  *)
