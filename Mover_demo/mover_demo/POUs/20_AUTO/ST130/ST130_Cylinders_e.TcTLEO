@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <EnumerationTextList Name="ST130_Cylinders_e" Id="{ff7bf38d-e7fd-4f27-9d60-c41db9f00c2d}">
-    <Declaration><![CDATA[TYPE ST130_Cylinders_e :
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE ST130_Cylinders_e :
 (
     Kammer_Offnen_Links,
     Kammer_Offnen_Rechts,
