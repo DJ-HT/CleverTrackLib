@@ -90,7 +90,7 @@ END_IF;
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
-    iOUT_Step    := iPreStep;
+    iOUT_Step    := ST140_Measure_e.READY; // iPreStep;
 END_IF;
 
 (*******************************************************************)
