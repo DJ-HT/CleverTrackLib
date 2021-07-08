@@ -165,11 +165,11 @@ VAR_GLOBAL
     //-5015
     (* ST145/150/155 I - 8x IO *)
     I2300_ST145_teil_in_vereinzelung    AT %I* : BOOL; // 0: AWK Teil in Vereinzelung (RST) ST145
-    I2301_ST150_kraftubersetzunh_zuruck AT %I* : BOOL; // 1: Kraftübersetzung zurück ST150
-    I2302_ST150_kraftubersetzunh_vor    AT %I* : BOOL; // 2: Kraftübersetzung vor ST150
+    I2301_ST150_kraftubersetzung_zuruck AT %I* : BOOL; // 1: Kraftübersetzung zurück ST150
+    I2302_ST150_kraftubersetzung_vor    AT %I* : BOOL; // 2: Kraftübersetzung vor ST150
     I2303_ST150_deckel_vohanden         AT %I* : BOOL; // 3: Deckel vorhanden ST150
-    I2304_ST155_kraftubersetzunh_zuruck AT %I* : BOOL; // 4: Kraftübersetzung zurück ST155
-    I2305_ST155_kraftubersetzunh_vor    AT %I* : BOOL; // 5: Kraftübersetzung vor ST155
+    I2304_ST155_kraftubersetzung_zuruck AT %I* : BOOL; // 4: Kraftübersetzung zurück ST155
+    I2305_ST155_kraftubersetzung_vor    AT %I* : BOOL; // 5: Kraftübersetzung vor ST155
     I2306_ST155_deckel_vohanden         AT %I* : BOOL; // 6: Deckel vorhanden ST155
 
     //-5501
