@@ -202,7 +202,7 @@ VAR
 END_VAR
 VAR CONSTANT
     MOVER_NUMBER     : INT  := 18;
-    TRACK_SIMULATION : BOOL := TRUE; // Set to true when supertrack is in simulation
+    TRACK_SIMULATION : BOOL := FALSE; // Set to true when supertrack is in simulation
 END_VAR
 VAR_STAT
     _iInstanceCounter : INT := 1; // instance counter
