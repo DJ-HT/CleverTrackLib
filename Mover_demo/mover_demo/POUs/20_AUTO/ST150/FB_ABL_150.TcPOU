@@ -29,6 +29,13 @@ VAR_INPUT
 
     // Application specific
     Mover : REFERENCE TO FB_Mover;
+
+    xIN_capDetector             : BOOL;
+    xIN_kraftubersetzunh_zuruck : BOOL;
+    xIN_kraftubersetzunh_vor    : BOOL;
+	
+	xIN_welding_bits : Ultrasonic_IN_bits_t;
+
 END_VAR
 VAR_OUTPUT
     (* standart Ausgänge *)
@@ -45,7 +52,9 @@ VAR_OUTPUT
 
     iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
     xOUT_MoverFree         : BOOL; // The mover is free to move
-    xOUT_PickPiece         : BOOL; // Set to true when a piece is picked
+
+    xOUT_moverMaintening_valve : BOOL;
+    xOUT_welding_bits          : Ultrasonic_OUT_bits_t;
 
 END_VAR
 VAR
@@ -65,12 +74,12 @@ VAR
     (* Spezial *)
     fb_moverMaintening   : FB_ZylMo2El_V2_1;
     simu_moverMaintening : FB_Simu_Zyl2Pos;
-	
-	TON_UssError : TON;
+
+    TON_UssError : TON;
 
 END_VAR
 VAR CONSTANT
-    USS_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    USS_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -96,6 +105,9 @@ END_IF;
 TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
             PT := tIN_Timeout);
 
+TON_UssError(IN := ST150_Uss_e.uss_start = iOUT_Step,
+             PT := DINT_TO_TIME(_20_AUTO.recipe.st150.USS_ErrorTime_ms));
+
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
@@ -119,8 +131,8 @@ fb_moverMaintening(xIN_Reset    := xIN_Reset OR (ST150_Uss_e.RESET = iOUT_Step),
                                                   [ST150_Cylinders_e.Kraftbstutzung].toGS_wait_time));
 
 simu_moverMaintening(xIN_Enable := USS_SIMULATION AND CONST.USE_SIMULATION,
-                     xIN_inGS   := IO_BOX.I2301_ST150_kraftubersetzunh_zuruck,
-                     xIN_inAS   := IO_BOX.I2302_ST150_kraftubersetzunh_vor,
+                     xIN_inGS   := xIN_kraftubersetzunh_zuruck,
+                     xIN_inAS   := xIN_kraftubersetzunh_vor,
                      xIN_valve  := fb_moverMaintening.xOUT_VALVE,
                      tIN_GS_ms  := 200,  // ms
                      tIN_AS_ms  := 200); // ms
@@ -153,22 +165,22 @@ xOUT_MoverFree := iOUT_Step >= ST150_Uss_e.MOVER_FREE_OP AND iOUT_Step < ST150_U
 iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          iAktStep,
                                          iAktStep,
-                                         ST150_Uss_e.mover_maintening_up,
+                                         ST150_Uss_e.check_cap_present,
                                          ST150_Uss_e.SYNC_MOVER_LEAVE);
 
-TON_UssError(IN := OUT.Q020_ST150_ultraschall_start,
-             PT := DINT_TO_TIME(_20_AUTO.recipe.st150.USS_ErrorTime_ms));
-
-IO_BOX.Q0202_12_ST150_kraftubersetzung :=
+xOUT_moverMaintening_valve :=
     fb_moverMaintening.xOUT_VALVE AND NOT (USS_SIMULATION AND CONST.USE_SIMULATION);
 
-OUT.Q020_ST150_ultraschall_start :=
+xOUT_welding_bits.Start :=
     (ST150_Uss_e.uss_start = iOUT_Step) AND
     NOT (USS_SIMULATION AND CONST.USE_SIMULATION) AND
-    IO_BOX.I2303_ST150_deckel_vohanden;
+    xIN_capDetector;
 
-OUT.Q021_ST150_ultraschall_reset :=
-    (ST150_Uss_e.Init_ResetUss_maintaining_down = iOUT_Step) AND NOT (USS_SIMULATION AND CONST.USE_SIMULATION);
+xOUT_welding_bits.Reset     := _14_STATE._FB_btQUIT.pbtIN^.press OR (ST150_Uss_e.Init_ResetUss_maintaining_down = iOUT_Step);
+xOUT_welding_bits.Data_Hex1 := _20_AUTO.recipe.st150.USS_Type.0;
+xOUT_welding_bits.Data_Hex2 := _20_AUTO.recipe.st150.USS_Type.1;
+xOUT_welding_bits.Data_Hex4 := _20_AUTO.recipe.st150.USS_Type.2;
+xOUT_welding_bits.Data_Hex8 := _20_AUTO.recipe.st150.USS_Type.3;
 
 (*******************************************************************)
 (* Ablauf *)
@@ -193,7 +205,7 @@ rtSTART(CLK := xIN_Start);
 IF 0 = bOUT_Error THEN
     IF fb_moverMaintening.xOUT_ErrFlag THEN
         bOUT_Error := 11;
-    ELSIF USS_SIMULATION AND CONST.USE_SIMULATION AND IN.I021_ultraschall_fehler_150_20 THEN
+    ELSIF USS_SIMULATION AND CONST.USE_SIMULATION AND xIN_welding_bits.Fehler THEN
         bOUT_Error := 12;
     ELSIF TON_UssError.Q THEN
         bOUT_Error := 13;
@@ -220,15 +232,11 @@ ST150_Uss_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST150_Uss_e.INIT: (* Grundstellung ? *)
-    IF USS_SIMULATION AND CONST.USE_SIMULATION THEN
-        iOUT_Step := ST150_Uss_e.Init_ResetUss_maintaining_down;
-    END_IF;
+    iOUT_Step := ST150_Uss_e.Init_ResetUss_maintaining_down;
 
 ST150_Uss_e.Init_ResetUss_maintaining_down:
     IF fb_moverMaintening.xOUT_inGS THEN
-        IF (USS_SIMULATION AND CONST.USE_SIMULATION) OR IN.I020_ultraschall_bereit_150_20 THEN
-            iOUT_Step := ST150_Uss_e.READY;
-        END_IF
+        iOUT_Step := ST150_Uss_e.READY;
     END_IF
 
 (***** READY / INIT DONE *****)
@@ -245,36 +253,38 @@ ST150_Uss_e.START: (*  *)
 
 ST150_Uss_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
-        IF (USS_SIMULATION AND CONST.USE_SIMULATION) OR
-           IO_BOX.I2303_ST150_deckel_vohanden THEN
-            iOUT_Step := ST150_Uss_e.mover_maintening_up;
-
-        ELSE
-            iOUT_Step  := ST150_Uss_e.ERROR;
-            bOUT_Error := 1;
-
-        END_IF
+        iOUT_Step := ST150_Uss_e.mover_maintening_up;
     END_IF;
+
+ST150_Uss_e.check_cap_present:
+    IF xIN_capDetector OR (USS_SIMULATION AND CONST.USE_SIMULATION) THEN
+        iOUT_Step := ST150_Uss_e.mover_maintening_up;
+    ELSE
+        iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
+    END_IF
 
 ST150_Uss_e.mover_maintening_up:
     IF xIN_NextStep AND fb_moverMaintening.xOUT_inAS THEN
-        iOUT_Step := ST150_Uss_e.uss_start;
+        IF USS_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST150_Uss_e.mover_maintening_down;
+        ELSE
+            IF xIN_welding_bits.Bereit THEN
+                iOUT_Step := ST150_Uss_e.uss_start;
+            ELSE
+                bOUT_Error := 1; // welding not ready
+            END_IF
+        END_IF;
     END_IF;
 
-// not used here, maybe later
 ST150_Uss_e.uss_start:
-    IF xIN_NextStep AND
-       (IN.I020_ultraschall_bereit_150_20 AND
-       NOT IN.I021_ultraschall_fehler_150_20 AND
-       NOT IN.I022_ultraschall_us_on_150_20 AND
-       IN.I023_ultraschall_nullpos_150_20) THEN
+    IF xIN_NextStep AND NOT xIN_welding_bits.NullPosition THEN
         iOUT_Step := ST150_Uss_e.uss_working;
     END_IF
 
 ST150_Uss_e.uss_working:
     IF xIN_NextStep AND
-       (NOT IN.I022_ultraschall_us_on_150_20 AND
-       IN.I023_ultraschall_nullpos_150_20) THEN
+       (NOT xIN_welding_bits.US_on AND
+       xIN_welding_bits.NullPosition) THEN
         iOUT_Step := ST150_Uss_e.mover_maintening_down;
     END_IF
 

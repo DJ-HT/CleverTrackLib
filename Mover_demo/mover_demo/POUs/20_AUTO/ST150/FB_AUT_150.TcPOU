@@ -25,18 +25,9 @@ VAR_OUTPUT
 END_VAR
 VAR
     (* Bausteine *)
-    fb_Pnp    : FB_ABL_145_Pnp;
-    fb_Feeder : FB_ABL_145_Feeder;
+    fb_Uss : FB_ABL_150;
 
-END_VAR
-
-VAR CONSTANT
-    ROT_TABLE_FREE_MAX_Y : REAL := 200.0; // If Y and Z axis is more than this value, the feeder cannot move
-    ROT_TABLE_FREE_MAX_Z : REAL := 200.0; // If Z and Y axis is more than this value, the feeder cannot move
-
-    PNP_VERTICAL_MAX_Z : REAL := 50.0; // If Z axis is more than this value, the horizontal axis of the pnp cannot move
-END_VAR
-]]></Declaration>
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(*******************************************************************)
 (* Timer *)
@@ -65,39 +56,40 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
+fb_Uss.xIN_welding_bits.Bereit       := IN.I020_ultraschall_bereit_150_20;
+fb_Uss.xIN_welding_bits.Fehler       := IN.I021_ultraschall_fehler_150_20;
+fb_Uss.xIN_welding_bits.US_on        := IN.I022_ultraschall_us_on_150_20;
+fb_Uss.xIN_welding_bits.NullPosition := IN.I023_ultraschall_nullpos_150_20;
+	   
+fb_Uss(xIN_Reset       := xReset,
+       xIN_Init        := xIN_Init,
+       xIN_Quit        := xIN_Quit,
+       xIN_Start       := enIN_State = enState.StateAUTO,
+       xIN_Sperre      := NOT xIN_On,
+       xIN_NextStep    := xNextStep,
+       xIN_AlarmAktiv  := xIN_AlarmAktiv,
+       xIN_DryCycle    := xIN_DryCycle,
+       xIN_RestartCYCL := enIN_State = enState.StateAUTO,
+       enIN_State      := enIN_State,
+       tIN_Timeout     := tIN_Timeout,
+       pxFG_Freigabe   := ADR(xDummy),
+       // CleverTrackLib
+       Mover := THIS^.Mover,
+       // hardware input
+       xIN_capDetector             := IO_BOX.I2303_ST150_deckel_vohanden,
+       xIN_kraftubersetzunh_zuruck := IO_BOX.I2301_ST150_kraftubersetzung_zuruck,
+       xIN_kraftubersetzunh_vor    := IO_BOX.I2302_ST150_kraftubersetzung_vor,
+       xIN_welding_bits            :=, // set above
+       // hardware output
+       xOUT_moverMaintening_valve => IO_BOX.Q0202_14_ST150_kraftubersetzung,
+       xOUT_welding_bits          =>); // set below
 
-fb_Pnp(xIN_Reset          := xReset,
-       xIN_Init           := xIN_Init,
-       xIN_Quit           := xIN_Quit,
-       xIN_Start          := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
-       xIN_Sperre         := NOT xIN_On,
-       xIN_NextStep       := xNextStep,
-       xIN_AlarmAktiv     := xIN_AlarmAktiv,
-       xIN_DryCycle       := xIN_DryCycle,
-       xIN_RestartCYCL    := enIN_State = enState.StateAUTO, // only restart when the mover has move out
-       enIN_State         := enIN_State,
-       tIN_Timeout        := tIN_Timeout,
-       pxFG_Freigabe      := ADR(xDummy),
-       Mover              := THIS^.Mover,
-       xIN_PceReadyToPick := fb_Feeder.xOUT_Done,
-       xIN_HorAxisFree    := ST145_Axis.axis145_02Z.rActPos < ROT_TABLE_FREE_MAX_Y);
-
-fb_Feeder(xIN_Reset       := xReset,
-          xIN_Init        := xIN_Init,
-          xIN_Quit        := xIN_Quit,
-          xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
-          xIN_Sperre      := NOT xIN_On,
-          xIN_NextStep    := xNextStep,
-          xIN_AlarmAktiv  := xIN_AlarmAktiv,
-          xIN_DryCycle    := xIN_DryCycle,
-          xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out
-          enIN_State      := enIN_State,
-          tIN_Timeout     := tIN_Timeout,
-          pxFG_Freigabe   := ADR(xDummy),
-          // special
-          xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
-          xIN_RotTableBlockedByPnp := (ST145_Axis.axis145_01Y.rActPos > ROT_TABLE_FREE_MAX_Y) AND
-                                      (ST145_Axis.axis145_02Z.rActPos > ROT_TABLE_FREE_MAX_Z));
+OUT.Q020_ST150_ultraschall_start      := fb_Uss.xOUT_welding_bits.Start;
+OUT.Q021_ST150_ultraschall_reset      := fb_Uss.xOUT_welding_bits.Reset;
+OUT.Q022_ST150_ultraschall_data_bit_0 := fb_Uss.xOUT_welding_bits.Data_Hex1;
+OUT.Q023_ST150_ultraschall_data_bit_1 := fb_Uss.xOUT_welding_bits.Data_Hex2;
+OUT.Q024_ST150_ultraschall_data_bit_2 := fb_Uss.xOUT_welding_bits.Data_Hex4;
+OUT.Q025_ST150_ultraschall_data_bit_3 := fb_Uss.xOUT_welding_bits.Data_Hex8;
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -106,11 +98,11 @@ fb_Feeder(xIN_Reset       := xReset,
 (*******************************************************************)
 (* OUTPUT *)
 (*******************************************************************)
-xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
-xOUT_Ready    := fb_Pnp.xOUT_Ready AND fb_Feeder.xOUT_Ready;
-xOUT_Done     := fb_Pnp.xOUT_Done;
-xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag;
-xOUT_Wait     := fb_Pnp.xOUT_Wait;
+xOUT_InitDone := fb_Uss.xOUT_InitDone;
+xOUT_Ready    := fb_Uss.xOUT_Ready;
+xOUT_Done     := fb_Uss.xOUT_Done;
+xOUT_ErrFlag  := fb_Uss.xOUT_ErrFlag;
+xOUT_Wait     := fb_Uss.xOUT_Wait;
 xOUT_AlarmST  := xOUT_ErrFlag;
 
 (*******************************************************************)
@@ -128,7 +120,7 @@ PROPERTY iCompletionPC : INT
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[iCompletionPC := THIS^.fb_Pnp.iOUT_ProcessCompletion;]]></ST>
+          <ST><![CDATA[iCompletionPC := THIS^.fb_Uss.iOUT_ProcessCompletion;]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -160,7 +152,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xBusy := THIS^.fb_Pnp.xOUT_Busy;
+          <ST><![CDATA[xBusy := THIS^.fb_Uss.xOUT_Busy;
 ]]></ST>
         </Implementation>
       </Get>
@@ -180,7 +172,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xDone := THIS^.fb_Pnp.xOUT_Ready OR THIS^.fb_Pnp.xOUT_Done;
+          <ST><![CDATA[xDone := THIS^.fb_Uss.xOUT_Ready OR THIS^.fb_Uss.xOUT_Done;
 ]]></ST>
         </Implementation>
       </Get>
@@ -192,7 +184,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverPathFree := THIS^.fb_Pnp.xOUT_MoverFree OR THIS^.fb_Pnp.xOUT_Ready OR THIS^.fb_Pnp.xOUT_Done;
+          <ST><![CDATA[xMoverPathFree := THIS^.fb_Uss.xOUT_MoverFree OR THIS^.fb_Uss.xOUT_Ready OR THIS^.fb_Uss.xOUT_Done;
 ]]></ST>
         </Implementation>
       </Get>
@@ -204,7 +196,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Pnp.iOUT_Step = ST145_Pnp_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Uss.iOUT_Step = ST150_Uss_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>
