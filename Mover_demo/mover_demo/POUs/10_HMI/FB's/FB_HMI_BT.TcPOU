@@ -179,6 +179,16 @@ HMI.cylinderNames[StationList_e.ST125][3] := TO_STRING(ST125_Cylinders_e.Handlin
 HMI.cylinderNames[StationList_e.ST125][4] := TO_STRING(ST125_Cylinders_e.GreiferSolerohrLinks);
 HMI.cylinderNames[StationList_e.ST125][5] := TO_STRING(ST125_Cylinders_e.GreiferSolerohrRechts);
 
+HMI.cylinderNames[StationList_e.ST130][0] := TO_STRING(ST130_Cylinders_e.Kammer_Offnen_Links);
+HMI.cylinderNames[StationList_e.ST130][1] := TO_STRING(ST130_Cylinders_e.Kammer_Offnen_Rechts);
+HMI.cylinderNames[StationList_e.ST130][2] := TO_STRING(ST130_Cylinders_e.Kammer_nachfullen_Links);
+HMI.cylinderNames[StationList_e.ST130][3] := TO_STRING(ST130_Cylinders_e.Kammer_nachfullen_Rechts);
+HMI.cylinderNames[StationList_e.ST130][4] := TO_STRING(ST130_Cylinders_e.Vibrieren_Kammer_Links);
+HMI.cylinderNames[StationList_e.ST130][5] := TO_STRING(ST130_Cylinders_e.Vibrieren_Kammer_Rechts);
+HMI.cylinderNames[StationList_e.ST130][6] := TO_STRING(ST130_Cylinders_e.Niederhalter_Patrone);
+HMI.cylinderNames[StationList_e.ST130][7] := TO_STRING(ST130_Cylinders_e.Vibrienren_Patrone_Links);
+HMI.cylinderNames[StationList_e.ST130][8] := TO_STRING(ST130_Cylinders_e.Viebrieren_Patrone_Rechts);
+
 HMI.cylinderNames[StationList_e.ST145][0] := TO_STRING(ST145_Cylinders_e.VakuumgreiferLinks);
 HMI.cylinderNames[StationList_e.ST145][1] := TO_STRING(ST145_Cylinders_e.VakuumgreiferRechts);
 
