@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <EnumerationTextList Name="StationList_e" Id="{7673be44-2b38-4ec9-b4a3-b2cf34b502a2}">
-    <Declaration><![CDATA[{attribute 'qualified_only'}
+    <Declaration><![CDATA[// Only station with manual mode cylinders
+{attribute 'qualified_only'}
 TYPE StationList_e :
 (
     ST105,
@@ -9,6 +10,7 @@ TYPE StationList_e :
     ST115,
     ST120,
     ST125,
+    ST128,
     ST130,
     ST135,
     ST140,
@@ -53,6 +55,11 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"ST125"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST128"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

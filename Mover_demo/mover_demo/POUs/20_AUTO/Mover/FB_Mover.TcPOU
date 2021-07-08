@@ -13,20 +13,34 @@ VAR
     _Station      : REFERENCE TO FB_Station;       // current station
 
     _State : MoverState_e := MoverState_e.WaitOnNextStation; // current mover state
-	
-	_MovingProcessOffset : LREAL; // added offset by the process, 
+
+    _ActualTargetOffset  : LREAL; // final offset to apply to the current/next target
+    _MovingProcessOffset : LREAL; // added offset by the process, 
                                   // used to compute the new position of the shuttle inside the station
-	
-	_iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+
+    _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
 VAR CONSTANT
 END_VAR
 VAR_STAT
-	_iInstanceCounter : INT := 1; // instance counter
-END_VAR]]></Declaration>
+    _iInstanceCounter : INT := 1; // instance counter
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Property Name="ActualTargetOffset" Id="{766155b6-a03b-4774-953b-46f447da7c1e}">
+      <Declaration><![CDATA[// This is the final offset to apply when moving to a target
+PROPERTY PUBLIC ActualTargetOffset : LREAL]]></Declaration>
+      <Get Name="Get" Id="{85f65cbc-71ca-49e5-9af2-96f83b7fcf58}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ActualTargetOffset := THIS^._ActualTargetOffset;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="AttachedPieceHolder" Id="{1f1520b6-17b9-443d-9101-58c2158353cb}">
       <Declaration><![CDATA[PROPERTY AttachedPieceHolder : REFERENCE TO FB_PieceHolder]]></Declaration>
       <Get Name="Get" Id="{7bc424cc-e238-4415-b174-26b9a1b9bd88}">
@@ -174,8 +188,11 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
-    THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
+    THIS^.MoverAxis
+        .MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
+
     THIS^._MovingProcessOffset := 0;
+    THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset;
     THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
 ELSE
     ASSERT(0); // should not be called when we are in operation !
@@ -198,6 +215,7 @@ END_VAR
     IF THIS^.Station.WaitPos <= (THIS^.Station.Position.lrWorkPosition - CONST.MAX_MOVER_SIZE) THEN
         THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
         THIS^._MovingProcessOffset := 0;
+        THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset + THIS^.Station._WaitPosOffset;
         THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
     END_IF
 ELSE
