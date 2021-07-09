@@ -3,12 +3,15 @@
   <DUT Name="ST110_Recipe_t" Id="{67830e86-a656-410c-b77d-77ee05a4605e}">
     <Declaration><![CDATA[TYPE ST110_Recipe_t :
 STRUCT
-    xUseVerLeft     : BOOL; // Is the left vertical picker element is used
-    xUseVerRight    : BOOL; // Is the right vertical picker element is used
-    FeederConfig    : FeederDelays_t;
-    blowPieceTof_ms : DINT; // time to let the blower take away the piece
-    vakum_left_pc   : INT;  // vacum limit for left pnp
-    vakum_right_pc  : INT;  // vacum limit for right pnp
+    xUseVerLeft         : BOOL; // Is the left vertical picker element is used
+    xUseVerRight        : BOOL; // Is the right vertical picker element is used
+    FeederConfig        : FeederDelays_t;
+    waitBlowPieceTon_ms : DINT; // time to wait before to blow the piece away
+    blowPieceTof_ms     : DINT; // time to let the blower take away the piece
+    vakum_left_pc       : INT;  // vacum limit for left pnp
+    vakum_right_pc      : INT;  // vacum limit for right pnp
+    kraft_left_raw      : REAL;  // force limit for left pnp, raw value
+    kraft_right_raw     : REAL;  // force limit for right pnp, raw value
 END_STRUCT
 END_TYPE
 ]]></Declaration>

@@ -78,8 +78,8 @@ VAR
     iSearchIndex       : INT; (* Initialization index TO see how many element we have AT startup
                                  or after an alarm *)
 
-    tof_color_sensor : TOF;
-    ton_blow_piece   : TON;
+    ton_wait_blow_piece : TON;
+    tof_color_sensor    : TOF;
 
 	rTest : REAL;
 END_VAR
@@ -113,6 +113,22 @@ iCurrentTableIndex := iCurrentTableIndex MOD 3;
 (*******************************************************************)
 TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
             PT := tIN_Timeout);
+
+// we use a set reset to be sure that the blower blow event if the time
+// is not elapsed
+IF IO_BOX.I8004_ST110_farbsensor_lagekontrolle THEN
+    ton_wait_blow_piece.IN := TRUE;
+
+ELSIF NOT IO_BOX.I8004_ST110_farbsensor_lagekontrolle AND ton_wait_blow_piece.Q THEN
+    ton_wait_blow_piece.IN := FALSE;
+
+END_IF
+
+ton_wait_blow_piece(IN :=, // see code above
+                    PT := DINT_TO_TIME(_20_AUTO.recipe.st110.waitBlowPieceTon_ms));
+
+tof_color_sensor(IN := ton_wait_blow_piece.Q,
+                 PT := DINT_TO_TIME(_20_AUTO.recipe.st110.blowPieceTof_ms));
 
 (*******************************************************************)
 (* Bausteine *)
@@ -155,12 +171,6 @@ END_IF
 
 IF ST110_Feeder_e.Init_simu_home_table = iOUT_Step THEN
     fb_axis110_10W.rIN_Position := TO_REAL(120.0 - LMOD(ST110_Axis.axis110_10W.rActPos, 120.0));
-
-ELSIF ST110_Feeder_e.Init_home_table = iOUT_Step THEN
-    fb_axis110_10W.rIN_Position := TO_REAL(120.0 - LMOD(ST110_Axis.axis110_10W.rActPos, 120.0));
-
-ELSIF ST110_Feeder_e.Init_table_go_to_zero = iOUT_Step THEN
-    fb_axis110_10W.rIN_Position := 360 - ST110_Axis.axis110_10W.rActPos;
 
 ELSE
     fb_axis110_10W.rIN_Position := 120.0;
@@ -240,18 +250,14 @@ xOUT_Wait := (iOUT_Step = ST110_Feeder_e.DONE);
 // TODO add simulation constant to prevent the output to be set
 IO_BOX.Q8000_ST110_freigabe_wf    := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 IO_BOX.Q8003_ST110_forderband_ein :=
-    ((iOUT_Step = ST110_Feeder_e.wait_on_a_piece) OR IO_BOX.Q8000_ST110_freigabe_wf) AND
+    (enIN_State >= enState.StateLEER) AND
     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 // blow out
-tof_color_sensor(IN := IO_BOX.I8004_ST110_farbsensor_lagekontrolle,
-                 PT := DINT_TO_TIME(_20_AUTO.recipe.st110.blowPieceTof_ms));
-
-ton_blow_piece(IN := NOT ton_blow_piece.Q AND NOT tof_color_sensor.Q, PT := T#300MS);
 
 IO_BOX.Q8005_ST110_blow_piece := fb_feeder.xOUT_EnableFeeder AND
-                                 NOT tof_color_sensor.Q AND
-                                 (ton_blow_piece.ET < (ton_blow_piece.PT / 2));
+                                 tof_color_sensor.Q AND
+                                 NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)
@@ -302,7 +308,7 @@ ST110_Feeder_e.Init_home_table:
         IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step := ST110_Feeder_e.Init_simu_home_table;
         ELSE
-            iOUT_Step := ST110_Feeder_e.Init_table_go_to_zero;
+            iOUT_Step := ST110_Feeder_e.Init_reset_search_index;
         END_IF
     END_IF
 

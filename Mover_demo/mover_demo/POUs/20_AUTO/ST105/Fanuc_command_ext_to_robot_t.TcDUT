@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="Fanuc_command_ext_to_robot_t" Id="{5b176c9b-2282-4cbf-a8f3-8b1ea1300970}">
+    <Declaration><![CDATA[// second set of command for the fanuc robot
+{attribute 'pack_mode' := '1'}
+TYPE Fanuc_command_ext_to_robot_t :
+STRUCT
+    PnsStrobe  : BIT; // Wechselsignal Programmanwahl
+    PROD_Start : BIT; // Produktion Start nach Programmanwahl
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

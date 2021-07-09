@@ -1,0 +1,392 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ABL_105_Feeder" Id="{d70cb1d1-b9f6-4566-adbe-6c2a76d0f476}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ABL_105_Feeder
+(****************************************************************************************)
+(*	TITEL				RFID-Ring laden, Feeder and rotary table                        *)
+(*	Status				ungetestet                         								*)
+(*	Beschrieb:			Ablaufbeschreibung												*)
+(*																						*)
+(*	Steps:	self-explained using enum													*)
+(***********************************Revisionen*******************************************)
+(*	see github blames																	*)
+(****************************************************************************************)
+
+VAR_INPUT
+    xIN_Reset       : BOOL;          // Schrittkette zurücksetzen 
+    xIN_Init        : BOOL;          // Initialisieren
+    xIN_Quit        : BOOL;          // Fehler quittieren 
+    xIN_Start       : BOOL;          // Startbefehl
+    xIN_Sperre      : BOOL;          // FB Sperren 
+    xIN_NextStep    : BOOL;          // Nächsten Schritt ausführen 
+    xIN_AlarmAktiv  : BOOL;          // Anlage hat Alarm
+    xIN_DryCycle    : BOOL;          // Fahren ohne Teile
+    xIN_RestartCYCL : BOOL;          // Zyklus erneut starten im STEP, END, LEERFAHREN
+    enIN_State      : enState;       // Status Anlage
+    tIN_Timeout     : TIME := T#10s; // Timout
+
+    pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
+
+    // Application specific
+    xIN_PickPiece : BOOL; (* signal from the pick and place element
+                             the number of picked signal depend on the recipe *)
+    xIN_RotTableBlockedByPnp : BOOL; // Is the pick and place blocking the rotary table?
+END_VAR
+VAR_OUTPUT
+    (* standart Ausgänge *)
+    xOUT_ErrFlag  : BOOL;           // Error Flag 
+    xOUT_Busy     : BOOL;           // Baustein befindet sich im Ablauf 
+    xOUT_Done     : BOOL;           // Baustein hat den Ablauf beendet 		
+    xOUT_Ready    : BOOL;           // Ready to begin, should be the same state as done	
+    xOUT_Timeout  : BOOL;           // Timeout FB 
+    xOUT_InitDone : BOOL;           // initialisierung fertig
+    xOUT_Wait     : BOOL;           // Wartet auf Bedingung
+    iOUT_Step     : ST105_Feeder_e; // Aktueller Schritt 
+    sOUT_Step     : STRING;         // Aktueller Schritt but in string format
+    bOUT_Error    : BYTE;           // Fehlernummer
+
+    // Application specific
+    xOUT_PceReadyToPick : BOOL; // the piece(s) is/are ready to picked
+END_VAR
+VAR
+    (* Standard *)
+    (* Schritt *)
+    iLastStep : ST105_Feeder_e; // Merker letzter Schritt 
+    iPreStep  : ST105_Feeder_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST105_Feeder_e; // aktueller Schritt
+
+    // Trigger Starten 
+    rtSTART : R_TRIG;
+    // Timer TimeOut 
+    TON_Timeout : TON;
+
+    (* Bausteine *)
+
+    // Application specific
+    fb_axis105_10W               : FB_AxisLMturn_V1_1;
+    simu_axis105_10W             : FB_Simu_AxisLM_V1_1;
+    fb_feeder                    : FB_Feeder2Sensors;
+    fifo                         : FB_Fifo(4);
+    simu_feeder                  : FB_Simu_Feeder; // simulation of a feeder
+    simu_fifo_feeder_to_rotTable : FB_Fifo(20);    // fifo to hold a piece
+    rtPutPiece                   : R_TRIG;         // trigger to add a piece
+
+    rtPick : R_TRIG; // r_trig signal from the pick and place machine
+
+    iCurrentTableIndex : INT; // current table index
+    iSearchIndex       : INT; (* Initialization index TO see how many element we have AT startup
+                                 or after an alarm *)
+
+    rDegreeToNextSlot : REAL; // how many degree is needed to rotate to the next slot
+
+END_VAR
+VAR CONSTANT
+    MAX_SEARCH_TURN : INT := 4; // maximum search number
+
+    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Trigger  *)
+(*******************************************************************)
+(* Zurücksetzen *)
+IF xIN_RESET THEN
+    iPreStep  := ST105_Feeder_e.RESET;
+    iOUT_Step := ST105_Feeder_e.RESET;
+END_IF;
+
+(* Error Quittieren *)
+IF (bOUT_Error <> 0) AND xIN_Quit THEN
+    xOUT_ErrFlag := FALSE;
+    bOUT_Error   := 0;
+    iOUT_Step    := iPreStep;
+END_IF;
+
+iCurrentTableIndex := iCurrentTableIndex MOD 3;
+
+IF _20_AUTO.recipe.st105.FeederSize <> 0 THEN
+    rDegreeToNextSlot := REAL#360.0 / DINT_TO_REAL(_20_AUTO.recipe.st105.FeederSize);
+ELSE
+    rDegreeToNextSlot := REAL#90.0;
+END_IF
+
+(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
+            PT := tIN_Timeout);
+
+(*******************************************************************)
+(* Bausteine *)
+(*******************************************************************)
+
+fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+          xIN_PieceInEnd            := TRUE,  // IO_BOX.I6000_ST105_teil_in_vereinzelung, 
+          xIN_PieceMax              := FALSE, // IO_BOX.I8001_ST105_maximum,
+          xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+          refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
+          iIN_FifoSetMaxSensorValue := 10,
+          diIN_SignlFilter_ms       := _20_AUTO.recipe.st105.FeederConfig.InFilterDelay,
+          diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,
+          diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,
+          diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);
+
+simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+            xIN_PceSensor      := fb_feeder.xIN_PieceInEnd,
+            tIN_NewPieceTime   := 500,
+            iIN_WaitTimeMin_ms := 500,
+            iIN_WaitTimeMax_ms := 1000);
+
+rtPick(CLK := xIN_PickPiece);
+rtPutPiece(CLK := simu_feeder.xOUT_NewPiece);
+
+IF rtPutPiece.Q AND NOT simu_fifo_feeder_to_rotTable.IsFull() THEN
+    simu_fifo_feeder_to_rotTable.Put(1);
+END_IF
+
+IF ST105_Feeder_e.Init_simu_home_table = iOUT_Step THEN
+    fb_axis105_10W.rIN_Position :=
+        TO_REAL(rDegreeToNextSlot - LMOD(ST105_Axis.axis105_10W.rActPos, rDegreeToNextSlot));
+
+ELSE
+    fb_axis105_10W.rIN_Position := rDegreeToNextSlot;
+
+END_IF
+
+simu_axis105_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                 wIN_AxisState       := ST105_Axis.axis105_10W.wState,
+                 bIN_AxisCntr        := fb_axis105_10W.bOUT_AxisCntr,
+                 udiIN_HomingTime_ms := 1000,
+                 pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST105_10W]),
+                 pIN_axisHW          := ADR(ST105_Axis.axis105_10W.axis),
+                 rIN_PosActual       := fb_axis105_10W.rOUT_ActPos,
+                 rIN_PosMax          := ST105_Axis.const105_10W.POS_MAX,
+                 rIN_PosMin          := ST105_Axis.const105_10W.POS_MIN,
+                 rIN_PixMax          := 0,
+                 rIN_PixMin          := 0);
+
+fb_axis105_10W(enIN_State     := enIN_State,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST105_10W]),
+               xIN_DisButtons := FALSE,
+               xIN_Quit       := xIN_Quit,
+               xIN_PARAMok    := TRUE,
+               xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
+               xIN_FREE_HOME  := TRUE,
+               rIN_POSMIN     := ST105_Axis.const105_10W.POS_MIN,
+               rIN_POSMAX     := ST105_Axis.const105_10W.POS_MAX,
+               rIN_VELOMAX    := ST105_Axis.const105_10W.VELO_MAX,
+               rIN_VELOMANU   := ST105_Axis.const105_10W.VELO_MANU,
+               rIN_VELOOPEN   := ST105_Axis.const105_10W.VELO_MANU / 4,
+               rIN_JogInc     := AXIS.rTeachIncAxis,
+               xIN_Execute    := ST105_Feeder_e.Init_set_table_pos = iOUT_Step OR
+                                 ST105_Feeder_e.Init_table_go_to_zero = iOUT_Step OR
+                                 ST105_Feeder_e.Init_simu_home_table = iOUT_Step OR
+                                 ST105_Feeder_e.load_piece = iOUT_Step,
+               xIN_Relative     := fb_axis105_10W.xIN_Execute,
+               xIN_STOP         := FALSE,
+               xIN_OFF          := FALSE,
+               rIN_Position     :=, // Is set above
+               rIN_Velocity     := TO_REAL(360.0),
+               rIN_Acceleration := TO_REAL(1440.0),
+               rIN_Deceleration := TO_REAL(1440.0),
+               rIN_Jerk         := TO_REAL(720000.0),
+               rIN_PosManu      := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST105_11Z]
+                   .movesList[AXIS.bTeachPos[Axis_e.ST105_11Z]].lrPosition,
+               xIN_Home         := ST105_feeder_e.Init_home_table = iOUT_Step,
+               xIN_Reset        := xIN_Reset OR ST105_feeder_e.RESET = iOUT_Step,
+               // The simu fb gives us the hardware signal when we are not in simulation
+               wAxisState    := simu_axis105_10W.wOUT_AxisState,
+               bOUT_AxisCntr => ST105_Axis.axis105_10W.bCtrlHi,
+               rOUT_ActPos   =>, // leave empty, rActPos must be set using the modulo
+               axisIN_REF    := simu_axis105_10W.pOUT_axisRef^);
+
+ST105_Axis.axis105_10W.rActPos := LREAL_TO_REAL(simu_axis105_10W.pOUT_axisRef^.NcToPlc.ModuloActPos);
+
+(*******************************************************************)
+(* OUTPUTS *)
+(*******************************************************************)
+// Error Flag 
+xOUT_ErrFlag := (bOUT_Error <> 0);
+// Baustein befindet sich im Ablauf 
+xOUT_Busy := (iOUT_Step > ST105_Feeder_e.READY) AND (iOUT_Step < ST105_Feeder_e.DONE);
+// Baustein hat den Ablauf beendet
+xOUT_Done := (iOUT_Step = ST105_Feeder_e.DONE);
+// Process ready
+xOUT_Ready := (iOUT_Step = ST105_Feeder_e.READY);
+// Timeout FB 				 		
+xOUT_Timeout := TON_Timeout.Q;
+// Itialisierung fertig			
+xOUT_InitDone := (iOUT_Step = ST105_Feeder_e.READY);
+// Aktueller Schritt			
+iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
+sOUT_Step := TO_STRING(iOUT_Step);
+//Fehlernummer	 
+bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
+(* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
+xOUT_Wait := (iOUT_Step = ST105_Feeder_e.DONE);
+
+// TODO add simulation constant to prevent the output to be set
+// IO_BOX.Q8000_ST105_freigabe_wf    := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+// IO_BOX.Q8003_ST105_forderband_ein :=
+//     (enIN_State >= enState.StateLEER) AND
+//     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+// 
+// // blow out
+// 
+// IO_BOX.Q8005_ST105_blow_piece := fb_feeder.xOUT_EnableFeeder AND
+//                                  tof_color_sensor.Q AND
+//                                  NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+xOUT_PceReadyToPick := ST105_Feeder_e.DONE = iOUT_Step;
+
+(*******************************************************************)
+(* Ablauf *)
+(*******************************************************************)
+
+(* Sperren *)
+IF xIN_Sperre THEN
+    iPreStep  := ST105_Feeder_e.RESET;
+    iOUT_Step := ST105_Feeder_e.RESET;
+    RETURN;
+END_IF;
+
+(* Schritt Merker *)
+IF iAktStep <> iOUT_Step THEN
+    iLastStep := iAktStep;
+    iAktStep  := iOUT_Step;
+END_IF
+
+(* START *)
+rtSTART(CLK := xIN_Start);
+
+(*******************************************************************)
+(* Schrittkette  *)
+(*******************************************************************)
+CASE iOUT_Step OF
+
+(***** RESET *****)
+ST105_Feeder_e.RESET: (* Schritt 0-99 *)
+    //Initialisierungen
+    //Start Init Ablauf
+    IF xIN_Init THEN
+        iOUT_Step := ST105_Feeder_e.INIT;
+        //Start Manu Ablauf
+    ELSIF enIN_State = StateMANU AND xIN_NextStep THEN
+        iOUT_Step := ST105_Feeder_e.INIT;
+    END_IF;
+
+(***** INIT *****)
+ST105_Feeder_e.INIT: (* Grundstellung ? *)
+    IF NOT xIN_RotTableBlockedByPnp THEN
+        iOUT_Step := ST105_Feeder_e.Init_home_table;
+    END_IF
+
+ST105_Feeder_e.Init_home_table:
+    IF fb_axis105_10W.xOUT_HOMED THEN
+        iCurrentTableIndex := 0;
+
+        IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST105_Feeder_e.Init_simu_home_table;
+        ELSE
+            iOUT_Step := ST105_Feeder_e.Init_reset_search_index;
+        END_IF
+    END_IF
+
+ST105_Feeder_e.Init_simu_home_table:
+    IF fb_axis105_10W.xOUT_DONE THEN
+        iOUT_Step := ST105_Feeder_e.Init_reset_search_index;
+    END_IF
+
+ST105_Feeder_e.Init_table_go_to_zero:
+    IF fb_axis105_10W.xOUT_DONE THEN
+        iOUT_Step := ST105_Feeder_e.Init_reset_search_index;
+    END_IF
+
+ST105_Feeder_e.Init_reset_search_index:
+    iSearchIndex := 0;
+    fifo.Empty();
+    iOUT_Step := ST105_Feeder_e.Init_set_table_pos;
+
+ST105_Feeder_e.Init_set_table_pos:
+    IF fb_axis105_10W.xOUT_DONE THEN
+        iCurrentTableIndex := iCurrentTableIndex + 1;
+        iOUT_Step          := ST105_Feeder_e.Init_see_if_piece_there;
+    END_IF
+
+ST105_Feeder_e.Init_see_if_piece_there:
+    IF simu_feeder.xOUT_NewPiece THEN
+        fifo.Put(1);
+    END_IF
+
+    IF iSearchIndex < MAX_SEARCH_TURN THEN
+        iOUT_Step    := ST105_Feeder_e.Init_set_table_pos;
+        iSearchIndex := iSearchIndex + 1;
+    ELSE
+        iOUT_Step := ST105_Feeder_e.READY;
+    END_IF
+
+(***** READY / INIT DONE *****)
+ST105_Feeder_e.READY: (* Start AUTO,END,LEER,STEP *)
+    IF xIN_Start THEN //IF rtSTART.Q THEN
+        iOUT_Step := ST105_Feeder_e.START;
+    END_IF
+
+(***** START  ZYKLISCH *****)
+ST105_Feeder_e.START: (*  *)
+    IF xIN_NextStep AND pxFG_Freigabe^ THEN
+        iOUT_Step := ST105_Feeder_e.check_if_feeding_necessary;
+    END_IF;
+
+ST105_Feeder_e.check_if_feeding_necessary:
+    IF (fifo.GetLen() >= _20_AUTO.recipe.st105.FeederSize) THEN
+        iOUT_Step := ST105_Feeder_e.DONE;
+    ELSE
+        iOUT_Step := ST105_Feeder_e.wait_on_a_piece;
+    END_IF
+
+ST105_Feeder_e.wait_on_a_piece:
+    IF (FEEDER_SIMULATION AND CONST.USE_SIMULATION AND NOT simu_fifo_feeder_to_rotTable.IsEmpty()) OR
+       (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND IO_BOX.I8600_ST101_homing_rotation_table) THEN
+        iOUT_Step := ST105_Feeder_e.load_piece;
+        simu_fifo_feeder_to_rotTable.Pop(1);
+    END_IF
+
+ST105_Feeder_e.load_piece:
+    IF fb_axis105_10W.xOUT_DONE THEN
+        fifo.Put(1);
+        iOUT_Step := ST105_Feeder_e.check_if_feeding_necessary;
+    END_IF
+
+(***** DONE *****)
+ST105_Feeder_e.DONE: (* Letzter Schritt  *)
+    IF rtPick.Q THEN
+        fifo.Pop(TO_INT(_20_AUTO.recipe.st105.xUseVerLeft));
+        fifo.Pop(TO_INT(_20_AUTO.recipe.st105.xUseVerRight));
+    END_IF
+
+    IF NOT xIN_AlarmAktiv THEN
+        //AUTO
+        IF (enIN_State = StateAUTO) AND xIN_RestartCYCL AND (fifo.GetLen() < _20_AUTO.recipe.st105.FeederSize)
+            THEN
+            iOUT_Step := ST105_Feeder_e.START;
+            //STEP / END / LEERFAHREN restart
+        ELSIF (enIN_State < StateAUTO) AND
+              (enIN_State >= enState.StateSTEP) AND
+              xIN_RestartCYCL AND
+              NOT (fifo.GetLen() >= _20_AUTO.recipe.st105.FeederSize) THEN
+            iOUT_Step := ST105_Feeder_e.START;
+            //STEP / END / LEERFAHREN fertig
+        ELSIF (enIN_State = StateREADY) THEN
+            iOUT_Step := ST105_Feeder_e.READY;
+        END_IF;
+    END_IF;
+
+(************ ERROR *************)
+ST105_Feeder_e.ERROR: (* ERROR *) ;
+
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

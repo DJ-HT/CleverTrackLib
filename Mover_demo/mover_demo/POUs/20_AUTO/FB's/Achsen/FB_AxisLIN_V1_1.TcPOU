@@ -211,7 +211,7 @@ END_VAR
 						
 //***************************** Velocity / ACC-DEC-JERK *******************
 	(* Velocity *)
-	rIN_Velocity := LIMIT(1,rIN_Velocity,100);
+	rIN_Velocity := LIMIT(0.01,rIN_Velocity,100);
 	IF (_02_SAFETY.xOUT_Einrichten) THEN
 		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOOPEN / 100;
 	ELSIF (enIN_State<StateREADY) THEN

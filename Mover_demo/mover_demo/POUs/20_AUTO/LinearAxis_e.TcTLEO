@@ -4,32 +4,33 @@
     <Declaration><![CDATA[{attribute 'qualified_only'}
 TYPE LinearAxis_e :
 (
-    ST110_01Y,	//0
+    ST105_11Z, //0
+    ST110_01Y,
     ST110_02Z,
     ST110_03Z,
     ST110_04Z,
-    ST115_01Y,
-    ST115_02Z,	//5
+    ST115_01Y,	//5
+    ST115_02Z,
     ST115_03Z,
     ST115_04Z,
     ST120_01Y,
-    ST120_02Z,
-    ST125_01Y,	//10
+    ST120_02Z,	//10
+    ST125_01Y,
     ST125_02Z,
 	ST130_01Z,
 	ST130_10Z,
-	ST135_01Z,
-	ST135_10Z,	//15
+	ST135_01Z,	//15
+	ST135_10Z,
 	ST145_01Y,
 	ST145_02Z,
 	ST160_01Z,
-	ST165_01Z,
-	ST170_01Z,	//20
+	ST165_01Z,	//20
+	ST170_01Z,
 	ST180_01Y,
 	ST180_02Z,
 	ST180_10Z,
-	ST185_01Y,
-	ST185_02Z,	//25
+	ST185_01Y,	//25
+	ST185_02Z,
 	ST185_10Z,
     _max
 );
@@ -39,6 +40,11 @@ END_TYPE
       <Data>
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"ST105_11Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
             <o>
               <v n="TextID">"ST110_01Y"</v>
               <v n="TextDefault">""</v>

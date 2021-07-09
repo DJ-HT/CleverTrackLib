@@ -103,6 +103,13 @@ VAR_GLOBAL
     Q135_ AT %QX13.5 : BOOL; // 
     Q136_ AT %QX13.6 : BOOL; // 
     Q137_ AT %QX13.7 : BOOL; // 
+
+    // analog
+    QA01_ST130_pressure_valve_left  AT %Q* : UINT; // Pro.Druckregelventil left
+    QA02_ST130_pressure_valve_right AT %Q* : UINT; // Pro.Druckregelventil right
+    QA03_ST135_pressure_valve_left  AT %Q* : UINT; // Pro.Druckregelventil left
+    QA04_ST135_pressure_valve_right AT %Q* : UINT; // Pro.Druckregelventil right
+
 END_VAR
 ]]></Declaration>
   </GVL>

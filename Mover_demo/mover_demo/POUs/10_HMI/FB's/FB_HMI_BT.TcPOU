@@ -12,6 +12,9 @@ VAR
     _FB_btCopyAxisCfg     : FB_BUTTON;
     _FB_btCopyCylinderCfg : FB_BUTTON;
 
+    _FB_btArForceCyclus : ARRAY[0..StationList_e._max - 1] OF FB_BUTTON;
+
+    i : INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,6 +32,15 @@ _FB_btCopyCylinderCfg(pbtIN  := ADR(HMI.btCopyCylinderCfg),
                       xINdis := FALSE,
                       xINon  := FALSE,
                       xINerr := FALSE);
+
+FOR i := 0 TO StationList_e._max - 1 BY 1 DO
+    _FB_btArForceCyclus[i](pbtIN  := ADR(HMI.btArForceCyclus[i]),
+                           xINdis := FALSE,
+                           xINon  := HMI.bArForceCyclusState[i],
+                           xINerr := FALSE);
+
+    HMI.bArForceCyclusState[i] := (HMI.btArForceCyclus[i].rtrig XOR HMI.bArForceCyclusState[i]);
+END_FOR
 ]]></ST>
     </Implementation>
     <Method Name="FB_init" Id="{347224b3-cdd2-4365-a399-1465c7726187}">
@@ -48,6 +60,10 @@ END_VAR
         HMI.movesNames[i][ii] := ' - ';
     END_FOR
 END_FOR
+
+// ST105
+HMI.movesNames[LinearAxis_e.ST105_11Z][0] := TO_STRING("Ab");
+HMI.movesNames[LinearAxis_e.ST105_11Z][1] := TO_STRING("Auf");
 
 // ST110
 HMI.movesNames[LinearAxis_e.ST110_01Y][0] := TO_STRING("Zurück");
@@ -115,8 +131,7 @@ HMI.movesNames[LinearAxis_e.ST145_01Y][1] := TO_STRING("Vor");
 HMI.movesNames[LinearAxis_e.ST145_02Z][0] := TO_STRING("Auf Leer");
 HMI.movesNames[LinearAxis_e.ST145_02Z][1] := TO_STRING("Ab Leer");
 HMI.movesNames[LinearAxis_e.ST145_02Z][2] := TO_STRING("Auf Voll");
-HMI.movesNames[LinearAxis_e.ST145_02Z][3] := TO_STRING("Ab Voll Schnell");
-HMI.movesNames[LinearAxis_e.ST145_02Z][4] := TO_STRING("Ab Voll Kraft");
+HMI.movesNames[LinearAxis_e.ST145_02Z][3] := TO_STRING("Ab Voll");
 
 // ST180
 HMI.movesNames[LinearAxis_e.ST180_01Y][0] := TO_STRING("Zurück");
@@ -129,6 +144,18 @@ HMI.movesNames[LinearAxis_e.ST180_02Z][3] := TO_STRING("Ab Voll");
 
 HMI.movesNames[LinearAxis_e.ST180_10Z][0] := TO_STRING("Auf");
 HMI.movesNames[LinearAxis_e.ST180_10Z][1] := TO_STRING("Ab");
+
+// ST185
+HMI.movesNames[LinearAxis_e.ST185_01Y][0] := TO_STRING("Zurück");
+HMI.movesNames[LinearAxis_e.ST185_01Y][1] := TO_STRING("Vor");
+
+HMI.movesNames[LinearAxis_e.ST185_02Z][0] := TO_STRING("Auf Leer");
+HMI.movesNames[LinearAxis_e.ST185_02Z][1] := TO_STRING("Ab Leer");
+HMI.movesNames[LinearAxis_e.ST185_02Z][2] := TO_STRING("Auf Voll");
+HMI.movesNames[LinearAxis_e.ST185_02Z][3] := TO_STRING("Ab Voll");
+
+HMI.movesNames[LinearAxis_e.ST185_10Z][0] := TO_STRING("Auf");
+HMI.movesNames[LinearAxis_e.ST185_10Z][1] := TO_STRING("Ab");
 
 FOR i := 0 TO TO_INT(StationList_e._max) - 1 BY 1 DO
     FOR ii := 0 TO CONST.MAX_CYLINDER_PER_STATION - 1 BY 1 DO
@@ -156,13 +183,31 @@ HMI.cylinderNames[StationList_e.ST125][3] := TO_STRING(ST125_Cylinders_e.Handlin
 HMI.cylinderNames[StationList_e.ST125][4] := TO_STRING(ST125_Cylinders_e.GreiferSolerohrLinks);
 HMI.cylinderNames[StationList_e.ST125][5] := TO_STRING(ST125_Cylinders_e.GreiferSolerohrRechts);
 
+HMI.cylinderNames[StationList_e.ST130][0] := TO_STRING(ST130_Cylinders_e.Kammer_Offnen_Links);
+HMI.cylinderNames[StationList_e.ST130][1] := TO_STRING(ST130_Cylinders_e.Kammer_Offnen_Rechts);
+HMI.cylinderNames[StationList_e.ST130][2] := TO_STRING(ST130_Cylinders_e.Kammer_nachfullen_Links);
+HMI.cylinderNames[StationList_e.ST130][3] := TO_STRING(ST130_Cylinders_e.Kammer_nachfullen_Rechts);
+HMI.cylinderNames[StationList_e.ST130][4] := TO_STRING(ST130_Cylinders_e.Vibrieren_Kammer_Links);
+HMI.cylinderNames[StationList_e.ST130][5] := TO_STRING(ST130_Cylinders_e.Vibrieren_Kammer_Rechts);
+HMI.cylinderNames[StationList_e.ST130][6] := TO_STRING(ST130_Cylinders_e.Niederhalter_Patrone);
+HMI.cylinderNames[StationList_e.ST130][7] := TO_STRING(ST130_Cylinders_e.Vibrienren_Patrone_Links);
+HMI.cylinderNames[StationList_e.ST130][8] := TO_STRING(ST130_Cylinders_e.Viebrieren_Patrone_Rechts);
+
 HMI.cylinderNames[StationList_e.ST145][0] := TO_STRING(ST145_Cylinders_e.VakuumgreiferLinks);
 HMI.cylinderNames[StationList_e.ST145][1] := TO_STRING(ST145_Cylinders_e.VakuumgreiferRechts);
+
+HMI.cylinderNames[StationList_e.ST150][0] := TO_STRING(ST150_Cylinders_e.Kraftbstutzung);
+HMI.cylinderNames[StationList_e.ST155][0] := TO_STRING(ST150_Cylinders_e.Kraftbstutzung);
 
 HMI.cylinderNames[StationList_e.ST180][0] := TO_STRING(ST180_Cylinders_e.Greifer_Patrone_Links);
 HMI.cylinderNames[StationList_e.ST180][1] := TO_STRING(ST180_Cylinders_e.Greifer_Patrone_Rechts);
 HMI.cylinderNames[StationList_e.ST180][2] := TO_STRING(ST180_Cylinders_e.Niederhalter_Deckel_Links);
 HMI.cylinderNames[StationList_e.ST180][3] := TO_STRING(ST180_Cylinders_e.Niederhalter_Deckel_Rechts);
+
+HMI.cylinderNames[StationList_e.ST185][0] := TO_STRING(ST185_Cylinders_e.Greifer_Patrone_Links);
+HMI.cylinderNames[StationList_e.ST185][1] := TO_STRING(ST185_Cylinders_e.Greifer_Patrone_Rechts);
+HMI.cylinderNames[StationList_e.ST185][2] := TO_STRING(ST185_Cylinders_e.Niederhalter_Deckel_Links);
+HMI.cylinderNames[StationList_e.ST185][3] := TO_STRING(ST185_Cylinders_e.Niederhalter_Deckel_Rechts);
 ]]></ST>
       </Implementation>
     </Method>

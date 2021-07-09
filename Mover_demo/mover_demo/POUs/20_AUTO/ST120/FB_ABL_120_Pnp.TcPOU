@@ -91,14 +91,14 @@ END_VAR
 IF xIN_RESET THEN
     iPreStep  := ST120_Pnp_e.RESET;
     iOUT_Step := ST120_Pnp_e.RESET;
-END_IF;
+END_IF
 
 (* Error Quittieren *)
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
     iOUT_Step    := iPreStep;
-END_IF;
+END_IF
 
 (*******************************************************************)
 (* Timer *)
@@ -340,11 +340,13 @@ ST120_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST120_Pnp_e.INIT: (* Grundstellung ? *)
-    iOUT_Step := ST120_Pnp_e.Init_HomeVerticals;
+    IF fb_axis120_02Z.xOUT_HOMED THEN
+        iOUT_Step := ST120_Pnp_e.Init_VerticalsUp;
+    ELSE
+        iOUT_Step := ST120_Pnp_e.Init_HomeVerticals;
+    END_IF
 
 ST120_Pnp_e.Init_HomeVerticals:
-    fb_axis120_02Z.rIN_Velocity := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST120_02Z].movesList[0].lrVelocity;
-
     IF fb_axis120_02Z.xOUT_HOMED THEN
         iOUT_Step := ST120_Pnp_e.Init_VerticalsUp;
     END_IF
@@ -476,7 +478,7 @@ ST120_Pnp_e.PnP_Hor_ToTrackPos:
     END_IF
 
 ST120_Pnp_e.waitOnMover: (*  *)
-    IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
+    IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST120] THEN
         iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleDown;
     END_IF;
 

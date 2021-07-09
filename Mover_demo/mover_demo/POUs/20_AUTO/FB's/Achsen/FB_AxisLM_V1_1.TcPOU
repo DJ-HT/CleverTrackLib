@@ -119,7 +119,7 @@ VAR
 	///Status aktualisieren
 	_MC_ReadStatus: MC_ReadStatus;
 	///Jog Mode 0: OFF, 1: INCHING, 2: SLOW, 3: FAST, 4: MOVE
-	bJogMode: BYTE := 0;
+	bJogMode: BYTE := 1;
 	///Button Disable 
 	_FB_btOFF: FB_BUTTON;
 	///Button Inching 
@@ -241,7 +241,7 @@ END_VAR
 						
 //***************************** Velocity / ACC-DEC-JERK *******************
 	(* Velocity *)
-	rIN_Velocity := LIMIT(1,rIN_Velocity,100);
+	rIN_Velocity := LIMIT(0.01,rIN_Velocity,100);
 	IF (_02_SAFETY.xOUT_Einrichten) THEN
 		_MC_MoveAbs.Velocity := rIN_Velocity * rIN_VELOOPEN / 100;
 	ELSIF (enIN_State=StateMANU) THEN
@@ -366,7 +366,7 @@ IF xOUT_HOMED THEN
 		//AUTO
 		IF (enIN_State>StateALARM) OR (enIN_State=StateINIT) OR (enIN_State=StateREF) THEN
 			//Mode
-			bJogMode:=0;
+			bJogMode:=1;
 			//Position
 			//Absolute
 			_MC_MoveAbs.Execute:= NOT xIN_Relative AND xIN_Execute;
@@ -424,6 +424,8 @@ END_IF;
 		_MC_Reset.Execute := FALSE;
 		_MC_MoveAbs.Execute := FALSE;
 		_MC_MoveRel.Execute := FALSE;
+		_MC_Jog.JogForward := FALSE;
+		_MC_Jog.JogBackwards := FALSE;
 		IF _MC_Power.Active THEN
 			iStepAxisReset	:= 20;
 		END_IF;

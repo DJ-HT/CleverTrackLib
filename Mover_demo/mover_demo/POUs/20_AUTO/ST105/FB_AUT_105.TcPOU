@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_AUT_105" Id="{ef651978-8ee1-450c-a7e2-99bda6efdfb3}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_105 EXTENDS FB_AUT_ABSTRACT
+(****************************************************************************)
+(*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
+(*	Status				ungetestet											*)
+(*  Version:			1.0													*)
+(*	Beschrieb:																*)
+(*																			*)
+(*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
+(*																			*)
+(*																			*)
+(* 	25.09.2019/Dj															*)
+(****************************************************************************)
+(*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
+(****************************************************************************)
+VAR_INPUT
+    (* spezifische Eingänge *)
+
+END_VAR
+VAR_OUTPUT
+    (* spezifische Ausgänge *)
+
+END_VAR
+VAR
+    (* Bausteine *)
+    fb_Pnp    : FB_ABL_105_Pnp;
+    fb_Feeder : FB_ABL_105_Feeder;
+END_VAR
+
+VAR CONSTANT
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+
+(*******************************************************************)
+(* Flanken / Merker *)
+(*******************************************************************)
+//MANU CYCLE
+IF (enIN_State = StateMANU) AND xIN_ManuCycle THEN
+    xManuCycle := TRUE;
+END_IF;
+
+IF (enIN_State <> StateMANU) OR xOUT_Done THEN
+    xManuCycle := FALSE;
+END_IF
+
+//NEXT STEP
+xNextStep := (enIN_State > StateSTEP) OR
+             ((enIN_State = StateSTEP) AND xIN_Step) OR
+             ((enIN_State = StateMANU) AND xManuCycle);
+
+//RESET
+xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
+
+(*******************************************************************)
+(* Bausteinaufrufe Abläufe *)
+(*******************************************************************)
+
+fb_Pnp(xIN_Reset       := xReset,
+       xIN_Init        := xIN_Init,
+       xIN_Quit        := xIN_Quit,
+       xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
+       xIN_Sperre      := NOT xIN_On,
+       xIN_NextStep    := xNextStep,
+       xIN_AlarmAktiv  := xIN_AlarmAktiv,
+       xIN_DryCycle    := xIN_DryCycle,
+       xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out               
+       enIN_State      := enIN_State,
+       tIN_Timeout     := tIN_Timeout,
+       pxFG_Freigabe   := ADR(xDummy),
+       // special
+       Mover              := THIS^.Mover,
+       xIN_PceReadyToPick := fb_Feeder.xOUT_PceReadyToPick);
+
+fb_Feeder(xIN_Reset       := xReset,
+          xIN_Init        := xIN_Init,
+          xIN_Quit        := xIN_Quit,
+          xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
+          xIN_Sperre      := NOT xIN_On,
+          xIN_NextStep    := xNextStep,
+          xIN_AlarmAktiv  := xIN_AlarmAktiv,
+          xIN_DryCycle    := xIN_DryCycle,
+          xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out
+          enIN_State      := enIN_State,
+          tIN_Timeout     := tIN_Timeout,
+          pxFG_Freigabe   := ADR(xDummy),
+          // special
+          xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
+          xIN_RotTableBlockedByPnp := fb_Pnp.iOUT_Step = ST105_Pnp_e.Robot_wait_picked_falling OR
+                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.Robot_Pick OR
+                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.pusher_down);
+
+(*******************************************************************)
+(* Mover reset flags *)
+(*******************************************************************)
+
+(*******************************************************************)
+(* OUTPUT *)
+(*******************************************************************)
+xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
+xOUT_Ready    := fb_Pnp.xOUT_Ready AND fb_Feeder.xOUT_Ready;
+xOUT_Done     := fb_Pnp.xOUT_Done AND fb_Feeder.xOUT_Done;
+xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
+xOUT_Wait     := fb_Pnp.xOUT_Wait OR fb_Feeder.xOUT_Wait;
+xOUT_AlarmST  := xOUT_ErrFlag;
+
+(*******************************************************************)
+(* Bausteinaufruf Error Station *)
+(*******************************************************************)
+// POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
+]]></ST>
+    </Implementation>
+    <Property Name="iCompletionPC" Id="{4eb8bcbd-1cf1-4c7c-9509-eabddf7ac3f6}">
+      <Declaration><![CDATA[(* % of completion of the process *)
+PROPERTY iCompletionPC : INT
+]]></Declaration>
+      <Get Name="Get" Id="{835fa924-95ed-4905-97f4-da591ac55c4d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iCompletionPC := THIS^.fb_Pnp.iOUT_ProcessCompletion;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ProcessExecution" Id="{1c6dfde0-db79-412e-bf01-921ec35fa176}">
+      <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
+      <Get Name="Get" Id="{567900d7-83f4-42ed-84fb-c5d1e32821e4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ProcessExecution := THIS^._ProcessExecution;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{99650021-6d44-46dc-8bef-bd65d7f94530}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._ProcessExecution := ProcessExecution;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xBusy" Id="{fa0456e5-6988-400c-97a1-fa64e0c59f92}">
+      <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{beaa991e-a701-4513-b51f-bca22760eb03}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xBusy := THIS^.fb_Pnp.xOUT_Busy;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{6cf7cf74-9c93-4b0e-b6bd-1d08f2d7a453}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xDone" Id="{3c0fcabf-240c-459c-84db-ee4d780866cc}">
+      <Declaration><![CDATA[PROPERTY xDone : BOOL]]></Declaration>
+      <Get Name="Get" Id="{56c5023c-480e-45b8-abca-b1d7473fb40f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xDone := THIS^.fb_Pnp.xOUT_Ready OR THIS^.fb_Pnp.xOUT_Done;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="xMoverPathFree" Id="{6a4929f1-05d5-41ee-a82a-74cd93758d14}">
+      <Declaration><![CDATA[PROPERTY xMoverPathFree : BOOL]]></Declaration>
+      <Get Name="Get" Id="{1730d5a9-7b73-4c18-b49f-3d53eb168a35}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverPathFree := THIS^.fb_Pnp.xOUT_MoverFree OR THIS^.fb_Pnp.xOUT_Ready OR THIS^.fb_Pnp.xOUT_Done;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="xMoverShouldLeave" Id="{6ee35853-4921-45e3-b495-54af1637f4bb}">
+      <Declaration><![CDATA[PROPERTY xMoverShouldLeave : BOOL]]></Declaration>
+      <Get Name="Get" Id="{76188b06-cb1d-467d-a19d-95dd741c543b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Pnp.iOUT_Step = ST105_Pnp_e.SYNC_MOVER_LEAVE;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

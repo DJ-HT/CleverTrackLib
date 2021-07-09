@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<safetyApplication Crc="166329969" xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.3.0.0" Id="7fb8c3ca-978f-41cd-acfc-24182781eb31" name="" mapState="false" mapDiag="false" groupOrderId="4" passificationAllowed="false" temporaryDeactivationAllowed="false" permamentDeactivationAllowed="false" xmlid="0" analogFBOutputReplacementValues="Zero" verifyAnalogFBInputsIfStart="false" userFbId="00000000-0000-0000-0000-000000000000" xmlns="http://schemas.microsoft.com/dsltools/SafetyApplicationLanguage">
+<safetyApplication Crc="2487440981" xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.3.0.0" Id="7fb8c3ca-978f-41cd-acfc-24182781eb31" name="" mapState="false" mapDiag="false" groupOrderId="4" passificationAllowed="false" temporaryDeactivationAllowed="false" permamentDeactivationAllowed="false" xmlid="0" analogFBOutputReplacementValues="Zero" verifyAnalogFBInputsIfStart="false" userFbId="00000000-0000-0000-0000-000000000000" xmlns="http://schemas.microsoft.com/dsltools/SafetyApplicationLanguage">
   <comments>
     <comment Id="01ee7e20-e03d-43f7-909d-926cc9d1659f" currentNetworkOrderId="0">
       <networks>
@@ -772,11 +772,17 @@
           <variableHasTargetUsages Id="650f3bec-4e01-4eb2-9348-483fd4f1a090">
             <variableUsages Id="4ff51671-44bb-4b3d-bb77-a377c739d87d">
               <usages>
-                <variableUsagesHasUsages Id="d3f2329e-aae7-4337-a200-b20ee50a23b9">
-                  <aliasDeviceIoUsage Id="ef218790-a586-4820-8716-7a022d2b0104" sdsId="300" channelId="4" functionId="1879114753" />
+                <variableUsagesHasUsages Id="8185817e-1a7b-4fa9-adb9-e12fe393fd1d">
+                  <aliasDeviceIoUsage Id="d2043270-782d-4eb3-b745-ba99784a1b86" sdsId="306" channelId="1" functionId="1879113985" />
                 </variableUsagesHasUsages>
-                <variableUsagesHasUsages Id="4e807cd7-779e-45c7-827f-02f438eba78f">
-                  <aliasDeviceIoUsage Id="a9668e84-b70b-43a1-81a7-6c96efdb3717" sdsId="301" channelId="3" functionId="1879114497" />
+                <variableUsagesHasUsages Id="b39aa4e7-3368-4998-a0cd-3dbf67a0808e">
+                  <aliasDeviceIoUsage Id="c224a436-8d3c-4c56-a102-ec274501fb0d" sdsId="306" channelId="2" functionId="1879114241" />
+                </variableUsagesHasUsages>
+                <variableUsagesHasUsages Id="091d61c5-2865-4bfd-a717-bfea7f5c8bb8">
+                  <aliasDeviceIoUsage Id="94e8f08e-6ca1-4475-9d13-70d98d638590" sdsId="300" channelId="4" functionId="1879114753" />
+                </variableUsagesHasUsages>
+                <variableUsagesHasUsages Id="868933f7-240d-44fc-a3be-d37769949e3a">
+                  <aliasDeviceIoUsage Id="9bce34c0-7293-4b3a-b579-205189223e98" sdsId="301" channelId="3" functionId="1879114497" />
                 </variableUsagesHasUsages>
               </usages>
             </variableUsages>

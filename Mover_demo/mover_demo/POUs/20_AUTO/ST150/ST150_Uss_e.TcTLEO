@@ -18,6 +18,7 @@ TYPE ST150_Uss_e :
     waitOnMover,     // wait until the mover is there
     MOVER_NEEDED_OP, // Since here, a mover in position is needed to perform the action
 
+    check_cap_present,     // See if the sensor sees the cap
     mover_maintening_up,   // Kraftbstützung goes up
     uss_start,             // start signal is given
     uss_working,           // we wait until the uss is finished
@@ -71,6 +72,11 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"MOVER_NEEDED_OP"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"check_cap_present"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

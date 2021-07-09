@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CT_Shuttle_BR_to_Tc_Status_t" Id="{21f9b133-897c-440f-8c30-ed4e747e38ef}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE
+CT_Shuttle_BR_to_Tc_Status_t :
+STRUCT
+    {STweep.disable}
+    reserve1               : BIT; // 
+    recovering             : BIT; // 
+    at_target              : BIT; // 
+    in_position            : BIT; // 
+    servo_enabled          : BIT; // 
+    moving_to_load_target  : BIT; // 
+    lost_position_feedback : BIT; // 
+    reserve8               : BIT; // 
+    {STweep.Enable}
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

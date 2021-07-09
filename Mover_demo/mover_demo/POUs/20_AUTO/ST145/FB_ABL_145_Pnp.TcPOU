@@ -227,7 +227,7 @@ fb_vakumGriperLeft(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),
                    tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST145]
                                                   [ST145_Cylinders_e.VakuumgreiferLinks].toGS_wait_time));
 
-simu_vacumGriperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_vacumGriperLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                      xIN_inGS   := NOT IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left,
                      xIN_inAS   := IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left,
                      xIN_valve  := fb_vakumGriperLeft.xOUT_VALVE,
@@ -252,7 +252,7 @@ fb_vakumGriperRight(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step)
                     tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST145]
                                                    [ST145_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
-simu_vacumGriperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_vacumGriperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                       xIN_inGS   := NOT IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right,
                       xIN_inAS   := IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right,
                       xIN_valve  := fb_vakumGriperRight.xOUT_VALVE,
@@ -351,22 +351,18 @@ ST145_Pnp_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST145_Pnp_e.INIT: (* Grundstellung ? *)
-    IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
-        iOUT_Step := ST145_Pnp_e.Init_HomeVerticals;
+    IF fb_axis145_02Z.xOUT_HOMED THEN
+        iOUT_Step := ST145_Pnp_e.Init_VerticalsUp;
     ELSE
         iOUT_Step := ST145_Pnp_e.Init_HomeVerticals;
     END_IF;
 
 ST145_Pnp_e.Init_HomeVerticals:
-    fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
-
     IF fb_axis145_02Z.xOUT_HOMED THEN
         iOUT_Step := ST145_Pnp_e.Init_VerticalsUp;
     END_IF
 
 ST145_Pnp_e.Init_VerticalsUp:
-    fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
-
     IF fb_vakumGriperLeft.xIN_AS OR fb_vakumGriperRight.xIN_AS THEN
         IF fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpFull).xOUT_InPos THEN
             IF fb_axis145_01Y.xOUT_READY OR fb_axis145_01Y.xOUT_HOMED THEN
@@ -474,7 +470,7 @@ ST145_Pnp_e.Pnp_Hor_ToTrackPos:
     END_IF
 
 ST145_Pnp_e.waitOnMover: (*  *)
-    IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
+    IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST145] THEN
         iOUT_Step := ST145_Pnp_e.Pnp_Ver_ShuttleDown;
     END_IF;
 

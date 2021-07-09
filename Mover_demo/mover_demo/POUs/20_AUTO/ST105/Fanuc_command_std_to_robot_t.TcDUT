@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="Fanuc_command_std_to_robot_t" Id="{6f8f606c-8043-42b8-b93e-cc9ca7eb4ada}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE Fanuc_command_std_to_robot_t :
+STRUCT
+    IMDSTP          : BIT; // Stopp sofort
+    Hold            : BIT; // Stopp
+    SFSPD           : BIT; // Sicher Geschwindigkeit
+    Abort_CycleStop : BIT; // Progfamm abrechen/Zyklus ende
+    FaultReset      : BIT; // Fehler Rücksetzten
+    Start           : BIT; // Start nach CycleEnd / Pause
+    Home            : BIT; // Fahrt zur Homposition !
+    Enable          : BIT; // Bereit
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

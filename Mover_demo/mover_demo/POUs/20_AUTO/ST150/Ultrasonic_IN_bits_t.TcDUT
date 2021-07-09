@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="Ultrasonic_IN_bits_t" Id="{4ddb3172-9ab9-4d80-959b-5bd11080d2c2}">
+    <Declaration><![CDATA[TYPE Ultrasonic_IN_bits_t :
+STRUCT
+    Bereit       : BIT; // Ready for the next
+    Fehler       : BIT; // Uss in error
+    US_on        : BIT; // welding is in progress (ultrsonic beam)
+    NullPosition : BIT; // Uss full above
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -184,7 +184,7 @@ fb_axis145_10W(enIN_State     := enIN_State,
                xIN_OFF          := FALSE,
                rIN_Position     :=, // Is set above
                rIN_Velocity     := TO_REAL(720.0),
-               rIN_Acceleration := TO_REAL(1440.0),
+               rIN_Acceleration := TO_REAL(7200.0),
                rIN_Deceleration := TO_REAL(7200.0),
                rIN_Jerk         := TO_REAL(720000.0),
                xIN_Home         := ST145_feeder_e.Init_home_table = iOUT_Step,
@@ -283,6 +283,7 @@ ST145_Feeder_e.Init_simu_home_table:
         iOUT_Step := ST145_Feeder_e.Init_reset_search_index;
     END_IF
 
+// unused, zero position is done by the configuration of the drive
 ST145_Feeder_e.Init_table_go_to_zero:
     IF fb_axis145_10W.xOUT_DONE THEN
         iOUT_Step := ST145_Feeder_e.Init_reset_search_index;

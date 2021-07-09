@@ -88,13 +88,13 @@ VAR_GLOBAL
     I517_                AT %IX51.7 : BOOL; // 
 
     //-EL1809 16DI 1015507
-    I520_ AT %IX52.0 : BOOL; // 
+    I520_                AT %IX52.0 : BOOL; // 
     I521_ AT %IX52.1 : BOOL; // 
-    I522_ AT %IX52.2 : BOOL; // 
+    I522_                AT %IX52.2 : BOOL; // 
     I523_ AT %IX52.3 : BOOL; // 
-    I524_ AT %IX52.4 : BOOL; // 
+    I524_                AT %IX52.4 : BOOL; // 
     I525_ AT %IX52.5 : BOOL; // 
-    I526_ AT %IX52.6 : BOOL; // 
+    I526_                AT %IX52.6 : BOOL; // 
     I527_ AT %IX52.7 : BOOL; // 
 
     I530_ AT %IX53.0 : BOOL; // 
@@ -105,6 +105,17 @@ VAR_GLOBAL
     I535_ AT %IX53.5 : BOOL; // 
     I536_ AT %IX53.6 : BOOL; // 
     I537_ AT %IX53.7 : BOOL; // 
+
+    AI01_ST140_level_track_side AT %I* : UINT; // laser sensor used to measure powder level, placed at the track side
+    AI02_ST140_level_door_side  AT %I* : UINT; // laser sensor used to measure powder level, placed at the door side
+	
+    AI11_ST130_valve_feedback_left  AT %I* : UINT; // current flow of the proportional valve
+    AI12_ST130_valve_feedback_right AT %I* : UINT; // current flow of the proportional valve
+    AI13_ST135_valve_feedback_left  AT %I* : UINT; // current flow of the proportional valve
+    AI14_ST135_valve_feedback_right AT %I* : UINT; // current flow of the proportional valve
+	
+    AI21_ST125_piece_height AT %I* : UINT; // laser sensor value, detect pieces in round table
+    AI22_                   AT %I* : UINT;
 
 END_VAR
 ]]></Declaration>

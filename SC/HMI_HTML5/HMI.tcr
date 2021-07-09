@@ -1,12 +1,13 @@
-﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/05/21 11:06:50
+﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/09/21 16:26:36
 #!-- Spider Control PPO CSV File version 5 since Jan 2016 utf8 support in editor and server and clients 
 #!-- Spider Control PPO CSV File version 6 since July2020 init ppo val col support in editor and server and clients 
 #!-- Start PPO INIT File
 #!-- VERSION = 6
 #!-- TYPE = 1
-#!-- TS = 60e2cbaa
-#!-- N = 2741
+#!-- TS = 60e85c9c
+#!-- N = 2819
 EMPTY_VAR_NAME;EMPTY_VAR_NAME; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.bInPos[@CO_AxisNo105Z11@];PLC1.AXIS.bInPos[@CO_AxisNo105Z11@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Y01@];PLC1.AXIS.bInPos[@CO_AxisNo110Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Z02@];PLC1.AXIS.bInPos[@CO_AxisNo110Z02@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Z03@];PLC1.AXIS.bInPos[@CO_AxisNo110Z03@]; ; ; ; ; ; ; ; ; ; ;
@@ -14,6 +15,7 @@ PLC1.AXIS.bInPos[@CO_AxisNo110Z04@];PLC1.AXIS.bInPos[@CO_AxisNo110Z04@]; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo115Y01@];PLC1.AXIS.bInPos[@CO_AxisNo115Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo115Z02@];PLC1.AXIS.bInPos[@CO_AxisNo115Z02@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo115Z03@];PLC1.AXIS.bInPos[@CO_AxisNo115Z03@]; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.bInPos[@CO_AxisNo115Z04@];PLC1.AXIS.bInPos[@CO_AxisNo115Z04@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo120Y01@];PLC1.AXIS.bInPos[@CO_AxisNo120Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo120Z02@];PLC1.AXIS.bInPos[@CO_AxisNo120Z02@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo125Y01@];PLC1.AXIS.bInPos[@CO_AxisNo125Y01@]; ; ; ; ; ; ; ; ; ; ;
@@ -33,6 +35,7 @@ PLC1.AXIS.bInPos[@CO_AxisNo180Z10@];PLC1.AXIS.bInPos[@CO_AxisNo180Z10@]; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo185Y01@];PLC1.AXIS.bInPos[@CO_AxisNo185Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo185Z02@];PLC1.AXIS.bInPos[@CO_AxisNo185Z02@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo185Z10@];PLC1.AXIS.bInPos[@CO_AxisNo185Z10@]; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.bTeachPos[@CO_AxisNo105Z11@];PLC1.AXIS.bTeachPos[@CO_AxisNo105Z11@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo110Y01@];PLC1.AXIS.bTeachPos[@CO_AxisNo110Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo110Z02@];PLC1.AXIS.bTeachPos[@CO_AxisNo110Z02@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo110Z03@];PLC1.AXIS.bTeachPos[@CO_AxisNo110Z03@]; ; ; ; ; ; ; ; ; ; ;
@@ -40,6 +43,7 @@ PLC1.AXIS.bTeachPos[@CO_AxisNo110Z04@];PLC1.AXIS.bTeachPos[@CO_AxisNo110Z04@]; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo115Y01@];PLC1.AXIS.bTeachPos[@CO_AxisNo115Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo115Z02@];PLC1.AXIS.bTeachPos[@CO_AxisNo115Z02@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo115Z03@];PLC1.AXIS.bTeachPos[@CO_AxisNo115Z03@]; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.bTeachPos[@CO_AxisNo115Z04@];PLC1.AXIS.bTeachPos[@CO_AxisNo115Z04@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo120Y01@];PLC1.AXIS.bTeachPos[@CO_AxisNo120Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo120Z02@];PLC1.AXIS.bTeachPos[@CO_AxisNo120Z02@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo125Y01@];PLC1.AXIS.bTeachPos[@CO_AxisNo125Y01@]; ; ; ; ; ; ; ; ; ; ;
@@ -59,6 +63,46 @@ PLC1.AXIS.bTeachPos[@CO_AxisNo180Z10@];PLC1.AXIS.bTeachPos[@CO_AxisNo180Z10@]; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo185Y01@];PLC1.AXIS.bTeachPos[@CO_AxisNo185Y01@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo185Z02@];PLC1.AXIS.bTeachPos[@CO_AxisNo185Z02@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bTeachPos[@CO_AxisNo185Z10@];PLC1.AXIS.bTeachPos[@CO_AxisNo185Z10@]; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][0].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][0].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][0].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][0].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][0].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][0].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][0].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][0].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][6].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][6].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][6].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][6].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][6].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][6].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][6].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][6].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][7].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][7].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][7].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][7].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][7].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][7].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][7].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105W10@][7].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][0].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][0].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][0].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][0].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][0].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][0].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][0].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][0].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][1].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][1].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][1].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][1].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][1].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][1].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][1].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][1].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][2].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][2].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][2].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][2].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][2].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][2].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][2].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][2].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][3].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][3].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][3].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][3].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][3].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][3].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][3].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][3].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][4].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][4].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][4].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][4].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][4].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][4].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][4].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][4].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][5].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][5].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][5].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][5].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][5].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][5].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][5].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][5].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][6].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][6].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][6].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][6].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][6].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][6].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][6].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo105Z11@][6].on; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo110W10@][0].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo110W10@][0].button; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo110W10@][0].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo110W10@][0].disable; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo110W10@][0].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo110W10@][0].error; ; ; ; ; ; ; ; ; ; ;
@@ -283,6 +327,34 @@ PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z03@][6].button;PLC1.AXIS.btTeachArAxis[@CO
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z03@][6].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z03@][6].disable; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z03@][6].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z03@][6].error; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z03@][6].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z03@][6].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][0].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][0].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][0].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][0].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][0].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][0].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][0].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][0].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][1].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][1].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][1].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][1].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][1].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][1].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][1].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][1].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][2].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][2].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][2].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][2].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][2].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][2].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][2].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][2].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][3].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][3].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][3].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][3].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][3].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][3].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][3].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][3].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][4].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][4].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][4].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][4].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][4].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][4].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][4].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][4].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][5].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][5].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][5].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][5].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][5].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][5].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][5].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][5].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][6].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][6].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][6].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][6].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][6].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][6].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][6].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo115Z04@][6].on; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo120Y01@][0].button;PLC1.AXIS.btTeachArAxis[@CO_AxisNo120Y01@][0].button; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo120Y01@][0].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo120Y01@][0].disable; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo120Y01@][0].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo120Y01@][0].error; ; ; ; ; ; ; ; ; ; ;
@@ -840,7 +912,9 @@ PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].disable;PLC1.AXIS.btTeachArAxis[@C
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].error; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].on; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st105_aut._Mover._ID;PLC1.GVL.st105_aut._Mover._ID; ; ;short; ; ; ; ; ; ; ;
+PLC1.GVL.st105_aut.fb_Pnp.fb_axis105_11Z.rOUT_ActPos;PLC1.GVL.st105_aut.fb_Pnp.fb_axis105_11Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st110_aut._Mover._ID;PLC1.GVL.st110_aut._Mover._ID; ; ;short; ; ; ; ; ; ; ;
+PLC1.GVL.st110_aut.fb_Feeder.fb_axis105_10W.rOUT_ActPos;PLC1.GVL.st110_aut.fb_Feeder.fb_axis105_10W.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st110_aut.fb_Feeder.fb_axis110_10W.rOUT_ActPos;PLC1.GVL.st110_aut.fb_Feeder.fb_axis110_10W.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st110_aut.fb_Pnp.fb_axis110_01Y.rOUT_ActPos;PLC1.GVL.st110_aut.fb_Pnp.fb_axis110_01Y.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st110_aut.fb_Pnp.fb_axis110_02Z.rOUT_ActPos;PLC1.GVL.st110_aut.fb_Pnp.fb_axis110_02Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
@@ -853,6 +927,7 @@ PLC1.GVL.st115_aut.fb_Feeder.fb_axis115_10W.rOUT_ActPos;PLC1.GVL.st115_aut.fb_Fe
 PLC1.GVL.st115_aut.fb_Pnp.fb_axis115_01Y.rOUT_ActPos;PLC1.GVL.st115_aut.fb_Pnp.fb_axis115_01Y.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_axis115_02Z.rOUT_ActPos;PLC1.GVL.st115_aut.fb_Pnp.fb_axis115_02Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_axis115_03Z.rOUT_ActPos;PLC1.GVL.st115_aut.fb_Pnp.fb_axis115_03Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st115_aut.fb_Pnp.fb_axis115_04Z.rOUT_ActPos;PLC1.GVL.st115_aut.fb_Pnp.fb_axis115_04Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
@@ -2622,6 +2697,8 @@ PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo185@][0].toAS_wait_time;PLC1._20_AUT
 PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo185@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo185@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[0].movesList[0].lrPosition;PLC1._20_AUTO.recipe.linearAxis[0].movesList[0].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_AxisNo@].movesList[@CO_ListNo@].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_AxisNo@].movesList[@CO_ListNo@].lrPosition; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo105Z11@].movesList[0].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo105Z11@].movesList[0].lrPosition; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo105Z11@].movesList[1].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo105Z11@].movesList[1].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo110Y01@].defProfile.lrAccel;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo110Y01@].defProfile.lrAccel; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo110Y01@].defProfile.lrDecel;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo110Y01@].defProfile.lrDecel; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo110Y01@].defProfile.lrJerk;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo110Y01@].defProfile.lrJerk; ; ; ; ; ; ; ; ; ; ;
@@ -2747,5 +2824,6 @@ PLC1.if_TruMark.Status.b0_Laser_On;PLC1.if_TruMark.Status.b0_Laser_On; ; ; ; ; ;
 PLC1.if_TruMark.Status.b15_Mark_Active;PLC1.if_TruMark.Status.b15_Mark_Active; ; ; ; ; ; ; ; ; ; ;
 PLC1.if_TruMark.Status.b1_Laser_Ready;PLC1.if_TruMark.Status.b1_Laser_Ready; ; ; ; ; ; ; ; ; ; ;
 PLC1.if_TruMark.Status.b3_Shutter_Open;PLC1.if_TruMark.Status.b3_Shutter_Open; ; ; ; ; ; ; ; ; ; ;
+dropDown;dropDown; ; ; ; ; ; ; ; ; ; ;
 #!-- End PPO INIT File
 

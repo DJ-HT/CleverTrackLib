@@ -20,8 +20,8 @@ VAR_GLOBAL
     xWait     : BOOL;    //ALLE FBs warten
     xAIRon    : BOOL;    //Luftdruck IO
     xSPC      : BOOL;    //SPC angewählt
-	
-	Tast_BL : BOOL; // ... 
+
+    Tast_BL : BOOL; // ... 
 
     (*******************************************************************)
     (* Buttons *)
@@ -106,11 +106,13 @@ VAR_GLOBAL
      * [StationList_e.ST185] 11
      * [0]: Zyklus [1]:  [2]: 
      *)
-	 
-	 
+
     btArST150 : ARRAY[0..20] OF structButton; (*	0 : Start USS
 	                                                1 : Reset US
 											   *)
+
+    btArForceCyclus     : ARRAY[0..StationList_e._max - 1] OF structButton;
+    bArForceCyclusState : ARRAY[0..StationList_e._max - 1] OF BOOL;
 
     (*******************************************************************)
     (* ALARME  *)
@@ -144,6 +146,11 @@ VAR_GLOBAL
     btCopyRecipe  : structButton;
     movesNames    : ARRAY[0..LinearAxis_e._max - 1] OF ARRAY[0..CONST.MAX_VECTOR_LIST] OF STRING;
     cylinderNames : ARRAY[0..StationList_e._max - 1] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF STRING;
+
+    (*******************************************************************)
+    (* Mover manual bt *)
+    (*******************************************************************)
+	selectedShuttle : INT := 1; // selected shuttle from the HMI
 
     (*******************************************************************)
     (* Diverses *)

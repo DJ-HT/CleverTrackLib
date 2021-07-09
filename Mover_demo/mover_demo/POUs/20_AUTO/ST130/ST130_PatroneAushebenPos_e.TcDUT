@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST130_PatroneAushebenPos_e" Id="{f5880163-cbc1-4a1a-81f4-153588247eda}">
+    <Declaration><![CDATA[TYPE ST130_PatroneAushebenPos_e :
+(
+    down_GS,
+    up_AS,
+    _max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
