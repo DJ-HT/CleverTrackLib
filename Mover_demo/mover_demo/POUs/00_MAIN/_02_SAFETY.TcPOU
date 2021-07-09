@@ -90,7 +90,8 @@ VAR_OUTPUT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//--------------------------------------------------------------------------
+      <ST><![CDATA[(* Run LOCAL
+//--------------------------------------------------------------------------
 //SAFETY BAUSTEINE AUFRUFEN
 //--------------------------------------------------------------------------	
 _FB_Gr001Input(tIN_ResetTime := T#500MS);
@@ -162,7 +163,7 @@ xOUT_MonOut    := xIN_MonOut;
 //--------------------------------------------------------------------------
 xOUT_ResetES    := HMI.Tast_BL;
 xOUT_Einrichten := xArIN_Input3[1];
-
+*)
 //--------------------------------------------------------------------------
 //Tür Verriegelung	
 //--------------------------------------------------------------------------
@@ -170,11 +171,16 @@ xOUT_Einrichten := xArIN_Input3[1];
 // OUT.Q021_T2L_VERR := OUT.Q020_T1_VERR;
 // OUT.Q022_T2R_VERR := OUT.Q020_T1_VERR;
 
-//xOUT_ESout     := TRUE;
-//xOUT_ESdelOut  := TRUE;
-//xOUT_MonOut    := TRUE;
-//xOUT_MonDelOut := TRUE;
-//xOUT_Einrichten := FALSE;  // true when doors are open]]></ST>
+xOUT_ESout     := TRUE;
+xOUT_ESdelOut  := TRUE;
+xOUT_MonOut    := TRUE;
+xOUT_MonDelOut := TRUE;
+xOUT_Einrichten := FALSE;  // true when doors are open]]></ST>
     </Implementation>
+    <LineIds Name="_02_SAFETY">
+      <LineId Id="174" Count="0" />
+      <LineId Id="3" Count="83" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
   </POU>
 </TcPlcObject>

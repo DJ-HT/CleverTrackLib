@@ -1,0 +1,18 @@
+﻿CANCEL;CANCEL
+Container;Container
+DEC_SYMB;.
+LANG_SYMB;EN
+Level 1;Level 1
+Level 2;Level 2
+Level 3;Level 3
+Level 4;Level 4
+Logout Button;Logout Button
+MD_@PPO_SCSYS_LANG@;MD_@PPO_SCSYS_LANG@
+OK;OK
+PM_AM;0
+Start Button;Start Button
+TEQ-View;TEQ-View
+This Macro stores a password as a SHA256 hash-code in your project. \nExplanation: It can be used e.g. as an entry screen. \n- Valid password hashes are stored in STRING's\n- Four user levels can be defined by the EventP's\nDuring runtime, the edit field shows *. The password will be written to a Container variable called 'myPassword'.  Each EventP object compares myPassword to the stored hash-code, If it matches, the container 'userLevel' will be set to a value > 0.\nThe button to jump to the first view of the project will be disabled, as long as the user level == 0. \nThe logout button may be copied to another page.\n\nHow to proceed: Enter your password below, then press 'Update'. This will generate the SHA256 hash-code to be stored in this macro. The hash-code is useless to guess the correct password.\nThe password will not be stored and will not be visible next time you open this dialogue.;This Macro stores a password as a SHA256 hash-code in your project. \nExplanation: It can be used e.g. as an entry screen. \n- Valid password hashes are stored in STRING's\n- Four user levels can be defined by the EventP's\nDuring runtime, the edit field shows *. The password will be written to a Container variable called 'myPassword'.  Each EventP object compares myPassword to the stored hash-code, If it matches, the container 'userLevel' will be set to a value > 0.\nThe button to jump to the first view of the project will be disabled, as long as the user level == 0. \nThe logout button may be copied to another page.\n\nHow to proceed: Enter your password below, then press 'Update'. This will generate the SHA256 hash-code to be stored in this macro. The hash-code is useless to guess the correct password.\nThe password will not be stored and will not be visible next time you open this dialogue.
+Update;Update
+User Level;User Level
+

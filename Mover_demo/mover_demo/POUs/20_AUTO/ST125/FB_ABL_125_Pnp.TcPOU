@@ -140,8 +140,8 @@ fb_simu_axis125_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis125_01Y(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st125_01Y,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST125_01Y]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -160,6 +160,7 @@ fb_axis125_01Y(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
+			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_01Y].movesList[AXIS.bTeachPos[Axis_e.ST125_01Y]].lrPosition),
                xIN_Reset        := (ST125_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                // the simu fb gives the hardware signal when the simulation is disabled
                wAxisState    := fb_simu_axis125_01Y.wOUT_AxisState,
@@ -188,8 +189,8 @@ fb_simu_axis125_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis125_02Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st125_02Z,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST125_02Z]),
+               xIN_DisButtons   := ,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -208,6 +209,7 @@ fb_axis125_02Z(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
+			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST125_02Z].movesList[AXIS.bTeachPos[Axis_e.ST125_02Z]].lrPosition),
                xIN_Reset        := (ST125_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                // the simu fb gives the hardware signal when the simulation is disabled
                wAxisState    := fb_simu_axis125_02Z.wOUT_AxisState,
