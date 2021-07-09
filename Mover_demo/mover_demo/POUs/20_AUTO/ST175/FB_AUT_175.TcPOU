@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_AUT_175" Id="{e703c51e-8801-4586-ba20-b4cb8ee017c9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_175 EXTENDS FB_AUT_ABSTRACT
+(****************************************************************************)
+(*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
+(*	Status				ungetestet											*)
+(*  Version:			1.0													*)
+(*	Beschrieb:																*)
+(*																			*)
+(*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
+(*																			*)
+(*																			*)
+(* 	25.09.2019/Dj															*)
+(****************************************************************************)
+(*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
+(****************************************************************************)
+VAR_INPUT
+
+    (* spezifische Eingänge *)
+
+END_VAR
+VAR_OUTPUT
+
+    (* spezifische Ausgänge *)
+
+END_VAR
+VAR
+    (* Bausteine *)
+    fb_laser : FB_Laser_ABL;
+
+						
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+
+(*******************************************************************)
+(* Flanken / Merker *)
+(*******************************************************************)
+//MANU CYCLE
+IF (enIN_State = StateMANU) AND xIN_ManuCycle THEN
+    xManuCycle := TRUE;
+END_IF;
+
+IF (enIN_State <> StateMANU) OR xOUT_Done THEN
+    xManuCycle := FALSE;
+END_IF
+
+//NEXT STEP
+xNextStep := (enIN_State > StateSTEP) OR
+             ((enIN_State = StateSTEP) AND xIN_Step) OR
+             ((enIN_State = StateMANU) AND xManuCycle);
+
+//RESET
+xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
+
+(*******************************************************************)
+(* Bausteinaufrufe Abläufe *)
+(*******************************************************************)
+fb_laser(xIN_Start :=);
+
+(*******************************************************************)
+(* Bausteinaufruf Error Station *)
+(*******************************************************************)
+// POU_ERR_VORLAGE(xIN_QUIT := xIN_Quit, pstrArIN_ALARM := ADR(HMI.strArALARM[1]));
+
+(*******************************************************************)
+(* OUTPUT *)
+(*******************************************************************)
+xOUT_InitDone := TRUE;
+xOUT_Ready    := TRUE;
+xOUT_Done     := TRUE;
+xOUT_ErrFlag  := TRUE;
+xOUT_Wait     := FALSE;
+xOUT_AlarmST  := FALSE;
+]]></ST>
+    </Implementation>
+    <Property Name="iCompletionPC" Id="{315967f2-03a0-4e8a-b947-7a30ebf5f040}">
+      <Declaration><![CDATA[PROPERTY iCompletionPC : INT]]></Declaration>
+      <Get Name="Get" Id="{d3d6dad8-d26b-40b1-81e1-f23b156094fa}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{6a991963-98b5-4a57-a16c-17d328b7b386}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="iProcessTimeMili_1" Id="{94d4c429-0ad5-4f5e-95e9-a4043181c20f}">
+      <Declaration><![CDATA[PROPERTY iProcessTimeMili_1 : DINT]]></Declaration>
+      <Get Name="Get" Id="{ab4b3291-b812-4564-bf42-226a68391516}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{12617e34-4ede-4d8b-94e2-20ef232d94d4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="iProcessTimeMili_2" Id="{a084a818-4a0c-443c-a7bb-04640996af44}">
+      <Declaration><![CDATA[PROPERTY iProcessTimeMili_2 : DINT]]></Declaration>
+      <Get Name="Get" Id="{ea15266e-da0a-4292-8aee-38050498571b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{450bc7df-ad74-4caf-9e32-e816d583936a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Mover" Id="{a6f02715-cbc1-49ca-9685-44e03b022758}">
+      <Declaration><![CDATA[PROPERTY Mover : REFERENCE TO FB_Mover]]></Declaration>
+      <Get Name="Get" Id="{452f67ba-dc9f-4efc-9d6a-afa6be5ff2a4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e9d303bc-d741-447e-8723-1092e04c63b7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="ProcessExecution" Id="{fd9f5552-2f7f-4c6a-8af6-92ee39200c7b}">
+      <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
+      <Get Name="Get" Id="{768c8785-7147-4e80-939f-b6a2931fc6ee}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{9924e2d1-e2cb-41eb-8c32-b1bc885ec4cc}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xBusy" Id="{8771e451-625f-43cc-9946-5c3512a109c1}">
+      <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{e4ae8288-255f-4af8-9c80-f8819b4bb8e6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xBusy := FALSE;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{669a6d19-f58f-4848-8280-59171de554e3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xDone" Id="{1484621a-1536-4404-a05b-d5834613226f}">
+      <Declaration><![CDATA[PROPERTY xDone : BOOL]]></Declaration>
+      <Get Name="Get" Id="{047aaad4-4d0a-4b37-b2fe-a51231ce49f6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xDone := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{0be92544-4fa1-4fde-a501-1388eef8d762}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xMoverPathFree" Id="{4adcb0a8-e62d-4fcf-809d-38fc4e02a974}">
+      <Declaration><![CDATA[PROPERTY xMoverPathFree : BOOL]]></Declaration>
+      <Get Name="Get" Id="{84947f2f-2df9-4019-8a8e-58f8c0b16c23}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverPathFree := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{fe795596-c4eb-41dc-a394-5dd300fdb00a}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xMoverShouldLeave" Id="{65d5ac1c-6801-483b-a52d-a990d2f39bf4}">
+      <Declaration><![CDATA[PROPERTY xMoverShouldLeave : BOOL]]></Declaration>
+      <Get Name="Get" Id="{1f120a3f-6481-463b-b594-bdab04dffb44}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverShouldLeave := TRUE;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{8dce2547-2e3f-4f68-96f6-d1fade3e237e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+  </POU>
+</TcPlcObject>

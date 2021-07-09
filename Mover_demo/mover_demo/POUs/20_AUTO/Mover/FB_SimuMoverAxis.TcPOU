@@ -116,7 +116,7 @@ END_VAR
 ]]></Declaration>
         <Implementation>
           <ST><![CDATA[IF CONST.BIND_WITH_TRACK THEN
-    CurrentPos := TO_LREAL(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._iID].diCurrentPos_um) / 1000.0;
+    CurrentPos := TO_LREAL(gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._iID].diCurrentPos_um) / 1000.0;
 ELSE
     CurrentPos := _CurrentPos;
 END_IF
@@ -257,28 +257,6 @@ END_VAR
 THIS^._CurrentDir := MoverDirection_e.Farward;
 isInPos := THIS^._CurrentPos = THIS^._TargetPos;
 MoveTo REF= THIS^;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="RelMoveTo" Id="{63f20b0f-13f1-4d11-9d44-19187e776860}">
-      <Declaration><![CDATA[// Move relatively of this position
-// With this function, a negative value move the mover at the reverse direction
-METHOD RelMoveTo : REFERENCE TO FB_SimuMoverAxis
-VAR_INPUT
-    RelativePos : LREAL; // move the axis to this amount¨
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[THIS^._TargetPos := THIS^._TargetPos + RelativePos;
-
-IF RelativePos >= 0 THEN
-    THIS^._CurrentDir := MoverDirection_e.Farward;
-ELSE
-    THIS^._CurrentDir := MoverDirection_e.Reverse;
-END_IF
-
-isInPos   := THIS^._CurrentPos = THIS^._TargetPos;
-RelMoveTo REF= THIS^;
 ]]></ST>
       </Implementation>
     </Method>

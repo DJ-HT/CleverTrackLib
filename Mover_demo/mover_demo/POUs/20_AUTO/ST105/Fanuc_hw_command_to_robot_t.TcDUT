@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="Fanuc_hw_command_to_robot_t" Id="{c65bdec0-5dc7-411b-a818-e71dc1a2a3f9}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE Fanuc_hw_command_to_robot_t :
+STRUCT
+    command_std : Fanuc_command_std_to_robot_t; // standard command for Fanuc robot
+    PNS         : BYTE;                         // number of the program to execute
+    command_ext : Fanuc_command_ext_to_robot_t; // extended command for Fanuc robot
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

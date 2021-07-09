@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="TruMark_Ethercat" Id="{6b9421f5-af6d-4be3-a041-df1068a81edb}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM TruMark_Ethercat
+VAR
+	// EtherCat Zustand
+	uiECatStatus AT %I* : UINT;				// --> Status von ECAT-Klemme (101A2-InfoData-State)
+	wStateMachine : WORD;
+
+	// Bus-Structure - Input
+	PBIM0 AT %I* : ARRAY[0..1] OF WORD;		// --> Linked with EK1110. TxPDO. Byte 0 - 3
+	PBIM1 AT %I* : ARRAY[0..1] OF WORD;		// --> Linked with EK1110. TxPDO. Byte 4 - 7
+	PBIM2 AT %I* : ARRAY[0..63] OF WORD;	// --> Linked with EK1110. TxPDO. Byte 8 - 135
+	
+	// Bus-Structure - Output
+	PBOM0 AT %Q* : ARRAY[0..1] OF WORD;		// --> Linked with EK1110. RxPDO. Byte 0 - 3
+	PBOM1 AT %Q* : ARRAY[0..1] OF WORD;		// --> Linked with EK1110. RxPDO. Byte 3 - 7
+	PBOM2 AT %Q* : ARRAY[0..63] OF WORD;	// --> Linked with EK1110. RxPDO. Byte 8 - 135
+
+
+	// TLV Data Structure
+	awTlvPBxM2 AT %M*: ARRAY [0..63] OF WORD;
+	// To avoid PADDING in a structure it is recommended to declare multiple single variables
+	iTlvHandshake AT %M* : INT;
+	diTlvTag AT %M* : DINT;
+	diTlvLenght AT %M* : DINT;
+	abyTlvValues AT %M* : ARRAY [0..117] OF BYTE;
+	
+	// BIT Helper-Variables
+	awPBOM AT %M* : ARRAY [0..1] OF WORD;
+	dwPBOM AT %M* : DWORD;
+	
+	iStep 	: INT;	
+	t1 : TON;
+	bT1Start : BOOL;
+	sS1 : STRING;
+	iInd: INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[t1(IN:=bT1Start, PT:=T#2000MS);
+wStateMachine := UINT_TO_WORD(uiECatStatus) AND 16#00FF;
+IF wStateMachine <> 8 THEN
+	if_TruMark.bError := TRUE;
+	iStep := 0;
+END_IF
+IF (iStep=99) AND HMI.btArMain[7].rtrig THEN
+	if_TruMark.bResetErr := TRUE;
+END_IF
+
+if_TruMark.Status.b0_Laser_On 					:= PBIM0[0].0;
+if_TruMark.Status.b1_Laser_Ready	 			:= PBIM0[0].1;
+if_TruMark.Status.b2_SIK_Open	 				:= PBIM0[0].2;
+if_TruMark.Status.b3_Shutter_Open 				:= PBIM0[0].3;
+if_TruMark.Status.b4_BeamExpander_IsInPos		:= PBIM0[0].4;
+if_TruMark.Status.b5_LaserMonitoring	 		:= PBIM0[0].5;
+if_TruMark.Status.b6_LaserMalfunction 			:= PBIM0[0].6;
+if_TruMark.Status.b7_PilotLaser_On				:= PBIM0[0].7;
+if_TruMark.Status.b8_LaserWarningLamp_On 		:= PBIM0[0].8;
+if_TruMark.Status.b9_QSwTrigger_ON 				:= PBIM0[0].9;
+if_TruMark.Status.b10_SwOff_NotActivated 		:= PBIM0[0].10;
+if_TruMark.Status.b11_KeySwLaserDisable_Closed	:= PBIM0[0].11;
+if_TruMark.Status.b12_EmergencyStop_Closed		:= PBIM0[0].12;
+if_TruMark.Status.b13_LaserHeatingPhase_On 		:= PBIM0[0].13;
+if_TruMark.Status.b14_ControlUnit_On 			:= PBIM0[0].14;
+if_TruMark.Status.b15_Mark_Active 				:= PBIM0[0].15;
+if_TruMark.Status.b16_Conversion_Active 		:= PBIM0[1].0;
+
+CASE iStep OF
+	0: 		// Bus Initialisation
+		CASE wStateMachine OF
+			8:  // 'OP';
+				if_TruMark.sErrorMsg := '';
+				if_TruMark.bError := FALSE;
+				if_TruMark.bBusy := FALSE;
+				if_TruMark.bBitCmd := FALSE;
+				if_TruMark.bTlvCmd := FALSE;
+				if_TruMark.bResetErr := FALSE;
+				iStep := 5;
+			ELSE
+				if_TruMark.sErrorMsg := CONCAT('EtherCat Bus ist nicht bereit.  State Machine = ', UINT_TO_STRING(wStateMachine));
+		END_CASE
+		
+	5:		// Waiting for command (TLV or BIT)
+		IF if_TruMark.bBitCmd THEN
+			if_TruMark.bBusy := TRUE;
+			iStep := 10;
+		END_IF
+		
+		IF if_TruMark.bTlvCmd THEN
+			if_TruMark.bBusy := TRUE;
+			if_TruMark.byTlvExtErrCode := 0;
+			if_TruMark.byTlvReturnCode := 0;
+			iStep := 20;
+		END_IF
+		
+	10:		// ------------------------------------
+			// BIT Command
+			// ------------------------------------
+		dwPBOM := if_TruMark.dwBitIn; 
+		PBOM0 := awPBOM;
+		iStep := 0;
+	
+	20:		// ------------------------------------
+			// TLV Command
+			// ------------------------------------
+		diTlvTag := if_TruMark.diTlvTag;
+		
+		// Convert String to ASCII Code
+		FOR iInd := 0 TO LEN(if_TruMark.sTlvValueIn) BY 1 DO
+			IF if_TruMark.sTlvValueIn[iInd] = 16#3B THEN
+				abyTlvValues[iInd] := 16#00;		// convert ; to 0x00
+			ELSE
+				abyTlvValues[iInd] := if_TruMark.sTlvValueIn[iInd];	
+			END_IF
+		END_FOR
+		abyTlvValues[iInd] := 16#00;		// end values with 0x00
+		diTlvLenght := INT_TO_DINT(iInd);
+
+		// 1.   A T T E N T I O N  - copy first all Data on the bus
+		PBOM2 := awTlvPBxM2;
+		
+		// 2.   A T T E N T I O N  - then set a new Handshake --> a new Handshake will trigger a command
+		PBOM2[0] := PBIM2[0] + 1;	// increment Handshake
+		
+		IF PBOM2[0] < 2 OR PBOM2[0] > 255 THEN	// Valid Range for Handshake is between 2 and 255
+			PBOM2[0] := 2; 				// minimal Handshake
+		END_IF
+				
+		iStep := 21;
+
+	21:		// Waiting for TLV-Response
+			// A TLV-Response has a new handshake (newHS = oldHS + 1)
+			// The response time varries depending on the TLV request/command
+		IF PBOM2[0] <= PBIM2[0] THEN
+			awTlvPBxM2 := PBIM2;
+			if_TruMark.byTlvReturnCode := abyTlvValues[0]; 
+			
+			CASE if_TruMark.byTlvReturnCode OF
+				16#30:	// Ascii = '0'		- No Error
+					sS1 := '';
+					FOR iInd := 0 TO DINT_TO_INT(diTlvLenght-1) BY 1 DO
+						IF abyTlvValues[iInd] = 16#00 THEN
+							sS1 := CONCAT(STR1:=sS1, STR2:=';');
+						ELSE
+							sS1 := CONCAT(STR1:=sS1, STR2:=F_ToCHR(c:=abyTlvValues[iInd]));
+						END_IF	
+					END_FOR
+					if_TruMark.sTlvRespons := sS1;
+					iStep := 0;
+					
+				16#31:	// Ascii = '1'
+					if_TruMark.bError := TRUE;
+					if_TruMark.sErrorMsg := 'TLV Error: Command was not executed!';
+					if_TruMark.byTlvExtErrCode := abyTlvValues[2];
+					iStep := 99;
+					
+				16#32:	// Ascii = '2'
+					if_TruMark.bError := TRUE;
+					if_TruMark.sErrorMsg := 'TLV Error: Invalid parameter value!';
+					iStep := 99;
+					
+				16#33:	// Ascii = '3'
+					if_TruMark.bError := TRUE;
+					if_TruMark.sErrorMsg := 'TLV Error: Invalid TLV value lenght!';
+					iStep := 99;
+				ELSE
+					if_TruMark.bError := TRUE;
+					if_TruMark.sErrorMsg := 'TLV Error';
+					iStep := 99;
+			END_CASE
+		END_IF
+	
+	99:	// in case of an TLV Error
+		if_TruMark.bBusy := FALSE;
+		
+		IF if_TruMark.bResetErr THEN
+			iStep := 0;
+		END_IF
+	
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

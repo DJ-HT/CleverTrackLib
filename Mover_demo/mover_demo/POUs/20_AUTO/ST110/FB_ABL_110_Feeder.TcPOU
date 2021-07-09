@@ -30,6 +30,7 @@ VAR_INPUT
     // Application specific
     xIN_PickPiece : BOOL; (* signal from the pick and place element
                              the number of picked signal depend on the recipe *)
+    xIN_RotTableBlockedByPnp : BOOL; // Is the pick and place blocking the rotary table?
 END_VAR
 VAR_OUTPUT
     (* standart Ausgänge *)
@@ -60,14 +61,16 @@ VAR
     TON_Timeout : TON;
 
     (* Bausteine *)
+	btfb_feeder					: FB_BUTTON;
 
     // Application specific
-    fb_axis110_10W : FB_AxisRotTable_V1_1;
-    fb_feeder      : FB_Feeder2Sensors;
-    fifo           : FB_Fifo(2);
-    simu_feeder    : FB_Simu_Feeder; // simulation of a feeder
-    simu_fifo      : FB_Fifo(20);    // fifo to hold a piece
-    rtPutPiece     : R_TRIG;         // trigger to add a piece
+    fb_axis110_10W               : FB_AxisLMturn_V1_1;
+    simu_axis110_10W             : FB_Simu_AxisLM_V1_1;
+    fb_feeder                    : FB_Feeder2Sensors;
+    fifo                         : FB_Fifo(3);
+    simu_feeder                  : FB_Simu_Feeder; // simulation of a feeder
+    simu_fifo_feeder_to_rotTable : FB_Fifo(20);    // fifo to hold a piece
+    rtPutPiece                   : R_TRIG;         // trigger to add a piece
 
     rtPick : R_TRIG; // r_trig signal from the pick and place machine
 
@@ -75,9 +78,15 @@ VAR
     iSearchIndex       : INT; (* Initialization index TO see how many element we have AT startup
                                  or after an alarm *)
 
+    ton_wait_blow_piece : TON;
+    tof_color_sensor    : TOF;
+
+	rTest : REAL;
 END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
+
+    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -105,60 +114,115 @@ iCurrentTableIndex := iCurrentTableIndex MOD 3;
 TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
             PT := tIN_Timeout);
 
+// we use a set reset to be sure that the blower blow event if the time
+// is not elapsed
+IF IO_BOX.I8004_ST110_farbsensor_lagekontrolle THEN
+    ton_wait_blow_piece.IN := TRUE;
+
+ELSIF NOT IO_BOX.I8004_ST110_farbsensor_lagekontrolle AND ton_wait_blow_piece.Q THEN
+    ton_wait_blow_piece.IN := FALSE;
+
+END_IF
+
+ton_wait_blow_piece(IN :=, // see code above
+                    PT := DINT_TO_TIME(_20_AUTO.recipe.st110.waitBlowPieceTon_ms));
+
+tof_color_sensor(IN := ton_wait_blow_piece.Q,
+                 PT := DINT_TO_TIME(_20_AUTO.recipe.st110.blowPieceTof_ms));
+
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
+btfb_feeder(pbtIN := ADR(HMI.btManuCylinders[StationList_e.ST110][3]),
+				xINdis:= (enIN_State<>enState.StateMANU),
+				xINon:= ,
+				xINerr:= fb_feeder.xOUT_Empty);
 
-fb_feeder(xIN_Enable          := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
-          xIN_PieceInEnd      := NOT simu_fifo.IsEmpty(),
-          xIN_PieceMax        := (simu_fifo.GetLen() > 10),
-          diIN_SignlFilter_ms := _20_AUTO.recipe.st110.FeederConfig.InFilterDelay,
-          diIN_StartDelay_ms  := _20_AUTO.recipe.st110.FeederConfig.StartDelay,
-          diIN_StopDelay_ms   := _20_AUTO.recipe.st110.FeederConfig.StopDelay,
-          diIN_EmptyDelay     := _20_AUTO.recipe.st110.FeederConfig.EmptyDelay);
+IF btfb_feeder.pbtIN^.rtrig THEN
+	btfb_feeder.xINon := NOT btfb_feeder.xINon;
+ELSIF (enIN_State<>enState.StateMANU) THEN
+	btfb_feeder.xINon := FALSE;
+END_IF;
 
-simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder,
+fb_feeder(xIN_Enable                := ((enIN_State<=enState.StateAUTO) AND (enIN_State>=enState.StateSTEP)) 
+										OR btfb_feeder.xINon,
+          xIN_PieceInEnd            := TRUE, // IO_BOX.I6000_ST110_teil_in_vereinzelung, 
+          xIN_PieceMax              := IO_BOX.I8001_ST110_maximum,
+          xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+          refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
+          iIN_FifoSetMaxSensorValue := 10,
+          diIN_SignlFilter_ms       := _20_AUTO.recipe.st110.FeederConfig.InFilterDelay,
+          diIN_StartDelay_ms        := _20_AUTO.recipe.st110.FeederConfig.StartDelay,
+          diIN_StopDelay_ms         := _20_AUTO.recipe.st110.FeederConfig.StopDelay,
+          diIN_EmptyDelay_ms        := _20_AUTO.recipe.st110.FeederConfig.EmptyDelay);
+
+simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+            xIN_PceSensor      := fb_feeder.xIN_PieceInEnd,
             tIN_NewPieceTime   := 500,
             iIN_WaitTimeMin_ms := 500,
             iIN_WaitTimeMax_ms := 1000);
 
-IF rtPutPiece.Q AND NOT simu_fifo.IsFull() THEN
-    simu_fifo.Put(1);
+rtPick(CLK := xIN_PickPiece);
+rtPutPiece(CLK := simu_feeder.xOUT_NewPiece);
+
+IF rtPutPiece.Q AND NOT simu_fifo_feeder_to_rotTable.IsFull() THEN
+    simu_fifo_feeder_to_rotTable.Put(1);
 END_IF
 
+IF ST110_Feeder_e.Init_simu_home_table = iOUT_Step THEN
+    fb_axis110_10W.rIN_Position := TO_REAL(120.0 - LMOD(ST110_Axis.axis110_10W.rActPos, 120.0));
+
+ELSE
+    fb_axis110_10W.rIN_Position := 120.0;
+
+END_IF
+
+simu_axis110_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+                 wIN_AxisState       := ST110_Axis.axis110_10W.wState,
+                 bIN_AxisCntr        := fb_axis110_10W.bOUT_AxisCntr,
+                 udiIN_HomingTime_ms := 1000,
+                 pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST110_10W]),
+                 pIN_axisHW          := ADR(ST110_Axis.axis110_10W.axis),
+                 rIN_PosActual       := fb_axis110_10W.rOUT_ActPos,
+                 rIN_PosMax          := ST110_Axis.const110_10W.POS_MAX,
+                 rIN_PosMin          := ST110_Axis.const110_10W.POS_MIN,
+                 rIN_PixMax          := 0,
+                 rIN_PixMin          := 0);
+
 fb_axis110_10W(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons := FALSE,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST110_10W]),
+               xIN_DisButtons := ,
                xIN_Quit       := xIN_Quit,
-               xIN_AX5000     := TRUE,
-               xIN_ENC_ABS    := TRUE,
                xIN_PARAMok    := TRUE,
-               xIN_FREE       := TRUE,
+               xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
                xIN_FREE_HOME  := TRUE,
                rIN_POSMIN     := ST110_Axis.const110_10W.POS_MIN,
                rIN_POSMAX     := ST110_Axis.const110_10W.POS_MAX,
                rIN_VELOMAX    := ST110_Axis.const110_10W.VELO_MAX,
                rIN_VELOMANU   := ST110_Axis.const110_10W.VELO_MANU,
                rIN_VELOOPEN   := ST110_Axis.const110_10W.VELO_MANU / 4,
-               rIN_JogInc     :=,
-               rIN_JogVelo    :=,
-               xIN_HomeExe    := ST110_Feeder_e.Init_home_table = iOUT_Step,
-               xIN_HomeCalib  :=,
+               rIN_JogInc     := AXIS.rTeachIncAxis,
                xIN_Execute    := ST110_Feeder_e.Init_set_table_pos = iOUT_Step OR
+                                 ST110_Feeder_e.Init_table_go_to_zero = iOUT_Step OR
+                                 ST110_Feeder_e.Init_simu_home_table = iOUT_Step OR
                                  ST110_Feeder_e.load_piece = iOUT_Step,
-               xIN_Relative     := ST110_Feeder_e.load_piece = iOUT_Step,
-               rIN_Position     := TO_REAL(iCurrentTableIndex * 120.0), // always move by 120°
+               xIN_Relative     := fb_axis110_10W.xIN_Execute,
+               xIN_STOP         := FALSE,
+               xIN_OFF          := FALSE,
+               rIN_Position     :=, // Is set above
                rIN_Velocity     := TO_REAL(360.0),
-               rIN_Acceleration := TO_REAL(3600.0),
-               rIN_Deceleration := TO_REAL(3600.0),
-               rIN_Jerk         := TO_REAL(360000.0),
-               xIN_Reset        := xIN_Reset OR (ST110_Feeder_e.RESET = iOUT_Step),
-               xOUT_ErrFlag     =>,
-               xOUT_READY       =>,
-               xOUT_DONE        =>,
-               bOUT_Error       =>,
-               rOUT_ActPos      =>,
-               axisIN_REF       := ST110_Axis.axis110_10W.axis);
+               rIN_Acceleration := TO_REAL(1440.0),
+               rIN_Deceleration := TO_REAL(1440.0),
+               rIN_Jerk         := TO_REAL(720000.0),
+               xIN_Home         := ST110_feeder_e.Init_home_table = iOUT_Step,
+               xIN_Reset        := xIN_Reset OR ST110_feeder_e.RESET = iOUT_Step,
+               // The simu fb gives us the hardware signal when we are not in simulation
+               wAxisState    := simu_axis110_10W.wOUT_AxisState,
+               bOUT_AxisCntr => ST110_Axis.axis110_10W.bCtrlHi,
+               rOUT_ActPos   =>, // leave empty, rActPos must be set using the modulo
+               axisIN_REF    := simu_axis110_10W.pOUT_axisRef^);
+
+ST110_Axis.axis110_10W.rActPos := LREAL_TO_REAL(simu_axis110_10W.pOUT_axisRef^.NcToPlc.ModuloActPos);
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -183,6 +247,18 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST110_Feeder_e.DONE);
 
+// TODO add simulation constant to prevent the output to be set
+IO_BOX.Q8000_ST110_freigabe_wf    := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q8003_ST110_forderband_ein :=
+    (enIN_State >= enState.StateLEER) AND
+    NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+// blow out
+
+IO_BOX.Q8005_ST110_blow_piece := fb_feeder.xOUT_EnableFeeder AND
+                                 tof_color_sensor.Q AND
+                                 NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)
@@ -202,8 +278,6 @@ END_IF
 
 (* START *)
 rtSTART(CLK := xIN_Start);
-rtPick(CLK := xIN_PickPiece);
-rtPutPiece(CLK := simu_feeder.xOUT_NewPiece);
 
 (*******************************************************************)
 (* Schrittkette  *)
@@ -223,16 +297,29 @@ ST110_Feeder_e.RESET: (* Schritt 0-99 *)
 
 (***** INIT *****)
 ST110_Feeder_e.INIT: (* Grundstellung ? *)
-    IF CONST.USE_SIMULATION THEN
-        iOUT_Step := ST110_Feeder_e.Init_reset_search_index;
-    ELSE
+    IF NOT xIN_RotTableBlockedByPnp THEN
         iOUT_Step := ST110_Feeder_e.Init_home_table;
-    END_IF;
+    END_IF
 
 ST110_Feeder_e.Init_home_table:
-    IF fb_axis110_10W.xOUT_DONE THEN
+    IF fb_axis110_10W.xOUT_HOMED THEN
         iCurrentTableIndex := 0;
-        iOUT_Step          := ST110_Feeder_e.Init_set_table_pos;
+
+        IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST110_Feeder_e.Init_simu_home_table;
+        ELSE
+            iOUT_Step := ST110_Feeder_e.Init_reset_search_index;
+        END_IF
+    END_IF
+
+ST110_Feeder_e.Init_simu_home_table:
+    IF fb_axis110_10W.xOUT_DONE THEN
+        iOUT_Step := ST110_Feeder_e.Init_reset_search_index;
+    END_IF
+
+ST110_Feeder_e.Init_table_go_to_zero:
+    IF fb_axis110_10W.xOUT_DONE THEN
+        iOUT_Step := ST110_Feeder_e.Init_reset_search_index;
     END_IF
 
 ST110_Feeder_e.Init_reset_search_index:
@@ -278,9 +365,10 @@ ST110_Feeder_e.check_if_feeding_necessary:
     END_IF
 
 ST110_Feeder_e.wait_on_a_piece:
-    IF NOT simu_fifo.IsEmpty() THEN
+    IF (FEEDER_SIMULATION AND CONST.USE_SIMULATION AND NOT simu_fifo_feeder_to_rotTable.IsEmpty()) OR
+       (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND IO_BOX.I6000_ST110_teil_in_vereinzelung) THEN
         iOUT_Step := ST110_Feeder_e.load_piece;
-        simu_fifo.Pop(1);
+        simu_fifo_feeder_to_rotTable.Pop(1);
     END_IF
 
 ST110_Feeder_e.load_piece:

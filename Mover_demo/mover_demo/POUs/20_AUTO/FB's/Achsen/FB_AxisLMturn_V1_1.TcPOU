@@ -19,7 +19,7 @@
 (*																			*)
 (* 	09.09.2019/Dj															*)
 (****************************************************************************)
-(*	31.03.2021/Dj	1.1 xIN_DisButtons: INPUT Disable Manu Buttons			*)
+(*	23.06.2021/Dj	1.1 xIN_DisButtons: INPUT Disable Manu Buttons			*)
 (****************************************************************************)
 VAR_INPUT
 	///Status Anlage/Zelle
@@ -62,7 +62,7 @@ VAR_INPUT
 	///Jerk
 	rIN_Jerk: REAL := 0;
 	///Positionen für Manuellfahrt
-	rIN_PosManu: REAL;
+	rIN_PosManu: REAL;		//not used
 	///Homing
 	xIN_Home: BOOL;
 	///Reset von Extern
@@ -180,67 +180,67 @@ END_VAR
 	
 
 //***************************** Buttons ************************************
-	//	Jog Mode OFF 
-	_FB_btOFF(pbtIN:= ADR(parIN_Buttons^[0]),
-	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
-	xINon:= (enIN_State=StateMANU) AND (bJogMode=0), 
-	xINerr:= FALSE);
-	//	Jog Mode INCH 
-	_FB_btINCH(pbtIN:= ADR(parIN_Buttons^[1]),
-	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
-	xINon:= (enIN_State=StateMANU) AND (bJogMode=1), 
-	xINerr:=  _MC_Jog.Error);
-	//	Jog Mode SLOW 
-	_FB_btSLOW(pbtIN:= ADR(parIN_Buttons^[2]),
-	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
-	xINon:= (enIN_State=StateMANU) AND (bJogMode=2), 
-	xINerr:=  _MC_Jog.Error);
-	//	Jog Mode FAST 
-	_FB_btFAST(pbtIN:= ADR(parIN_Buttons^[3]),
-	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
-	xINon:= (enIN_State=StateMANU) AND (bJogMode=3), 
-	xINerr:= _MC_Jog.Error);
-	//	Jog Mode MOVE 
-	_FB_btMOVE(pbtIN:= ADR(parIN_Buttons^[4]),
-	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
-	xINon:= (enIN_State=StateMANU) AND (bJogMode=4), 
-	xINerr:= _MC_MoveAbs.Error OR _MC_MoveRel.Error);
-	//	Jog NEGATIVE 
-	_FB_btJOGneg(pbtIN:= ADR(parIN_Buttons^[5]),
-	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
-	xINon:= (enIN_State=StateMANU) AND (bJogMode>0), 
-	xINerr:= FALSE);
-	//	Jog POSITIVE 
-	_FB_btJOGpos(pbtIN:= ADR(parIN_Buttons^[6]),
-	xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
-	xINon:= (enIN_State=StateMANU) AND (bJogMode>0), 
-	xINerr:= FALSE);	
-	//	Manuell HOMING 
-	_FB_btHOME(pbtIN:= ADR(parIN_Buttons^[7]),
-	xINdis:= (enIN_State<>StateMANU) or xIN_DisButtons, 
-	xINon:= xOUT_HOMED, 
-	xINerr:= FALSE);	
-	IF (enIN_State=StateMANU) THEN
-	//Mode
-			IF _FB_btOFF.pbtIN^.rtrig THEN
-				IF (bJogMode=0) THEN
-					bJogMode := 4;
-				ELSE
-					bJogMode := 0;
-				END_IF;
-				_MC_MoveAbs.Execute:= FALSE;
-				_MC_MoveRel.Execute:= FALSE;
-				_MC_Home.Execute:= FALSE;
-			ELSIF _FB_btINCH.pbtIN^.rtrig THEN
-				;//bJogMode := 1;
-			ELSIF _FB_btSLOW.pbtIN^.rtrig THEN
-				;//bJogMode := 2;
-			ELSIF _FB_btFAST.pbtIN^.rtrig THEN
-				;//bJogMode := 3;
-			ELSIF _FB_btMOVE.pbtIN^.rtrig THEN
-				;//bJogMode := 4;
-			END_IF
-	END_IF;
+		//	Jog Mode OFF 
+		_FB_btOFF(pbtIN:= ADR(parIN_Buttons^[0]),
+		xINdis:= (enIN_State<>StateMANU), 
+		xINon:= (enIN_State=StateMANU) AND (bJogMode=0), 
+		xINerr:= FALSE);
+		//	Jog Mode INCH 
+		_FB_btINCH(pbtIN:= ADR(parIN_Buttons^[1]),
+		xINdis:= (enIN_State<>StateMANU), 
+		xINon:= (enIN_State=StateMANU) AND (bJogMode=1), 
+		xINerr:=  _MC_Jog.Error);
+		//	Jog Mode SLOW 
+		_FB_btSLOW(pbtIN:= ADR(parIN_Buttons^[2]),
+		xINdis:= (enIN_State<>StateMANU), 
+		xINon:= (enIN_State=StateMANU) AND (bJogMode=2), 
+		xINerr:=  _MC_Jog.Error);
+		//	Jog Mode FAST 
+		_FB_btFAST(pbtIN:= ADR(parIN_Buttons^[3]),
+		xINdis:= (enIN_State<>StateMANU) OR xIN_DisButtons, 
+		xINon:= (enIN_State=StateMANU) AND (bJogMode=3), 
+		xINerr:= _MC_Jog.Error);
+		//	Jog Mode MOVE 
+		_FB_btMOVE(pbtIN:= ADR(parIN_Buttons^[4]),
+		xINdis:= (enIN_State<>StateMANU), 
+		xINon:= (enIN_State=StateMANU) AND (bJogMode=4), 
+		xINerr:= _MC_MoveAbs.Error OR _MC_MoveRel.Error);
+		//	Jog NEGATIVE 
+		_FB_btJOGneg(pbtIN:= ADR(parIN_Buttons^[5]),
+		xINdis:= (enIN_State<>StateMANU), 
+		xINon:= (enIN_State=StateMANU) AND (bJogMode>0), 
+		xINerr:= FALSE);
+		//	Jog POSITIVE 
+		_FB_btJOGpos(pbtIN:= ADR(parIN_Buttons^[6]),
+		xINdis:= (enIN_State<>StateMANU), 
+		xINon:= (enIN_State=StateMANU) AND (bJogMode>0), 
+		xINerr:= FALSE);	
+		//	Manuell HOMING 
+		_FB_btHOME(pbtIN:= ADR(parIN_Buttons^[7]),
+		xINdis:= (enIN_State<>StateMANU), 
+		xINon:= xOUT_HOMED, 
+		xINerr:= FALSE);	
+
+		//Mode
+				IF _FB_btOFF.pbtIN^.rtrig THEN
+					IF (bJogMode=0) THEN
+						bJogMode := 4;
+					ELSE
+						bJogMode := 0;
+					END_IF;
+					_MC_MoveAbs.Execute:= FALSE;
+					_MC_MoveRel.Execute:= FALSE;
+					_MC_Home.Execute:= FALSE;
+				ELSIF _FB_btINCH.pbtIN^.rtrig THEN
+					;//bJogMode := 1;
+				ELSIF _FB_btSLOW.pbtIN^.rtrig THEN
+					;//bJogMode := 2;
+				ELSIF _FB_btFAST.pbtIN^.rtrig THEN
+					;//bJogMode := 3;
+				ELSIF _FB_btMOVE.pbtIN^.rtrig THEN
+					;//bJogMode := 4;
+				END_IF
+
 						
 //***************************** Velocity / ACC-DEC-JERK *******************
 	(* Velocity *)
@@ -376,16 +376,21 @@ IF xOUT_HOMED THEN
 			_MC_MoveRel.Execute:= xIN_Relative AND xIN_Execute;
 		//MANUELL
 		ELSIF (enIN_State=StateMANU) THEN
-			_MC_MoveAbs.Position:= rIN_PosManu;
+			_MC_MoveAbs.Position:= rIN_Position;
 			//*********************************************
 			//Move
 			IF (bJogMode=4) THEN
+				(* allways relative
 				//Absolute
 				_MC_MoveAbs.Execute:= NOT xIN_Relative AND 
 					(_FB_btJOGneg.pbtIN^.press OR _FB_btJOGpos.pbtIN^.press);
 				//Relative
 				_MC_MoveRel.Execute:= xIN_Relative AND 
 					(_FB_btJOGneg.pbtIN^.press OR _FB_btJOGpos.pbtIN^.press);
+					*)
+					
+				//Relative
+				_MC_MoveRel.Execute:= (_FB_btJOGneg.pbtIN^.press OR _FB_btJOGpos.pbtIN^.press);
 			//*********************************************
 			//Jog
 			ELSIF (bJogMode>0) THEN

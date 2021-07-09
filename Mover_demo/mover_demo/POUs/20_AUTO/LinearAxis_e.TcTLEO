@@ -2,21 +2,36 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <EnumerationTextList Name="LinearAxis_e" Id="{de49f3bc-7d80-4b86-8b23-defa93556e22}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
-{attribute 'strict'}
 TYPE LinearAxis_e :
 (
+    ST105_11Z, //0
     ST110_01Y,
     ST110_02Z,
     ST110_03Z,
     ST110_04Z,
-    ST115_01Y,
+    ST115_01Y,	//5
     ST115_02Z,
     ST115_03Z,
     ST115_04Z,
     ST120_01Y,
-    ST120_02Z,
+    ST120_02Z,	//10
     ST125_01Y,
     ST125_02Z,
+	ST130_01Z,
+	ST130_10Z,
+	ST135_01Z,	//15
+	ST135_10Z,
+	ST145_01Y,
+	ST145_02Z,
+	ST160_01Z,
+	ST165_01Z,	//20
+	ST170_01Z,
+	ST180_01Y,
+	ST180_02Z,
+	ST180_10Z,
+	ST185_01Y,	//25
+	ST185_02Z,
+	ST185_10Z,
     _max
 );
 END_TYPE
@@ -25,6 +40,11 @@ END_TYPE
       <Data>
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
+            <o>
+              <v n="TextID">"ST105_11Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
             <o>
               <v n="TextID">"ST110_01Y"</v>
               <v n="TextDefault">""</v>
@@ -82,6 +102,81 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"ST125_02Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST130_01Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST130_10Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST135_01Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST135_10Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST145_01Y"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST145_02Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST160_01Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST165_01Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST170_01Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST180_01Y"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST180_02Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST180_10Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST185_01Y"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST185_02Z"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"ST185_10Z"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

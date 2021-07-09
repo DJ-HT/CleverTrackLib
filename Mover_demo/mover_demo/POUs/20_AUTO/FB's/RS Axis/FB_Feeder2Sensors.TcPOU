@@ -11,14 +11,17 @@
 //
 FUNCTION_BLOCK FB_Feeder2Sensors
 VAR_INPUT
-    xIN_Enable     : BOOL;
-    xIN_PieceInEnd : BOOL;
-    xIN_PieceMax   : BOOL; // TRUE when maximum is reached
+    xIN_Enable                : BOOL;
+    xIN_PieceInEnd            : BOOL;
+    xIN_PieceMax              : BOOL;                 // TRUE when maximum is reached
+    xIN_InSimulation          : BOOL;                 // Set to TRUE when simulation
+    refIN_SimulatedFifo       : REFERENCE TO FB_Fifo; // the reference to an FB_Fifo
+    iIN_FifoSetMaxSensorValue : INT;                  // when the simulated fifo is at this value or above, the signal xIN_PieceMax is set
 
     diIN_SignlFilter_ms : DINT; // Increase signal pulses by at least the given amount of time
     diIN_StartDelay_ms  : DINT; // How many ms do we need to wait before starting the feeder
     diIN_StopDelay_ms   : DINT; // If xIN_PieceMax and xIN_PieceInEnd are TRUE, the feeder continues for this amount before stopping
-    diIN_EmptyDelay     : DINT; // If xIN_PieceMax is False for this amount of time, the xOUT_Empty becomes TRUE
+    diIN_EmptyDelay_ms  : DINT; // If xIN_PieceMax is False for this amount of time, the xOUT_Empty becomes TRUE
 END_VAR
 VAR_OUTPUT
     xOUT_EnableFeeder : BOOL; // Connect this output to your feeder
@@ -29,12 +32,17 @@ VAR
     startTon  : TON;
     stopTof   : TOF;
     emptyTon  : TON;
-	
-	xRun : BOOL;
+
+    xRun : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[// If we are in simulation, the fifo input are overrided
+IF xIN_InSimulation THEN
+    xIN_PieceInEnd := NOT refIN_SimulatedFifo.IsEmpty();
+    xIN_PieceMax   := refIN_SimulatedFifo.GetLen() >= iIN_FifoSetMaxSensorValue;
+END_IF
+
 // update the filter TON
 filterTof(IN := NOT xIN_PieceInEnd OR NOT xIN_PieceMax, PT := TO_TIME(diIN_SignlFilter_ms));
 
@@ -48,7 +56,7 @@ startTon(IN := NOT xIN_Enable OR (xIN_Enable AND xRun),
 // If xIN_Enable is False, we set PT to 0 to disable the stopTof
 stopTof(IN := startTon.Q, PT := TO_TIME(diIN_StopDelay_ms * TO_DINT(xIN_Enable)));
 
-emptyTon(IN := NOT xIN_PieceMax, PT := TO_TIME(diIN_EmptyDelay));
+emptyTon(IN := NOT xIN_PieceMax, PT := TO_TIME(diIN_EmptyDelay_ms));
 
 xOUT_EnableFeeder := xIN_Enable AND stopTof.Q;
 xOUT_Empty        := emptyTon.Q;

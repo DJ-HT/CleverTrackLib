@@ -3,15 +3,15 @@
   <GVL Name="ST125_Axis" Id="{0add6b92-4a82-45cb-9a35-5248c598eca6}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL CONSTANT
-    const125_01Y : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 650, VELO_MAX := 2000, VELO_MANU := 100);
-    const125_02Z : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 650, VELO_MAX := 2000, VELO_MANU := 50);
+    const125_01Y : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 200, VELO_MAX := 2000, VELO_MANU := 100);
+    const125_02Z : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 200, VELO_MAX := 2000, VELO_MANU := 50);
     const125_10W : AxisLinMotConst_t := (POS_MIN := 0, POS_MAX := 360, VELO_MAX := 360, VELO_MANU := 50);
 
 END_VAR
 VAR_GLOBAL
     axis125_01Y : AxisLinMot_t;
-    axis125_02Z : AxisBeckhoff_t;
-    axis125_10W : AxisBeckhoff_t;
+    axis125_02Z : AxisLinMot_t;
+    axis125_10W : AxisLinMot_t;
 END_VAR
 VAR_GLOBAL RETAIN
     // Recipe values are managed elsewhere

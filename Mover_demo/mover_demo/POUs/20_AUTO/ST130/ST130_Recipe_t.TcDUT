@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST130_Recipe_t" Id="{41300b22-4f55-48a2-963a-64b2e064b0f7}">
+    <Declaration><![CDATA[TYPE ST130_Recipe_t :
+STRUCT
+    diLoadKammer_ms   : DINT; // waiting time until Kammer (chambre) is fully loaded
+    diLoadPatrone_ms  : DINT; // waiting time until Patrone (cartridge) is fully loaded
+    uiVibroUnderneath : UINT; // underneath vibro force expressed as a percentage
+    xUseVerLeft       : BOOL; // Is the left vertical picker element is used
+    xUseVerRight      : BOOL; // Is the right vertical picker element is used
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

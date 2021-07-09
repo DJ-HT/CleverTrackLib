@@ -50,6 +50,9 @@
     <Compile Include="DUTs\Helptec\Axis\typeOutputArea.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Helptec\Cylinder2Pos_config.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Helptec\enLamp.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -91,6 +94,7 @@
     </Compile>
     <Compile Include="GlobalTextList.TcGTLO">
       <SubType>Code</SubType>
+      <ExcludeFromBuild>true</ExcludeFromBuild>
     </Compile>
     <Compile Include="GVLs\AXIS.TcGVL">
       <SubType>Code</SubType>
@@ -107,6 +111,10 @@
     </Compile>
     <Compile Include="GVLs\IN.TcGVL">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\IO_BOX.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="GVLs\OUT.TcGVL">
       <SubType>Code</SubType>
@@ -154,10 +162,19 @@
     <Compile Include="POUs\10_HMI\_14_STATE.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\BuR_MoverAxis_Array_u.TcDUT">
+    <Compile Include="POUs\20_AUTO\Axis_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\BuR_MoverAxis_EtherCAT_st.TcDUT">
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_Status_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_Tc_To_BR_Command_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_Tc_to_BR_t.TcDUT">
@@ -166,10 +183,16 @@
     <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_Tc_to_BR_u.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_BR_to_TC_Status_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_BR_to_Tc_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_BR_to_Tc_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_Tc_to_BR_Command_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_Tc_to_BR_t.TcDUT">
@@ -181,6 +204,9 @@
     <Compile Include="POUs\20_AUTO\BuR SuperTrack com\gMoverAxis.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\FB_WandlerForceSensor.TcPOU">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\LinearAxis_e.TcTLEO">
       <SubType>Code</SubType>
@@ -331,6 +357,18 @@
     <Compile Include="POUs\20_AUTO\Simu\FB_Simu_Feeder.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\Simu\FB_Simu_Zyl2Pos.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\FB_ABL_LASER.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\FB_AUT_LASER.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\FB_AUT_100.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST100\F_GetPercent.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -373,7 +411,64 @@
     <Compile Include="POUs\20_AUTO\ST100\ST100_Modify_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST100\ST100_Laser_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST100\ST100_Unload_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_command_ext_to_robot_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_hw_command_to_robot_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_command_std_to_robot_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_status_std_from_robot.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\FB_ABL_105_Feeder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\FB_ABL_105_Pnp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\FB_AUT_105.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Axis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Fanuc_status_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\ST105_PnpVerPushPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Feeder_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Fanuc_command_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Pnp_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\VISU_Recipe_ST105.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\VISU_ST105.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\ST110_Cylinders_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST110\ST110_Feeder_e.TcDUT">
@@ -391,6 +486,9 @@
     <Compile Include="POUs\20_AUTO\ST110\ST110_Axis.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\ST110_PnpVerPushPos_e.TcDUT">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST110\ST110_Pnp_e.TcTLEO">
       <SubType>Code</SubType>
@@ -419,6 +517,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST115\FB_AUT_115.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST115\ST115_Cylinders_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST115\ST115_Recipe_t.TcDUT">
@@ -457,6 +558,9 @@
     <Compile Include="POUs\20_AUTO\ST120\FB_AUT_120.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST120\ST120_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST120\ST120_Axis.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -493,6 +597,9 @@
     <Compile Include="POUs\20_AUTO\ST125\FB_AUT_125.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST125\ST125_Axis.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -520,6 +627,201 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\FB_ABL_130_Dose.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\FB_AUT_130.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\ST130_Axis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\ST130_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\ST130_DosierkammerPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\ST130_PatroneAushebenPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\ST130_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\ST130_Dose_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\VISU_Recipe_ST130.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\VISU_ST130.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+      <ExcludeFromBuild>false</ExcludeFromBuild>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST140\FB_ABL_140_Measure.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST140\FB_AUT_140.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST140\ST140_Measure_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST140\ST140_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST140\VISU_Recipe_ST140.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST140\VISU_ST140.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\FB_ABL_145_Feeder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\FB_ABL_145_Pnp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\FB_AUT_145.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\ST145_Axis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\ST145_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\ST145_Feeder_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\ST145_PnpHorPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\ST145_PnpVerPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\ST145_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\ST145_Pnp_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\VISU_Recipe_ST145.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST145\VISU_ST145.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\FB_ABL_150.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\FB_AUT_150.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\FB_AUT_155.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\ST150_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\ST150_Uss_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\ST150_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\Ultrasonic_IN_bits_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\Ultrasonic_OUT_bits_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\VISU_Recipe_ST150.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST150\VISU_ST150.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\FB_AUT_175.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\FB_ABL_180_Pnp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\FB_AUT_180.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\ST180_Axis.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\ST180_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\ST180_PnpHorPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\ST180_PnpVerPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\ST180_Pnp_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\ST180_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\VISU_Recipe_ST180.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST180\VISU_ST180.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\FB_ABL_185_Pnp.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\FB_AUT_185.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_Axis.TcGVL">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_PnpHorPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_PnpVerPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_Pnp_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\ST185_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\VISU_Recipe_ST185.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST185\VISU_ST185.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\StationList_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\TOOL\ASSERT.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -544,10 +846,30 @@
     <Compile Include="POUs\20_AUTO\TOOL\SortBubbleLREAL.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\FB_Laser_ABL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\if_SingleCmds.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\if_TruMark.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\TruMarkLaserStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\TruMark_SingleCmds.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\Trumpf\TruMark_Ethercat.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\_20_AUTO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Task_fileMan.TcTTO">
+    <Compile Include="POUs\20_AUTO\_21_CopyDefaultRecipe.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Visualization Manager.TcVMO">
@@ -560,9 +882,18 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="VISUs\VISU_Cylinder2PosConfig.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="VISUs\VISU_AxisManual.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="VISUs\VISU_main.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+      <CompilerDefines>VISU_NO_EXCEPTION_HANDLING</CompilerDefines>
     </Compile>
     <Compile Include="VISU_TASK.TcTTO">
       <SubType>Code</SubType>
@@ -587,6 +918,15 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST140" />
+    <Folder Include="POUs\20_AUTO\ST105" />
+    <Folder Include="POUs\20_AUTO\ST185" />
+    <Folder Include="POUs\20_AUTO\ST130" />
+    <Folder Include="POUs\20_AUTO\ST150" />
+    <Folder Include="POUs\20_AUTO\ST175" />
+    <Folder Include="POUs\20_AUTO\Trumpf" />
+    <Folder Include="POUs\20_AUTO\ST180" />
+    <Folder Include="POUs\20_AUTO\ST145" />
     <Folder Include="POUs\20_AUTO\Simu" />
     <Folder Include="POUs\20_AUTO\ST125" />
     <Folder Include="POUs\20_AUTO\ST120" />
@@ -645,6 +985,10 @@
       <SystemLibrary>true</SystemLibrary>
       <ResolverGuid>2717eb6a-dd07-4c66-8d8d-cacebd7b18ae</ResolverGuid>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Math">
+      <DefaultResolution>Tc2_Math, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Math</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_MC2">
       <DefaultResolution>Tc2_MC2, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_MC2</Namespace>
@@ -660,6 +1004,10 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_JsonXml">
       <DefaultResolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</DefaultResolution>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="if_SingleCmds" Id="{7903fc58-5f6f-4532-91e4-082099b528bd}">
+    <Declaration><![CDATA[{attribute 'qualified_only' := ''}
+VAR_GLOBAL
+	// -----------------------------------------------
+	// Interface for SingleCmds
+	// -----------------------------------------------	
+	
+	// Input
+	// --------
+	iStepNr: INT;
+	bStart: BOOL;
+	sInputValue: STRING;
+	
+	// Output
+	// --------
+	bReady: BOOL;
+	bError: BOOL;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -25,9 +25,14 @@ VAR_OUTPUT
 END_VAR
 VAR
     (* Bausteine *)
-    fb_Pnp : FB_ABL_110_Pnp;
+    fb_Pnp    : FB_ABL_110_Pnp;
     fb_Feeder : FB_ABL_110_Feeder;
-	
+
+END_VAR
+
+VAR CONSTANT
+    ROT_TABLE_FREE_MAX_Y : REAL := 100.0; // If Y and Z axis is more than this value, the feeder cannot move
+    ROT_TABLE_FREE_MAX_Z : REAL := 50.0; // If Z and Y axis is more than this value, the feeder cannot move
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -53,8 +58,7 @@ xNextStep := (enIN_State > StateSTEP) OR
              ((enIN_State = StateMANU) AND xManuCycle);
 
 //RESET
-xReset := ((enIN_State < StateREADY) AND (enIN_State <> StateINIT)) OR
-          ((enIN_State = StateMANU) AND NOT xManuCycle);
+xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
 
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
@@ -68,7 +72,6 @@ fb_Pnp(xIN_Reset          := xReset,
        xIN_NextStep       := xNextStep,
        xIN_AlarmAktiv     := xIN_AlarmAktiv,
        xIN_DryCycle       := xIN_DryCycle,
-       xIN_Reset          := HMI.btArMain[7].on,
        xIN_RestartCYCL    := enIN_State = enState.StateAUTO, // only restart when the mover has move out
        enIN_State         := enIN_State,
        tIN_Timeout        := tIN_Timeout,
@@ -76,7 +79,7 @@ fb_Pnp(xIN_Reset          := xReset,
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := fb_Feeder.xOUT_Done);
 
-fb_Feeder(xIN_Reset       := xReset OR HMI.btArMain[7].on,
+fb_Feeder(xIN_Reset       := xReset,
           xIN_Init        := xIN_Init,
           xIN_Quit        := xIN_Quit,
           xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
@@ -88,7 +91,10 @@ fb_Feeder(xIN_Reset       := xReset OR HMI.btArMain[7].on,
           enIN_State      := enIN_State,
           tIN_Timeout     := tIN_Timeout,
           pxFG_Freigabe   := ADR(xDummy),
-          xIN_PickPiece   := fb_Pnp.xOUT_PickPiece);
+          // special
+          xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
+          xIN_RotTableBlockedByPnp := (ST110_Axis.axis110_01Y.rActPos > ROT_TABLE_FREE_MAX_Y) AND
+                                      (ST110_Axis.axis110_02Z.rActPos > ROT_TABLE_FREE_MAX_Z));
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -98,7 +104,7 @@ fb_Feeder(xIN_Reset       := xReset OR HMI.btArMain[7].on,
 (* OUTPUT *)
 (*******************************************************************)
 xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
-xOUT_Ready    := xOUT_InitDone;
+xOUT_Ready    := fb_Pnp.xOUT_Ready AND fb_Feeder.xOUT_Ready;
 xOUT_Done     := fb_Pnp.xOUT_Done;
 xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag;
 xOUT_Wait     := fb_Pnp.xOUT_Wait;
@@ -110,18 +116,6 @@ xOUT_AlarmST  := xOUT_ErrFlag;
 // POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
 ]]></ST>
     </Implementation>
-    <Method Name="GiveMover" Id="{90505fb1-9a4c-45d5-b06e-16a18772176e}">
-      <Declaration><![CDATA[METHOD GiveMover : IProcessSampleMover
-VAR_INPUT
-	mover : REFERENCE TO FB_Mover;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[IF __ISVALIDREF(mover) THEN
-    THIS^.Mover                       REF= mover;
-END_IF
-]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="iCompletionPC" Id="{f03aab34-0709-45b8-80fe-12aa7c735bba}">
       <Declaration><![CDATA[(* % of completion of the process *)
 PROPERTY iCompletionPC : INT
@@ -156,16 +150,6 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Method Name="TakeMover" Id="{d84cb916-2f66-4d9a-b351-183c45d9b25f}">
-      <Declaration><![CDATA[METHOD TakeMover : IProcessSampleMover
-VAR_INPUT
-END_VAR
-
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[THIS^.Mover REF= 0;]]></ST>
-      </Implementation>
-    </Method>
     <Property Name="xBusy" Id="{a5e462d0-5361-4950-a5f3-f24e71556501}">
       <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
       <Get Name="Get" Id="{3ea2fb3d-7ff1-4760-b35f-20e1f7d0a75a}">

@@ -13,17 +13,34 @@ VAR
     _Station      : REFERENCE TO FB_Station;       // current station
 
     _State : MoverState_e := MoverState_e.WaitOnNextStation; // current mover state
-	
-	_iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+
+    _ActualTargetOffset  : LREAL; // final offset to apply to the current/next target
+    _MovingProcessOffset : LREAL; // added offset by the process, 
+                                  // used to compute the new position of the shuttle inside the station
+
+    _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
 VAR CONSTANT
 END_VAR
 VAR_STAT
-	_iInstanceCounter : INT := 1; // instance counter
-END_VAR]]></Declaration>
+    _iInstanceCounter : INT := 1; // instance counter
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Property Name="ActualTargetOffset" Id="{766155b6-a03b-4774-953b-46f447da7c1e}">
+      <Declaration><![CDATA[// This is the final offset to apply when moving to a target
+PROPERTY PUBLIC ActualTargetOffset : LREAL]]></Declaration>
+      <Get Name="Get" Id="{85f65cbc-71ca-49e5-9af2-96f83b7fcf58}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ActualTargetOffset := THIS^._ActualTargetOffset;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="AttachedPieceHolder" Id="{1f1520b6-17b9-443d-9101-58c2158353cb}">
       <Declaration><![CDATA[PROPERTY AttachedPieceHolder : REFERENCE TO FB_PieceHolder]]></Declaration>
       <Get Name="Get" Id="{7bc424cc-e238-4415-b174-26b9a1b9bd88}">
@@ -106,10 +123,17 @@ END_VAR
       <Implementation>
         <ST><![CDATA[// we have to substract the piecholder offset to find the station position again
 IF CONST.BIND_WITH_TRACK THEN
-    IsInStationPos :=
-        THIS^.Station.Position.isInPos(gMoverAxis.I_BuR_MoverAxis.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
-                                       THIS^._AttachedTool.PosOffset -
-                                       THIS^.Station.Offset);
+    // IsInStationPos :=
+    //     THIS^.Station.Position.isInPos(gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
+    //                                    THIS^._AttachedTool.PosOffset -
+    //                                    THIS^.Station.Offset);
+    IF __ISVALIDREF(THIS^.Station) THEN
+        IsInStationPos :=
+            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.at_target AND
+            (gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bDestinationStation = THIS^.Station.SuperTrackNumber);
+    ELSE
+        IsInStationPos := FALSE;
+    END_IF
 ELSE
     IsInStationPos := THIS^.Station.Position
         .isInPos(THIS^.MoverAxis.CurrentPos - THIS^._AttachedTool.PosOffset - THIS^.Station.Offset);
@@ -136,6 +160,26 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
+    <Method Name="MoveRelativeInsideStation" Id="{e03e38bc-fe93-41b3-b2de-36cb4be61842}">
+      <Declaration><![CDATA[// When a mover is given to a process, this process is allowed to
+// use this command to move the shuttle
+METHOD PUBLIC MoveRelativeInsideStation : BOOL
+VAR_INPUT
+    offsetPosition : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MoveRelativeInsideStation := FALSE;
+
+IF (MoverState_e.InOperation = THIS^.State) AND
+   (ABS(offsetPosition + THIS^.Station.Offset + THIS^._MovingProcessOffset) < LREAL#500.0) THEN
+    THIS^.State                := MoverState_e.PerformRelativeMove;
+    THIS^._MovingProcessOffset := offsetPosition + THIS^._MovingProcessOffset;
+    MoveRelativeInsideStation  := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="MoveToStation" Id="{eca588ef-140f-424d-b8d0-9320c30f98a1}">
       <Declaration><![CDATA[// Move to the current set station. Can only move if the current process are running
 METHOD MoveToStation : REFERENCE TO FB_Mover
@@ -144,8 +188,14 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
-    THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
-    THIS^._State := MoverState_e.MovingToStation;
+    THIS^.MoverAxis
+        .MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
+
+    THIS^._MovingProcessOffset := 0;
+    THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset;
+    THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
+ELSE
+    ASSERT(0); // should not be called when we are in operation !
 END_IF
 
 MoveToStation REF= THIS^;
@@ -164,15 +214,29 @@ END_VAR
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
     IF THIS^.Station.WaitPos <= (THIS^.Station.Position.lrWorkPosition - CONST.MAX_MOVER_SIZE) THEN
         THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
+        THIS^._MovingProcessOffset := 0;
+        THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset + THIS^.Station._WaitPosOffset;
+        THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
     END_IF
+ELSE
+    ASSERT(0); // never use this command when we are in operation
 END_IF
-
-THIS^._State := MoverState_e.MovingToStation;
 
 MoveToWaitSpot REF= THIS^;
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="MovingProcessOffset" Id="{5efad44e-a624-4841-b07f-de69581e97e3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MovingProcessOffset : LREAL]]></Declaration>
+      <Get Name="Get" Id="{fe3c85cb-71f1-46e6-b2f6-c639c791b5e4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MovingProcessOffset := THIS^._MovingProcessOffset;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="SetPieceHolder" Id="{3656c226-034e-4545-af0f-2c2902573b50}">
       <Declaration><![CDATA[// Set a specic piece holder. This will affect the station position offset
 METHOD SetPieceHolder : REFERENCE TO FB_Mover
