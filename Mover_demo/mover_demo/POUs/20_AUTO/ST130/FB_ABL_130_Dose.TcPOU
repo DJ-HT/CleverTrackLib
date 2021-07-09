@@ -145,8 +145,8 @@ fb_simu_axis130_01Z(xIN_InSimu    := DOSE_SIMULATION AND CONST.USE_SIMULATION,
                     rIN_PixMin    := 0);
 
 fb_axis130_01Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st130_01Z,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST130_01Z]),
+               xIN_DisButtons   := FALSE,
                xIN_Quit         := xIN_Quit,
                xIN_AX5000       := FALSE,
                xIN_ENC_ABS      := TRUE,
@@ -194,8 +194,8 @@ fb_simu_axis130_10Z(xIN_Enable          := DOSE_SIMULATION AND CONST.USE_SIMULAT
                     rIN_PixMin          := 0);
 
 fb_axis130_10Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st130_10Z,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST130_10Z]),
+               xIN_DisButtons   := FALSE,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,

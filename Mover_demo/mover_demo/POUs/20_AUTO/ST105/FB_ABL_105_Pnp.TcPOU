@@ -132,8 +132,8 @@ fb_simu_axis105_11Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis105_11Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis),
-               xIN_DisButtons   := HMI.iSelectJogAxis <> Axis_e.st185_10Z,
+               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST105_11Z]),
+               xIN_DisButtons := FALSE,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,
