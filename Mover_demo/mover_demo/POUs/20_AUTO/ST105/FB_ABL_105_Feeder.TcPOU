@@ -191,7 +191,8 @@ fb_axis105_10W(enIN_State     := enIN_State,
                rIN_Acceleration := TO_REAL(1440.0),
                rIN_Deceleration := TO_REAL(1440.0),
                rIN_Jerk         := TO_REAL(720000.0),
-               rIN_PosManu      := AXIS.rTeachPos,
+               rIN_PosManu      := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST105_11Z]
+                   .movesList[AXIS.bTeachPos[Axis_e.ST105_11Z]].lrPosition,
                xIN_Home         := ST105_feeder_e.Init_home_table = iOUT_Step,
                xIN_Reset        := xIN_Reset OR ST105_feeder_e.RESET = iOUT_Step,
                // The simu fb gives us the hardware signal when we are not in simulation

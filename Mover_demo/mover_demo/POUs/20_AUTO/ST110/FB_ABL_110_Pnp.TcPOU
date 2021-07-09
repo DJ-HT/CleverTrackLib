@@ -141,7 +141,7 @@ fb_simu_axis110_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis110_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST110_01Y]),
-               xIN_DisButtons   := ,
+               xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -160,8 +160,9 @@ fb_axis110_01Y(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_01Y].movesList[AXIS.bTeachPos[Axis_e.ST110_01Y]].lrPosition),
-               xIN_Reset        := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_01Y]
+                                               .movesList[AXIS.bTeachPos[Axis_e.ST110_01Y]].lrPosition),
+               xIN_Reset := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                // the simu fb gives the hardware signal when not in simulation
                wAxisState    := fb_simu_axis110_01Y.wOUT_AxisState,
                rOUT_ActPos   => ST110_Axis.axis110_01Y.rActPos,
@@ -187,7 +188,7 @@ fb_simu_axis110_02Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
 
 fb_axis110_02Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST110_02Z]),
-               xIN_DisButtons := ,
+               xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_AX5000     := TRUE,
                xIN_ENC_ABS    := TRUE, // TODO set accordingly
@@ -214,8 +215,9 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_02Z].movesList[AXIS.bTeachPos[Axis_e.ST110_02Z]].lrPosition),
-               xIN_Reset        := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_02Z]
+                                               .movesList[AXIS.bTeachPos[Axis_e.ST110_02Z]].lrPosition),
+               xIN_Reset := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                // output
                rOUT_ActPos => ST110_Axis.axis110_02Z.rActPos,
                axisIN_REF  := fb_simu_axis110_02Z.pOUT_axisRef^);
@@ -239,7 +241,7 @@ fb_simu_axis110_03Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
 
 fb_axis110_03Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST110_03Z]),
-               xIN_DisButtons := ,
+               xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE, (*TODO*)
                xIN_FREE       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
@@ -261,13 +263,15 @@ fb_axis110_03Z(enIN_State     := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_03Z].movesList[AXIS.bTeachPos[Axis_e.ST110_03Z]].lrPosition),
-               xIN_Reset        := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-               axisIN_REF       := fb_simu_axis110_03Z.pOUT_axisRef^,
-               xIN_AX5000       := TRUE,
-               xIN_ENC_ABS      := TRUE,
-               rOUT_ActPos      => ST110_Axis.axis110_03Z.rActPos,
-               axisIN_REF       := fb_simu_axis110_03Z.pOUT_axisRef^);
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST110_03Z].movesList[AXIS.bTeachPos[Axis_e.ST110_03Z]].lrPosition),
+               xIN_Reset   := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               axisIN_REF  := fb_simu_axis110_03Z.pOUT_axisRef^,
+               xIN_AX5000  := TRUE,
+               xIN_ENC_ABS := TRUE,
+               rOUT_ActPos => ST110_Axis.axis110_03Z.rActPos,
+               axisIN_REF  := fb_simu_axis110_03Z.pOUT_axisRef^);
 
 fb_PnpVerAxisU(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_04Z],
                xIN_Init        := enState.StateINIT = enIN_State,
@@ -288,7 +292,7 @@ fb_simu_axis110_04Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
 
 fb_axis110_04Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST110_04Z]),
-               xIN_DisButtons   := ,
+               xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_AX5000       := TRUE,
                xIN_ENC_ABS      := TRUE,
@@ -311,10 +315,12 @@ fb_axis110_04Z(enIN_State       := enIN_State,
                rIN_Acceleration := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_04Z].movesList[AXIS.bTeachPos[Axis_e.ST110_04Z]].lrPosition),
-               xIN_Reset        := xIN_Reset,
-               rOUT_ActPos      => ST110_Axis.axis110_04Z.rActPos,
-               axisIN_REF       := fb_simu_axis110_04Z.pOUT_axisRef^);
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST110_04Z].movesList[AXIS.bTeachPos[Axis_e.ST110_04Z]].lrPosition),
+               xIN_Reset   := xIN_Reset,
+               rOUT_ActPos => ST110_Axis.axis110_04Z.rActPos,
+               axisIN_REF  := fb_simu_axis110_04Z.pOUT_axisRef^);
 
 // pneumatics
 
