@@ -61,6 +61,10 @@ END_VAR
     END_FOR
 END_FOR
 
+// ST105
+HMI.movesNames[LinearAxis_e.ST105_11Z][0] := TO_STRING("Ab");
+HMI.movesNames[LinearAxis_e.ST105_11Z][1] := TO_STRING("Auf");
+
 // ST110
 HMI.movesNames[LinearAxis_e.ST110_01Y][0] := TO_STRING("Zurück");
 HMI.movesNames[LinearAxis_e.ST110_01Y][1] := TO_STRING("Vor");
@@ -127,7 +131,7 @@ HMI.movesNames[LinearAxis_e.ST145_01Y][1] := TO_STRING("Vor");
 HMI.movesNames[LinearAxis_e.ST145_02Z][0] := TO_STRING("Auf Leer");
 HMI.movesNames[LinearAxis_e.ST145_02Z][1] := TO_STRING("Ab Leer");
 HMI.movesNames[LinearAxis_e.ST145_02Z][2] := TO_STRING("Auf Voll");
-HMI.movesNames[LinearAxis_e.ST145_02Z][3] := TO_STRING("Ab Voll Schnell");
+HMI.movesNames[LinearAxis_e.ST145_02Z][3] := TO_STRING("Ab Voll");
 
 // ST180
 HMI.movesNames[LinearAxis_e.ST180_01Y][0] := TO_STRING("Zurück");
@@ -141,7 +145,7 @@ HMI.movesNames[LinearAxis_e.ST180_02Z][3] := TO_STRING("Ab Voll");
 HMI.movesNames[LinearAxis_e.ST180_10Z][0] := TO_STRING("Auf");
 HMI.movesNames[LinearAxis_e.ST180_10Z][1] := TO_STRING("Ab");
 
-// ST180
+// ST185
 HMI.movesNames[LinearAxis_e.ST185_01Y][0] := TO_STRING("Zurück");
 HMI.movesNames[LinearAxis_e.ST185_01Y][1] := TO_STRING("Vor");
 
@@ -191,6 +195,9 @@ HMI.cylinderNames[StationList_e.ST130][8] := TO_STRING(ST130_Cylinders_e.Viebrie
 
 HMI.cylinderNames[StationList_e.ST145][0] := TO_STRING(ST145_Cylinders_e.VakuumgreiferLinks);
 HMI.cylinderNames[StationList_e.ST145][1] := TO_STRING(ST145_Cylinders_e.VakuumgreiferRechts);
+
+HMI.cylinderNames[StationList_e.ST150][0] := TO_STRING(ST150_Cylinders_e.Kraftbstutzung);
+HMI.cylinderNames[StationList_e.ST155][0] := TO_STRING(ST150_Cylinders_e.Kraftbstutzung);
 
 HMI.cylinderNames[StationList_e.ST180][0] := TO_STRING(ST180_Cylinders_e.Greifer_Patrone_Links);
 HMI.cylinderNames[StationList_e.ST180][1] := TO_STRING(ST180_Cylinders_e.Greifer_Patrone_Rechts);
