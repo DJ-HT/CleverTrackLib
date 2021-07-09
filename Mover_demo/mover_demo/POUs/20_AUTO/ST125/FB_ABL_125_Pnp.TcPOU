@@ -328,11 +328,12 @@ fb_gripperSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_St
                        xIN_GS       := simu_gripperSolerohrLeft.xOUT_inGS, // TODO use sensor
                        xIN_AS       := simu_gripperSolerohrLeft.xOUT_inAS, // TODO use sensor
                        xIN_FREE     := TRUE,
-                       xINtoGS      := ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step,
-                       xINtoAS      := _20_AUTO.recipe.st125.xUseVerLeft AND
-                                       (ST125_Pnp_e.Pnp_Ver_ShuttleDown = iOUT_Step OR
-                                       ST125_Pnp_e.Pnp_Ver_ShuttleTorqueControl = iOUT_Step) AND
-                                       fb_handlingSolerohrLeft.xOUT_inAS,
+                       xINtoGS      := (ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step) OR
+                                       (ST125_Pnp_e.Init_open_solenohr_gripper = iOUT_Step),
+                       xINtoAS := _20_AUTO.recipe.st125.xUseVerLeft AND
+                                  (ST125_Pnp_e.Pnp_Ver_ShuttleDown = iOUT_Step OR
+                                  ST125_Pnp_e.Pnp_Ver_ShuttleTorqueControl = iOUT_Step) AND
+                                  fb_handlingSolerohrLeft.xOUT_inAS,
                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                      [ST125_Cylinders_e.GreiferSolerohrLinks].toAS_alarm_time),
                        tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
@@ -356,11 +357,12 @@ fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         xIN_GS       := simu_gripperSolerohrRight.xOUT_inGS,
                         xIN_AS       := simu_gripperSolerohrRight.xOUT_inAS,
                         xIN_FREE     := TRUE,
-                        xINtoGS      := ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step,
-                        xINtoAS      := _20_AUTO.recipe.st125.xUseVerRight AND
-                                        (ST125_Pnp_e.Pnp_Ver_ShuttleDown = iOUT_Step OR
-                                        ST125_Pnp_e.Pnp_Ver_ShuttleTorqueControl = iOUT_Step) AND
-                                        fb_handlingSolerohrRight.xOUT_inAS,
+                        xINtoGS      := (ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step) OR
+                                        (ST125_Pnp_e.Init_open_solenohr_gripper = iOUT_Step),
+                        xINtoAS := _20_AUTO.recipe.st125.xUseVerRight AND
+                                   (ST125_Pnp_e.Pnp_Ver_ShuttleDown = iOUT_Step OR
+                                   ST125_Pnp_e.Pnp_Ver_ShuttleTorqueControl = iOUT_Step) AND
+                                   fb_handlingSolerohrRight.xOUT_inAS,
                         tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                       [ST125_Cylinders_e.GreiferSolerohrRechts].toAS_alarm_time),
                         tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
@@ -525,13 +527,18 @@ ST125_Pnp_e.Init_HomeHorizontals:
 
 ST125_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST125_PnpHorPos_e.GS).xOUT_InPos THEN
+        iOUT_Step := ST125_Pnp_e.Init_open_solenohr_gripper;
+    END_IF
+	
+ST125_Pnp_e.Init_open_solenohr_gripper:
+    IF fb_gripperSolerohrLeft.xOUT_inGS AND fb_gripperSolerohrRight.xOUT_inGS THEN
         iOUT_Step := ST125_Pnp_e.Init_handling_up;
     END_IF
 	
 ST125_Pnp_e.Init_handling_up:
-	IF fb_handlingSolerohrLeft.xOUT_inGS AND fb_handlingSolerohrRight.xOUT_inGS THEN
+    IF fb_handlingSolerohrLeft.xOUT_inGS AND fb_handlingSolerohrRight.xOUT_inGS THEN
         iOUT_Step := ST125_Pnp_e.Init_adjust_left_clamp;
-	END_IF
+    END_IF
 
 ST125_Pnp_e.Init_adjust_left_clamp:
     // a piece is in the griper when there is no GS signal
