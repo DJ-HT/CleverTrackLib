@@ -1,11 +1,11 @@
-﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/09/21 14:54:45
+﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/09/21 16:26:36
 #!-- Spider Control PPO CSV File version 5 since Jan 2016 utf8 support in editor and server and clients 
 #!-- Spider Control PPO CSV File version 6 since July2020 init ppo val col support in editor and server and clients 
 #!-- Start PPO INIT File
 #!-- VERSION = 6
 #!-- TYPE = 1
-#!-- TS = 60e84715
-#!-- N = 2818
+#!-- TS = 60e85c9c
+#!-- N = 2819
 EMPTY_VAR_NAME;EMPTY_VAR_NAME; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo105Z11@];PLC1.AXIS.bInPos[@CO_AxisNo105Z11@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Y01@];PLC1.AXIS.bInPos[@CO_AxisNo110Y01@]; ; ; ; ; ; ; ; ; ; ;
@@ -2824,5 +2824,6 @@ PLC1.if_TruMark.Status.b0_Laser_On;PLC1.if_TruMark.Status.b0_Laser_On; ; ; ; ; ;
 PLC1.if_TruMark.Status.b15_Mark_Active;PLC1.if_TruMark.Status.b15_Mark_Active; ; ; ; ; ; ; ; ; ; ;
 PLC1.if_TruMark.Status.b1_Laser_Ready;PLC1.if_TruMark.Status.b1_Laser_Ready; ; ; ; ; ; ; ; ; ; ;
 PLC1.if_TruMark.Status.b3_Shutter_Open;PLC1.if_TruMark.Status.b3_Shutter_Open; ; ; ; ; ; ; ; ; ; ;
+dropDown;dropDown; ; ; ; ; ; ; ; ; ; ;
 #!-- End PPO INIT File
 
