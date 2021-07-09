@@ -424,6 +424,8 @@ END_IF;
 		_MC_Reset.Execute := FALSE;
 		_MC_MoveAbs.Execute := FALSE;
 		_MC_MoveRel.Execute := FALSE;
+		_MC_Jog.JogForward := FALSE;
+		_MC_Jog.JogBackwards := FALSE;
 		IF _MC_Power.Active THEN
 			iStepAxisReset	:= 20;
 		END_IF;
