@@ -1,11 +1,11 @@
-﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/12/21 11:41:47
+﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/12/21 15:56:09
 #!-- Spider Control PPO CSV File version 5 since Jan 2016 utf8 support in editor and server and clients 
 #!-- Spider Control PPO CSV File version 6 since July2020 init ppo val col support in editor and server and clients 
 #!-- Start PPO INIT File
 #!-- VERSION = 6
 #!-- TYPE = 1
-#!-- TS = 60ec0e5b
-#!-- N = 2830
+#!-- TS = 60ec49f9
+#!-- N = 2824
 EMPTY_VAR_NAME;EMPTY_VAR_NAME; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo105Z11@];PLC1.AXIS.bInPos[@CO_AxisNo105Z11@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Y01@];PLC1.AXIS.bInPos[@CO_AxisNo110Y01@]; ; ; ; ; ; ; ; ; ; ;
@@ -933,8 +933,6 @@ PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gri
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st120_aut._Mover._ID;PLC1.GVL.st120_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
@@ -954,10 +952,6 @@ PLC1.GVL.st120_aut.fb_Pnp.fb_gripperRight.xIN_AS;PLC1.GVL.st120_aut.fb_Pnp.fb_gr
 PLC1.GVL.st120_aut.fb_Pnp.fb_gripperRight.xIN_GS;PLC1.GVL.st120_aut.fb_Pnp.fb_gripperRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut._Mover._ID;PLC1.GVL.st125_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Feeder.fb_axis125_10W.rOUT_ActPos;PLC1.GVL.st125_aut.fb_Feeder.fb_axis125_10W.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrLeft.xIN_AS;PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrRight.xIN_AS;PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrRight.xIN_GS;PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_axis125_01Y.rOUT_ActPos;PLC1.GVL.st125_aut.fb_Pnp.fb_axis125_01Y.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_axis125_02Z.rOUT_ActPos;PLC1.GVL.st125_aut.fb_Pnp.fb_axis125_02Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;

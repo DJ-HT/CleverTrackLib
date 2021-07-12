@@ -208,6 +208,12 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\Alarm\FB_ALARM.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\Alarm\FB_ALARM32.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\FB_WandlerForceSensor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -913,6 +919,7 @@
     <Folder Include="POUs\10_HMI\FB%27s" />
     <Folder Include="POUs\20_AUTO\FB%27s" />
     <Folder Include="POUs\20_AUTO\FB%27s\Achsen" />
+    <Folder Include="POUs\20_AUTO\FB%27s\Alarm" />
     <Folder Include="POUs\20_AUTO\FB%27s\Pneumatic" />
     <Folder Include="POUs\20_AUTO\FB%27s\RS Axis" />
     <Folder Include="POUs\20_AUTO\FB%27s\Vorlagen" />

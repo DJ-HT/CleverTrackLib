@@ -22,7 +22,15 @@ VAR_GLOBAL
     rTeachActPos  : REAL;                              // Achse AKTUELLE Position (AKTUEL
     rTeachPosMin  : REAL;                              // Achse PositionsminimumLER Position Wert)
     rTeachPosMax  : REAL;                              // Achse Positionsmaximum
-    rJogVelo_pc   : REAL := REAL#10.0;                 // global jog velocity in pc
+    rJogVelo_pc   : REAL                := REAL#10.0;  // global jog velocity in pc
+    arrJogValues  : ARRAY[0..7] OF REAL := [0.01,      // lookup table for jog % value
+                                            0.05,
+                                            0.1,
+                                            0.5,
+                                            1.0,
+                                            5.0,
+                                            10.0,
+                                            50.0];
 
     btTeachArAxis : ARRAY[0..Axis_e._max - 1] OF ARRAY[0..8] OF structButton; (* Buttons AXIS
                                                     0: Disable 

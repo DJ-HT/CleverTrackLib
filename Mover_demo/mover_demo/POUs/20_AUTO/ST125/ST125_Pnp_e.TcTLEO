@@ -35,10 +35,10 @@ TYPE ST125_Pnp_e :
     MOVER_NEEDED_OP, // Since here, a mover in position is needed to perform the action
 
     Pnp_HandlingDown,
-    Pnp_Ver_ShuttleDown,
-    Pnp_HandlingSolerohrMaintain,
-    Pnp_Ver_ShuttleTorqueControl,
-    Pnp_putTubeCap,
+    Pnp_Ver_ShuttleDown_and_closeTubeGriper,
+    Pnp_placeCap,
+    Pnp_Ver_pushCapTorqueControl,
+	PnP_Ver_quick_stop,
     Pnp_Ver_ShuttleUpToHandling,
     Pnp_HandlingSolerohrRelease,
     Pnp_Ver_ShuttleFullUp,
@@ -181,22 +181,22 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Pnp_Ver_ShuttleDown"</v>
+              <v n="TextID">"Pnp_Ver_ShuttleDown_and_closeTubeGriper"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Pnp_HandlingSolerohrMaintain"</v>
+              <v n="TextID">"Pnp_placeCap"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Pnp_Ver_ShuttleTorqueControl"</v>
+              <v n="TextID">"Pnp_Ver_pushCapTorqueControl"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Pnp_putTubeCap"</v>
+              <v n="TextID">"PnP_Ver_quick_stop"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

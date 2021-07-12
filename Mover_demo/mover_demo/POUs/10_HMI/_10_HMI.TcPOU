@@ -47,6 +47,8 @@ VAR
     //Divers
     idx        : INT; //Index
     _12_HMI_BT : FB_HMI_BT;
+	
+	iJogValueIndex : INT := 4; // index used to know current jog velocty from lookup table
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -67,35 +69,15 @@ _12_HMI_BT();
 _key_keba_1(s_in :=); // s_in is set by the keba panel 1 (ST105 - ST155)
 _key_keba_2(s_in :=); // s_in is set by the keba panel 1 (ST160 - ST185)
 
-IF (_key_keba_1.F12.press OR _key_keba_2.F12.press) AND (AXIS.rJogVelo_pc > REAL#0.01) AND NOT _key_press_tof.Q THEN
-    IF AXIS.rJogVelo_pc > REAL#10.0 THEN
-        AXIS.rJogVelo_pc := AXIS.rJogVelo_pc - REAL#10.0;
+IF (_key_keba_1.F12.press OR _key_keba_2.F12.press) AND (iJogValueIndex > 0) AND NOT _key_press_tof.Q THEN
+    iJogValueIndex := iJogValueIndex - 1;
 
-    ELSIF AXIS.rJogVelo_pc > REAL#1.0 THEN
-        AXIS.rJogVelo_pc := AXIS.rJogVelo_pc - REAL#1.0;
-
-    ELSIF AXIS.rJogVelo_pc > REAL#0.1 THEN
-        AXIS.rJogVelo_pc := AXIS.rJogVelo_pc - REAL#0.1;
-
-    ELSE
-        AXIS.rJogVelo_pc := AXIS.rJogVelo_pc - REAL#0.01;
-    END_IF
-
-ELSIF (_key_keba_1.F11.press OR _key_keba_2.F11.press) AND (AXIS.rJogVelo_pc < REAL#100.0) AND NOT _key_press_tof.Q
+ELSIF (_key_keba_1.F11.press OR _key_keba_2.F11.press) AND (iJogValueIndex < 7) AND NOT _key_press_tof.Q
     THEN
-    IF AXIS.rJogVelo_pc < REAL#0.1 THEN
-        AXIS.rJogVelo_pc := AXIS.rJogVelo_pc + REAL#0.01;
-
-    ELSIF AXIS.rJogVelo_pc < REAL#1.0 THEN
-        AXIS.rJogVelo_pc := AXIS.rJogVelo_pc + REAL#0.1;
-
-    ELSIF AXIS.rJogVelo_pc < REAL#10.0 THEN
-        AXIS.rJogVelo_pc := AXIS.rJogVelo_pc + REAL#1.0;
-
-    ELSE
-        AXIS.rJogVelo_pc := AXIS.rJogVelo_pc + REAL#10.0;
-    END_IF
+    iJogValueIndex := iJogValueIndex + 1;
 END_IF
+
+AXIS.rJogVelo_pc := AXIS.arrJogValues[iJogValueIndex];
 
 // this needs to be placed below the rJogVelo_pc management
 _key_press_tof(IN := (_key_keba_1.F11.press OR
@@ -103,7 +85,7 @@ _key_press_tof(IN := (_key_keba_1.F11.press OR
                      _key_keba_1.F12.press OR
                      _key_keba_2.F12.press) AND
                      NOT _key_press_tof.Q,
-               PT := DINT_TO_TIME(250 *
+               PT := DINT_TO_TIME(500 *
                                   TO_DINT(_key_keba_1.F11.press OR // set time to 0
                                           _key_keba_2.F11.press OR // when no key is
                                           _key_keba_1.F12.press OR // pressed
