@@ -79,6 +79,8 @@ VAR
     PickOffset_X_deci AT %Q* : UINT; // X offset of picking position
     PickOffset_Y_deci AT %Q* : UINT; // Y offset of picking position
     PickUpPos_Z_deci  AT %Q* : UINT; // Z traveling height from pick to place position
+	
+	Robot_in_place_pos : BOOL := FALSE;
 
 END_VAR
 VAR CONSTANT
@@ -286,7 +288,11 @@ ST105_Pnp_e.Init_RobotFallStartFlag:
 
 ST105_Pnp_e.Init_check_if_pces_handled:
     IF TRUE THEN
-        iOUT_Step := ST105_Pnp_e.READY;
+        IF Robot_in_place_pos THEN
+            iOUT_Step := ST105_Pnp_e.waitOnMover;
+        ELSE
+            iOUT_Step := ST105_Pnp_e.READY;
+        END_IF
     END_IF
 
 (***** READY / INIT DONE *****)
@@ -318,12 +324,13 @@ ST105_Pnp_e.push_up_casing:
     END_IF
 
 ST105_Pnp_e.Robot_Pick:
-    IF xIN_NextStep AND aut_status_from_robot.Picked THEN
+    IF aut_status_from_robot.Picked THEN
         iOUT_Step := ST105_Pnp_e.Robot_wait_picked_falling;
     END_IF
 
 ST105_Pnp_e.Robot_wait_picked_falling:
     IF xIN_NextStep AND NOT aut_status_from_robot.Picked THEN
+		Robot_in_place_pos := TRUE;
         iOUT_Step := ST105_Pnp_e.pusher_down;
     END_IF
 
@@ -342,12 +349,13 @@ ST105_Pnp_e.waitOnMover: (*  *)
     END_IF;
 
 ST105_Pnp_e.Robot_place:
-    IF xIN_NextStep AND aut_status_from_robot.Placed THEN
+    IF aut_status_from_robot.Placed THEN
         iOUT_Step := ST105_Pnp_e.Robot_wait_placed_falling;
     END_IF
 
 ST105_Pnp_e.Robot_wait_placed_falling:
     IF xIN_NextStep AND NOT aut_status_from_robot.Placed THEN
+		Robot_in_place_pos := FALSE;
         iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
     END_IF
 
