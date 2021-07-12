@@ -63,6 +63,8 @@ VAR_INPUT
 	rIN_Jerk: REAL := 0;
 	///Positionen für Manuellfahrt
 	rIN_PosManu: REAL;
+	///Speed in manual jog in %
+	rIN_VeloJogManu: REAL := REAL#10.0;
 	///Homing
 	xIN_Home: BOOL;
 	///Reset von Extern
@@ -157,6 +159,7 @@ VAR
 	///Timeout Move
 	TON_ToutMove: TON;
 END_VAR
+
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//***************************** MC FBs *************************************
@@ -174,8 +177,9 @@ END_VAR
 	_MC_MoveAbs( Axis:= axisIN_REF );
 	_MC_MoveRel( Axis:= axisIN_REF );
 
-	_MC_Jog (	Axis:= axisIN_REF );
-
+	_MC_Jog (	Axis:= axisIN_REF,
+				Velocity := (rIN_VeloJogManu * rIN_VELOMAX) / REAL#100.0);
+	
 	_MC_ReadStatus(	Enable:= TRUE ,
 					Axis:= axisIN_REF);
 
@@ -387,7 +391,7 @@ IF xOUT_HOMED THEN
 			//*********************************************
 			//Jog
 			ELSIF (bJogMode>0) THEN
-				_MC_Jog.Mode := MC_JOGMODE_STANDARD_SLOW;
+				_MC_Jog.Mode := MC_JOGMODE_CONTINOUS;
 				IF (bJogMode=1) THEN
 					_MC_Jog.Mode := MC_JOGMODE_INCHING;
 				ELSIF (bJogMode=3) THEN

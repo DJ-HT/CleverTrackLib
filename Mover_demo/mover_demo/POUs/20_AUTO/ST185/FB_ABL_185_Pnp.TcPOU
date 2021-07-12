@@ -159,8 +159,9 @@ fb_axis185_01Y(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST185_01Y]
                                                .movesList[AXIS.bTeachPos[Axis_e.ST185_01Y]].lrPosition),
-               xIN_Home         := ST185_Pnp_e.Init_HomeHorizontal = iOUT_Step,
-               xIN_Reset        := (ST185_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST185_Pnp_e.Init_HomeHorizontal = iOUT_Step,
+               xIN_Reset       := (ST185_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                // The simu fb gives the hardware state when we are not in simu
                wAxisState    := fb_simu_axis185_01Y.wOUT_AxisState,
                bOUT_AxisCntr => st185_axis.axis185_01Y.bCtrlHi,
@@ -211,12 +212,13 @@ fb_axis185_02Z(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis_02.OUT_MoveProfile.lrJerk),
                rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST185_02Z]
                                                .movesList[AXIS.bTeachPos[Axis_e.ST185_02Z]].lrPosition),
-               xIN_Home      := ST185_Pnp_e.Init_HomeVertical_02 = iOUT_Step,
-               xIN_Reset     := (ST185_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-               wAxisState    := fb_simu_axis185_02Z.wOUT_AxisState,
-               bOUT_AxisCntr => ST185_Axis.axis185_02Z.bCtrlHi,
-               rOUT_ActPos   => ST185_Axis.axis185_02Z.rActPos,
-               axisIN_REF    := fb_simu_axis185_02Z.pOUT_axisRef^);
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST185_Pnp_e.Init_HomeVertical_02 = iOUT_Step,
+               xIN_Reset       := (ST185_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState      := fb_simu_axis185_02Z.wOUT_AxisState,
+               bOUT_AxisCntr   => ST185_Axis.axis185_02Z.bCtrlHi,
+               rOUT_ActPos     => ST185_Axis.axis185_02Z.rActPos,
+               axisIN_REF      := fb_simu_axis185_02Z.pOUT_axisRef^);
 
 fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST185_10Z],
                  xIN_Init        := enIN_State = enState.StateINIT,
@@ -262,12 +264,13 @@ fb_axis185_10Z(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis_10.OUT_MoveProfile.lrJerk),
                rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST185_10Z]
                                                .movesList[AXIS.bTeachPos[Axis_e.ST185_10Z]].lrPosition),
-               xIN_Home      := ST185_Pnp_e.Init_HomeVertical_10 = iOUT_Step,
-               xIN_Reset     := (ST185_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-               wAxisState    := fb_simu_axis185_10Z.wOUT_AxisState,
-               bOUT_AxisCntr => ST185_Axis.axis185_10Z.bCtrlHi,
-               rOUT_ActPos   => ST185_Axis.axis185_10Z.rActPos,
-               axisIN_REF    := fb_simu_axis185_10Z.pOUT_axisRef^);
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST185_Pnp_e.Init_HomeVertical_10 = iOUT_Step,
+               xIN_Reset       := (ST185_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState      := fb_simu_axis185_10Z.wOUT_AxisState,
+               bOUT_AxisCntr   => ST185_Axis.axis185_10Z.bCtrlHi,
+               rOUT_ActPos     => ST185_Axis.axis185_10Z.rActPos,
+               axisIN_REF      := fb_simu_axis185_10Z.pOUT_axisRef^);
 
 //////////////////////////////////
 fb_griperLeft(xIN_Reset    := xIN_Reset OR (ST185_Pnp_e.RESET = iOUT_Step),

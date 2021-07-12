@@ -13,17 +13,18 @@ VAR_GLOBAL
     (* ACHSEN Variablen *)
     (*******************************************************************)
     //Axis Allgemein Teachen und Anzeige
-    bTeachAxisNr  : BYTE; // Zu Teachende Achse # (von HMI)
-    bTeachInPos   : BYTE; // Achse in Position (Teachpos (99= nicht in Pos))
-    bTeachPos     : ARRAY [0..Axis_e._max-1] OF BYTE; // Achse Teach Position (Anzufahrende Position #)
-    rTeachIncAxis : REAL := 0.1; // Axis Inching Wert
-    rTeachVelo    : REAL := 10; // Achse Geschwindigkeit (Anzeige)
-    rTeachPos     : REAL; // Achse Teach Position (Anzufahrende Position Wert)
-    rTeachActPos  : REAL; // Achse AKTUELLE Position (AKTUEL
-    rTeachPosMin  : REAL; // Achse PositionsminimumLER Position Wert)
-    rTeachPosMax  : REAL; // Achse Positionsmaximum
+    bTeachAxisNr  : BYTE;                              // Zu Teachende Achse # (von HMI)
+    bTeachInPos   : BYTE;                              // Achse in Position (Teachpos (99= nicht in Pos))
+    bTeachPos     : ARRAY[0..Axis_e._max - 1] OF BYTE; // Achse Teach Position (Anzufahrende Position #)
+    rTeachIncAxis : REAL := 0.1;                       // Axis Inching Wert
+    rTeachVelo    : REAL := 10;                        // Achse Geschwindigkeit (Anzeige)
+    rTeachPos     : REAL;                              // Achse Teach Position (Anzufahrende Position Wert)
+    rTeachActPos  : REAL;                              // Achse AKTUELLE Position (AKTUEL
+    rTeachPosMin  : REAL;                              // Achse PositionsminimumLER Position Wert)
+    rTeachPosMax  : REAL;                              // Achse Positionsmaximum
+    rJogVelo_pc   : REAL := REAL#10.0;                 // global jog velocity in pc
 
-    btTeachArAxis : ARRAY [0..Axis_e._max-1] OF ARRAY[0..8] OF structButton; (* Buttons AXIS
+    btTeachArAxis : ARRAY[0..Axis_e._max - 1] OF ARRAY[0..8] OF structButton; (* Buttons AXIS
                                                     0: Disable 
                                                     1: Inching 
                                                     2: Slow 

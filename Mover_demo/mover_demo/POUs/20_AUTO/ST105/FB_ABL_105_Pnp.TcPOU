@@ -132,8 +132,8 @@ fb_simu_axis105_11Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis105_11Z(enIN_State       := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST105_11Z]),
-               xIN_DisButtons := FALSE,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST105_11Z]),
+               xIN_DisButtons   := FALSE,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,
@@ -155,12 +155,13 @@ fb_axis105_11Z(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrJerk),
                rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST105_11Z]
                                                .movesList[AXIS.bTeachPos[Axis_e.ST105_11Z]].lrPosition),
-               xIN_Home         := ST105_Pnp_e.Init_HomeVertical = iOUT_Step,
-               xIN_Reset        := (ST105_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-               wAxisState       := fb_simu_axis105_11Z.wOUT_AxisState,
-               bOUT_AxisCntr    => ST105_Axis.axis105_11Z.bCtrlHi,
-               rOUT_ActPos      => ST105_Axis.axis105_11Z.rActPos,
-               axisIN_REF       := fb_simu_axis105_11Z.pOUT_axisRef^);
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST105_Pnp_e.Init_HomeVertical = iOUT_Step,
+               xIN_Reset       := (ST105_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState      := fb_simu_axis105_11Z.wOUT_AxisState,
+               bOUT_AxisCntr   => ST105_Axis.axis105_11Z.bCtrlHi,
+               rOUT_ActPos     => ST105_Axis.axis105_11Z.rActPos,
+               axisIN_REF      := fb_simu_axis105_11Z.pOUT_axisRef^);
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -308,9 +309,9 @@ ST105_Pnp_e.wait_on_feeder:
 ST105_Pnp_e.push_up_casing:
     IF xIN_NextStep AND fb_PnpVerAxisU.MoveTo(ST105_PnpVerPushPos_e.up).xOUT_InPos THEN
         IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
-			IF fb_axis105_11Z.xOUT_DONE THEN // needed beacause we perform 2 movements one after the other
-            	iOUT_Step := ST105_Pnp_e.pusher_down;
-			END_IF
+            IF fb_axis105_11Z.xOUT_DONE THEN // needed beacause we perform 2 movements one after the other
+                iOUT_Step := ST105_Pnp_e.pusher_down;
+            END_IF
         ELSE
             iOUT_Step := ST105_Pnp_e.Robot_Pick;
         END_IF

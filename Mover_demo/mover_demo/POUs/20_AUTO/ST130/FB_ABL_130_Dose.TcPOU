@@ -92,7 +92,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    DOSE_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    DOSE_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -144,24 +144,24 @@ fb_simu_axis130_01Z(xIN_InSimu    := DOSE_SIMULATION AND CONST.USE_SIMULATION,
                     rIN_PixMax    := 60,
                     rIN_PixMin    := 0);
 
-fb_axis130_01Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST130_01Z]),
-               xIN_DisButtons   := FALSE,
-               xIN_Quit         := xIN_Quit,
-               xIN_AX5000       := FALSE,
-               xIN_ENC_ABS      := TRUE,
-               xIN_PARAMok      := TRUE,
-               xIN_FREE         := TRUE,
-               xIN_FREE_HOME    := TRUE,
-               rIN_POSMIN       := ST130_Axis.const130_01Z.POS_MIN,
-               rIN_POSMAX       := ST130_Axis.const130_01Z.POS_MAX,
-               rIN_VELOMAX      := ST130_Axis.const130_01Z.VELO_MAX,
-               rIN_VELOMANU     := ST130_Axis.const130_01Z.VELO_MANU,
-               rIN_VELOOPEN     := ST130_Axis.const130_01Z.VELO_MANU / 4,
-               rIN_JogInc       := AXIS.rTeachIncAxis,
-               rIN_JogVelo      := AXIS.rTeachVelo,
-               rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_01Z]
-                                               .movesList[AXIS.bTeachPos[Axis_e.ST130_01Z]].lrPosition),
+fb_axis130_01Z(enIN_State      := enIN_State,
+               parIN_Buttons   := ADR(AXIS.btTeachArAxis[Axis_e.ST130_01Z]),
+               xIN_DisButtons  := FALSE,
+               xIN_Quit        := xIN_Quit,
+               xIN_AX5000      := FALSE,
+               xIN_ENC_ABS     := TRUE,
+               xIN_PARAMok     := TRUE,
+               xIN_FREE        := TRUE,
+               xIN_FREE_HOME   := TRUE,
+               rIN_POSMIN      := ST130_Axis.const130_01Z.POS_MIN,
+               rIN_POSMAX      := ST130_Axis.const130_01Z.POS_MAX,
+               rIN_VELOMAX     := ST130_Axis.const130_01Z.VELO_MAX,
+               rIN_VELOMANU    := ST130_Axis.const130_01Z.VELO_MANU,
+               rIN_VELOOPEN    := ST130_Axis.const130_01Z.VELO_MANU / 4,
+               rIN_JogInc      := AXIS.rTeachIncAxis,
+               rIN_VeloJogManu := TO_REAL(AXIS.rJogVelo_pc),
+               rIN_PosManu     := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_01Z]
+                                              .movesList[AXIS.bTeachPos[Axis_e.ST130_01Z]].lrPosition),
                xIN_HomeExe      := FALSE,
                xIN_HomeCalib    := FALSE,
                xIN_Execute      := fb_VerAxis_01.xOUT_Execute,
@@ -219,12 +219,13 @@ fb_axis130_10Z(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_VerAxis_10.OUT_MoveProfile.lrJerk),
                rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_10Z]
                                                .movesList[AXIS.bTeachPos[Axis_e.ST130_10Z]].lrPosition),
-               xIN_Home         := ST130_Dose_e.Init_HomeVertical_10 = iOUT_Step,
-               xIN_Reset        := (ST130_Dose_e.RESET = iOUT_Step) OR xIN_Reset,
-               wAxisState       := fb_simu_axis130_10Z.wOUT_AxisState,
-               bOUT_AxisCntr    => ST130_Axis.axis130_10Z.bCtrlHi,
-               rOUT_ActPos      => ST130_Axis.axis130_10Z.rActPos,
-               axisIN_REF       := fb_simu_axis130_10Z.pOUT_axisRef^);
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST130_Dose_e.Init_HomeVertical_10 = iOUT_Step,
+               xIN_Reset       := (ST130_Dose_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState      := fb_simu_axis130_10Z.wOUT_AxisState,
+               bOUT_AxisCntr   => ST130_Axis.axis130_10Z.bCtrlHi,
+               rOUT_ActPos     => ST130_Axis.axis130_10Z.rActPos,
+               axisIN_REF      := fb_simu_axis130_10Z.pOUT_axisRef^);
 
 //////////////////////////////////
 fb_Kammer_Offnen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iOUT_Step),
@@ -454,25 +455,32 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST130_Dose_e.DONE);
 
 IO_BOX.Q0100_14_ST130_kammer_offnen_links :=
-    fb_Kammer_Offnen_Links.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Kammer_Offnen_Links.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0101_14_ST130_kammer_offnen_rechts :=
-    fb_Kammer_Offnen_Rechts.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Kammer_Offnen_Rechts.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0102_14_ST130_kammer_nachfullen_links :=
-    fb_Kammer_nachfullen_Links.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Kammer_nachfullen_Links.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0103_14_ST130_kammer_nachfullen_rechts :=
-    fb_Kammer_nachfullen_Rechts.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Kammer_nachfullen_Rechts.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0104_14_ST130_vibrieren_kammer_links :=
-    fb_viebrieren_kammer_links.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_viebrieren_kammer_links.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0104_12_ST130_vibrieren_kammer_rechts :=
-    fb_viebrieren_kammer_rechts.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_viebrieren_kammer_rechts.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0105_14_ST130_niederhalter_patrone :=
-    fb_Niederhalter_Patrone.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Niederhalter_Patrone.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 _20_AUTO.recipe.st130.uiVibroUnderneath := LIMIT(UINT#0, _20_AUTO.recipe.st130.uiVibroUnderneath, UINT#100);
 

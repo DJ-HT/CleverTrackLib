@@ -1,11 +1,11 @@
-﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/09/21 17:28:17
+﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/12/21 11:41:47
 #!-- Spider Control PPO CSV File version 5 since Jan 2016 utf8 support in editor and server and clients 
 #!-- Spider Control PPO CSV File version 6 since July2020 init ppo val col support in editor and server and clients 
 #!-- Start PPO INIT File
 #!-- VERSION = 6
 #!-- TYPE = 1
-#!-- TS = 60e86b11
-#!-- N = 2819
+#!-- TS = 60ec0e5b
+#!-- N = 2830
 EMPTY_VAR_NAME;EMPTY_VAR_NAME; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo105Z11@];PLC1.AXIS.bInPos[@CO_AxisNo105Z11@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Y01@];PLC1.AXIS.bInPos[@CO_AxisNo110Y01@]; ; ; ; ; ; ; ; ; ; ;
@@ -911,6 +911,7 @@ PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].button;PLC1.AXIS.btTeachArAxis[@CO
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].disable; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].error; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.rJogVelo_pc;PLC1.AXIS.rJogVelo_pc; ; ;float; ; ; ; ; ; ; ;
 PLC1.GVL.st105_aut._Mover._ID;PLC1.GVL.st105_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st105_aut.fb_Feeder.fb_axis105_10W.rOUT_ActPos;PLC1.GVL.st105_aut.fb_Feeder.fb_axis105_10W.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st105_aut.fb_Pnp.fb_axis105_11Z.rOUT_ActPos;PLC1.GVL.st105_aut.fb_Pnp.fb_axis105_11Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
@@ -963,6 +964,14 @@ PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_AS;PLC1.GVL.st125_aut.fb_P
 PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutRight.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutRight.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut._Mover._ID;PLC1.GVL.st130_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut.fb_Dose.fb_axis130_01Z.rOUT_ActPos;PLC1.GVL.st130_aut.fb_Dose.fb_axis130_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut.fb_Dose.fb_axis130_10Z.rOUT_ActPos;PLC1.GVL.st130_aut.fb_Dose.fb_axis130_10Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
@@ -2661,6 +2670,8 @@ PLC1.PERS.udiTempNOK;PLC1.PERS.udiTempNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTempOK;PLC1.PERS.udiTempOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalNOK;PLC1.PERS.udiTotalNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalOK;PLC1.PERS.udiTotalOK; ; ; ; ; ; ; ; ; ; ;
+PLC1._10_HMI._key_keba_1.s_in;PLC1._10_HMI._key_keba_1.s_in; ; ;string; ; ; ; ; ; ; ;
+PLC1._10_HMI._key_keba_2.s_in;PLC1._10_HMI._key_keba_2.s_in; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo110@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo110@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
