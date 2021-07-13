@@ -297,7 +297,7 @@ ST105_Feeder_e.Init_table_go_to_zero:
 ST105_Feeder_e.Init_reset_search_index:
     iSearchIndex := 0;
     fifo.Empty();
-    iOUT_Step := ST105_Feeder_e.Init_set_table_pos;
+    iOUT_Step := ST105_Feeder_e.READY; // bypass unusefull search cycle
 
 ST105_Feeder_e.Init_set_table_pos:
     IF fb_axis105_10W.xOUT_DONE THEN

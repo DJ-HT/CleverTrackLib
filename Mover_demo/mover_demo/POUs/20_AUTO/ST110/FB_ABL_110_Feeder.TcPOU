@@ -325,7 +325,7 @@ ST110_Feeder_e.Init_table_go_to_zero:
 ST110_Feeder_e.Init_reset_search_index:
     iSearchIndex := 0;
     fifo.Empty();
-    iOUT_Step := ST110_Feeder_e.Init_set_table_pos;
+    iOUT_Step := ST110_Feeder_e.READY; // Bypass search algorithm, unusful
 
 ST110_Feeder_e.Init_set_table_pos:
     IF fb_axis110_10W.xOUT_DONE THEN
