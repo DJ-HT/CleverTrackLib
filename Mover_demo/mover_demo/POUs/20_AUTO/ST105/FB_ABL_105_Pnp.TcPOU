@@ -330,8 +330,8 @@ ST105_Pnp_e.Robot_Pick:
 
 ST105_Pnp_e.Robot_wait_picked_falling:
     IF xIN_NextStep AND NOT aut_status_from_robot.Picked THEN
-		Robot_in_place_pos := TRUE;
-        iOUT_Step := ST105_Pnp_e.pusher_down;
+        Robot_in_place_pos := TRUE;
+        iOUT_Step          := ST105_Pnp_e.pusher_down;
     END_IF
 
 ST105_Pnp_e.pusher_down:
@@ -351,12 +351,24 @@ ST105_Pnp_e.waitOnMover: (*  *)
 ST105_Pnp_e.Robot_place:
     IF aut_status_from_robot.Placed THEN
         iOUT_Step := ST105_Pnp_e.Robot_wait_placed_falling;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(-105) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF
 
 ST105_Pnp_e.Robot_wait_placed_falling:
     IF xIN_NextStep AND NOT aut_status_from_robot.Placed THEN
-		Robot_in_place_pos := FALSE;
-        iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+        Robot_in_place_pos := FALSE;
+        iOUT_Step          := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(105) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF
 
 ST105_Pnp_e.SYNC_MOVER_LEAVE:

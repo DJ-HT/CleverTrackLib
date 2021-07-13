@@ -24,6 +24,7 @@ ST140_Measure_e :
 	Measure_left_3,
 	Move_shuttle_to_pos_4,
 	Measure_left_4,
+    Save_result_in_mover,
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
     MOVER_FREE_OP,    // here, operation without mover can be done.
@@ -105,6 +106,11 @@ check level NIO Box
             </o>
             <o>
               <v n="TextID">"Measure_left_4"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Save_result_in_mover"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

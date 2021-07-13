@@ -675,6 +675,11 @@ ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper:
        (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inAS) THEN
         iOUT_Step := ST125_Pnp_e.Pnp_placeCap;
+		IF __ISVALIDREF(Mover) THEN
+			IF NOT Mover.SetLastStation(-125) THEN
+				ASSERT(0);
+			END_IF
+		END_IF
     END_IF;
 
 ST125_Pnp_e.Pnp_placeCap:
@@ -721,6 +726,11 @@ ST125_Pnp_e.Pnp_HandlingUp:
        (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_handlingSolerohrLeft.xOUT_inGS) AND
        (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_handlingSolerohrRight.xOUT_inGS) THEN
         iOUT_Step := ST125_Pnp_e.SYNC_MOVER_LEAVE;
+		IF __ISVALIDREF(Mover) THEN
+			IF NOT Mover.SetLastStation(125) THEN
+				ASSERT(0);
+			END_IF
+		END_IF
     END_IF;
 
 ST125_Pnp_e.SYNC_MOVER_LEAVE:

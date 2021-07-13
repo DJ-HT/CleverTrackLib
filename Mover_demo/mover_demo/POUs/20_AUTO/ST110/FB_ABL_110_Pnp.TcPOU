@@ -596,6 +596,11 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
        NOT _20_AUTO.recipe.st110.xUseVerRight) AND
        fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+		IF __ISVALIDREF(Mover) THEN
+			IF NOT Mover.SetLastStation(-110) THEN
+				ASSERT(0);
+			END_IF
+		END_IF
     END_IF;
 
 // We need a fb that enables for us torque control. Here we just go a bit further
@@ -634,6 +639,11 @@ ST110_Pnp_e.PnP_Ver_ShuttleUp:
        NOT _20_AUTO.recipe.st110.xUseVerRight) AND
        fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
+		IF __ISVALIDREF(Mover) THEN
+			IF NOT Mover.SetLastStation(110) THEN
+				ASSERT(0);
+			END_IF
+		END_IF
     END_IF;
 
 ST110_Pnp_e.SYNC_MOVER_LEAVE:

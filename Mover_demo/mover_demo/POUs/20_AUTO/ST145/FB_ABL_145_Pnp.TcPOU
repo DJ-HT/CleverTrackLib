@@ -483,6 +483,12 @@ ST145_Pnp_e.waitOnMover: (*  *)
 ST145_Pnp_e.Pnp_Ver_ShuttleDown:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.DownFullQuick).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.Vacum_off;
+		
+		IF __ISVALIDREF(Mover) THEN
+			IF NOT Mover.SetLastStation(-145) THEN
+				ASSERT(0);
+			END_IF
+		END_IF
     END_IF;
 
 // not used here, maybe later
@@ -500,6 +506,12 @@ ST145_Pnp_e.Vacum_off:
 ST145_Pnp_e.PnP_Ver_ShuttleUp:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.SYNC_MOVER_LEAVE;
+		
+		IF __ISVALIDREF(Mover) THEN
+			IF NOT Mover.SetLastStation(145) THEN
+				ASSERT(0);
+			END_IF
+		END_IF
     END_IF;
 
 ST145_Pnp_e.SYNC_MOVER_LEAVE:

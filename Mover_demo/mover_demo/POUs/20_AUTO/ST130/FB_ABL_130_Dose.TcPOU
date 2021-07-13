@@ -640,6 +640,11 @@ ST130_Dose_e.open_down_feeder:
        (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_Offnen_Links.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_Offnen_Rechts.xOUT_inAS) THEN
         iOUT_Step := ST130_Dose_e.load_powder_and_vibrate;
+		IF __ISVALIDREF(Mover) THEN
+			IF NOT Mover.SetLastStation(-130) THEN
+				ASSERT(0);
+			END_IF
+		END_IF
     END_IF
 
 ST130_Dose_e.load_powder_and_vibrate:
@@ -674,6 +679,11 @@ ST130_Dose_e.clamp_down:
 ST130_Dose_e.clamp_up:
     IF xIN_NextStep AND fb_Niederhalter_Patrone.xOUT_inGS THEN
         iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
+		IF __ISVALIDREF(Mover) THEN
+			IF NOT Mover.SetLastStation(130) THEN
+				ASSERT(0);
+			END_IF
+		END_IF
     END_IF
 
 ST130_Dose_e.SYNC_MOVER_LEAVE:

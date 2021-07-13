@@ -613,6 +613,10 @@ ST180_Pnp_e.take_out_piece_and_put_down_lifter:
        fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_full).xOUT_InPos AND
        fb_PnpVerAxis_10.MoveTo(ST180_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST180_Pnp_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            Mover.UnloadPieces();
+        END_IF
     END_IF
 
 ST180_Pnp_e.SYNC_MOVER_LEAVE:
