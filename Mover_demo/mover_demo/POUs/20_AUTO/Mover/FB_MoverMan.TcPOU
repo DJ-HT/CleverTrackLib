@@ -185,7 +185,9 @@ CASE step OF
     gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.startMoverNumberingSequence := TRUE;
 
     IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.allIdSet THEN
-        step := 13;
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.setShuttleNumber      := FALSE;
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.releaseUnknownShuttle := FALSE;
+        step                                                                := 13;
     END_IF
 
     IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.unknownMoverAtTarget1 THEN
@@ -206,8 +208,9 @@ CASE step OF
     END_IF
 
     IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.allIdSet THEN
-        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.setShuttleNumber := FALSE;
-        step                                                           := 13;
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.setShuttleNumber      := FALSE;
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.releaseUnknownShuttle := FALSE;
+        step                                                                := 13;
     END_IF
 
 13: // stop id attrib sequence
@@ -222,7 +225,8 @@ CASE step OF
         ASSERT(0);
     END_IF
 
-    step := 15;
+    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enableProcess := TRUE;
+    step                                                        := 15;
 
 15: //move every shuttle to the last station
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
