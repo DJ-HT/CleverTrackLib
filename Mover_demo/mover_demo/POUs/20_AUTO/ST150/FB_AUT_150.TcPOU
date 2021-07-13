@@ -60,7 +60,7 @@ fb_Uss.xIN_welding_bits.Bereit       := IN.I020_ultraschall_bereit_150_20;
 fb_Uss.xIN_welding_bits.Fehler       := IN.I021_ultraschall_fehler_150_20;
 fb_Uss.xIN_welding_bits.US_on        := IN.I022_ultraschall_us_on_150_20;
 fb_Uss.xIN_welding_bits.NullPosition := IN.I023_ultraschall_nullpos_150_20;
-	   
+
 fb_Uss(xIN_Reset       := xReset,
        xIN_Init        := xIN_Init,
        xIN_Quit        := xIN_Quit,
@@ -80,6 +80,7 @@ fb_Uss(xIN_Reset       := xReset,
        xIN_kraftubersetzunh_zuruck := IO_BOX.I2301_ST150_kraftubersetzung_zuruck,
        xIN_kraftubersetzunh_vor    := IO_BOX.I2302_ST150_kraftubersetzung_vor,
        xIN_welding_bits            :=, // set above
+       iIN_StationNumber           := 150,
        // hardware output
        xOUT_moverMaintening_valve => IO_BOX.Q0202_14_ST150_kraftubersetzung,
        xOUT_welding_bits          =>); // set below

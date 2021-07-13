@@ -89,7 +89,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION       : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION       : BOOL := TRUE; // Set to TRUE to simulate this part of the program
     PNP_DONT_CHECK_KRAFT : BOOL := TRUE;  // don't care of kraft sensor
 END_VAR
 ]]></Declaration>
@@ -585,7 +585,11 @@ ST110_Pnp_e.PnP_Hor_ToTrackPos:
 
 ST110_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST110]) THEN
-        iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleDown;
+		IF Mover.GetLastStationDone() >= INT#110 THEN
+			iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
+		ELSE
+        	iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleDown;
+		END_IF
     END_IF;
 
 ST110_Pnp_e.PnP_Ver_ShuttleDown:
@@ -649,7 +653,11 @@ ST110_Pnp_e.PnP_Ver_ShuttleUp:
 ST110_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST110_Pnp_e.DONE;
+		IF fb_gripperLeft.xOUT_inGS AND fb_gripperRight.xOUT_inGS THEN
+        	iOUT_Step := ST110_Pnp_e.DONE;
+		ELSE
+			iOUT_Step := ST110_Pnp_e.waitOnMover;
+		END_IF
     END_IF
 
 (***** DONE *****)

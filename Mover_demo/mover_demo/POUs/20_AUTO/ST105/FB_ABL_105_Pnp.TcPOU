@@ -344,7 +344,11 @@ ST105_Pnp_e.waitOnMover: (*  *)
         IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
-            iOUT_Step := ST105_Pnp_e.Robot_place;
+            IF Mover.GetLastStationDone() >= INT#105 THEN
+                iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+            ELSE
+                iOUT_Step := ST105_Pnp_e.Robot_place;
+            END_IF
         END_IF
     END_IF;
 
@@ -374,7 +378,11 @@ ST105_Pnp_e.Robot_wait_placed_falling:
 ST105_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST105_Pnp_e.DONE;
+        IF NOT Robot_in_place_pos THEN
+            iOUT_Step := ST105_Pnp_e.DONE;
+        ELSE
+            iOUT_Step := ST105_Pnp_e.waitOnMover;
+        END_IF
     END_IF
 
 (***** DONE *****)

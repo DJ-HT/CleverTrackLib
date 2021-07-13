@@ -559,7 +559,7 @@ ST125_Pnp_e.Init_handling_up:
 
 ST125_Pnp_e.Init_adjust_left_clamp:
     // a piece is in the griper when there is no GS signal
-    IF NOT _20_AUTO.recipe.st120.xUseVerLeft THEN
+    IF _20_AUTO.recipe.st125.xUseVerLeft THEN
         iOUT_Step := ST125_Pnp_e.Init_adjust_right_clamp;
     ELSE
         iOUT_Step := ST125_Pnp_e.Init_open_left_clamp;
@@ -572,7 +572,7 @@ ST125_Pnp_e.Init_open_left_clamp:
 
 ST125_Pnp_e.Init_adjust_right_clamp:
     // a piece is in the griper when there is no GS signal
-    IF NOT _20_AUTO.recipe.st120.xUseVerRight THEN
+    IF _20_AUTO.recipe.st125.xUseVerRight THEN
         iOUT_Step := ST125_Pnp_e.Init_check_if_pces_handled;
     ELSE
         iOUT_Step := ST125_Pnp_e.Init_open_right_clamp;
@@ -584,9 +584,9 @@ ST125_Pnp_e.Init_open_right_clamp:
     END_IF
 
 ST125_Pnp_e.Init_check_if_pces_handled:
-    IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND
+    IF (NOT _20_AUTO.recipe.st125.xUseVerLeft AND
        fb_gripperFilterhutLeft.xIN_GS) OR
-       (NOT _20_AUTO.recipe.st120.xUseVerRight AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight AND
        NOT fb_gripperFilterhutRight.xIN_GS) THEN
         // ERROR: a piece is present in an unused gripper
         bOUT_Error := 1;
@@ -596,14 +596,14 @@ ST125_Pnp_e.Init_check_if_pces_handled:
     ELSIF fb_gripperFilterhutLeft.xOUT_inAS AND fb_gripperFilterhutRight.xOUT_inAS THEN
         iOUT_Step := ST125_Pnp_e.READY;
 
-    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperFilterhutLeft.xOUT_inGS) AND
-          (_20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperFilterhutRight.xOUT_inGS) THEN
+    ELSIF (_20_AUTO.recipe.st125.xUseVerLeft AND fb_gripperFilterhutLeft.xOUT_inGS) AND
+          (_20_AUTO.recipe.st125.xUseVerRight AND NOT fb_gripperFilterhutRight.xOUT_inGS) THEN
         // ERROR: A piece is missing in the left griper.
         bOUT_Error := 2;
         iOUT_Step  := ST125_Pnp_e.ERROR;
 
-    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperFilterhutLeft.xOUT_inGS) AND
-          (_20_AUTO.recipe.st120.xUseVerRight AND fb_gripperFilterhutRight.xOUT_inGS) THEN
+    ELSIF (_20_AUTO.recipe.st125.xUseVerLeft AND NOT fb_gripperFilterhutLeft.xOUT_inGS) AND
+          (_20_AUTO.recipe.st125.xUseVerRight AND fb_gripperFilterhutRight.xOUT_inGS) THEN
         // ERROR: A piece is missing in the right griper.
         bOUT_Error := 3;
         iOUT_Step  := ST125_Pnp_e.ERROR;
@@ -658,7 +658,11 @@ ST125_Pnp_e.Pnp_Hor_ToTrackPos:
 
 ST125_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST125] THEN
-        iOUT_Step := ST125_Pnp_e.Pnp_HandlingDown;
+        IF Mover.GetLastStationDone() >= INT#125 THEN
+            iOUT_Step := ST125_Pnp_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST125_Pnp_e.Pnp_HandlingDown;
+        END_IF
     END_IF;
 
 ST125_Pnp_e.Pnp_HandlingDown:
@@ -675,11 +679,12 @@ ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper:
        (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inAS) THEN
         iOUT_Step := ST125_Pnp_e.Pnp_placeCap;
-		IF __ISVALIDREF(Mover) THEN
-			IF NOT Mover.SetLastStation(-125) THEN
-				ASSERT(0);
-			END_IF
-		END_IF
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(-125) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF;
 
 ST125_Pnp_e.Pnp_placeCap:
@@ -726,17 +731,23 @@ ST125_Pnp_e.Pnp_HandlingUp:
        (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_handlingSolerohrLeft.xOUT_inGS) AND
        (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_handlingSolerohrRight.xOUT_inGS) THEN
         iOUT_Step := ST125_Pnp_e.SYNC_MOVER_LEAVE;
-		IF __ISVALIDREF(Mover) THEN
-			IF NOT Mover.SetLastStation(125) THEN
-				ASSERT(0);
-			END_IF
-		END_IF
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(125) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF;
 
 ST125_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST125_Pnp_e.DONE;
+        IF (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperFilterhutLeft.xOUT_inAS) AND
+           (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperFilterhutRight.xOUT_inAS) THEN
+            iOUT_Step := ST125_Pnp_e.DONE;
+        ELSE
+            iOUT_Step := ST125_Pnp_e.waitOnMover;
+        END_IF
     END_IF
 
 (***** DONE *****)

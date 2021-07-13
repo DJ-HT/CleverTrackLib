@@ -80,6 +80,7 @@ fb_Uss(xIN_Reset       := xReset,
        xIN_kraftubersetzunh_zuruck := IO_BOX.I2304_ST155_kraftubersetzung_zuruck,
        xIN_kraftubersetzunh_vor    := IO_BOX.I2305_ST155_kraftubersetzung_vor,
        xIN_welding_bits            :=, // set above
+       iIN_StationNumber           := 155,
        // hardware output
        xOUT_moverMaintening_valve => IO_BOX.Q0203_14_ST155_kraftubersetzung,
        xOUT_welding_bits          =>); // set below

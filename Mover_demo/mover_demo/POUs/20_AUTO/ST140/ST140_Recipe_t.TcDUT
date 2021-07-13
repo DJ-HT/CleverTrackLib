@@ -3,9 +3,11 @@
   <DUT Name="ST140_Recipe_t" Id="{615869a3-2d36-4afc-9a09-1900dfb31a43}">
     <Declaration><![CDATA[TYPE ST140_Recipe_t :
 STRUCT
-    rMinHeightSensor   : REAL; // minimum height allowed to be measured by the sensor
-    rMaxHeightSensor   : REAL; // maximum height allowed to be measured by the sensor
-    xIsTypeMiniOrSmart : BOOL; // do we have 2 pieces (smart and mini) or just one (others)
+    rMinHeightSensorLeft  : REAL; // minimum height allowed to be measured by the sensor
+    rMaxHeightSensorLeft  : REAL; // maximum height allowed to be measured by the sensor
+    rMinHeightSensorRight : REAL; // minimum height allowed to be measured by the sensor
+    rMaxHeightSensorRight : REAL; // maximum height allowed to be measured by the sensor
+    xIsTypeMiniOrSmart    : BOOL; // do we have 2 pieces (smart and mini) or just one (others)
 END_STRUCT
 END_TYPE
 ]]></Declaration>

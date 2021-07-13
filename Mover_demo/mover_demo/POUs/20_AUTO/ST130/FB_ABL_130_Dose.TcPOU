@@ -92,7 +92,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    DOSE_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    DOSE_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -615,7 +615,11 @@ ST130_Dose_e.fill_kammer:
 
 ST130_Dose_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST130] THEN
-        iOUT_Step := ST130_Dose_e.check_filterhut_presence;
+        IF Mover.GetLastStationDone() >= INT#130 THEN
+            iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST130_Dose_e.check_filterhut_presence;
+        END_IF
     END_IF
 
 ST130_Dose_e.check_filterhut_presence:
@@ -640,11 +644,12 @@ ST130_Dose_e.open_down_feeder:
        (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_Offnen_Links.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_Offnen_Rechts.xOUT_inAS) THEN
         iOUT_Step := ST130_Dose_e.load_powder_and_vibrate;
-		IF __ISVALIDREF(Mover) THEN
-			IF NOT Mover.SetLastStation(-130) THEN
-				ASSERT(0);
-			END_IF
-		END_IF
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(-130) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF
 
 ST130_Dose_e.load_powder_and_vibrate:
@@ -679,11 +684,12 @@ ST130_Dose_e.clamp_down:
 ST130_Dose_e.clamp_up:
     IF xIN_NextStep AND fb_Niederhalter_Patrone.xOUT_inGS THEN
         iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
-		IF __ISVALIDREF(Mover) THEN
-			IF NOT Mover.SetLastStation(130) THEN
-				ASSERT(0);
-			END_IF
-		END_IF
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(130) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF
 
 ST130_Dose_e.SYNC_MOVER_LEAVE:

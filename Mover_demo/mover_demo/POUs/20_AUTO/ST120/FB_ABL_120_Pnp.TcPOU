@@ -485,7 +485,11 @@ ST120_Pnp_e.PnP_Hor_ToTrackPos:
 
 ST120_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST120] THEN
-        iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleDown;
+		IF Mover.GetLastStationDone() >= INT#120 THEN
+			iOUT_Step := ST120_Pnp_e.SYNC_MOVER_LEAVE;
+		ELSE
+        	iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleDown;
+		END_IF
     END_IF;
 
 ST120_Pnp_e.PnP_Ver_ShuttleDown:
@@ -522,7 +526,11 @@ ST120_Pnp_e.PnP_Ver_ShuttleUp:
 ST120_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST120_Pnp_e.DONE;
+		IF fb_gripperLeft.xOUT_inAS AND fb_gripperRight.xOUT_inAS THEN
+        	iOUT_Step := ST120_Pnp_e.DONE;
+		ELSE
+			iOUT_Step := ST120_Pnp_e.waitOnMover;
+		END_IF
     END_IF
 
 (***** DONE *****)

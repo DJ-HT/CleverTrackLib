@@ -33,8 +33,10 @@ VAR_INPUT
     xIN_capDetector             : BOOL;
     xIN_kraftubersetzunh_zuruck : BOOL;
     xIN_kraftubersetzunh_vor    : BOOL;
-	
-	xIN_welding_bits : Ultrasonic_IN_bits_t;
+
+    xIN_welding_bits : Ultrasonic_IN_bits_t;
+
+    iIN_StationNumber : INT; // station number 
 
 END_VAR
 VAR_OUTPUT
@@ -79,7 +81,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    USS_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    USS_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -255,7 +257,11 @@ ST150_Uss_e.START: (*  *)
 
 ST150_Uss_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST150_Uss_e.mover_maintening_up;
+        IF Mover.GetLastStationDone() >= iIN_StationNumber THEN
+            iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST150_Uss_e.mover_maintening_up;
+        END_IF
     END_IF;
 
 ST150_Uss_e.check_cap_present:
@@ -265,7 +271,7 @@ ST150_Uss_e.check_cap_present:
         iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-150) THEN
+            IF NOT Mover.SetLastStation(-iIN_StationNumber) THEN
                 ASSERT(0);
             END_IF
         END_IF
@@ -278,6 +284,7 @@ ST150_Uss_e.mover_maintening_up:
         ELSE
             IF xIN_welding_bits.Bereit THEN
                 iOUT_Step := ST150_Uss_e.uss_start;
+
                 IF __ISVALIDREF(Mover) THEN
                     IF NOT Mover.SetLastStation(-150) THEN
                         ASSERT(0);
@@ -306,7 +313,7 @@ ST150_Uss_e.mover_maintening_down:
         iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(150) THEN
+            IF NOT Mover.SetLastStation(iIN_StationNumber) THEN
                 ASSERT(0);
             END_IF
         END_IF
