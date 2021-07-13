@@ -200,7 +200,7 @@ fb_axis125_02Z(enIN_State       := enIN_State,
                xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
-               xIN_FREE         := TRUE,
+               xIN_FREE         := NOT (iOUT_Step = ST125_Pnp_e.PnP_Ver_quick_stop),
                xIN_FREE_HOME    := TRUE,
                rIN_POSMIN       := ST125_Axis.const125_02Z.POS_MIN,
                rIN_POSMAX       := ST125_Axis.const125_02Z.POS_MAX,
@@ -300,8 +300,8 @@ fb_handlingSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                                                        [ST125_Cylinders_e.HandlingSolerohrLinks].toGS_wait_time));
 
 simu_handlingSolerohrLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
-                          xIN_inGS   := IO_BOX.I6600_ST125_solerhor_handling_links_unten,
-                          xIN_inAS   := IO_BOX.I6601_ST125_solerhor_handling_links_oben,
+                          xIN_inGS   := IO_BOX.I6601_ST125_solerhor_handling_links_oben,
+                          xIN_inAS   := IO_BOX.I6600_ST125_solerhor_handling_links_unten,
                           xIN_valve  := fb_handlingSolerohrLeft.xOUT_VALVE,
                           tIN_GS_ms  := 500,  //ms
                           tIN_AS_ms  := 500); //ms
@@ -340,7 +340,7 @@ fb_gripperSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_St
                        xIN_GS       := simu_gripperSolerohrLeft.xOUT_inGS, // TODO use sensor
                        xIN_AS       := simu_gripperSolerohrLeft.xOUT_inAS, // TODO use sensor
                        xIN_FREE     := TRUE,
-                       xINtoGS      := (ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step) OR
+                       xINtoGS      := (ST125_Pnp_e.Pnp_HandlingSolerohrRelease = iOUT_Step) OR
                                        (ST125_Pnp_e.Init_open_solenohr_gripper = iOUT_Step),
                        xINtoAS := _20_AUTO.recipe.st125.xUseVerLeft AND
                                   (ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper = iOUT_Step OR
@@ -369,7 +369,7 @@ fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         xIN_GS       := simu_gripperSolerohrRight.xOUT_inGS,
                         xIN_AS       := simu_gripperSolerohrRight.xOUT_inAS,
                         xIN_FREE     := TRUE,
-                        xINtoGS      := (ST125_Pnp_e.Pnp_Ver_ShuttleUpToHandling = iOUT_Step) OR
+                        xINtoGS      := (ST125_Pnp_e.Pnp_HandlingSolerohrRelease = iOUT_Step) OR
                                         (ST125_Pnp_e.Init_open_solenohr_gripper = iOUT_Step),
                         xINtoAS := _20_AUTO.recipe.st125.xUseVerRight AND
                                    (ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper = iOUT_Step OR
@@ -390,7 +390,7 @@ simu_gripperSolerohrRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                           xIN_valve  := fb_gripperSolerohrRight.xOUT_VALVE,
                           tIN_GS_ms  := 300,  //ms
                           tIN_AS_ms  := 300); //ms
-						  
+
 // Force control
 fb_kraftLeft();
 fb_kraftRight();
@@ -465,6 +465,7 @@ IF 0 = bOUT_Error THEN
         bOUT_Error := 18;
     END_IF
 ELSIF iOUT_Step < ST125_Pnp_e.ERROR THEN
+    iPreStep  := iOUT_Step;
     iOUT_Step := ST125_Pnp_e.ERROR;
 END_IF
 
@@ -558,7 +559,7 @@ ST125_Pnp_e.Init_handling_up:
 
 ST125_Pnp_e.Init_adjust_left_clamp:
     // a piece is in the griper when there is no GS signal
-    IF fb_gripperFilterhutLeft.xIN_AS OR NOT fb_gripperFilterhutLeft.xIN_GS THEN
+    IF NOT _20_AUTO.recipe.st120.xUseVerLeft THEN
         iOUT_Step := ST125_Pnp_e.Init_adjust_right_clamp;
     ELSE
         iOUT_Step := ST125_Pnp_e.Init_open_left_clamp;
@@ -571,7 +572,7 @@ ST125_Pnp_e.Init_open_left_clamp:
 
 ST125_Pnp_e.Init_adjust_right_clamp:
     // a piece is in the griper when there is no GS signal
-    IF fb_gripperFilterhutRight.xIN_AS OR NOT fb_gripperFilterhutRight.xIN_GS THEN
+    IF NOT _20_AUTO.recipe.st120.xUseVerRight THEN
         iOUT_Step := ST125_Pnp_e.Init_check_if_pces_handled;
     ELSE
         iOUT_Step := ST125_Pnp_e.Init_open_right_clamp;
@@ -584,11 +585,9 @@ ST125_Pnp_e.Init_open_right_clamp:
 
 ST125_Pnp_e.Init_check_if_pces_handled:
     IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND
-       NOT fb_gripperFilterhutLeft.xIN_GS AND
-       NOT fb_gripperFilterhutLeft.xIN_AS) OR
+       fb_gripperFilterhutLeft.xIN_GS) OR
        (NOT _20_AUTO.recipe.st120.xUseVerRight AND
-       NOT fb_gripperFilterhutRight.xIN_GS AND
-       NOT fb_gripperFilterhutRight.xIN_AS) THEN
+       NOT fb_gripperFilterhutRight.xIN_GS) THEN
         // ERROR: a piece is present in an unused gripper
         bOUT_Error := 1;
         iOUT_Step  := ST125_Pnp_e.ERROR;
@@ -597,15 +596,15 @@ ST125_Pnp_e.Init_check_if_pces_handled:
     ELSIF fb_gripperFilterhutLeft.xOUT_inAS AND fb_gripperFilterhutRight.xOUT_inAS THEN
         iOUT_Step := ST125_Pnp_e.READY;
 
-    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperFilterhutLeft.xOUT_inAS) AND
+    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperFilterhutLeft.xOUT_inGS) AND
           (_20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperFilterhutRight.xOUT_inGS) THEN
-        // ERROR:  Initialisation failed. A piece is missing in the left griper.
+        // ERROR: A piece is missing in the left griper.
         bOUT_Error := 2;
         iOUT_Step  := ST125_Pnp_e.ERROR;
 
     ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperFilterhutLeft.xOUT_inGS) AND
-          (_20_AUTO.recipe.st120.xUseVerRight AND fb_gripperFilterhutRight.xOUT_inAS) THEN
-        // ERROR:  Initialisation failed. A piece is missing in the right griper.
+          (_20_AUTO.recipe.st120.xUseVerRight AND fb_gripperFilterhutRight.xOUT_inGS) THEN
+        // ERROR: A piece is missing in the right griper.
         bOUT_Error := 3;
         iOUT_Step  := ST125_Pnp_e.ERROR;
 
@@ -670,7 +669,9 @@ ST125_Pnp_e.Pnp_HandlingDown:
     END_IF;
 
 ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper:
-    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.DownFullQuick).xOUT_InPos AND
+    fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.DownFullQuick);
+    IF xIN_NextStep AND
+       fb_axis125_02Z.xOUT_DONE AND // we need the xOUT_DONE flag since we perform twice the same movement
        (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inAS) THEN
         iOUT_Step := ST125_Pnp_e.Pnp_placeCap;
@@ -685,7 +686,7 @@ ST125_Pnp_e.Pnp_placeCap:
 
 ST125_Pnp_e.Pnp_Ver_pushCapTorqueControl:
     IF (fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
-       NOT _20_AUTO.recipe.st110.xUseVerLeft) THEN
+        NOT _20_AUTO.recipe.st110.xUseVerLeft) THEN
         IF (PNP_SIMULATION AND CONST.USE_SIMULATION) OR PNP_DONT_CHECK_KRAFT THEN
             iOUT_Step := ST125_Pnp_e.PnP_Ver_quick_stop;
         ELSE
