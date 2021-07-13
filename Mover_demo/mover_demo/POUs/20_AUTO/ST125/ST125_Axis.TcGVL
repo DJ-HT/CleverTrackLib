@@ -5,7 +5,7 @@
 VAR_GLOBAL CONSTANT
     const125_01Y : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 200, VELO_MAX := 2000, VELO_MANU := 100);
     const125_02Z : AxisLinMotConst_t := (POS_MIN := -5, POS_MAX := 200, VELO_MAX := 2000, VELO_MANU := 50);
-    const125_10W : AxisLinMotConst_t := (POS_MIN := 0, POS_MAX := 360, VELO_MAX := 360, VELO_MANU := 50);
+    const125_10W : AxisLinMotConst_t := (POS_MIN := 0, POS_MAX := 360, VELO_MAX := 720, VELO_MANU := 50);
 
 END_VAR
 VAR_GLOBAL
