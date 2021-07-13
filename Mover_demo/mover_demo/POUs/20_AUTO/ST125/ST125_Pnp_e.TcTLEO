@@ -36,6 +36,7 @@ TYPE ST125_Pnp_e :
 
     Pnp_HandlingDown,
     Pnp_Ver_ShuttleDown_and_closeTubeGriper,
+	Pnp_Wait_on_tube_griper, // Used to catch xOUT_DONE flag from the motor
     Pnp_placeCap,
     Pnp_Ver_pushCapTorqueControl,
 	PnP_Ver_quick_stop,
@@ -182,6 +183,11 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"Pnp_Ver_ShuttleDown_and_closeTubeGriper"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Pnp_Wait_on_tube_griper"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

@@ -674,11 +674,9 @@ ST125_Pnp_e.Pnp_HandlingDown:
 
 ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper:
     fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.DownFullQuick);
-    IF xIN_NextStep AND
-       fb_axis125_02Z.xOUT_DONE AND // we need the xOUT_DONE flag since we perform twice the same movement
-       (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inAS) AND
-       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inAS) THEN
-        iOUT_Step := ST125_Pnp_e.Pnp_placeCap;
+    IF xIN_NextStep AND fb_axis125_02Z.xOUT_DONE
+        THEN // we need the xOUT_DONE flag since we perform twice the same movement
+        iOUT_Step := ST125_Pnp_e.Pnp_Wait_on_tube_griper;
 
         IF __ISVALIDREF(Mover) THEN
             IF NOT Mover.SetLastStation(-125) THEN
@@ -686,6 +684,12 @@ ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper:
             END_IF
         END_IF
     END_IF;
+
+ST125_Pnp_e.Pnp_Wait_on_tube_griper:
+    IF (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inAS) THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_placeCap;
+    END_IF
 
 ST125_Pnp_e.Pnp_placeCap:
     IF xIN_NextStep AND

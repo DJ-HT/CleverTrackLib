@@ -521,7 +521,12 @@ ST145_Pnp_e.PnP_Ver_ShuttleUp:
 ST145_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST145_Pnp_e.DONE;
+        IF (NOT _20_AUTO.recipe.st145.xUseVerLeft OR fb_vakumGriperLeft.xOUT_inAS) AND
+           (NOT _20_AUTO.recipe.st145.xUseVerRight OR fb_vakumGriperRight.xOUT_inAS) THEN
+            iOUT_Step := ST145_Pnp_e.waitOnMover;
+        ELSE
+            iOUT_Step := ST145_Pnp_e.DONE;
+        END_IF
     END_IF
 
 (***** DONE *****)
