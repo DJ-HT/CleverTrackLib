@@ -405,11 +405,13 @@ xOUT_Busy := (iOUT_Step > ST125_Pnp_e.READY) AND (iOUT_Step < ST125_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
 xOUT_Done := (iOUT_Step = ST125_Pnp_e.DONE);
 // Process ready
-xOUT_Ready := (iOUT_Step = ST125_Pnp_e.READY);
+xOUT_Ready := (iOUT_Step = ST125_Pnp_e.READY) OR (iOUT_Step = ST125_Pnp_e.waitOnMover);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
-xOUT_InitDone := (iOUT_Step = ST125_Pnp_e.READY) OR (iOUT_Step = ST125_Pnp_e.waitOnMover);
+xOUT_InitDone := (iOUT_Step = ST125_Pnp_e.READY) OR
+                 (iOUT_Step = ST125_Pnp_e.waitOnMover);
+
 // Aktueller Schritt			
 iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
 sOUT_Step := TO_STRING(iOUT_Step);

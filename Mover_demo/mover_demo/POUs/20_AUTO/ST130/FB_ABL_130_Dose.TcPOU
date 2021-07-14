@@ -431,11 +431,12 @@ xOUT_Busy := (iOUT_Step > ST130_Dose_e.READY) AND (iOUT_Step < ST130_Dose_e.DONE
 // Baustein hat den Ablauf beendet
 xOUT_Done := (iOUT_Step = ST130_Dose_e.DONE);
 // Process ready
-xOUT_Ready := (iOUT_Step = ST130_Dose_e.READY);
+xOUT_Ready := (iOUT_Step = ST130_Dose_e.READY) OR (iOUT_Step = ST130_Dose_e.waitOnMover);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
 xOUT_InitDone := (iOUT_Step = ST130_Dose_e.READY) OR
+                 (iOUT_Step = ST130_Dose_e.waitOnMover) OR
                  (iOUT_Step = ST130_Dose_e.DONE);
 
 // Aktueller Schritt			
