@@ -123,7 +123,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 
 fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
           xIN_PieceInEnd            := IO_BOX.I8600_ST105_teil_in_vereinzelung,
-          xIN_PieceMax              := IO_BOX.I8701_ST105_Maximum_WF,
+          xIN_PieceMax              := IO_BOX.I8704_ST105_Maximum_LF,
           xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
           refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
           iIN_FifoSetMaxSensorValue := 10,
@@ -226,8 +226,8 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST105_Feeder_e.DONE);
 
-IO_BOX.Q8700_ST105_Freigabe_WF := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
-IO_BOX.Q8702_ST105_Freigabe_LF := IO_BOX.Q8700_ST105_Freigabe_WF;
+IO_BOX.Q9500_ST105_Freigabe_WF := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q9501_ST105_Freigabe_LF := IO_BOX.Q9500_ST105_Freigabe_WF;
 
 xOUT_PceReadyToPick := ST105_Feeder_e.DONE = iOUT_Step;
 

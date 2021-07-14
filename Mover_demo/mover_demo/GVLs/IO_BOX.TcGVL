@@ -425,17 +425,22 @@ VAR_GLOBAL
 
     //-5001
     (* feeder ST105 and ST101 - 8x I *)
-    I8600_ST105_teil_in_vereinzelung     AT %I* : BOOL; // 1: piece in place in rotary table
-    I8601_ST105_shuttle_pin_config_pro   AT %I* : BOOL; // 2: shuttle pin config pro/maxi blocked in pro position
-    I8602_ST105_shuttle_pin_config_maxi  AT %I* : BOOL; // 3: shuttle pin config pro/maxi blocked in maxi position
-    I8603_ST105_shuttle_ring_pro_present AT %I* : BOOL; // 4: pro ring present on the shuttle
-    I8604_ST105_first_shuttle_pin        AT %I* : BOOL; // 5: sensor to detect the first shuttle
+    I8600_ST105_teil_in_vereinzelung     AT %I* : BOOL; // 1: Teil in Vereinzelung (RST)
+    I8601_ST105_shuttle_pin_config_pro   AT %I* : BOOL; // 2: Kontrolle WT-Hülsen Typ Pro
+    I8602_ST105_shuttle_pin_config_maxi  AT %I* : BOOL; // 3: Kontrolle WT- Schieber verriegelt
+    I8603_ST105_shuttle_ring_pro_present AT %I* : BOOL; // 4: Kontrolle WT- Schieber entriegelt
+    I8604_ST105_first_shuttle_pin        AT %I* : BOOL; // 5: Anwesenheit, Init. WT Nr.1
 
     //-15500
     (* feeder ST105 - 8x IO *)
-    Q8700_ST105_Freigabe_WF AT %Q* : BOOL; // 1: Run vibrator feeder (nearest of the rotary table)
-    I8701_ST105_Maximum_WF  AT %I* : BOOL; // 2: vibrator full of piece sensor
-    Q8702_ST105_Freigabe_LF AT %Q* : BOOL; // 3: Run LF 
+    I8700_ST105_Ausheber_unten_GS             AT %I* : BOOL; // 1: 
+    I8701_ST105_Ausheber_oben_AS              AT %I* : BOOL; // 2: 
+    I8702_ST105_Abschieber_zuruck_GS          AT %I* : BOOL; // 3: 
+    I8703_ST105_Abschieber_vor_AS             AT %I* : BOOL; // 4: 
+    I8704_ST105_Maximum_LF                    AT %I* : BOOL; // 5: 
+    I8705_ST105_Kontrolle_zwei_Filtergehiluse AT %I* : BOOL; // 6: 
+    I8706_ST105_                              AT %I* : BOOL; // 7: 
+    I8707_ST105_                              AT %I* : BOOL; // 8: 
 
     (* IO-Link Boxen 10191A5 *)
     (*******************************************************************)
@@ -470,6 +475,12 @@ VAR_GLOBAL
     //-10960B2
     (* Wegmesssenor ST175 *)
     I9300_ST175_wegmesssensor AT %I* : BOOL; // 0: Wegmesssenor ST175
+
+    //-15506
+    (* feeder ST105 *)
+    Q9500_ST105_Freigabe_WF         AT %Q* : BOOL; // 1: Run vibrator feeder (nearest of the rotary table)
+    Q9501_ST105_Freigabe_LF         AT %Q* : BOOL; // 2 Run LF 
+    I9502_ST105_Fullstand_kontrolle AT %I* : BOOL; // 3: vibrator full of piece sensor
 
 END_VAR
 ]]></Declaration>
