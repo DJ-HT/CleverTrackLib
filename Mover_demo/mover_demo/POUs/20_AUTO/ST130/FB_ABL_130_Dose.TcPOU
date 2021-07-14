@@ -637,7 +637,11 @@ ST130_Dose_e.close_up_feeder:
 
 ST130_Dose_e.lift_up_piece_in_workposition:
     IF xIN_NextStep AND fb_VerAxis_10.MoveTo(ST130_PatroneAushebenPos_e.up_AS).xOUT_InPos THEN
-        iOUT_Step := ST130_Dose_e.open_down_feeder;
+        IF DOSE_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST130_Dose_e.load_powder_and_vibrate;
+        ELSE
+            iOUT_Step := ST130_Dose_e.open_down_feeder;
+        END_IF
     END_IF
 
 ST130_Dose_e.open_down_feeder:

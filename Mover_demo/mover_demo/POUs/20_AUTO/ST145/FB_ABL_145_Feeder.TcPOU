@@ -164,7 +164,7 @@ simu_axis145_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis145_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST145_10W]),
-               xIN_DisButtons := ,
+               xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE,
                xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
@@ -221,7 +221,10 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 xOUT_Wait := (iOUT_Step = ST145_Feeder_e.DONE);
 
 // TODO add simulation constant to prevent the output to be set
-IO_BOX.Q2402_ST145_reigabe_wf   := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q2402_ST145_reigabe_wf := fb_feeder.xOUT_EnableFeeder AND
+                                 NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
+                                 (NOT IO_BOX.I2401_ST145_maximum_wf);
+
 IO_BOX.Q2400_ST145_freigabe_REO := ((iOUT_Step = ST145_Feeder_e.wait_on_a_piece) OR IO_BOX.Q2402_ST145_reigabe_wf) AND
                                    NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 

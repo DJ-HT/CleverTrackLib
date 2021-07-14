@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="_02_SAFETY" Id="{1d11b277-8721-45f2-8362-d5a102755ff3}" SpecialFunc="None">
-    <Declaration><![CDATA[ PROGRAM _02_SAFETY
+    <Declaration><![CDATA[PROGRAM _02_SAFETY
 (****************************************************************************)
 //SAVETY PROGRAMM
 //	04.09.2019/Dj
@@ -26,6 +26,7 @@ VAR
 																	*)
 
     //GR001 IN
+    xIN_Reset_bp AT %I* : BOOL;                // blue reset button
     xArIN_Input1 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
     xArIN_Input2 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
     xArIN_Input3 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
@@ -160,7 +161,7 @@ xOUT_MonOut    := xIN_MonOut;
 //--------------------------------------------------------------------------
 //RESET + Einrichten	
 //--------------------------------------------------------------------------
-xOUT_ResetES    := HMI.Tast_BL;
+xOUT_ResetES    := HMI.Tast_BL OR xIN_Reset_bp;
 xOUT_Einrichten := xArIN_Input3[1];
 
 ////--------------------------------------------------------------------------

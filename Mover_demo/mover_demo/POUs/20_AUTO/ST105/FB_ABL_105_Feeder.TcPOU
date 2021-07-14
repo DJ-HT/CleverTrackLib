@@ -123,7 +123,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 
 fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
           xIN_PieceInEnd            := IO_BOX.I8600_ST105_teil_in_vereinzelung,
-          xIN_PieceMax              := IO_BOX.I8704_ST105_Maximum_LF,
+          xIN_PieceMax              := IO_BOX.I8600_ST105_teil_in_vereinzelung, //IO_BOX.I8704_ST105_Maximum_LF,
           xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
           refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
           iIN_FifoSetMaxSensorValue := 10,
