@@ -73,8 +73,7 @@ fb_ABL_CETA(xIN_Reset       := xReset,
             // CleverTrackLib
             Mover := THIS^.Mover,
 			// for multiple reference of the FB
-			ref_fb_CETA := ceta_160,
-			iIN_StationNumber := 160);
+			ref_fb_CETA := ceta_160);
 
 (*******************************************************************)
 (* Mover reset flags *)

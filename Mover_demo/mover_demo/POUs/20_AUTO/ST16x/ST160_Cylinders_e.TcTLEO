@@ -6,10 +6,8 @@
 {attribute 'to_string'}
 TYPE ST160_Cylinders_e : 
 (
-	Niederhalter_links_160,
-	Niederhalter_rechts_160,
-	Niederhalter_links_165,
-	Niederhalter_rechts_165,
+	Niederhalter_links,
+	Niederhalter_rechts,
 	_max
 );
 END_TYPE
@@ -19,22 +17,12 @@ END_TYPE
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
             <o>
-              <v n="TextID">"Niederhalter_links_160"</v>
+              <v n="TextID">"Niederhalter_links"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Niederhalter_rechts_160"</v>
-              <v n="TextDefault">""</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"Niederhalter_links_165"</v>
-              <v n="TextDefault">""</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"Niederhalter_rechts_165"</v>
+              <v n="TextID">"Niederhalter_rechts"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

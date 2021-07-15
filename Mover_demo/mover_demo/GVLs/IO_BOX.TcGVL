@@ -183,19 +183,19 @@ VAR_GLOBAL
     (*******************************************************************)
     //-960B2
     (* Wegmessenor ST160.02 *)
-    I3000_ AT %I* : BOOL;
+    I3000_ST160_Wegmessenor_links AT %I* : USINT;
 
     //-960B4
     (* Wegmessenor ST160.03 *)
-    I3100_ AT %I* : BOOL;
+    I3100_ST160_Wegmessenor_rechts AT %I* : USINT;
 
     //-960B6
     (* Wegmessenor ST165.02 *)
-    I3200_ AT %I* : BOOL;
+    I3200_ST165_Wegmessenor_links AT %I* : USINT;
 
     //-960B7
     (* Wegmessenor ST165.03 *)
-    I3300_ AT %I* : BOOL;
+    I3300_ST165_Wegmessenor_rechts AT %I* : USINT;
 
     (*******************************************************************)
     (* EINGÄNGE Schrank B *)
