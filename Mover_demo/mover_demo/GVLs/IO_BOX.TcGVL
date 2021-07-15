@@ -139,14 +139,15 @@ VAR_GLOBAL
     (*******************************************************************)
     //-5011
     (* Filterhut vorhanden ST130/135 I - 8x IO *)
-    I2000_ST130_filterhut_vorhanden_links    AT %I* : BOOL; // 0: ST130 Filterhut vorhanden links
-    I2001_ST130_filterhut_vorhanden_rechts   AT %I* : BOOL; // 1: ST130 Filterhut vorhanden rechts
-    I2002_ST130_filterhut_vorhanden_links_2  AT %I* : BOOL; // 2: ST130 Filterhut vorhanden links ???
-    I2003_ST130_filterhut_vorhanden_rechts_2 AT %I* : BOOL; // 3: ST130 Filferhut vorhanden rechts ???
-    I2004_ST130_filterhut_vorhanden_links    AT %I* : BOOL; // 4: ST135 Filterhut vorhanden links
-    I2005_ST130_filterhut_vorhanden_rechts   AT %I* : BOOL; // 5: ST135 Filterhut vorhanden rechts
-    I2006_ST130_filterhut_vorhanden_links_2  AT %I* : BOOL; // 6: ST135 Filterhut vorhanden links ???
-    I2007_ST130_filterhut_vorhanden_rechts_2 AT %I* : BOOL; // 7: ST135 Filterhut vorhanden rechts ???
+    I2000_ST128_filterhut_vorhanden AT %I* : BOOL; // 0: ST130 Filterhut vorhanden links
+    //
+    I2001_ AT %I* : BOOL; // 
+    I2002_ AT %I* : BOOL; // 
+    I2003_ AT %I* : BOOL; // 
+    I2004_ AT %I* : BOOL; // 
+    I2005_ AT %I* : BOOL; // 
+    I2006_ AT %I* : BOOL; // 
+    I2007_ AT %I* : BOOL; // 
 
     //-5012
     (* Niederhalter Patrone ST130/135 I - 8x IO *)
