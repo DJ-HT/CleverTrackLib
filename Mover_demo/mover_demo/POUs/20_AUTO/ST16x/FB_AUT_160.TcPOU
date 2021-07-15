@@ -58,6 +58,12 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
+ceta_160(xIN_StatusBits   := CETA_IO.I_ST160_StatusBits,
+         xIN_Data         := CETA_IO.I_ST160_Data,
+         xIN_Reset        := xReset,
+         xOUT_CommandBits => CETA_IO.Q_ST160_CommandBits,
+         xOUT_Data        => CETA_IO.Q_ST160_Data);
+
 fb_ABL_CETA(xIN_Reset       := xReset,
             xIN_Init        := xIN_Init,
             xIN_Quit        := xIN_Quit,
@@ -72,8 +78,8 @@ fb_ABL_CETA(xIN_Reset       := xReset,
             pxFG_Freigabe   := ADR(xDummy),
             // CleverTrackLib
             Mover := THIS^.Mover,
-			// for multiple reference of the FB
-			ref_fb_CETA := ceta_160);
+            // for multiple reference of the FB
+            ref_fb_CETA := ceta_160);
 
 (*******************************************************************)
 (* Mover reset flags *)

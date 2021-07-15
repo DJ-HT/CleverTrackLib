@@ -74,7 +74,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    CETA_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    CETA_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -152,59 +152,59 @@ fb_axis160_01Z(enIN_State       := enIN_State,
                // output
                rOUT_ActPos => ST160_Axis.axis160_01Z.rActPos,
                axisIN_REF  := simu_axis160_01Z.pOUT_axisRef^);
-			   
+
 // pneumatics
 fb_capMainteningLeft(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
-                   xIN_Quit     := xIN_Quit,
-                   xIN_Manu     := enState.StateMANU = enIN_State,
-                   pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][1]),
-                   xIN_GS       := simu_capMainteningLeft.xOUT_inGS,
-                   xIN_AS       := simu_capMainteningLeft.xOUT_inAS,
-                   xIN_FREE     := TRUE,
-                   xINtoGS      := (ST160_CETA_e.Init_pneumatic_up = iOUT_Step) OR
-                                   (ST160_CETA_e.handling_up = iOUT_Step),
-                   xINtoAS   := ST160_CETA_e.handling_down = iOUT_Step,
-                   tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                 [ST160_Cylinders_e.Niederhalter_links].toAS_alarm_time),
-                   tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                 [ST160_Cylinders_e.Niederhalter_links].toGS_alarm_time),
-                   tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                  [ST160_Cylinders_e.Niederhalter_links].toAS_wait_time),
-                   tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                  [ST160_Cylinders_e.Niederhalter_links].toGS_wait_time));
+                     xIN_Quit     := xIN_Quit,
+                     xIN_Manu     := enState.StateMANU = enIN_State,
+                     pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][1]),
+                     xIN_GS       := simu_capMainteningLeft.xOUT_inGS,
+                     xIN_AS       := simu_capMainteningLeft.xOUT_inAS,
+                     xIN_FREE     := TRUE,
+                     xINtoGS      := (ST160_CETA_e.Init_pneumatic_up = iOUT_Step) OR
+                                     (ST160_CETA_e.handling_up = iOUT_Step),
+                     xINtoAS   := ST160_CETA_e.handling_down = iOUT_Step,
+                     tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                   [ST160_Cylinders_e.Niederhalter_links].toAS_alarm_time),
+                     tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                   [ST160_Cylinders_e.Niederhalter_links].toGS_alarm_time),
+                     tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                    [ST160_Cylinders_e.Niederhalter_links].toAS_wait_time),
+                     tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                    [ST160_Cylinders_e.Niederhalter_links].toGS_wait_time));
 
 simu_capMainteningLeft(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
-                     xIN_inGS   := IO_BOX.I3000_ST160_Wegmessenor_links < 10,
-                     xIN_inAS   := IO_BOX.I3000_ST160_Wegmessenor_links > 10,
-                     xIN_valve  := fb_capMainteningLeft.xOUT_VALVE,
-                     tIN_GS_ms  := 200,  // ms
-                     tIN_AS_ms  := 200); // ms
+                       xIN_inGS   := IO_BOX.I3000_ST160_Wegmessenor_links < 10,
+                       xIN_inAS   := IO_BOX.I3000_ST160_Wegmessenor_links > 200,
+                       xIN_valve  := fb_capMainteningLeft.xOUT_VALVE,
+                       tIN_GS_ms  := 200,  // ms
+                       tIN_AS_ms  := 200); // ms
 
 fb_capMainteningRight(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
-                   xIN_Quit     := xIN_Quit,
-                   xIN_Manu     := enState.StateMANU = enIN_State,
-                   pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][1]),
-                   xIN_GS       := simu_capMainteningRight.xOUT_inGS,
-                   xIN_AS       := simu_capMainteningRight.xOUT_inAS,
-                   xIN_FREE     := TRUE,
-                   xINtoGS      := (ST160_CETA_e.Init_pneumatic_up = iOUT_Step) OR
-                                   (ST160_CETA_e.handling_up = iOUT_Step),
-                   xINtoAS   := ST160_CETA_e.handling_down = iOUT_Step,
-                   tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                 [ST160_Cylinders_e.Niederhalter_rechts].toAS_alarm_time),
-                   tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                 [ST160_Cylinders_e.Niederhalter_rechts].toGS_alarm_time),
-                   tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                  [ST160_Cylinders_e.Niederhalter_rechts].toAS_wait_time),
-                   tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                  [ST160_Cylinders_e.Niederhalter_rechts].toGS_wait_time));
+                      xIN_Quit     := xIN_Quit,
+                      xIN_Manu     := enState.StateMANU = enIN_State,
+                      pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][2]),
+                      xIN_GS       := simu_capMainteningRight.xOUT_inGS,
+                      xIN_AS       := simu_capMainteningRight.xOUT_inAS,
+                      xIN_FREE     := TRUE,
+                      xINtoGS      := (ST160_CETA_e.Init_pneumatic_up = iOUT_Step) OR
+                                      (ST160_CETA_e.handling_up = iOUT_Step),
+                      xINtoAS   := ST160_CETA_e.handling_down = iOUT_Step,
+                      tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                    [ST160_Cylinders_e.Niederhalter_rechts].toAS_alarm_time),
+                      tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                    [ST160_Cylinders_e.Niederhalter_rechts].toGS_alarm_time),
+                      tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                     [ST160_Cylinders_e.Niederhalter_rechts].toAS_wait_time),
+                      tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                     [ST160_Cylinders_e.Niederhalter_rechts].toGS_wait_time));
 
 simu_capMainteningRight(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
-                     xIN_inGS   := IO_BOX.I3100_ST160_Wegmessenor_rechts < 10,
-                     xIN_inAS   := IO_BOX.I3100_ST160_Wegmessenor_rechts > 10,
-                     xIN_valve  := fb_capMainteningRight.xOUT_VALVE,
-                     tIN_GS_ms  := 200,  // ms
-                     tIN_AS_ms  := 200); // ms
+                        xIN_inGS   := IO_BOX.I3100_ST160_Wegmessenor_rechts < 10,
+                        xIN_inAS   := IO_BOX.I3100_ST160_Wegmessenor_rechts > 200,
+                        xIN_valve  := fb_capMainteningRight.xOUT_VALVE,
+                        tIN_GS_ms  := 200,  // ms
+                        tIN_AS_ms  := 200); // ms
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -236,6 +236,12 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          iAktStep,
                                          ST160_CETA_e.Init_pneumatic_up,
                                          ST160_CETA_e.SYNC_MOVER_LEAVE);
+
+IO_BOX.Q0300_14_ST160_niederhalter_links :=
+    fb_capMainteningLeft.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q0301_14_ST160_niederhalter_rechts :=
+    fb_capMainteningLeft.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)
@@ -319,37 +325,37 @@ ST160_CETA_e.waitOnMover: (*  *)
             iOUT_Step := ST160_CETA_e.vertical_up;
         END_IF
     END_IF;
-	
+
 ST160_CETA_e.vertical_up:
     IF fb_PnpVerAxis.MoveTo(ST160_PnpVerPos_e.as_up).xOUT_InPos THEN
         iOUT_Step := ST160_CETA_e.handling_up;
     END_IF
-	
+
 ST160_CETA_e.handling_up:
     IF fb_capMainteningLeft.xOUT_inAS AND fb_capMainteningRight.xOUT_inAS THEN
         iOUT_Step := ST160_CETA_e.CETA_start;
     END_IF
-	
+
 ST160_CETA_e.CETA_start:
-	IF TRUE THEN
+    IF TRUE THEN
         iOUT_Step := ST160_CETA_e.CETA_wait_on_result;
-	END_IF
-	
+    END_IF
+
 ST160_CETA_e.CETA_wait_on_result:
-	IF TRUE THEN
+    IF TRUE THEN
         iOUT_Step := ST160_CETA_e.CETA_read;
-	END_IF
-	
+    END_IF
+
 ST160_CETA_e.CETA_read:
-	IF TRUE THEN
+    IF TRUE THEN
         iOUT_Step := ST160_CETA_e.handling_down;
-	END_IF
-	
+    END_IF
+
 ST160_CETA_e.handling_down:
     IF fb_capMainteningLeft.xOUT_inGS AND fb_capMainteningRight.xOUT_inGS THEN
         iOUT_Step := ST160_CETA_e.vertical_down;
     END_IF
-	
+
 ST160_CETA_e.vertical_down:
     IF fb_PnpVerAxis.MoveTo(ST160_PnpVerPos_e.gs_down).xOUT_InPos THEN
         iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;

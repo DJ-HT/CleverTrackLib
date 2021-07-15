@@ -6,17 +6,17 @@
 // Please call each method only once (Use the command only during transition between step) 
 FUNCTION_BLOCK PUBLIC FB_CETA_715
 VAR_INPUT
-    xIN_StatusBits AT %I* : CETA_IN_u;            // connect this to the 2 first byte of the input of the CETATEST
-    xIN_Data       AT %I* : ARRAY[0..61] OF BYTE; // connect those 62 bytes right after xIN_StatusBits
-    xIN_Reset             : BOOL;                 // Reset errors
+    xIN_StatusBits : CETA_IN_u;            // connect this to the 2 first byte of the input of the CETATEST
+    xIN_Data       : ARRAY[0..61] OF BYTE; // connect those 62 bytes right after xIN_StatusBits
+    xIN_Reset      : BOOL;                 // Reset errors
 END_VAR
 VAR_OUTPUT
-    xOUT_CommandBits AT %Q* : CETA_OUT_u;           // connect this to the 2 first byte of the Output of the CETATEST
-    xOUT_Data        AT %Q* : ARRAY[0..29] OF BYTE; // connect those 30 bytes right after xIN_StatusBits
-    xOUT_DataReady          : BOOL;
-    xOUT_Error_Flag         : BOOL;
-    bOUT_ErrorCode          : BYTE;
-    sOUT_ErrorMessage       : STRING;
+    xOUT_CommandBits  : CETA_OUT_u;           // connect this to the 2 first byte of the Output of the CETATEST
+    xOUT_Data         : ARRAY[0..29] OF BYTE; // connect those 30 bytes right after xIN_StatusBits
+    xOUT_DataReady    : BOOL;
+    xOUT_Error_Flag   : BOOL;
+    bOUT_ErrorCode    : BYTE;
+    sOUT_ErrorMessage : STRING;
 END_VAR
 VAR
     iStep       : INT := 0;
