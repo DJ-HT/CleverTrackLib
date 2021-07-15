@@ -89,8 +89,8 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION       : BOOL := TRUE; // Set to TRUE to simulate this part of the program
-    PNP_DONT_CHECK_KRAFT : BOOL := TRUE;  // don't care of kraft sensor
+    PNP_SIMULATION       : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_DONT_CHECK_KRAFT : BOOL := FALSE;  // don't care of kraft sensor
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -438,6 +438,24 @@ END_IF
 
 (* START *)
 rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis110_01Y.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_axis110_02Z.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_axis110_03Z.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    ELSIF fb_axis110_04Z.xOUT_ErrFlag THEN
+        bOUT_Error := 14;
+    ELSIF fb_gripperLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 20;
+    ELSIF fb_gripperRight.xOUT_ErrFlag THEN
+        bOUT_Error := 21;
+    END_IF
+ELSIF iOUT_Step < ST145_Pnp_e.ERROR THEN
+    iOUT_Step := ST145_Pnp_e.ERROR;
+END_IF
 
 (*******************************************************************)
 (* Schrittkette  *)
