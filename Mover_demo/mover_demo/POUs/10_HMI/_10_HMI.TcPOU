@@ -132,6 +132,10 @@ OUT.Q000_LAMP_NRJ:= _10_HMI.x_BLINK_500 AND
 						_02_Safety.bArIN_Input[2].6 
 					OR (HMI.enState>enState.StateOFF);
 					*)
+					
+OUT.Q_CPX9_1_EnergiEin_led := _02_SAFETY.xOUT_ESout;
+OUT.Q_CPX9_1_Process_running := HMI.enState > enState.StateSTOP OR HMI.enState = enState.StateREADY;
+OUT.Q_CPX9_1_Process_stopped := HMI.enState = enState.StateSTOP;
 
 (***********************************************************************************************)
 (* HMI Alarme*)

@@ -110,6 +110,10 @@ VAR_GLOBAL
     QA03_ST135_pressure_valve_left  AT %Q* : UINT; // Pro.Druckregelventil left
     QA04_ST135_pressure_valve_right AT %Q* : UINT; // Pro.Druckregelventil right
 
+    Q_CPX9_1_EnergiEin_led   AT %Q* : BOOL; // Blue button on the panel
+    Q_CPX9_1_Process_running AT %Q* : BOOL; // Green button on the panel
+    Q_CPX9_1_Process_stopped AT %Q* : BOOL; // Red button on the panel
+
 END_VAR
 ]]></Declaration>
   </GVL>

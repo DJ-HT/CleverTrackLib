@@ -161,7 +161,7 @@ xOUT_MonOut    := xIN_MonOut;
 //--------------------------------------------------------------------------
 //RESET + Einrichten	
 //--------------------------------------------------------------------------
-xOUT_ResetES    := HMI.Tast_BL OR xIN_Reset_bp;
+xOUT_ResetES    := HMI.Tast_BL OR IN.I_CPX9_1_ResetBp;
 xOUT_Einrichten := xArIN_Input3[1];
 
 ////--------------------------------------------------------------------------
