@@ -752,35 +752,79 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\FB_ABL_150.TcPOU">
+    <Compile Include="POUs\20_AUTO\ST15x\FB_ABL_150.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\FB_AUT_150.TcPOU">
+    <Compile Include="POUs\20_AUTO\ST15x\FB_AUT_150.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\FB_AUT_155.TcPOU">
+    <Compile Include="POUs\20_AUTO\ST15x\FB_AUT_155.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\ST150_Cylinders_e.TcTLEO">
+    <Compile Include="POUs\20_AUTO\ST15x\ST150_Cylinders_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\ST150_Uss_e.TcTLEO">
+    <Compile Include="POUs\20_AUTO\ST15x\ST150_Uss_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\ST150_Recipe_t.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST15x\ST150_Recipe_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\Ultrasonic_IN_bits_t.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST15x\Ultrasonic_IN_bits_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\Ultrasonic_OUT_bits_t.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST15x\Ultrasonic_OUT_bits_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\VISU_Recipe_ST150.TcVIS">
+    <Compile Include="POUs\20_AUTO\ST15x\VISU_Recipe_ST150.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST150\VISU_ST150.TcVIS">
+    <Compile Include="POUs\20_AUTO\ST15x\VISU_ST150.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_error_handling_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_IN_bits_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_IN_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_OUT_bits_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_OUT_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\FB_CETA_715.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\FB_ABL_160.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\FB_AUT_160.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\FB_AUT_165.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\ST160_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\ST160_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\ST160_CETA_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\VISU_Recipe_ST160.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\VISU_ST160.TcVIS">
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
@@ -951,13 +995,14 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
-    <Folder Include="POUs\20_AUTO\CETA" />
+    <Folder Include="POUs\20_AUTO\ST16x" />
     <Folder Include="POUs\20_AUTO\ST128" />
     <Folder Include="POUs\20_AUTO\ST140" />
     <Folder Include="POUs\20_AUTO\ST105" />
+    <Folder Include="POUs\20_AUTO\ST16x\CETA" />
     <Folder Include="POUs\20_AUTO\ST185" />
     <Folder Include="POUs\20_AUTO\ST130" />
-    <Folder Include="POUs\20_AUTO\ST150" />
+    <Folder Include="POUs\20_AUTO\ST15x" />
     <Folder Include="POUs\20_AUTO\ST175" />
     <Folder Include="POUs\20_AUTO\Trumpf" />
     <Folder Include="POUs\20_AUTO\ST180" />
