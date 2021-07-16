@@ -267,8 +267,8 @@ ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_left:
     END_IF
 
 ST128_TubeCapCheck_e.Save_result_in_mover:
-    IF NOT capFoundRight OR
-       (_20_AUTO.recipe.st128.xIsTypeMiniOrSmart AND NOT capFoundLeft) AND
+    IF (NOT capFoundRight OR
+       (_20_AUTO.recipe.st128.xIsTypeMiniOrSmart AND NOT capFoundLeft)) AND
        NOT (TUBE_CAP_CHECK_SIMULATION AND CONST.USE_SIMULATION) THEN
         iOUT_Step := ST128_TubeCapCheck_e.ERROR;
         IF __ISVALIDREF(Mover) THEN

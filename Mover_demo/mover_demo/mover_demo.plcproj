@@ -866,8 +866,48 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\FB_ABL_175.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST175\FB_AUT_175.TcPOU">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\ST175_LASER_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\ST175_Cylinders_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\ST175_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\Trumpf\FB_Laser_ABL.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\Trumpf\if_SingleCmds.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\Trumpf\if_TruMark.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\Trumpf\TruMarkLaserStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\Trumpf\TruMark_Ethercat.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\Trumpf\TruMark_SingleCmds.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\VISU_Recipe_ST175.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST175\VISU_ST175.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST180\FB_ABL_180_Pnp.TcPOU">
       <SubType>Code</SubType>
@@ -960,26 +1000,6 @@
     <Compile Include="POUs\20_AUTO\TOOL\SortBubbleLREAL.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\Trumpf\FB_Laser_ABL.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\Trumpf\if_SingleCmds.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\Trumpf\if_TruMark.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\Trumpf\TruMarkLaserStatus.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\Trumpf\TruMark_SingleCmds.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\Trumpf\TruMark_Ethercat.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\20_AUTO\_20_AUTO.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -1039,11 +1059,11 @@
     <Folder Include="POUs\20_AUTO\ST140" />
     <Folder Include="POUs\20_AUTO\ST105" />
     <Folder Include="POUs\20_AUTO\ST16x\CETA" />
+    <Folder Include="POUs\20_AUTO\ST175\Trumpf" />
     <Folder Include="POUs\20_AUTO\ST185" />
     <Folder Include="POUs\20_AUTO\ST130" />
     <Folder Include="POUs\20_AUTO\ST15x" />
     <Folder Include="POUs\20_AUTO\ST175" />
-    <Folder Include="POUs\20_AUTO\Trumpf" />
     <Folder Include="POUs\20_AUTO\ST180" />
     <Folder Include="POUs\20_AUTO\ST145" />
     <Folder Include="POUs\20_AUTO\Simu" />

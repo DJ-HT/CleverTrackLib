@@ -318,8 +318,6 @@ GVL.st185_aut(xIN_Init       := HMI.enState = enState.StateINIT,
               tIN_Timeout    := T#10S,
               xIN_On         := TRUE);
 
-GVL.st1xx_aut();
-
 
 ]]></ST>
     </Implementation>

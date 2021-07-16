@@ -27,9 +27,8 @@ VAR_OUTPUT
 END_VAR
 VAR
     (* Bausteine *)
-    fb_laser : FB_Laser_ABL;
+    fb_laser : FB_ABL_175;
 
-						
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -60,7 +59,20 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
-fb_laser(xIN_Start :=);
+fb_laser(xIN_Reset       := xReset,
+         xIN_Init        := xIN_Init,
+         xIN_Quit        := xIN_Quit,
+         xIN_Start       := enIN_State = enState.StateAUTO,
+         xIN_Sperre      := NOT xIN_On,
+         xIN_NextStep    := xNextStep,
+         xIN_AlarmAktiv  := xIN_AlarmAktiv,
+         xIN_DryCycle    := xIN_DryCycle,
+         xIN_RestartCYCL := enIN_State = enState.StateAUTO,
+         enIN_State      := enIN_State,
+         tIN_Timeout     := tIN_Timeout,
+         pxFG_Freigabe   := ADR(xDummy),
+         // CleverTrackLib
+         Mover := THIS^.Mover);
 
 (*******************************************************************)
 (* Bausteinaufruf Error Station *)
@@ -70,120 +82,60 @@ fb_laser(xIN_Start :=);
 (*******************************************************************)
 (* OUTPUT *)
 (*******************************************************************)
-xOUT_InitDone := TRUE;
-xOUT_Ready    := TRUE;
-xOUT_Done     := TRUE;
-xOUT_ErrFlag  := TRUE;
-xOUT_Wait     := FALSE;
-xOUT_AlarmST  := FALSE;
+xOUT_InitDone := fb_laser.xOUT_InitDone;
+xOUT_Ready    := fb_laser.xOUT_Ready;
+xOUT_Done     := fb_laser.xOUT_Done;
+xOUT_ErrFlag  := fb_laser.xOUT_ErrFlag;
+xOUT_Wait     := fb_laser.xOUT_Wait;
+xOUT_AlarmST  := xOUT_ErrFlag;
 ]]></ST>
     </Implementation>
-    <Property Name="iCompletionPC" Id="{315967f2-03a0-4e8a-b947-7a30ebf5f040}">
-      <Declaration><![CDATA[PROPERTY iCompletionPC : INT]]></Declaration>
-      <Get Name="Get" Id="{d3d6dad8-d26b-40b1-81e1-f23b156094fa}">
+    <Property Name="iCompletionPC" Id="{e2fa9667-8677-4294-9ac2-dc0271992986}">
+      <Declaration><![CDATA[(* % of completion of the process *)
+PROPERTY iCompletionPC : INT
+]]></Declaration>
+      <Get Name="Get" Id="{27af7196-12b2-4880-a690-b9435b6d778c}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[]]></ST>
+          <ST><![CDATA[iCompletionPC := THIS^.fb_laser.iOUT_ProcessCompletion;]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{6a991963-98b5-4a57-a16c-17d328b7b386}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
     </Property>
-    <Property Name="iProcessTimeMili_1" Id="{94d4c429-0ad5-4f5e-95e9-a4043181c20f}">
-      <Declaration><![CDATA[PROPERTY iProcessTimeMili_1 : DINT]]></Declaration>
-      <Get Name="Get" Id="{ab4b3291-b812-4564-bf42-226a68391516}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{12617e34-4ede-4d8b-94e2-20ef232d94d4}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="iProcessTimeMili_2" Id="{a084a818-4a0c-443c-a7bb-04640996af44}">
-      <Declaration><![CDATA[PROPERTY iProcessTimeMili_2 : DINT]]></Declaration>
-      <Get Name="Get" Id="{ea15266e-da0a-4292-8aee-38050498571b}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{450bc7df-ad74-4caf-9e32-e816d583936a}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="Mover" Id="{a6f02715-cbc1-49ca-9685-44e03b022758}">
-      <Declaration><![CDATA[PROPERTY Mover : REFERENCE TO FB_Mover]]></Declaration>
-      <Get Name="Get" Id="{452f67ba-dc9f-4efc-9d6a-afa6be5ff2a4}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Get>
-      <Set Name="Set" Id="{e9d303bc-d741-447e-8723-1092e04c63b7}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
-    </Property>
-    <Property Name="ProcessExecution" Id="{fd9f5552-2f7f-4c6a-8af6-92ee39200c7b}">
+    <Property Name="ProcessExecution" Id="{22b82c88-6347-43bc-90d0-6902106442d4}">
       <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
-      <Get Name="Get" Id="{768c8785-7147-4e80-939f-b6a2931fc6ee}">
+      <Get Name="Get" Id="{e67a2328-cdab-4115-a777-cfdb3e283460}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[]]></ST>
+          <ST><![CDATA[ProcessExecution := THIS^._ProcessExecution;
+]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{9924e2d1-e2cb-41eb-8c32-b1bc885ec4cc}">
+      <Set Name="Set" Id="{1ef539a5-5959-4248-9c95-75b8da59ad81}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[]]></ST>
+          <ST><![CDATA[THIS^._ProcessExecution := ProcessExecution;
+]]></ST>
         </Implementation>
       </Set>
     </Property>
-    <Property Name="xBusy" Id="{8771e451-625f-43cc-9946-5c3512a109c1}">
+    <Property Name="xBusy" Id="{380ab12d-553d-4db8-89b1-8a31b58ec5f4}">
       <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
-      <Get Name="Get" Id="{e4ae8288-255f-4af8-9c80-f8819b4bb8e6}">
+      <Get Name="Get" Id="{4142ea11-5e05-484f-944f-258292f096dd}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xBusy := FALSE;]]></ST>
+          <ST><![CDATA[xBusy := THIS^.fb_laser.xOUT_Busy;
+]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{669a6d19-f58f-4848-8280-59171de554e3}">
+      <Set Name="Set" Id="{9f90a352-cb01-46b5-9482-c59db03ec73b}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -192,62 +144,41 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Property Name="xDone" Id="{1484621a-1536-4404-a05b-d5834613226f}">
+    <Property Name="xDone" Id="{fe270e69-7b35-4c4b-8d42-e68ef775a001}">
       <Declaration><![CDATA[PROPERTY xDone : BOOL]]></Declaration>
-      <Get Name="Get" Id="{047aaad4-4d0a-4b37-b2fe-a51231ce49f6}">
+      <Get Name="Get" Id="{45fc742f-1c27-4f7e-a250-57ed93bb37a0}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xDone := TRUE;]]></ST>
+          <ST><![CDATA[xDone := THIS^.fb_laser.xOUT_Ready OR THIS^.fb_laser.xOUT_Done;
+]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{0be92544-4fa1-4fde-a501-1388eef8d762}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
     </Property>
-    <Property Name="xMoverPathFree" Id="{4adcb0a8-e62d-4fcf-809d-38fc4e02a974}">
+    <Property Name="xMoverPathFree" Id="{1c7fad61-69f4-40ed-9109-38ada4defd02}">
       <Declaration><![CDATA[PROPERTY xMoverPathFree : BOOL]]></Declaration>
-      <Get Name="Get" Id="{84947f2f-2df9-4019-8a8e-58f8c0b16c23}">
+      <Get Name="Get" Id="{5e1095eb-bdf7-49aa-8c87-0a868a7a81a7}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverPathFree := TRUE;]]></ST>
+          <ST><![CDATA[xMoverPathFree := THIS^.fb_laser.xOUT_MoverFree OR THIS^.fb_laser.xOUT_Ready OR THIS^.fb_laser.xOUT_Done;
+]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{fe795596-c4eb-41dc-a394-5dd300fdb00a}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
     </Property>
-    <Property Name="xMoverShouldLeave" Id="{65d5ac1c-6801-483b-a52d-a990d2f39bf4}">
+    <Property Name="xMoverShouldLeave" Id="{c90cfc5b-9667-4380-a9e2-31543a87542f}">
       <Declaration><![CDATA[PROPERTY xMoverShouldLeave : BOOL]]></Declaration>
-      <Get Name="Get" Id="{1f120a3f-6481-463b-b594-bdab04dffb44}">
+      <Get Name="Get" Id="{8cf35ae6-3233-4d0c-aaf2-7962d57fd8ff}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := TRUE;]]></ST>
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_laser.iOUT_Step = ST175_LASER_e.SYNC_MOVER_LEAVE;
+]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{8dce2547-2e3f-4f68-96f6-d1fade3e237e}">
-        <Declaration><![CDATA[VAR
-END_VAR
-]]></Declaration>
-        <Implementation>
-          <ST><![CDATA[]]></ST>
-        </Implementation>
-      </Set>
     </Property>
   </POU>
 </TcPlcObject>

@@ -453,8 +453,8 @@ IF 0 = bOUT_Error THEN
     ELSIF fb_gripperRight.xOUT_ErrFlag THEN
         bOUT_Error := 21;
     END_IF
-ELSIF iOUT_Step < ST145_Pnp_e.ERROR THEN
-    iOUT_Step := ST145_Pnp_e.ERROR;
+ELSIF iOUT_Step < ST110_Pnp_e.ERROR THEN
+    iOUT_Step := ST110_Pnp_e.ERROR;
 END_IF
 
 (*******************************************************************)
