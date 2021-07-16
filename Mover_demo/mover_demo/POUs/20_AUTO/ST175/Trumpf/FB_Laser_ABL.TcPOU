@@ -3,18 +3,21 @@
   <POU Name="FB_Laser_ABL" Id="{da082569-8ac6-4e90-8334-73d28c10a92f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Laser_ABL
 VAR_INPUT
-    xIN_Start : BOOL;
+    xIN_Start    : BOOL;
+    sIN_FileName : STRING := 'Someting here please';
 END_VAR
 VAR_OUTPUT
+    xOUT_DONE  : BOOL;
+    xOUT_ERROR : BOOL;
 END_VAR
 VAR
-    iStep : INT := 0;
-	sDataTime : STRING(10);
+    iStep     : INT := 0;
+    sDataTime : STRING(10);
 
     sLastName : STRING;
     sLastNum  : STRING(10);
-	
-	fb_time : NT_GetTime;
+
+    fb_time : NT_GetTime;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -80,7 +83,7 @@ CASE iStep OF
 1110: (* Load File *)
     IF if_SingleCmds.bReady THEN
         if_SingleCmds.iStepNr     := 20; // TLV - Load Marking-File with 2 variables
-        if_SingleCmds.sInputValue := CONCAT('C:\Aquis\', CONCAT(SIMU.sLaserFileName, '.VLF'));
+        if_SingleCmds.sInputValue := CONCAT('C:\Aquis\', CONCAT(sIN_FileName, '.VLF'));
         sLastName                 := SIMU.sLaserFileName;
 
         if_SingleCmds.bStart := TRUE;
@@ -167,7 +170,9 @@ CASE iStep OF
     END_IF
 
 END_CASE
-]]></ST>
+
+xOUT_DONE := 1300 = iStep;
+xOUT_ERROR := if_SingleCmds.bError;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
