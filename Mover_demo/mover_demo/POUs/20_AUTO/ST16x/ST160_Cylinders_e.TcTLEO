@@ -8,6 +8,10 @@ TYPE ST160_Cylinders_e :
 (
 	Niederhalter_links,
 	Niederhalter_rechts,
+	Dichtung_prufglocke_links,
+	Dichtung_prufglocke_rechts,
+	nc_160_06,
+	nc_160_07,
 	_max
 );
 END_TYPE
@@ -23,6 +27,26 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"Niederhalter_rechts"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Dichtung_prufglocke_links"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Dichtung_prufglocke_rechts"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"nc_160_06"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"nc_160_07"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

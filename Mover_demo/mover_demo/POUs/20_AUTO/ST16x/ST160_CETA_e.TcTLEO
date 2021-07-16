@@ -9,8 +9,8 @@ TYPE ST160_CETA_e :
     RESET := 0, // Reset
 
     INIT := 100, // Initialisieren 
+    Init_pneumatics,
     Init_vertical_down,
-    Init_pneumatic_up,
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
@@ -19,17 +19,19 @@ TYPE ST160_CETA_e :
     waitOnMover,     // wait until the mover is there
     MOVER_NEEDED_OP, // Since here, a mover in position is needed to perform the action
 
-    vertical_up,   // 
     handling_down, // 
+    vertical_up,   // 
+    seal_piece,   //
     CETA_start,    // 
     CETA_wait_on_result, // 
     CETA_read,     // 
-    handling_up,   // 
+    unseal_piece,   //
     vertical_down, // 
+    handling_up,   // 
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
-    DONE := 8000,  // Ablauf beendet 
-    ERROR := 9000, // Fehler 
+    DONE := 8000,     // Ablauf beendet 
+    ERROR := 9000,    // Fehler 
     _max
 );
 END_TYPE
@@ -49,12 +51,12 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_vertical_down"</v>
+              <v n="TextID">"Init_pneumatics"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_pneumatic_up"</v>
+              <v n="TextID">"Init_vertical_down"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
@@ -84,12 +86,17 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"handling_down"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"vertical_up"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"handling_down"</v>
+              <v n="TextID">"seal_piece"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
@@ -109,12 +116,17 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"handling_up"</v>
+              <v n="TextID">"unseal_piece"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"vertical_down"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"handling_up"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

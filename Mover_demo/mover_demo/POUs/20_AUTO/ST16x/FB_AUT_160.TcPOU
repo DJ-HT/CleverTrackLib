@@ -186,7 +186,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_ABL_CETA.iOUT_Step = ST150_Uss_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_ABL_CETA.iOUT_Step = ST160_CETA_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>

@@ -65,30 +65,30 @@ VAR_GLOBAL
 
     //-203A1
     (* Ventil Batterie 203 A *)
-    Q0300_14_ST160_niederhalter_links        AT %Q* : BOOL; // 
-    Q0300_12_                                AT %Q* : BOOL; // ST160 Niederhalter links ST160
-    Q0301_14_ST160_niederhalter_rechts       AT %Q* : BOOL; // 
-    Q0301_12_ST160_dichtung_pruflocker_aus   AT %Q* : BOOL; // ST160 Niederhalter rechts ST160
-    Q0302_14_ST160_dichtung_pruflocker_ein   AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts aus
-    Q0302_12_ST160_dichtung_pruflocker_aus_2 AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts ein
-    Q0303_14_ST160_dichtung_pruflocker_ein_2 AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts aus ???
-    Q0303_12_                                AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts ein ???
-    Q0304_14_ST165_niederhalter_links        AT %Q* : BOOL; // 
-    Q0304_12_                                AT %Q* : BOOL; // ST165 Niederhalter links ST160
-    Q0305_14_ST165_niederhalter_rechts       AT %Q* : BOOL; // 
-    Q0305_12_ST165_dichtung_pruflocker_aus   AT %Q* : BOOL; // ST165 Niederhalter rechts ST160
-    Q0306_14_ST165_dichtung_pruflocker_ein   AT %Q* : BOOL; // 
-    Q0306_12_ST165_dichtung_pruflocker_aus_2 AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts aus
-    Q0307_14_ST165_dichtung_pruflocker_ein_2 AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts ein
-    Q0307_12_                                AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts aus ???
-    Q0308_14_                                AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts ein ???
-    Q0308_12_                                AT %Q* : BOOL; // 
-    Q0309_14_                                AT %Q* : BOOL; // 
-    Q0309_12_                                AT %Q* : BOOL; // 
-    Q0310_14_                                AT %Q* : BOOL; // 
-    Q0310_12_                                AT %Q* : BOOL; // 
-    Q0311_14_                                AT %Q* : BOOL; // 
-    Q0311_12_                                AT %Q* : BOOL; // 
+    Q0300_14_ST160_niederhalter_links         AT %Q* : BOOL; // ST160 Niederhalter links ST160
+    Q0300_12_                                 AT %Q* : BOOL; // 
+    Q0301_14_ST160_niederhalter_rechts        AT %Q* : BOOL; // ST160 Niederhalter rechts ST160
+    Q0301_12_                                 AT %Q* : BOOL; // 
+    Q0302_14_ST160_dichtung_pruflocker_links  AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links
+    Q0302_12_ST160_dichtung_pruflocker_rechts AT %Q* : BOOL; // ST160 Dichtung Prüfglocker rechts
+    Q0303_14_nc                               AT %Q* : BOOL; // ST160 not connected (yet?)
+    Q0303_12_nc                               AT %Q* : BOOL; // ST160 not connected (yet?)
+    Q0304_14_ST165_niederhalter_links         AT %Q* : BOOL; // ST165 Niederhalter links ST160   
+    Q0304_12_                                 AT %Q* : BOOL; //                                  
+    Q0305_14_ST165_niederhalter_rechts        AT %Q* : BOOL; // ST165 Niederhalter rechts ST160  
+    Q0305_12_                                 AT %Q* : BOOL; // 
+    Q0306_14_ST165_dichtung_pruflocker_links  AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links 
+    Q0306_12_ST165_dichtung_pruflocker_rechts AT %Q* : BOOL; // ST165 Dichtung Prüfglocker rechts
+    Q0307_14_nc                               AT %Q* : BOOL; // ST165 not connected (yet?)       
+    Q0307_12_nc                               AT %Q* : BOOL; // ST165 not connected (yet?)       
+    Q0308_14_                                 AT %Q* : BOOL; // 
+    Q0308_12_                                 AT %Q* : BOOL; // 
+    Q0309_14_                                 AT %Q* : BOOL; // 
+    Q0309_12_                                 AT %Q* : BOOL; // 
+    Q0310_14_                                 AT %Q* : BOOL; // 
+    Q0310_12_                                 AT %Q* : BOOL; // 
+    Q0311_14_                                 AT %Q* : BOOL; // 
+    Q0311_12_                                 AT %Q* : BOOL; // 
 
     (* IO-Link Boxen 190A4 *)
     (*******************************************************************)
