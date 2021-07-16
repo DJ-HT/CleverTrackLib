@@ -839,6 +839,33 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST170\FB_ABL_170.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST170\FB_AUT_170.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST170\ST170_Axis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST170\ST170_RFID_e.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST170\ST170_PnpVerPos_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST170\ST170_Recipe_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST170\VISU_Recipe_ST170.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST170\VISU_ST170.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST175\FB_AUT_175.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -1006,6 +1033,7 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST170" />
     <Folder Include="POUs\20_AUTO\ST16x" />
     <Folder Include="POUs\20_AUTO\ST128" />
     <Folder Include="POUs\20_AUTO\ST140" />
