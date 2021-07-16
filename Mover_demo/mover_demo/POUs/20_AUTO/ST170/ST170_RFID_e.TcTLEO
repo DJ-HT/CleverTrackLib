@@ -9,6 +9,7 @@ TYPE ST170_RFID_e :
     RESET := 0, // Reset
 
     INIT := 100, // Initialisieren 
+    Init_vertical_homing,
     Init_vertical_down,
 
     READY := 999,  // READY to Start, Init Done 
@@ -43,6 +44,11 @@ END_TYPE
             <o>
               <v n="TextID">"INIT"</v>
               <v n="TextDefault">"100"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_vertical_homing"</v>
+              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
