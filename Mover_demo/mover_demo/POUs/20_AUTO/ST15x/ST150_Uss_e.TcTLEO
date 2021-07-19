@@ -23,6 +23,10 @@ TYPE ST150_Uss_e :
     uss_start,             // start signal is given
     uss_working,           // we wait until the uss is finished
     mover_maintening_down, // Kraftbstützung goes down
+	
+	// only used for xxxx_solo process
+	move_shuttle_120_mm,
+	wait_shuttle_in_pos,
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
     DONE := 8000,     // Ablauf beendet 
@@ -97,6 +101,16 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"mover_maintening_down"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"move_shuttle_120_mm"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"wait_shuttle_in_pos"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

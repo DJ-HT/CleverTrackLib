@@ -65,11 +65,13 @@ VAR
     // Application specific
     fb_axis105_10W               : FB_AxisLMturn_V1_1;
     simu_axis105_10W             : FB_Simu_AxisLM_V1_1;
-    fb_feeder                    : FB_Feeder2Sensors;
+    fb_feeder_wf                 : FB_Feeder2Sensors;
     fifo                         : FB_Fifo(4);
     simu_feeder                  : FB_Simu_Feeder; // simulation of a feeder
     simu_fifo_feeder_to_rotTable : FB_Fifo(20);    // fifo to hold a piece
+    simu_fifo_feeder_lf          : FB_Fifo(20);    // fifo to hold a piece
     rtPutPiece                   : R_TRIG;         // trigger to add a piece
+    fb_feeder_lf                 : FB_Feeder2Sensors;
 
     rtPick : R_TRIG; // r_trig signal from the pick and place machine
 
@@ -133,19 +135,30 @@ ton_two_pieces(IN := IO_BOX.I8705_ST105_Kontrolle_zwei_Filtergehiluse,
 (* Bausteine *)
 (*******************************************************************)
 
-fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
-          xIN_PieceInEnd            := IO_BOX.I8600_ST105_teil_in_vereinzelung,
-          xIN_PieceMax              := IO_BOX.I8600_ST105_teil_in_vereinzelung, //IO_BOX.I8704_ST105_Maximum_LF,
-          xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
-          refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
-          iIN_FifoSetMaxSensorValue := 10,
-          diIN_SignlFilter_ms       := _20_AUTO.recipe.st105.FeederConfig.InFilterDelay,
-          diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,
-          diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,
-          diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);
+fb_feeder_wf(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+             xIN_PieceInEnd            := IO_BOX.I8600_ST105_teil_in_vereinzelung,
+             xIN_PieceMax              := IO_BOX.I8600_ST105_teil_in_vereinzelung,
+             xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+             refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
+             iIN_FifoSetMaxSensorValue := 10,
+             diIN_SignlFilter_ms       := _20_AUTO.recipe.st105.FeederConfig.InFilterDelay,
+             diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,
+             diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,
+             diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);
 
-simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
-            xIN_PceSensor      := fb_feeder.xIN_PieceInEnd,
+fb_feeder_lf(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+             xIN_PieceInEnd            := NOT fb_feeder_wf.xOUT_EnableFeeder,
+             xIN_PieceMax              := IO_BOX.I8704_ST105_Maximum_LF,
+             xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+             refIN_SimulatedFifo       := simu_fifo_feeder_lf,
+             iIN_FifoSetMaxSensorValue := 10,
+             diIN_SignlFilter_ms       := 3000,
+             diIN_StartDelay_ms        := 1000,
+             diIN_StopDelay_ms         := 500,
+             diIN_EmptyDelay_ms        := 0);
+
+simu_feeder(xIN_Enable         := fb_feeder_wf.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+            xIN_PceSensor      := fb_feeder_wf.xIN_PieceInEnd,
             tIN_NewPieceTime   := 500,
             iIN_WaitTimeMin_ms := 500,
             iIN_WaitTimeMax_ms := 1000);
@@ -289,9 +302,16 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST105_Feeder_e.DONE);
 
-IO_BOX.Q9500_ST105_Freigabe_WF := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
-IO_BOX.Q9501_ST105_Freigabe_LF := IO_BOX.Q9500_ST105_Freigabe_WF;
-OUT.Q106_ST105_zusatz_band_on  := IO_BOX.Q9500_ST105_Freigabe_WF;
+IO_BOX.Q9500_ST105_Freigabe_WF := fb_feeder_wf.xOUT_EnableFeeder AND
+                                  NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
+                                  (ST105_Slider_e.slider_down = eSliderStep);
+
+IO_BOX.Q9501_ST105_Freigabe_LF := fb_feeder_lf.xOUT_EnableFeeder AND
+                                  NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
+								  NOT IO_BOX.I8704_ST105_Maximum_LF AND
+                                  (ST105_Slider_e.slider_down = eSliderStep);
+
+OUT.Q106_ST105_zusatz_band_on := IO_BOX.Q9501_ST105_Freigabe_LF;
 
 IO_BOX.Q8800_14_Auschieber_ab_auf :=
     fb_slider.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
@@ -323,10 +343,12 @@ END_IF
 rtSTART(CLK := xIN_Start);
 
 IF 0 = bOUT_Error THEN
-    IF fb_slider.xOUT_ErrFlag THEN
+    IF fb_axis105_10W.xOUT_ErrFlag THEN
         bOUT_Error := 11;
-    ELSIF fb_pusher.xOUT_ErrFlag THEN
+    ELSIF fb_slider.xOUT_ErrFlag THEN
         bOUT_Error := 12;
+    ELSIF fb_pusher.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
     END_IF
 ELSIF iOUT_Step < ST105_Feeder_e.ERROR THEN
     iOUT_Step := ST105_Feeder_e.ERROR;
@@ -347,7 +369,7 @@ ST105_Slider_e.slider_go_up:
     END_IF
 
 ST105_Slider_e.slider_push_out:
-    IF xIN_NextStep AND  fb_pusher.xOUT_inAS THEN
+    IF xIN_NextStep AND fb_pusher.xOUT_inAS THEN
         eSliderStep := ST105_Slider_e.slider_pusher_in;
     END_IF
 

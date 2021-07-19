@@ -1,0 +1,2162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TreeItem>
+  <ItemName>HT1 (EL7221-9014)</ItemName>
+  <PathName>TIID^Device 1 (EtherCAT)^Term 74 (EK1100)^HT1 (EL7221-9014)</PathName>
+  <ItemType>5</ItemType>
+  <ItemId>75</ItemId>
+  <ObjectId>#x0302004b</ObjectId>
+  <ItemSubType>9099</ItemSubType>
+  <ItemSubTypeName>EL7221-9014 1Ch. MDP742 Servo motor output stage with OCT (50V, 8A RMS) and STO input</ItemSubTypeName>
+  <ChildCount>0</ChildCount>
+  <Disabled>false</Disabled>
+  <TreeImageData16x14>424dd6020000000000003600000028000000100000000e0000000100180000000000a002000000000000000000000000000000000000ff00ffff00ffff00ffff00ff808080808080808080808080808080808080808080808080808080808080808080808080ff00ffff00ffff00ffff00ffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0000000c0c0c0c0c0c0808080ff00ffff00ffff00ffff00ffc0c0c0c0c0c0000000000000000000000000000000000000000000c0c0c0c0c0c0808080007fff007fff007fff007fffc0c0c0c0c0c00000000000000000000000000000000000000000000000ffc0c0c0808080007fff007fff007fff007fffc0c0c0c0c0c0000000000000000000000000000000000000000000c0c0c0c0c0c0808080007fff007fff007fff007fffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0000000c0c0c0c0c0c0000000c0c0c0c0c0c0808080007fff007fff007fff007fffc0c0c0c0c0c0000000000000000000000000c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0808080007fff007fff007fff007fffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0808080007fff007fff007fff007fffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0808080007fff007fff007fff007fffc0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0808080</TreeImageData16x14>
+  <BoxDef>
+    <FieldbusAddress>1078</FieldbusAddress>
+    <AmsAddress>
+      <AmsPort>0</AmsPort>
+      <AmsPortTimeout>5</AmsPortTimeout>
+    </AmsAddress>
+  </BoxDef>
+  <EtherCAT>
+    <Slave>
+      <Info>
+        <Name><![CDATA[HT1 (EL7221-9014)]]></Name>
+        <PhysAddr>1078</PhysAddr>
+        <AutoIncAddr>65459</AutoIncAddr>
+        <Physics>KK</Physics>
+        <VendorId>2</VendorId>
+        <ProductCode>473247826</ProductCode>
+        <RevisionNo>2106166</RevisionNo>
+        <SerialNo>0</SerialNo>
+        <ProductRevision>EL7221-9014-0032</ProductRevision>
+      </Info>
+      <ProcessData>
+        <Send>
+          <BitStart>24912</BitStart>
+          <BitLength>48</BitLength>
+        </Send>
+        <Recv>
+          <BitStart>24912</BitStart>
+          <BitLength>48</BitLength>
+        </Recv>
+        <Sm2>
+          <Type>Outputs</Type>
+          <DefaultSize>6</DefaultSize>
+          <StartAddress>4352</StartAddress>
+          <ControlByte>36</ControlByte>
+          <Enable>1</Enable>
+          <Pdo>5632</Pdo>
+          <Pdo>5633</Pdo>
+        </Sm2>
+        <Sm3>
+          <Type>Inputs</Type>
+          <DefaultSize>6</DefaultSize>
+          <StartAddress>4480</StartAddress>
+          <ControlByte>32</ControlByte>
+          <Enable>1</Enable>
+          <Pdo>6656</Pdo>
+          <Pdo>6657</Pdo>
+        </Sm3>
+        <TxPdo Fixed="true" Sm="3">
+          <Index>#x1a00</Index>
+          <Name>FB Position</Name>
+          <Entry>
+            <Index>#x6000</Index>
+            <SubIndex>17</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>Position</Name>
+            <DataType>UDINT</DataType>
+            <AdsInfo>
+              <AmsAddress>
+                <AmsPort>11</AmsPort>
+              </AmsAddress>
+              <IndexGroup>50593856</IndexGroup>
+              <IndexOffset>-2147482070</IndexOffset>
+              <Length>4</Length>
+            </AdsInfo>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true" Sm="3">
+          <Index>#x1a01</Index>
+          <Name>DRV Statusword</Name>
+          <Entry>
+            <Index>#x6010</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Statusword</Name>
+            <DataType>UINT</DataType>
+            <AdsInfo>
+              <AmsAddress>
+                <AmsPort>11</AmsPort>
+              </AmsAddress>
+              <IndexGroup>50593856</IndexGroup>
+              <IndexOffset>-2147482066</IndexOffset>
+              <Length>2</Length>
+            </AdsInfo>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a02</Index>
+          <Name>DRV Velocity actual value</Name>
+          <Entry>
+            <Index>#x6010</Index>
+            <SubIndex>7</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>Velocity actual value</Name>
+            <DataType>DINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a03</Index>
+          <Name>DRV Torque actual value</Name>
+          <Entry>
+            <Index>#x6010</Index>
+            <SubIndex>8</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Torque actual value</Name>
+            <DataType>INT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a04</Index>
+          <Name>DRV Info data 1</Name>
+          <Entry>
+            <Index>#x6010</Index>
+            <SubIndex>18</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Info data 1</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a05</Index>
+          <Name>DRV Info data 2</Name>
+          <Entry>
+            <Index>#x6010</Index>
+            <SubIndex>19</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Info data 2</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a06</Index>
+          <Name>DRV Following error actual value</Name>
+          <Entry>
+            <Index>#x6010</Index>
+            <SubIndex>6</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>Following error actual value</Name>
+            <DataType>DINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a07</Index>
+          <Name>FB Touch probe status</Name>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP1 Enable</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>2</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP1 Pos value stored</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>3</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP1 Neg value stored</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>4</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>8</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP1 Input</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>9</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP2 Enable</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>10</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP2 Pos value stored</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>11</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP2 Neg value stored</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>4</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>16</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP2 Input</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a08</Index>
+          <Name>FB Touch probe 1 pos position</Name>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>17</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>TP1 Pos position</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a09</Index>
+          <Name>FB Touch probe 1 neg position</Name>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>18</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>TP1 Neg position</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a0a</Index>
+          <Name>FB Touch probe 2 pos position</Name>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>19</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>TP2 Pos position</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a0b</Index>
+          <Name>FB Touch probe 2 neg position</Name>
+          <Entry>
+            <Index>#x6001</Index>
+            <SubIndex>20</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>TP2 Neg position</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a0c</Index>
+          <Name>FB Status</Name>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>13</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6000</Index>
+            <SubIndex>14</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TxPDO State</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6000</Index>
+            <SubIndex>15</SubIndex>
+            <BitLen>2</BitLen>
+            <Name>Input Cycle Counter</Name>
+            <DataType>BIT2</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a0e</Index>
+          <Name>DRV Modes of operation display</Name>
+          <Entry>
+            <Index>#x6010</Index>
+            <SubIndex>3</SubIndex>
+            <BitLen>8</BitLen>
+            <Name>Modes of operation display</Name>
+            <DataType>USINT</DataType>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a30</Index>
+          <Name>DMC Inputs</Name>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>1</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>2</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackStatus__Latch extern valid</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>3</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackStatus__Set counter done</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>9</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>13</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackStatus__Status of extern latch</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>3</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>17</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Ready to enable</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>18</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Ready</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>19</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Warning</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>20</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Error</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>21</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Moving positive</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>22</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Moving negative</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>5</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>28</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Digital input 1</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>29</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Digital input 2</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>3</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>33</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Busy</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>34</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__In-Target</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>35</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Warning</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>36</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Error</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>37</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Calibrated</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>38</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Accelerate</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>39</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Decelerate</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>40</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Ready to execute</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>8</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>49</SubIndex>
+            <BitLen>64</BitLen>
+            <Name>DMC__Set position</Name>
+            <DataType>LINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>50</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Set velocity</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>51</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Actual drive time</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>52</SubIndex>
+            <BitLen>64</BitLen>
+            <Name>DMC__Actual position lag</Name>
+            <DataType>LINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>53</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Actual velocity</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>54</SubIndex>
+            <BitLen>64</BitLen>
+            <Name>DMC__Actual position</Name>
+            <DataType>LINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>55</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Error id</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>56</SubIndex>
+            <BitLen>8</BitLen>
+            <Name>DMC__Input cycle counter</Name>
+            <DataType>USINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>8</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>58</SubIndex>
+            <BitLen>64</BitLen>
+            <Name>DMC__Latch value</Name>
+            <DataType>LINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>59</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Cyclic info data 1</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>60</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Cyclic info data 2</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>64</BitLen>
+          </Entry>
+        </TxPdo>
+        <TxPdo Fixed="true">
+          <Index>#x1a31</Index>
+          <Name>DMC Inputs 32 Bit</Name>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>1</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>2</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackStatus__Latch extern valid</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>3</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackStatus__Set counter done</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>9</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>13</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackStatus__Status of extern latch</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>3</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>17</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Ready to enable</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>18</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Ready</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>19</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Warning</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>20</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Error</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>21</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Moving positive</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>22</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Moving negative</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>5</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>28</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Digital input 1</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>29</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveStatus__Digital input 2</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>3</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>33</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Busy</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>34</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__In-Target</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>35</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Warning</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>36</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Error</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>37</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Calibrated</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>38</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Accelerate</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>39</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Decelerate</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>40</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningStatus__Ready to execute</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>8</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>49</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Set position</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>32</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>50</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Set velocity</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>51</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Actual drive time</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>52</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Actual position lag</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>32</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>53</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Actual velocity</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>54</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Actual position</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>32</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>55</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Error id</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>56</SubIndex>
+            <BitLen>8</BitLen>
+            <Name>DMC__Input cycle counter</Name>
+            <DataType>USINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>8</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>58</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Latch value</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>32</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>59</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Cyclic info data 1</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x6030</Index>
+            <SubIndex>60</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Cyclic info data 2</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>64</BitLen>
+          </Entry>
+        </TxPdo>
+        <RxPdo Fixed="true" Sm="2">
+          <Index>#x1600</Index>
+          <Name>DRV Controlword</Name>
+          <Entry>
+            <Index>#x7010</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Controlword</Name>
+            <DataType>UINT</DataType>
+            <AdsInfo>
+              <AmsAddress>
+                <AmsPort>11</AmsPort>
+              </AmsAddress>
+              <IndexGroup>50593856</IndexGroup>
+              <IndexOffset>-2130704854</IndexOffset>
+              <Length>2</Length>
+            </AdsInfo>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true" Sm="2">
+          <Index>#x1601</Index>
+          <Name>DRV Target velocity</Name>
+          <Entry>
+            <Index>#x7010</Index>
+            <SubIndex>6</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>Target velocity</Name>
+            <DataType>DINT</DataType>
+            <AdsInfo>
+              <AmsAddress>
+                <AmsPort>11</AmsPort>
+              </AmsAddress>
+              <IndexGroup>50593856</IndexGroup>
+              <IndexOffset>-2130704852</IndexOffset>
+              <Length>4</Length>
+            </AdsInfo>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1602</Index>
+          <Name>DRV Target torque</Name>
+          <Entry>
+            <Index>#x7010</Index>
+            <SubIndex>9</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Target torque</Name>
+            <DataType>INT</DataType>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1603</Index>
+          <Name>DRV Commutation angle</Name>
+          <Entry>
+            <Index>#x7010</Index>
+            <SubIndex>14</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Commutation angle</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1604</Index>
+          <Name>DRV Torque limitation</Name>
+          <Entry>
+            <Index>#x7010</Index>
+            <SubIndex>11</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Torque limitation</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1605</Index>
+          <Name>DRV Torque offset</Name>
+          <Entry>
+            <Index>#x7010</Index>
+            <SubIndex>10</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>Torque offset</Name>
+            <DataType>INT</DataType>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1606</Index>
+          <Name>DRV Target position</Name>
+          <Entry>
+            <Index>#x7010</Index>
+            <SubIndex>5</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>Target position</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1607</Index>
+          <Name>FB Touch probe control</Name>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>1</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP1 Enable</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>2</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP1 Continous</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>3</SubIndex>
+            <BitLen>2</BitLen>
+            <Name>TP1 Trigger mode</Name>
+            <DataType>BIT2</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>5</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP1 Enable pos edge</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>6</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP1 Enable neg edge</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>2</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>9</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP2 Enable</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>10</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP2 Continous</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>11</SubIndex>
+            <BitLen>2</BitLen>
+            <Name>TP2 Trigger mode</Name>
+            <DataType>BIT2</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>13</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP2 Enable pos edge</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7001</Index>
+            <SubIndex>14</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>TP2 Enable neg edge</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>2</BitLen>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1608</Index>
+          <Name>DRV Modes of operation</Name>
+          <Entry>
+            <Index>#x7010</Index>
+            <SubIndex>3</SubIndex>
+            <BitLen>8</BitLen>
+            <Name>Modes of operation</Name>
+            <DataType>USINT</DataType>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1630</Index>
+          <Name>DMC Outputs</Name>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>1</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>2</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackControl__Enable latch extern on positive edge</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>3</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackControl__Set counter</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>4</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackControl__Enable latch extern on negative edge</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>12</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>17</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveControl__Enable</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>18</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveControl__Reset</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>14</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>33</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningControl__Execute</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>34</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningControl__Emergency stop</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>14</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>49</SubIndex>
+            <BitLen>64</BitLen>
+            <Name>DMC__Set counter value</Name>
+            <DataType>LINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>50</SubIndex>
+            <BitLen>64</BitLen>
+            <Name>DMC__Target position</Name>
+            <DataType>LINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>51</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Target velocity</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>52</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Start type</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>53</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Target acceleration</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>54</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Target deceleration</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>80</BitLen>
+          </Entry>
+        </RxPdo>
+        <RxPdo Fixed="true">
+          <Index>#x1631</Index>
+          <Name>DMC Outputs 32 Bit</Name>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>1</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>2</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackControl__Enable latch extern on positive edge</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>3</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackControl__Set counter</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>4</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__FeedbackControl__Enable latch extern on negative edge</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>12</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>17</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveControl__Enable</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>18</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__DriveControl__Reset</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>14</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>33</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningControl__Execute</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>34</SubIndex>
+            <BitLen>1</BitLen>
+            <Name>DMC__PositioningControl__Emergency stop</Name>
+            <DataType>BIT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>14</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>49</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Set counter value</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>32</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>50</SubIndex>
+            <BitLen>32</BitLen>
+            <Name>DMC__Target position</Name>
+            <DataType>UDINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>32</BitLen>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>51</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Target velocity</Name>
+            <DataType>INT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>52</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Start type</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>53</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Target acceleration</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x7030</Index>
+            <SubIndex>54</SubIndex>
+            <BitLen>16</BitLen>
+            <Name>DMC__Target deceleration</Name>
+            <DataType>UINT</DataType>
+          </Entry>
+          <Entry>
+            <Index>#x0</Index>
+            <BitLen>80</BitLen>
+          </Entry>
+        </RxPdo>
+        <AlternativeSmMappings>
+          <AlternativeSmMapping>
+            <Name>Cyclic synchronous torque mode (CST)</Name>
+            <Sm No="2">
+              <Pdo ChannelNo="1">#x1600</Pdo>
+              <Pdo ChannelNo="1">#x1602</Pdo>
+            </Sm>
+            <Sm No="3">
+              <Pdo ChannelNo="1">#x1a00</Pdo>
+              <Pdo ChannelNo="1">#x1a01</Pdo>
+              <Pdo ChannelNo="1">#x1a03</Pdo>
+            </Sm>
+          </AlternativeSmMapping>
+          <AlternativeSmMapping>
+            <Name>Cyclic synchronous torque mode with commutation angle (CSTCA)</Name>
+            <Sm No="2">
+              <Pdo ChannelNo="1">#x1600</Pdo>
+              <Pdo ChannelNo="1">#x1602</Pdo>
+              <Pdo ChannelNo="1">#x1603</Pdo>
+            </Sm>
+            <Sm No="3">
+              <Pdo ChannelNo="1">#x1a01</Pdo>
+            </Sm>
+          </AlternativeSmMapping>
+          <AlternativeSmMapping Default="1" Selected="true">
+            <Name>Cyclic synchronous velocity mode (CSV)</Name>
+            <Sm No="2">
+              <Pdo ChannelNo="1">#x1600</Pdo>
+              <Pdo ChannelNo="1">#x1601</Pdo>
+            </Sm>
+            <Sm No="3">
+              <Pdo ChannelNo="1">#x1a00</Pdo>
+              <Pdo ChannelNo="1">#x1a01</Pdo>
+            </Sm>
+          </AlternativeSmMapping>
+          <AlternativeSmMapping>
+            <Name>Cyclic synchronous position mode (CSP)</Name>
+            <Sm No="2">
+              <Pdo ChannelNo="1">#x1600</Pdo>
+              <Pdo ChannelNo="1">#x1606</Pdo>
+            </Sm>
+            <Sm No="3">
+              <Pdo ChannelNo="1">#x1a00</Pdo>
+              <Pdo ChannelNo="1">#x1a01</Pdo>
+              <Pdo ChannelNo="1">#x1a06</Pdo>
+            </Sm>
+          </AlternativeSmMapping>
+          <AlternativeSmMapping>
+            <Name>Drive motion control (For TC3 DriveMotionControl Lib)</Name>
+            <Sm No="2">
+              <Pdo ChannelNo="1">#x1630</Pdo>
+            </Sm>
+            <Sm No="3">
+              <Pdo ChannelNo="1">#x1a30</Pdo>
+            </Sm>
+          </AlternativeSmMapping>
+          <AlternativeSmMapping>
+            <Name>Drive motion control (32 Bit)</Name>
+            <Sm No="2">
+              <Pdo ChannelNo="1">#x1631</Pdo>
+            </Sm>
+            <Sm No="3">
+              <Pdo ChannelNo="1">#x1a31</Pdo>
+            </Sm>
+          </AlternativeSmMapping>
+        </AlternativeSmMappings>
+      </ProcessData>
+      <Mailbox DataLinkLayer="true">
+        <Send>
+          <Start>4096</Start>
+          <Length>128</Length>
+        </Send>
+        <Recv>
+          <Start>4224</Start>
+          <Length>128</Length>
+          <StatusBitAddr>59</StatusBitAddr>
+        </Recv>
+        <Timeout>
+          <ReturningRequest>100</ReturningRequest>
+          <Response>2000</Response>
+        </Timeout>
+        <BootStrap>
+          <Send>
+            <Start>4096</Start>
+            <Length>244</Length>
+          </Send>
+          <Recv>
+            <Start>4340</Start>
+            <Length>244</Length>
+          </Recv>
+        </BootStrap>
+        <Protocol>CoE</Protocol>
+        <Protocol>FoE</Protocol>
+        <CoE>
+          <InitCmds>
+            <InitCmd Fixed="true" CompleteAccess="true">
+              <Transition>PS</Transition>
+              <Comment><![CDATA[download pdo 0x1C12 index]]></Comment>
+              <Timeout>0</Timeout>
+              <Ccs>1</Ccs>
+              <Index>7186</Index>
+              <SubIndex>0</SubIndex>
+              <Data>020000160116</Data>
+            </InitCmd>
+            <InitCmd Fixed="true" CompleteAccess="true">
+              <Transition>PS</Transition>
+              <Comment><![CDATA[download pdo 0x1C13 index]]></Comment>
+              <Timeout>0</Timeout>
+              <Ccs>1</Ccs>
+              <Index>7187</Index>
+              <SubIndex>0</SubIndex>
+              <Data>0200001a011a</Data>
+            </InitCmd>
+            <InitCmd>
+              <Transition>IP</Transition>
+              <Timeout>0</Timeout>
+              <Ccs>1</Ccs>
+              <Index>61569</Index>
+              <SubIndex>1</SubIndex>
+              <Data>36232000</Data>
+            </InitCmd>
+            <InitCmd>
+              <Transition>IP</Transition>
+              <Timeout>0</Timeout>
+              <Ccs>1</Ccs>
+              <Index>4339</Index>
+              <SubIndex>5</SubIndex>
+              <Data>0100</Data>
+            </InitCmd>
+            <InitCmd>
+              <Transition>PS</Transition>
+              <Comment><![CDATA[DRV Amplifier Settings / Nominal DC link voltage]]></Comment>
+              <Timeout>0</Timeout>
+              <Ccs>1</Ccs>
+              <Index>32784</Index>
+              <SubIndex>25</SubIndex>
+              <Data>80bb0000</Data>
+            </InitCmd>
+          </InitCmds>
+          <CanOpenType>39</CanOpenType>
+          <Profile>
+            <ChannelInfo>
+              <ProfileNo>5001</ProfileNo>
+              <AddInfo>513</AddInfo>
+              <DisplayName>Servo interface</DisplayName>
+            </ChannelInfo>
+            <ChannelInfo>
+              <ProfileNo>5001</ProfileNo>
+              <AddInfo>742</AddInfo>
+              <DisplayName>Servo interface</DisplayName>
+            </ChannelInfo>
+            <ChannelInfo>
+              <ProfileNo>5001</ProfileNo>
+              <AddInfo>750</AddInfo>
+            </ChannelInfo>
+          </Profile>
+        </CoE>
+      </Mailbox>
+      <InitCmds>
+        <InitCmd>
+          <Transition>PI</Transition>
+          <Transition>BI</Transition>
+          <Transition>SI</Transition>
+          <Transition>OI</Transition>
+          <Comment><![CDATA[set device state to INIT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>288</Ado>
+          <Data>1100</Data>
+          <Retries>3</Retries>
+          <Timeout>5000</Timeout>
+        </InitCmd>
+        <InitCmd>
+          <Transition>SI</Transition>
+          <Transition>OI</Transition>
+          <Comment><![CDATA[clear DC activation]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>2432</Ado>
+          <Data>0000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PI</Transition>
+          <Transition>SI</Transition>
+          <Transition>OI</Transition>
+          <Comment><![CDATA[check device state for INIT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>1</Cmd>
+          <Adp>65459</Adp>
+          <Ado>304</Ado>
+          <Data>0000</Data>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>0100</Data>
+            <DataMask>0f00</DataMask>
+            <Timeout>5000</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>BI</Transition>
+          <Comment><![CDATA[check device state for INIT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>1</Cmd>
+          <Adp>65459</Adp>
+          <Ado>304</Ado>
+          <Data>0000</Data>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>0100</Data>
+            <DataMask>0f00</DataMask>
+            <Timeout>10000</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[set device state to INIT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>288</Ado>
+          <Data>1100</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Timeout>3000</Timeout>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[check device state for INIT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>1</Cmd>
+          <Adp>65459</Adp>
+          <Ado>304</Ado>
+          <Data>0000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>0100</Data>
+            <DataMask>0f00</DataMask>
+            <Timeout>3000</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[assign EEPROM to ECAT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1280</Ado>
+          <Data>00</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[check vendor id]]></Comment>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1282</Ado>
+          <Data>000108000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[check vendor id]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>1</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1288</Ado>
+          <Data>00000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>02000000</Data>
+            <Timeout>100</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[check product code]]></Comment>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1282</Ado>
+          <Data>00010a000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[check product code]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>1</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1288</Ado>
+          <Data>00000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>5230351c</Data>
+            <Timeout>100</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[check revision number (lo word)]]></Comment>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1282</Ado>
+          <Data>00010c000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[check revision number (lo word)]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>1</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1288</Ado>
+          <Data>0000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>3623</Data>
+            <Timeout>100</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[set physical address]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>16</Ado>
+          <Data>3604</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>IB</Transition>
+          <Transition>PI</Transition>
+          <Transition>SI</Transition>
+          <Transition>OI</Transition>
+          <Comment><![CDATA[clear sm 0/1 (mailbox out/in)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2048</Ado>
+          <Data>00000000000000000000000000000000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>BI</Transition>
+          <Comment><![CDATA[clear sm 0/1 (mailbox out/in)]]></Comment>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>2048</Ado>
+          <Data>00000000000000000000000000000000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[set sm 0 (mailbox out)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2048</Ado>
+          <Data>0010800026000100</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[set sm 1 (mailbox in)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2056</Ado>
+          <Data>8010800022000100</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[set sm 0 (bootstrap out)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2048</Ado>
+          <Data>0010f40026000100</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[set sm 1 (bootstrap in)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2056</Ado>
+          <Data>f410f40022000100</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set DC cycle time]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2464</Ado>
+          <Data>80969800e8030000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set DC start time]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2448</Ado>
+          <Data>3075000000000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set DC activation]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2432</Ado>
+          <Data>0007</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set DC latch cfg]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2472</Ado>
+          <Data>0000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>PP</Transition>
+          <Comment><![CDATA[clear DC activation]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2432</Ado>
+          <Data>0000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>SP</Transition>
+          <Transition>OP</Transition>
+          <Comment><![CDATA[set device state to PREOP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>288</Ado>
+          <Data>1200</Data>
+          <Retries>300</Retries>
+          <Timeout>200</Timeout>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>SP</Transition>
+          <Transition>SI</Transition>
+          <Transition>OP</Transition>
+          <Transition>OI</Transition>
+          <Comment><![CDATA[clear sms]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2064</Ado>
+          <Data>00000000000000000000000000000000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set sm 2 (outputs)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2064</Ado>
+          <Data>0011060024000100</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set sm 3 (inputs)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2072</Ado>
+          <Data>8011060020000100</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set fmmu 0 (outputs)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>1536</Ado>
+          <Data>00200002060000070011000201000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set fmmu 1 (inputs)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>1552</Ado>
+          <Data>00200002060000078011000101000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[set fmmu 2 (mailbox state)]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>1568</Ado>
+          <Data>07000009010003030d08000101000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>OS</Transition>
+          <Comment><![CDATA[set device state to SAFEOP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>288</Ado>
+          <Data>0400</Data>
+          <Retries>3</Retries>
+          <Timeout>200</Timeout>
+        </InitCmd>
+        <InitCmd>
+          <Transition>SP</Transition>
+          <Transition>SI</Transition>
+          <Transition>OP</Transition>
+          <Transition>OI</Transition>
+          <Comment><![CDATA[clear fmmu 0]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>1536</Ado>
+          <Data>00000000000000000000000000000000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>SP</Transition>
+          <Transition>SI</Transition>
+          <Transition>OP</Transition>
+          <Transition>OI</Transition>
+          <Comment><![CDATA[clear fmmu 1]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>1552</Ado>
+          <Data>00000000000000000000000000000000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PI</Transition>
+          <Transition>BI</Transition>
+          <Transition>SI</Transition>
+          <Transition>OI</Transition>
+          <Comment><![CDATA[clear fmmu 2]]></Comment>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>1568</Ado>
+          <Data>00000000000000000000000000000000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>SP</Transition>
+          <Transition>OP</Transition>
+          <Comment><![CDATA[clear DC activation]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>2432</Ado>
+          <Data>0000</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>SP</Transition>
+          <Transition>OP</Transition>
+          <Comment><![CDATA[check device state for PREOP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>4</Cmd>
+          <Adp>1078</Adp>
+          <Ado>304</Ado>
+          <Data>000000000000</Data>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>020000000000</Data>
+            <DataMask>0f0000000000</DataMask>
+            <Timeout>5000</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[assign EEPROM to PDI]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>1280</Ado>
+          <Data>01</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>II</Transition>
+          <Comment><![CDATA[assign EEPROM back to ECAT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1280</Ado>
+          <Data>00</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[set device state to PREOP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>288</Ado>
+          <Data>1200</Data>
+          <Cnt>1</Cnt>
+          <Retries>300</Retries>
+          <Timeout>3000</Timeout>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Comment><![CDATA[check device state for PREOP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>4</Cmd>
+          <Adp>1078</Adp>
+          <Ado>304</Ado>
+          <Data>000000000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>020000000000</Data>
+            <DataMask>1f0000000000</DataMask>
+            <Timeout>3000</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IP</Transition>
+          <Transition>BI</Transition>
+          <Comment><![CDATA[assign EEPROM back to ECAT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>2</Cmd>
+          <Adp>65459</Adp>
+          <Ado>1280</Ado>
+          <Data>00</Data>
+          <Retries>3</Retries>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[set device state to BOOT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>288</Ado>
+          <Data>1300</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Timeout>3000</Timeout>
+        </InitCmd>
+        <InitCmd>
+          <Transition>IB</Transition>
+          <Comment><![CDATA[check device state for BOOT]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>4</Cmd>
+          <Adp>1078</Adp>
+          <Ado>304</Ado>
+          <Data>000000000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>030000000000</Data>
+            <DataMask>1f0000000000</DataMask>
+            <Timeout>3000</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[set device state to SAFEOP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>288</Ado>
+          <Data>0400</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Timeout>10000</Timeout>
+        </InitCmd>
+        <InitCmd>
+          <Transition>PS</Transition>
+          <Comment><![CDATA[check device state for SAFEOP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>4</Cmd>
+          <Adp>1078</Adp>
+          <Ado>304</Ado>
+          <Data>000000000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>040000000000</Data>
+            <DataMask>1f0000000000</DataMask>
+            <Timeout>10000</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>OS</Transition>
+          <Comment><![CDATA[check device state for SAFEOP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>4</Cmd>
+          <Adp>1078</Adp>
+          <Ado>304</Ado>
+          <Data>000000000000</Data>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>040000000000</Data>
+            <DataMask>0f0000000000</DataMask>
+            <Timeout>200</Timeout>
+          </Validate>
+        </InitCmd>
+        <InitCmd>
+          <Transition>SO</Transition>
+          <Comment><![CDATA[set device state to OP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>5</Cmd>
+          <Adp>1078</Adp>
+          <Ado>288</Ado>
+          <Data>0800</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Timeout>10000</Timeout>
+        </InitCmd>
+        <InitCmd>
+          <Transition>SO</Transition>
+          <Comment><![CDATA[check device state for OP]]></Comment>
+          <Requires>cycle</Requires>
+          <Cmd>4</Cmd>
+          <Adp>1078</Adp>
+          <Ado>304</Ado>
+          <Data>000000000000</Data>
+          <Cnt>1</Cnt>
+          <Retries>3</Retries>
+          <Validate>
+            <Data>080000000000</Data>
+            <DataMask>1f0000000000</DataMask>
+            <Timeout>10000</Timeout>
+          </Validate>
+        </InitCmd>
+      </InitCmds>
+      <PreviousPort Selected="true">
+        <Port>B</Port>
+        <PhysAddr>1077</PhysAddr>
+      </PreviousPort>
+      <SyncUnits>
+        <SyncUnit>Motion</SyncUnit>
+      </SyncUnits>
+      <DC>
+        <PotentialReferenceClock>false</PotentialReferenceClock>
+        <TimeLoopControlOnly>false</TimeLoopControlOnly>
+        <ReferenceClock>false</ReferenceClock>
+        <CycleTime0>10000000</CycleTime0>
+        <CycleTime1>1000</CycleTime1>
+        <ShiftTime>30000</ShiftTime>
+        <OpMode Selected="true">
+          <Name>DC</Name>
+          <Desc>DC-Synchron</Desc>
+          <AssignActivate>#x700</AssignActivate>
+          <CycleTimeSync0 Factor="1">0</CycleTimeSync0>
+          <ShiftTimeSync0>30000</ShiftTimeSync0>
+          <CycleTimeSync1 Factor="-1">0</CycleTimeSync1>
+          <ShiftTimeSync1>1000</ShiftTimeSync1>
+        </OpMode>
+        <OpMode>
+          <Name>DC</Name>
+          <Desc>SM-Synchron</Desc>
+          <AssignActivate>#x1</AssignActivate>
+          <CycleTimeSync0 Factor="1">0</CycleTimeSync0>
+          <ShiftTimeSync0>30000</ShiftTimeSync0>
+          <CycleTimeSync1 Factor="-1">0</CycleTimeSync1>
+          <ShiftTimeSync1>1000</ShiftTimeSync1>
+        </OpMode>
+      </DC>
+      <Settings>
+        <StateMachine>
+          <AutoRestoreStates>true</AutoRestoreStates>
+          <WaitForWcStateOkay>false</WaitForWcStateOkay>
+          <ReInitAfterCommError>true</ReInitAfterCommError>
+          <LogCommChanges>true</LogCommChanges>
+          <FinalState>SAFEOP_CFGMODE</FinalState>
+          <Timeout>
+            <I2P>3000</I2P>
+            <P2S2O>10000</P2S2O>
+            <Back2PI>5000</Back2PI>
+            <O2S>200</O2S>
+          </Timeout>
+          <CheckVendorId>EQ</CheckVendorId>
+          <CheckProductCode>EQ</CheckProductCode>
+          <CheckRevisionNo>LW_EQ</CheckRevisionNo>
+          <CheckSerialNo></CheckSerialNo>
+          <CheckIdentification></CheckIdentification>
+        </StateMachine>
+        <Watchdog>
+          <Divider0400 Enabled="false">2498</Divider0400>
+          <PdiTime0410 Enabled="false">1000</PdiTime0410>
+          <SmTime0420 Enabled="false">1000</SmTime0420>
+        </Watchdog>
+        <PdoSettings>
+          <PdoAssign>1</PdoAssign>
+          <PdoConfig>0</PdoConfig>
+        </PdoSettings>
+        <InfoData>
+          <State>true</State>
+          <AdsAddress>true</AdsAddress>
+          <Channels>true</Channels>
+          <DcTimes>true</DcTimes>
+          <ObjectId>false</ObjectId>
+        </InfoData>
+      </Settings>
+      <EsiFile>C:\TwinCAT\3.1\Config\Io\EtherCAT\Beckhoff EL72xx.xml</EsiFile>
+      <TwinCAT>
+        <ExtensionSupportFlags>1</ExtensionSupportFlags>
+      </TwinCAT>
+    </Slave>
+    <AmsAddress>
+      <AmsNetId>5.86.218.156.2.1</AmsNetId>
+      <AmsPort>1078</AmsPort>
+    </AmsAddress>
+  </EtherCAT>
+  <Xml>
+    <TcDMDrive>
+      <SortId>3</SortId>
+      <DriveModuleType>4</DriveModuleType>
+      <TcLink>
+        <TcPrjPath>..\Mover_demo\Mover_demo.tsproj</TcPrjPath>
+        <IoItemPathName>TIID^Device 1 (EtherCAT)^Term 74 (EK1100)^HT1 (EL7221-9014)</IoItemPathName>
+        <ItemId>75</ItemId>
+        <ObjectId>#x0302004b</ObjectId>
+      </TcLink>
+      <OrderCode>EL7221-9014</OrderCode>
+      <Name>HT1 (EL7221-9014)</Name>
+      <ProductRevision>EL7221-9014-0032</ProductRevision>
+      <WatchLog UpdateIntervalInMs="500">
+        <WatchLogItem>
+          <WatchLogParaCoE Index="4120" SubIndex="2" />
+          <Alias>Type</Alias>
+        </WatchLogItem>
+        <WatchLogItem>
+          <WatchLogParaCoE Index="4120" SubIndex="4" />
+          <Alias>Serial Nr</Alias>
+        </WatchLogItem>
+        <WatchLogItem>
+          <WatchLogParaCoE Index="4106" SubIndex="0" />
+          <Alias>Firmware version</Alias>
+        </WatchLogItem>
+        <WatchLogItem>
+          <WatchLogParaCoE Index="36880" SubIndex="18" />
+          <Alias>DC link voltage</Alias>
+        </WatchLogItem>
+        <WatchLogItem>
+          <WatchLogParaCoE Index="36880" SubIndex="17" />
+          <Alias>Amplifier temperature</Alias>
+        </WatchLogItem>
+      </WatchLog>
+      <Inverter>
+        <Device>
+          <Name>DMInverterTypeDevice</Name>
+          <Parameter>
+            <PropertyName>MaxAllowedMainVoltage</PropertyName>
+            <Value>48</Value>
+          </Parameter>
+          <Parameter>
+            <PropertyName>MinDcLinkVoltage</PropertyName>
+            <Value>6.8</Value>
+          </Parameter>
+          <Parameter>
+            <PropertyName>MaxDcLinkVoltage</PropertyName>
+            <Value>60</Value>
+          </Parameter>
+        </Device>
+        <Channel ChnId="0">
+          <TcLink>
+            <TcPrjPath>..\Mover_demo\Mover_demo.tsproj</TcPrjPath>
+            <IoItemPathName>TIID^Device 1 (EtherCAT)^Term 74 (EK1100)^HT1 (EL7221-9014)</IoItemPathName>
+          </TcLink>
+          <SelectedModifyOptPDOsMode>0</SelectedModifyOptPDOsMode>
+          <Block Id="0">
+            <Controller />
+          </Block>
+          <WatchLog ChnId="0" UpdateIntervalInMs="500">
+            <WatchLogItem>
+              <WatchLogParaCoE Index="24592" SubIndex="1" />
+              <Alias>Status word</Alias>
+            </WatchLogItem>
+            <WatchLogItem>
+              <WatchLogParaCoE Index="28688" SubIndex="3" />
+              <Alias>Actual operation mode</Alias>
+            </WatchLogItem>
+            <WatchLogItem>
+              <WatchLogParaCoE Index="24592" SubIndex="7" />
+              <Alias>Actual velocity</Alias>
+            </WatchLogItem>
+            <WatchLogItem>
+              <WatchLogParaCoE Index="24592" SubIndex="8" />
+              <Alias>Actual torque</Alias>
+            </WatchLogItem>
+          </WatchLog>
+        </Channel>
+      </Inverter>
+    </TcDMDrive>
+  </Xml>
+</TreeItem>

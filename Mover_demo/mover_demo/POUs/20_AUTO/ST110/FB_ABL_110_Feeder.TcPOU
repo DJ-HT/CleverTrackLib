@@ -133,20 +133,20 @@ tof_color_sensor(IN := ton_wait_blow_piece.Q,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
-btfb_feeder(pbtIN := ADR(HMI.btManuCylinders[StationList_e.ST110][3]),
-				xINdis:= (enIN_State<>enState.StateMANU),
-				xINon:= ,
-				xINerr:= fb_feeder.xOUT_Empty);
+btfb_feeder(pbtIN  := ADR(HMI.btManuCylinders[StationList_e.ST110][3]),
+            xINdis := (enIN_State <> enState.StateMANU),
+            xINon  :=,
+            xINerr := fb_feeder.xOUT_Empty);
 
 IF btfb_feeder.pbtIN^.rtrig THEN
-	btfb_feeder.xINon := NOT btfb_feeder.xINon;
-ELSIF (enIN_State<>enState.StateMANU) THEN
-	btfb_feeder.xINon := FALSE;
+    btfb_feeder.xINon := NOT btfb_feeder.xINon;
+ELSIF (enIN_State <> enState.StateMANU) THEN
+    btfb_feeder.xINon := FALSE;
 END_IF;
 
-fb_feeder(xIN_Enable                := ((enIN_State<=enState.StateAUTO) AND (enIN_State>=enState.StateSTEP)) 
-										OR btfb_feeder.xINon,
-          xIN_PieceInEnd            := TRUE, // IO_BOX.I6000_ST110_teil_in_vereinzelung, 
+fb_feeder(xIN_Enable := ((enIN_State <= enState.StateAUTO) AND (enIN_State >= enState.StateSTEP)) OR btfb_feeder.xINon,
+          xIN_PieceInEnd
+              := TRUE, // IO_BOX.I6000_ST110_teil_in_vereinzelung, 
           xIN_PieceMax              := IO_BOX.I8001_ST110_maximum,
           xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
           refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
@@ -191,7 +191,7 @@ simu_axis110_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis110_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST110_10W]),
-               xIN_DisButtons := ,
+               xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE,
                xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
@@ -278,6 +278,14 @@ END_IF
 
 (* START *)
 rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis110_10W.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    END_IF
+ELSIF iOUT_Step < ST110_Feeder_e.ERROR THEN
+    iOUT_Step := ST110_Feeder_e.ERROR;
+END_IF
 
 (*******************************************************************)
 (* Schrittkette  *)

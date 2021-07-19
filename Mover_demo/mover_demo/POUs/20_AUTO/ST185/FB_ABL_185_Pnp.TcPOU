@@ -224,7 +224,7 @@ fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST18
                  xIN_Init        := enIN_State = enState.StateINIT,
                  xIN_Reset       := xIN_Reset,
                  lrIN_CurrPos    := fb_axis185_10Z.rOUT_ActPos,
-                 lrIN_Delta_mm   := 0.5,
+                 lrIN_Delta_mm   := 1.0,
                  iIN_CurrentStep := iOUT_Step,
                  iIN_moveNumber  := ST185_PnpVerPos_e._max);
 

@@ -82,6 +82,9 @@ VAR
 	
 	Robot_in_place_pos : BOOL := FALSE;
 
+    hmi_force_place    : BOOL;
+    hmi_force_in_place : BOOL;
+
 END_VAR
 VAR CONSTANT
     PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
@@ -212,11 +215,15 @@ PickOffset_Y_deci := _20_AUTO.recipe.st105.PickOffset_Y_deci;
 // add a constant to adjust the screw height of the rotative table
 PickUpPos_Z_deci := _20_AUTO.recipe.st105.PickUpPos_Z_deci + UINT#500;
 
-aut_cmd_to_robot.FG_Pick  := ST105_Pnp_e.Robot_Pick = iOUT_Step AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
-aut_cmd_to_robot.FG_Place := ST105_Pnp_e.Robot_place = iOUT_Step AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
-aut_cmd_to_robot.XOff     := _20_AUTO.recipe.st105.isPickOffset_X_neg;
-aut_cmd_to_robot.YOff     := _20_AUTO.recipe.st105.isPickOffset_Y_neg;
-aut_cmd_to_robot.ZOff     := _20_AUTO.recipe.st105.isPickUpPos_Z_neg;
+aut_cmd_to_robot.FG_Pick  := (ST105_Pnp_e.Robot_Pick = iOUT_Step) AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+aut_cmd_to_robot.FG_Place :=
+    ((ST105_Pnp_e.Robot_place = iOUT_Step) OR hmi_force_place) AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+aut_cmd_to_robot.XOff := _20_AUTO.recipe.st105.isPickOffset_X_neg;
+aut_cmd_to_robot.YOff := _20_AUTO.recipe.st105.isPickOffset_Y_neg;
+aut_cmd_to_robot.ZOff := _20_AUTO.recipe.st105.isPickUpPos_Z_neg;
+
+Robot_in_place_pos := Robot_in_place_pos OR hmi_force_in_place;
 
 (*******************************************************************)
 (* Ablauf *)

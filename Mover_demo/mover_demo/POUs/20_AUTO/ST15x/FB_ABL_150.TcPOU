@@ -181,10 +181,10 @@ xOUT_welding_bits.Start :=
 xOUT_welding_bits.Reset :=
     _14_STATE._FB_btQUIT.pbtIN^.press OR (ST150_Uss_e.Init_ResetUss_maintaining_down = iOUT_Step);
 
-xOUT_welding_bits.Data_Hex1 := _20_AUTO.recipe.st150.USS_Type.0;
-xOUT_welding_bits.Data_Hex2 := _20_AUTO.recipe.st150.USS_Type.1;
-xOUT_welding_bits.Data_Hex4 := _20_AUTO.recipe.st150.USS_Type.2;
-xOUT_welding_bits.Data_Hex8 := _20_AUTO.recipe.st150.USS_Type.3;
+xOUT_welding_bits.Data_Hex1 := _20_AUTO.recipe.st150.USS_Type.0; // _20_AUTO.recipe.st150.USS_Type = 1;
+xOUT_welding_bits.Data_Hex2 := _20_AUTO.recipe.st150.USS_Type.1; // _20_AUTO.recipe.st150.USS_Type = 2;
+xOUT_welding_bits.Data_Hex4 := _20_AUTO.recipe.st150.USS_Type.2; // _20_AUTO.recipe.st150.USS_Type = 3;
+xOUT_welding_bits.Data_Hex8 := _20_AUTO.recipe.st150.USS_Type.3; // _20_AUTO.recipe.st150.USS_Type = 4;
 
 (*******************************************************************)
 (* Ablauf *)
