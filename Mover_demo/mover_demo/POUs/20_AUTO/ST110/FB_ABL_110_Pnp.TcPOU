@@ -343,7 +343,7 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
                                               [ST110_Cylinders_e.VakuumgreiferLinks].toGS_wait_time));
 
-simu_gripperLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_gripperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                  xIN_inGS   := (IO_BOX.I5500_ST110_vakumkontrolle_links / TO_INT(16#FFFF / 100)) <=
                                _20_AUTO.recipe.st110.vakum_left_pc,
                  xIN_inAS := (IO_BOX.I5500_ST110_vakumkontrolle_links / TO_INT(16#FFFF / 100)) >
@@ -370,7 +370,7 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                 tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
                                                [ST110_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
-simu_gripperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_gripperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                   xIN_inGS   := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / TO_INT(16#FFFF / 100)) <=
                                 _20_AUTO.recipe.st110.vakum_right_pc,
                   xIN_inAS := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / TO_INT(16#FFFF / 100)) >
