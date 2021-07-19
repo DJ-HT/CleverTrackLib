@@ -426,16 +426,22 @@
     <Compile Include="POUs\20_AUTO\ST100\ST100_Unload_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST105\Fanuc_command_ext_to_robot_t.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_robot\Fanuc_command_ext_to_robot_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST105\Fanuc_hw_command_to_robot_t.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_robot\Fanuc_command_std_to_robot_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST105\Fanuc_command_std_to_robot_t.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_robot\Fanuc_hw_command_to_robot_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST105\Fanuc_status_std_from_robot.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_robot\Fanuc_status_std_from_robot.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_robot\ST105_Fanuc_command_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\Fanuc_robot\ST105_Fanuc_status_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST105\FB_ABL_105_Feeder.TcPOU">
@@ -451,9 +457,6 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST105\ST105_Fanuc_status_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\20_AUTO\ST105\ST105_PnpVerPushPos_e.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -463,10 +466,13 @@
     <Compile Include="POUs\20_AUTO\ST105\ST105_Feeder_e.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST105\ST105_Fanuc_command_t.TcDUT">
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Pnp_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST105\ST105_Pnp_e.TcTLEO">
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Slider_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST105\ST105_Cylinders_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST105\VISU_Recipe_ST105.TcVIS">
@@ -753,6 +759,9 @@
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST15x\FB_ABL_150.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST15x\FB_ABL_150_solo.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST15x\FB_AUT_150.TcPOU">
@@ -1053,6 +1062,7 @@
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
     <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
+    <Folder Include="POUs\20_AUTO\ST105\Fanuc_robot" />
     <Folder Include="POUs\20_AUTO\ST170" />
     <Folder Include="POUs\20_AUTO\ST16x" />
     <Folder Include="POUs\20_AUTO\ST128" />

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST105_Slider_e" Id="{04391169-de66-4ac9-ab08-bf82dc3d6745}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+// slider steps for ST105 feeder
+// The slider is used to separate two parts that are inside each other
+TYPE ST105_Slider_e :
+(
+    slider_down := 0,
+    slider_go_up := 10,
+    slider_push_out := 20,
+    slider_pusher_in := 30,
+	slider_go_down := 40,
+    _max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

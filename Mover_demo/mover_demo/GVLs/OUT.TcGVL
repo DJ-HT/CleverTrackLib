@@ -73,7 +73,7 @@ VAR_GLOBAL
     Q103_Doppel_tur_lock           AT %QX10.3 : BOOL; // Doppel Türe 5+6 Verriegelung
     Q104_ST110_vacum_on_left       AT %QX10.4 : BOOL; // ST110 Vacum greifer left on 
     Q105_ST110_vacum_on_right      AT %QX10.5 : BOOL; // ST110 Vacum greifer right on 
-    Q106_                          AT %QX10.6 : BOOL; // Reserve
+    Q106_ST105_zusatz_band_on      AT %QX10.6 : BOOL; // Reserve
     Q107_                          AT %QX10.7 : BOOL; // Reserve
 
     Q110_ AT %QX11.0 : BOOL; // Reserve

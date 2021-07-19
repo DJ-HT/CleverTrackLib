@@ -443,6 +443,21 @@ VAR_GLOBAL
     I8706_ST105_                              AT %I* : BOOL; // 7: 
     I8707_ST105_                              AT %I* : BOOL; // 8: 
 
+    //-10201B1
+    (* Ventilbat. 204 B - 12 slots *)
+    Q8800_14_Auschieber_ab_auf     AT %Q* : BOOL; //
+	Q8800_12_ AT %Q* : BOOL; // 
+    Q8801_14_Auschieber_vor_zuruck AT %Q* : BOOL; // 
+	Q8801_12_ AT %Q* : BOOL; // 
+    Q8802_14_                      AT %Q* : BOOL; // 
+	Q8802_12_ AT %Q* : BOOL; // 
+    Q8803_14_                      AT %Q* : BOOL; // 
+	Q8803_12_ AT %Q* : BOOL; // 
+    Q8804_14_                      AT %Q* : BOOL; // 
+	Q8804_12_ AT %Q* : BOOL; // 
+    Q8805_14_                      AT %Q* : BOOL; // 
+	Q8805_12_ AT %Q* : BOOL; // 
+
     (* IO-Link Boxen 10191A5 *)
     (*******************************************************************)
     //-5016
