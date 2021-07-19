@@ -179,7 +179,7 @@ fb_VerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_1
               xIN_Init        := enIN_State = enState.StateINIT,
               xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis130_10Z.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.5,
+              lrIN_Delta_mm   := 0.75,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST130_PatroneAushebenPos_e._max);
 
