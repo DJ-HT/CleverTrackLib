@@ -197,7 +197,7 @@ fb_capMainteningRight(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_St
                       xIN_FREE     := TRUE,
                       xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
                                       (ST160_CETA_e.handling_up = iOUT_Step),
-                      xINtoAS   := _20_AUTO.recipe.st160.Use_element_left AND (ST160_CETA_e.handling_down = iOUT_Step),
+                      xINtoAS   := _20_AUTO.recipe.st160.Use_element_right AND (ST160_CETA_e.handling_down = iOUT_Step),
                       tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
                                                     [ST160_Cylinders_e.Niederhalter_rechts].toAS_alarm_time),
                       tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
@@ -249,7 +249,7 @@ fb_dichtung_right(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
                   xIN_FREE     := TRUE,
                   xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
                                   (ST160_CETA_e.unseal_piece = iOUT_Step),
-                  xINtoAS   := _20_AUTO.recipe.st160.Use_element_left AND (ST160_CETA_e.seal_piece = iOUT_Step),
+                  xINtoAS   := _20_AUTO.recipe.st160.Use_element_right AND (ST160_CETA_e.seal_piece = iOUT_Step),
                   tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
                                                 [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toAS_alarm_time),
                   tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]

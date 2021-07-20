@@ -321,7 +321,7 @@ fb_Kammer_nachfullen_Rechts(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = i
                             xIN_FREE     := TRUE,
                             xINtoGS      := (ST130_Dose_e.close_up_feeder = iOUT_Step) OR
                                             (enIN_State < enState.StateSTEP),
-                            xINtoAS := _20_AUTO.recipe.st130.xUseVerLeft AND
+                            xINtoAS := _20_AUTO.recipe.st130.xUseVerRight AND
                                        (enIN_State >= enState.StateSTEP) AND
                                        (ST130_Dose_e.open_up_feeder = iOUT_Step OR
                                        ST130_Dose_e.open_up_feeder_first = iOUT_Step),

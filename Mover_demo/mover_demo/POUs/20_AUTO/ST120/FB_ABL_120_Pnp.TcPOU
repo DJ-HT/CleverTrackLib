@@ -523,7 +523,9 @@ ST120_Pnp_e.PnP_Ver_ShuttleTorqueControl:
     END_IF;
 
 ST120_Pnp_e.Gripper_open:
-    IF xIN_NextStep AND fb_gripperLeft.xOUT_inAS AND fb_gripperRight.xOUT_inAS THEN
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
         iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleUp;
     END_IF;
 

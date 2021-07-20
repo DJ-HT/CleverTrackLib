@@ -464,7 +464,7 @@ ST105_Feeder_e.START: (*  *)
     END_IF;
 
 ST105_Feeder_e.check_if_feeding_necessary:
-    IF (fifo.GetLen() >= _20_AUTO.recipe.st105.FeederSize) THEN
+    IF (fifo.GetLen() >= _20_AUTO.recipe.st105.FeederSize) OR fifo.IsFull() THEN
         iOUT_Step := ST105_Feeder_e.DONE;
     ELSE
         iOUT_Step := ST105_Feeder_e.wait_on_a_piece;

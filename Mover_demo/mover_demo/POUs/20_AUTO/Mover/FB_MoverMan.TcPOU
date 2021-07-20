@@ -8,7 +8,7 @@ VAR_OUTPUT
 END_VAR
 VAR
     _PieceHolderList : ARRAY[1..2] OF FB_PieceHolder[(0),
-                                                     (60)];
+                                                     (0)];
     _SimuMoverList : ARRAY[1..19] OF FB_SimuMoverAxis[(116),
                                                       (433),
                                                       (750),
@@ -284,8 +284,8 @@ VAR
     _WorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF
         FB_StationMan[(ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[2], _PieceHolderList[1]),
-                      (ADR(_StationList), _SelWorkStationList[3], _PieceHolderList[2]),
-                      (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[2])];
+                      (ADR(_StationList), _SelWorkStationList[3], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[1])];
 
     step : INT := 0; //test step
 
