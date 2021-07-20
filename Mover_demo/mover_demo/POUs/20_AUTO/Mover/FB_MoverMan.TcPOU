@@ -400,6 +400,8 @@ END_CASE
 // should be done elsewhere ...
 SIMU.lrAccelMover := SIMU.lrAccelMoverSlider * SIMU.lrAccelMoverSlider;
 
+PH_num := PERS.iRecipeCurrent + 1;
+
 // Affect station offset depending on the station offset list
 FOR mv_i := 1 TO CONST.STATION_NUMBER BY 1 DO
     _StationList[mv_i].Offset := PERS.recipeList[PERS.iRecipeCurrent].stationOffsets[mv_i - 1];
