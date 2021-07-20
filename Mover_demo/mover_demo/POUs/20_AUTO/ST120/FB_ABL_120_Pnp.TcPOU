@@ -308,6 +308,11 @@ xOUT_PickPiece := iOUT_Step = ST120_Pnp_e.PnP_Ver_RotTableUp;
 IO_BOX.Q5202_14_ST120_greifer_links  := fb_gripperLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 IO_BOX.Q5203_14_ST120_greifer_rechts := fb_gripperRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
+IO_BOX.Q5212_14_ST120_stop_vertical_axis := NOT fb_simu_axis120_02Z.pIN_axisHW^.Status.Error AND
+                                            _02_SAFETY.xOUT_ESout AND
+                                            _02_SAFETY.xOUT_MonOut AND
+                                            NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)
