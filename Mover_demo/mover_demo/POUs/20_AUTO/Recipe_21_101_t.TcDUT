@@ -7,6 +7,7 @@ STRUCT
     linearAxis     : ARRAY[0..LinearAxis_e._max - 1] OF LinearMotionMan_Config_t;
     cylinder2Pos   : ARRAY[0..StationList_e._max] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF Cylinder2Pos_config;
     stationOffsets : ARRAY[0..CONST.STATION_NUMBER - 1] OF REAL;
+    stationSet     : ARRAY[0..CONST.STATION_NUMBER - 1] OF INT;
     st105          : ST105_Recipe_t;
     st110          : ST110_Recipe_t;
     st115          : ST115_Recipe_t;

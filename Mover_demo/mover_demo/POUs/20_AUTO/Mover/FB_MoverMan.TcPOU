@@ -49,243 +49,153 @@ VAR
                                           (18, _SimuMoverList[18]),
                                           (19, _SimuMoverList[19])];
 
-    _PosList : ARRAY[1..CONST.STATION_NUMBER] OF FB_Position[(125, 1, 1),
-                                                             (625, 1, 1),
-                                                             (1125, 1, 1),
-                                                             (1375, 1, 1),
-                                                             (1625, 1, 1),
-                                                             (1875, 1, 1),
-                                                             (2375, 1, 1),
-                                                             (2625, 1, 1),
-                                                             (2875, 1, 1),
-                                                             (3125, 1, 1),
-                                                             (3625, 1, 1),
-                                                             (3875, 1, 1),
-                                                             // second part
-                                                             (5175, 1, 1),
-                                                             (5425, 1, 1),
-                                                             (6135, 1, 1),
-                                                             (6835, 1, 1), // waiting pos
-                                                             (7335, 1, 1),
-                                                             (7665, 1, 1),
-                                                             (8625, 1, 1),
-                                                             (8875, 1, 1)];
+    _PosList : ARRAY[0..CONST.STATION_NUMBER - 1] OF FB_Position[(125, 1, 1),
+                                                                 (625, 1, 1),
+                                                                 (1125, 1, 1),
+                                                                 (1375, 1, 1),
+                                                                 (1625, 1, 1),
+                                                                 (1875, 1, 1),
+                                                                 (2375, 1, 1),
+                                                                 (2625, 1, 1),
+                                                                 (2875, 1, 1),
+                                                                 (3125, 1, 1),
+                                                                 (3625, 1, 1),
+                                                                 (3875, 1, 1),
+                                                                 // second part
+                                                                 (5205, 1, 1),
+                                                                 (5455, 1, 1),
+                                                                 (6165, 1, 1),
+                                                                 (6830, 1, 1), // waiting pos
+                                                                 (7365, 1, 1),
+                                                                 (7695, 1, 1),
+                                                                 (8655, 1, 1),
+                                                                 (8905, 1, 1)];
 
-    _StationList : ARRAY[1..CONST.STATION_NUMBER] OF
-        FB_Station[(_PosList[1],
+    _StationList : ARRAY[0..CONST.STATION_NUMBER - 1] OF
+        FB_Station[(_PosList[0],
                     GVL.st105_aut,
                     -250,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     3,
                     5),
-                   (_PosList[2],
+                   (_PosList[1],
                     GVL.st110_aut,
                     -250,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     1,
                     10),
-                   (_PosList[3],
+                   (_PosList[2],
                     GVL.st115_aut,
                     -250,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     1,
                     15),
-                   (_PosList[4],
+                   (_PosList[3],
                     GVL.st120_aut,
                     0,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     0,
                     20),
-                   (_PosList[5],
+                   (_PosList[4],
                     GVL.st125_aut,
                     0,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     3,
                     25),
-                   (_PosList[6],
+                   (_PosList[5],
                     GVL.st128_aut,
                     -100,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     1,
                     28),
-                   (_PosList[7],
+                   (_PosList[6],
                     GVL.st130_aut,
                     0,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     1,
                     30),
-                   (_PosList[8],
+                   (_PosList[7],
                     GVL.st135_aut,
                     0,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     3,
                     35),
-                   (_PosList[9],
+                   (_PosList[8],
                     GVL.st140_aut,
                     -100,
                     ApproachScenario_e.DoNotWait,
                     0,
                     40),
-                   (_PosList[10],
+                   (_PosList[9],
                     GVL.st145_aut,
                     0,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     0,
                     45),
-                   (_PosList[11],
+                   (_PosList[10],
                     GVL.st150_aut,
                     -250,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     1,
                     50),
-                   (_PosList[12],
+                   (_PosList[11],
                     GVL.st155_aut,
                     -500,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     1,
                     55),
-                   (_PosList[13],
+                   (_PosList[12],
                     GVL.st160_aut,
                     -250,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     3,
                     60),
-                   (_PosList[14],
+                   (_PosList[13],
                     GVL.st165_aut,
                     -500,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     3,
                     65),
-                   (_PosList[15],
+                   (_PosList[14],
                     GVL.st170_aut,
                     -250,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     2,
                     70),
-                   (_PosList[16],
+                   (_PosList[15],
                     0,
                     0,
                     ApproachScenario_e.DoNotWait,
                     3,
                     74),
-                   (_PosList[17],
+                   (_PosList[16],
                     GVL.st175_aut,
                     0,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     0,
                     75),
-                   (_PosList[18],
+                   (_PosList[17],
                     GVL.st176_aut,
                     0,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     0,
                     76),
-                   (_PosList[19],
+                   (_PosList[18],
                     GVL.st180_aut,
                     -400,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     2,
                     80),
-                   (_PosList[20],
+                   (_PosList[19],
                     GVL.st185_aut,
                     0,
                     ApproachScenario_e.WaitOnFinishedProcess,
                     3,
                     85)];
 
-    _StationSet1 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,  // ST105
-                                                  0,  // ST110
-                                                  -1, // ST115
-                                                  -1, // ST120
-                                                  0,  // ST125
-                                                  0,  // ST128
-                                                  1,  // ST130
-                                                  -1, // ST135
-                                                  0,  // ST140
-                                                  0,  // ST145
-                                                  -1, // ST150
-                                                  0,  // ST155
-                                                  3,  // ST160
-                                                  -1, // ST165
-                                                  0,  // ST170
-                                                  0,  // ST174
-                                                  4,  // ST175
-                                                  -1, // ST176
-                                                  -1, // ST180
-                                                  0]; // ST185
-    _StationSet2 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0];
-    _StationSet3 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0];
-    _StationSet4 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0];
-
-    _SelWorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF BOOL
-        := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4)];
-
-    _WorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF
-        FB_StationMan[(ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
-                      (ADR(_StationList), _SelWorkStationList[2], _PieceHolderList[1]),
-                      (ADR(_StationList), _SelWorkStationList[3], _PieceHolderList[2]),
-                      (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[2])];
+    _StationMan : FB_StationMan(ADR(_StationList),
+                                _20_AUTO.recipe.stationSet,
+                                _PieceHolderList[1]);
 
     step : INT := 0; //test step
 
@@ -320,8 +230,8 @@ CASE step OF
 
 0: // setup everything
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
-        _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetStartStation(_MoverList[mv_i].MoverAxis.CurrentPos)^);
-        _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
+        _MoverList[mv_i].SetStation(_StationMan.GetStartStation(_MoverList[mv_i].MoverAxis.CurrentPos)^);
+        _MoverList[mv_i].AttachedPieceHolder REF= _StationMan.PieceHolder;
     END_FOR
 
     step := 5;
@@ -387,7 +297,7 @@ CASE step OF
 
 15: //move every shuttle to the last station
     FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
-        _MoverList[mv_i].SetStation(THIS^._StationList[CONST.STATION_NUMBER]);
+        _MoverList[mv_i].SetStation(THIS^._StationList[CONST.STATION_NUMBER - 1]);
         _MoverList[mv_i].MoveToStation();
     END_FOR
 
@@ -406,7 +316,7 @@ FOR mv_i := 1 TO CONST.STATION_NUMBER BY 1 DO
 END_FOR
 
 FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
-    _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
+    _MoverList[mv_i].AttachedPieceHolder REF= _StationMan.PieceHolder;
 
     IF HMI.enState = enState.StateAUTO OR HMI.enState = enState.StateSTEP THEN
 
@@ -419,7 +329,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 ASSERT(0);
             END_IF
 
-            _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+            _MoverList[mv_i].SetStation(_StationMan.GetNextStation(_MoverList[mv_i].Station));
 
         MoverState_e.WaitOnNextStation:
             // depending on the next station scenario, move
@@ -444,7 +354,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
 
                 ELSE
                     _MoverList[mv_i]
-                        .SetStation(_WorkStationList[PH_num].GetNextStationWithProcess(_MoverList[mv_i].Station));
+                        .SetStation(_StationMan.GetNextStationWithProcess(_MoverList[mv_i].Station));
                 END_IF
 
             ApproachScenario_e.WaitOnFreeStation:
@@ -490,7 +400,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
-                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+                _MoverList[mv_i].SetStation(_StationMan.GetNextStation(_MoverList[mv_i].Station));
 
             ELSIF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[mv_i]);
@@ -509,12 +419,12 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
-                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+                _MoverList[mv_i].SetStation(_StationMan.GetNextStation(_MoverList[mv_i].Station));
 
                 // If there is no station (waiting position)
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
-                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+                _MoverList[mv_i].SetStation(_StationMan.GetNextStation(_MoverList[mv_i].Station));
 
             ELSE
                 IF __ISVALIDREF(_MoverList[mv_i].Station.Process.Mover) THEN
@@ -537,7 +447,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
-                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+                _MoverList[mv_i].SetStation(_StationMan.GetNextStation(_MoverList[mv_i].Station));
 
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 ASSERT(0);
@@ -555,7 +465,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
-                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+                _MoverList[mv_i].SetStation(_StationMan.GetNextStation(_MoverList[mv_i].Station));
 
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 ASSERT(0);
@@ -572,7 +482,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             IF NOT __ISVALIDREF(_MoverList[mv_i].Station) THEN
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
-                _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
+                _MoverList[mv_i].SetStation(_StationMan.GetNextStation(_MoverList[mv_i].Station));
 
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 ASSERT(0);
