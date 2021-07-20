@@ -9,6 +9,7 @@ END_VAR
 VAR
     // Recipe HMI management
     _FB_btCopyRecipe      : FB_BUTTON;
+    _FB_btSetDefault      : FB_BUTTON;
     _FB_btCopyAxisCfg     : FB_BUTTON;
     _FB_btCopyCylinderCfg : FB_BUTTON;
 
@@ -19,6 +20,11 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[_FB_btCopyRecipe(pbtIN  := ADR(HMI.btCopyRecipe),
+                 xINdis := FALSE,
+                 xINon  := FALSE,
+                 xINerr := FALSE);
+				 
+_FB_btSetDefault(pbtIN  := ADR(HMI.btSetDefault),
                  xINdis := FALSE,
                  xINon  := FALSE,
                  xINerr := FALSE);

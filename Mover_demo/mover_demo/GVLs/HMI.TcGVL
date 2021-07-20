@@ -144,6 +144,7 @@ VAR_GLOBAL
     (* Recipe HMI management *)
     (*******************************************************************)
     btCopyRecipe  : structButton;
+    btSetDefault  : structButton;
     movesNames    : ARRAY[0..LinearAxis_e._max - 1] OF ARRAY[0..CONST.MAX_VECTOR_LIST] OF STRING;
     cylinderNames : ARRAY[0..StationList_e._max - 1] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF STRING;
 
