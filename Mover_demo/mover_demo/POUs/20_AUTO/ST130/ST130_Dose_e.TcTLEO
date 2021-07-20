@@ -15,12 +15,12 @@ ST130_Dose_e :
     Init_HomeVertical_10,
     Init_Vertical_10_Down,
     Init_close_down_feeder,
-    Init_open_up_feeder,
 	Init_clamp_up,
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
   
+	open_up_feeder_first, // we ensure that the up clamp is open
 	fill_kammer, // we have to wait until the kammer is full 
 	
     waitOnMover,     // wait until the mover is there
@@ -91,11 +91,6 @@ check level NIO Box
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Init_open_up_feeder"</v>
-              <v n="TextDefault">""</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
               <v n="TextID">"Init_clamp_up"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -108,6 +103,11 @@ check level NIO Box
             <o>
               <v n="TextID">"START"</v>
               <v n="TextDefault">"1000"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"open_up_feeder_first"</v>
+              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

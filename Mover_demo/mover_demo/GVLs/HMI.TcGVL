@@ -40,9 +40,9 @@ VAR_GLOBAL
 													9: START
 													10: HUBTÜREn ALLE
 													11: HUBTÜRE 1
-													11: HUBTÜRE 2
-													11: HUBTÜRE 3
-													11: HUBTÜRE 4
+													12: HUBTÜRE 2
+													13: HUBTÜRE 3
+													14: HUBTÜRE 4
 												*)
     //Manual pneumatics
     // see below for button button instance 
@@ -150,14 +150,15 @@ VAR_GLOBAL
     (*******************************************************************)
     (* Mover manual bt *)
     (*******************************************************************)
-	selectedShuttle : INT := 1; // selected shuttle from the HMI
+    selectedShuttle : INT := 1; // selected shuttle from the HMI
 
     (*******************************************************************)
     (* Diverses *)
     (*******************************************************************)
-    xWriteALlog : BOOL; //Alarmlog schreiben in File
-	
-	sCurrentHMI2 : STRING; // ???
+    xWriteALlog : BOOL;         // Alarmlog schreiben in File
+    btWritePers : structButton; // write pers data in filesystem
+
+    sCurrentHMI2 : STRING; // ???
 END_VAR
 ]]></Declaration>
   </GVL>

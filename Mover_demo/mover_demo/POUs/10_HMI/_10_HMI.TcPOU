@@ -35,10 +35,16 @@ VAR
     dw_ActTime     : DWORD;
 
     //Lampen
-    _FB_LAMPE      : FB_LampeBNI007F;
+    _FB_LAMPE : FB_LampeBNI007F;
+
+    // keba keys
     _key_keba_1    : FB_Keba_key;
     _key_keba_2    : FB_Keba_key;
     _key_press_tof : TOF;
+
+    // pers variable save
+    _fb_bp_pers_save      : FB_BUTTON;
+    fbWritePersistentData : WritePersistentData;
 
     //Alarmlog
     iCount6h : INT;    //6h Ticker (für AlarmLOG)
@@ -47,8 +53,8 @@ VAR
     //Divers
     idx        : INT; //Index
     _12_HMI_BT : FB_HMI_BT;
-	
-	iJogValueIndex : INT := 4; // index used to know current jog velocty from lookup table
+
+    iJogValueIndex : INT := 4; // index used to know current jog velocty from lookup table
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -91,6 +97,16 @@ _key_press_tof(IN := (_key_keba_1.F11.press OR
                                           _key_keba_1.F12.press OR // pressed
                                           _key_keba_2.F12.press)));
 
+_fb_bp_pers_save(pbtIN  := ADR(HMI.btWritePers),
+                 xINdis := FALSE,
+                 xINon  := fbWritePersistentData.BUSY,
+                 xINerr := fbWritePersistentData.ERR);
+
+fbWritePersistentData(NETID := '',
+                      PORT  := 851,
+                      START := HMI.btWritePers.rtrig,
+                      TMOUT := T#1S);
+
 //***********************************************************************************************)
 //State
 //***********************************************************************************************)
@@ -132,8 +148,8 @@ OUT.Q000_LAMP_NRJ:= _10_HMI.x_BLINK_500 AND
 						_02_Safety.bArIN_Input[2].6 
 					OR (HMI.enState>enState.StateOFF);
 					*)
-					
-OUT.Q_CPX9_1_EnergiEin_led := _02_SAFETY.xOUT_ESout;
+
+OUT.Q_CPX9_1_EnergiEin_led   := _02_SAFETY.xOUT_ESout;
 OUT.Q_CPX9_1_Process_running := HMI.enState > enState.StateSTOP OR HMI.enState = enState.StateREADY;
 OUT.Q_CPX9_1_Process_stopped := HMI.enState = enState.StateSTOP;
 
