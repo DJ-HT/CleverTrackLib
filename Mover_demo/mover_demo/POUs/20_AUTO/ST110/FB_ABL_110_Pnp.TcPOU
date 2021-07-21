@@ -639,8 +639,11 @@ ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
 
         END_IF
 
-    ELSIF fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw AND
-          fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw THEN
+    ELSIF
+        (NOT _20_AUTO.recipe.st110.xUseVerLeft OR (fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw)
+            ) AND
+        (NOT _20_AUTO.recipe.st110.xUseVerRight OR (fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw)
+            ) THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_quick_stop;
     END_IF;
 
