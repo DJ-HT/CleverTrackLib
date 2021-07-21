@@ -289,7 +289,8 @@ fb_handlingSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         xIN_FREE     := TRUE,
                         xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step OR
                                         ST125_Pnp_e.Init_handling_up = iOUT_Step,
-                        xINtoAS   := _20_AUTO.recipe.st125.xUseVerLeft AND ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
+                        // should always go down, even if this side is not used, If not, it crashes with the gripper
+                        xINtoAS   := ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
                         tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                       [ST125_Cylinders_e.HandlingSolerohrLinks].toAS_alarm_time),
                         tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
@@ -315,8 +316,8 @@ fb_handlingSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_
                          xIN_FREE     := TRUE,
                          xINtoGS      := ST125_Pnp_e.Pnp_HandlingUp = iOUT_Step OR
                                          ST125_Pnp_e.Init_handling_up = iOUT_Step,
-                         xINtoAS :=
-                             _20_AUTO.recipe.st125.xUseVerRight AND ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
+                         // should always go down, even if this side is not used, If not, it crashes with the gripper
+                         xINtoAS   := ST125_Pnp_e.Pnp_HandlingDown = iOUT_Step,
                          tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
                                                        [ST125_Cylinders_e.HandlingSolerohrRechts].toAS_alarm_time),
                          tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]

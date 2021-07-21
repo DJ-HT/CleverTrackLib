@@ -251,9 +251,13 @@ ST140_Measure_e.Move_shuttle_relative_right:
 
 ST140_Measure_e.Move_shuttle_to_pos_left:
     IF __ISVALIDREF(Mover) THEN
-        IF Mover.MoveRelativeInsideStation(100.0) THEN
-            iOUT_Step    := ST140_Measure_e.Measure_left;
-            measureIndex := 0;
+        IF _20_AUTO.recipe.st140.xIsTypeMiniOrSmart THEN
+            IF Mover.MoveRelativeInsideStation(100.0) THEN
+                iOUT_Step    := ST140_Measure_e.Measure_left;
+                measureIndex := 0;
+            END_IF
+        ELSE
+            iOUT_Step := ST140_Measure_e.Save_result_in_mover;
         END_IF
     ELSE
         bOUT_Error := 11;

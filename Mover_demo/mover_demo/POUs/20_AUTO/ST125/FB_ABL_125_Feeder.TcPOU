@@ -140,7 +140,7 @@ fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_St
           diIN_StopDelay_ms         := _20_AUTO.recipe.st125.FeederConfig.StopDelay,
           diIN_EmptyDelay_ms        := _20_AUTO.recipe.st125.FeederConfig.EmptyDelay);
 
-simu_feeder(xIN_Enable         := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
             xIN_PceSensor      := fb_feeder.xIN_PieceMax,
             tIN_NewPieceTime   := 500,
             iIN_WaitTimeMin_ms := 500,
