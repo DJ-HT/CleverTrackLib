@@ -66,7 +66,7 @@ VAR
     fb_axis105_10W               : FB_AxisLMturn_V1_1;
     simu_axis105_10W             : FB_Simu_AxisLM_V1_1;
     fb_feeder_wf                 : FB_Feeder2Sensors;
-    fifo                         : FB_Fifo(3);
+    fifo                         : FB_Fifo(4);
     simu_feeder                  : FB_Simu_Feeder; // simulation of a feeder
     simu_fifo_feeder_to_rotTable : FB_Fifo(20);    // fifo to hold a piece
     simu_fifo_feeder_lf          : FB_Fifo(20);    // fifo to hold a piece

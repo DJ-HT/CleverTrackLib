@@ -290,6 +290,7 @@ fb_Kammer_nachfullen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iO
                            xIN_AS       := simu_Kammer_nachfullen_Links.xOUT_inAS,
                            xIN_FREE     := TRUE,
                            xINtoGS      := (ST130_Dose_e.close_up_feeder = iOUT_Step) OR
+                                           (ST130_Dose_e.Init_close_up_feeder = iOUT_Step) OR
                                            (enIN_State < enState.StateSTEP),
                            xINtoAS := _20_AUTO.recipe.st130.xUseVerLeft AND
                                       (enIN_State >= enState.StateSTEP) AND
@@ -320,6 +321,7 @@ fb_Kammer_nachfullen_Rechts(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = i
                             xIN_AS       := simu_Kammer_nachfullen_Rechts.xOUT_inAS,
                             xIN_FREE     := TRUE,
                             xINtoGS      := (ST130_Dose_e.close_up_feeder = iOUT_Step) OR
+                                            (ST130_Dose_e.Init_close_up_feeder = iOUT_Step) OR
                                             (enIN_State < enState.StateSTEP),
                             xINtoAS := _20_AUTO.recipe.st130.xUseVerRight AND
                                        (enIN_State >= enState.StateSTEP) AND
@@ -595,6 +597,12 @@ ST130_Dose_e.Init_Vertical_10_Down:
 ST130_Dose_e.Init_close_down_feeder:
     IF (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_Offnen_Links.xOUT_inGS) AND
        (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_Offnen_Rechts.xOUT_inGS) THEN
+        iOUT_Step := ST130_Dose_e.Init_close_up_feeder;
+    END_IF
+
+ST130_Dose_e.Init_close_up_feeder:
+    IF (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_nachfullen_Links.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_nachfullen_Rechts.xOUT_inGS) THEN
         iOUT_Step := ST130_Dose_e.Init_clamp_up;
     END_IF
 
@@ -612,14 +620,14 @@ ST130_Dose_e.READY:   (* Start AUTO:END:LEER:STEP *)
 (***** START  ZYKLISCH *****)
 ST130_Dose_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST130_Dose_e.fill_kammer;
+        iOUT_Step := ST130_Dose_e.open_up_feeder_first;
     END_IF;
 
 ST130_Dose_e.open_up_feeder_first:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_nachfullen_Links.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_nachfullen_Rechts.xOUT_inAS) THEN
-        iOUT_Step := ST130_Dose_e.clamp_down;
+        iOUT_Step := ST130_Dose_e.fill_kammer;
     END_IF
 
 ST130_Dose_e.fill_kammer:

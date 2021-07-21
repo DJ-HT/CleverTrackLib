@@ -371,7 +371,7 @@ ST145_Pnp_e.Init_HomeVerticals:
 ST145_Pnp_e.Init_VerticalsUp:
     IF fb_vakumGriperLeft.xIN_AS OR fb_vakumGriperRight.xIN_AS THEN
         IF fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpFull).xOUT_InPos THEN
-            IF fb_axis145_01Y.xOUT_READY OR fb_axis145_01Y.xOUT_HOMED THEN
+            IF fb_axis145_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST145_Pnp_e.Init_HorizontalsToTrack;
             ELSE
                 iOUT_Step := ST145_Pnp_e.Init_HomeHorizontals;
@@ -379,7 +379,7 @@ ST145_Pnp_e.Init_VerticalsUp:
         END_IF
     ELSE
         IF fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
-            IF fb_axis145_01Y.xOUT_READY OR fb_axis145_01Y.xOUT_HOMED THEN
+            IF fb_axis145_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST145_Pnp_e.Init_HorizontalsToTrack;
             ELSE
                 iOUT_Step := ST145_Pnp_e.Init_HomeHorizontals;
@@ -388,8 +388,6 @@ ST145_Pnp_e.Init_VerticalsUp:
     END_IF
 
 ST145_Pnp_e.Init_HomeHorizontals:
-    fb_axis145_01Y.rIN_Velocity := ST145_Axis.const145_01Y.VELO_MANU;
-
     IF fb_axis145_01Y.xOUT_HOMED THEN
         iOUT_Step := ST145_Pnp_e.Init_HorizontalsToTrack;
     END_IF

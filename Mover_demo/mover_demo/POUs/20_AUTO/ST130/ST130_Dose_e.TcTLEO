@@ -15,6 +15,7 @@ ST130_Dose_e :
     Init_HomeVertical_10,
     Init_Vertical_10_Down,
     Init_close_down_feeder,
+    Init_close_up_feeder,
 	Init_clamp_up,
 
     READY := 999,  // READY to Start, Init Done 
@@ -87,6 +88,11 @@ check level NIO Box
             </o>
             <o>
               <v n="TextID">"Init_close_down_feeder"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_close_up_feeder"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

@@ -194,8 +194,8 @@ VAR
                     85)];
 
     _StationSet1 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,  // ST105
-                                                  0,  // ST110
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+                                                  -1, // ST110
                                                   -1, // ST115
                                                   -1, // ST120
                                                   0,  // ST125
@@ -204,7 +204,7 @@ VAR
                                                   -1, // ST135
                                                   0,  // ST140
                                                   0,  // ST145
-                                                  0,  // ST150
+                                                  2,  // ST150
                                                   0,  // ST155
                                                   3,  // ST160
                                                   -1, // ST165
@@ -215,7 +215,7 @@ VAR
                                                   -1, // ST180
                                                   0]; // ST185
     _StationSet2 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
                                                   0,  // ST110
                                                   -1, // ST115
                                                   0,  // ST120
@@ -236,7 +236,7 @@ VAR
                                                   -1, // ST180
                                                   0]; // ST185
     _StationSet3 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,
                                                   0,
                                                   0,
                                                   0,
@@ -257,7 +257,7 @@ VAR
                                                   0,
                                                   0];
     _StationSet4 :
-        ARRAY[0..CONST.STATION_NUMBER] OF INT := [0,
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,
                                                   0,
                                                   0,
                                                   0,
@@ -278,7 +278,7 @@ VAR
                                                   0,
                                                   0];
 
-    _SelWorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF BOOL
+    _SelWorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF INT
         := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4)];
 
     _WorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF
