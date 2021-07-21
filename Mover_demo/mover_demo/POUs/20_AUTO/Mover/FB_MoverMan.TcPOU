@@ -62,14 +62,14 @@ VAR
                                                              (3625, 1, 1),
                                                              (3875, 1, 1),
                                                              // second part
-                                                             (5175, 1, 1),
-                                                             (5425, 1, 1),
-                                                             (6135, 1, 1),
-                                                             (6835, 1, 1), // waiting pos
-                                                             (7335, 1, 1),
-                                                             (7665, 1, 1),
-                                                             (8625, 1, 1),
-                                                             (8875, 1, 1)];
+                                                             (5205, 1, 1),
+                                                             (5455, 1, 1),
+                                                             (6165, 1, 1),
+                                                             (6830, 1, 1), // waiting pos
+                                                             (7365, 1, 1),
+                                                             (7695, 1, 1),
+                                                             (8655, 1, 1),
+                                                             (8905, 1, 1)];
 
     _StationList : ARRAY[1..CONST.STATION_NUMBER] OF
         FB_Station[(_PosList[1],
@@ -226,7 +226,7 @@ VAR
                                                   0,  // ST140
                                                   0,  // ST145
                                                   2,  // ST150
-                                                  2,  // ST155
+                                                  -1, // ST155
                                                   3,  // ST160
                                                   -1, // ST165
                                                   0,  // ST170
@@ -494,7 +494,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 _MoverList[mv_i].State := MoverState_e.WaitOnNextStation;
                 _MoverList[mv_i].SetStation(_WorkStationList[PH_num].GetNextStation(_MoverList[mv_i].Station));
 
-            ELSIF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
+            ELSIF __ISVALIDREF(_MoverList[mv_i].Station.Process) AND NOT CONST.BIND_WITH_TRACK THEN
                 iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[mv_i]);
 
                 IF _MoverList[mv_i].Station.Process.xMoverPathFree AND
@@ -583,6 +583,9 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             ELSE
                 IF _MoverList[mv_i].IsInStationPos() THEN
                     _MoverList[mv_i].State := MoverState_e.InOperation;
+					
+                ELSIF gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.at_target THEN
+                    _MoverList[mv_i].State := MoverState_e.PerformRelativeMove;
                 END_IF
 
             END_IF
