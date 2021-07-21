@@ -583,7 +583,7 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             ELSE
                 IF _MoverList[mv_i].IsInStationPos() THEN
                     _MoverList[mv_i].State := MoverState_e.InOperation;
-					
+
                 ELSIF gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.at_target THEN
                     _MoverList[mv_i].State := MoverState_e.PerformRelativeMove;
                 END_IF
@@ -658,6 +658,10 @@ IF CONST.BIND_WITH_TRACK THEN
             gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.wholePathFree := FALSE;
         END_IF
     END_FOR
+
+    IF HMI.enState = enState.StateMANU THEN
+        gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.wholePathFree := TRUE;
+    END_IF
 END_IF
 
 // start collision check **********************************************
