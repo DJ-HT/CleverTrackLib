@@ -179,7 +179,10 @@ xOUT_welding_bits.Start :=
     xIN_capDetector;
 
 xOUT_welding_bits.Reset :=
-    _14_STATE._FB_btQUIT.pbtIN^.press OR (ST150_Uss_e.Init_ResetUss_maintaining_down = iOUT_Step);
+    (_14_STATE._FB_btQUIT.pbtIN^.press AND
+    NOT (ST150_Uss_e.uss_working = iOUT_Step) AND
+    NOT (ST150_Uss_e.uss_start = iOUT_Step)) OR
+    (ST150_Uss_e.Init_ResetUss_maintaining_down = iOUT_Step);
 
 xOUT_welding_bits.Data_Hex1 := _20_AUTO.recipe.st150.USS_Type.0; // _20_AUTO.recipe.st150.USS_Type = 1;
 xOUT_welding_bits.Data_Hex2 := _20_AUTO.recipe.st150.USS_Type.1; // _20_AUTO.recipe.st150.USS_Type = 2;
@@ -268,13 +271,15 @@ ST150_Uss_e.check_cap_present:
     IF xIN_capDetector OR (USS_SIMULATION AND CONST.USE_SIMULATION) THEN
         iOUT_Step := ST150_Uss_e.mover_maintening_up;
     ELSE
-        iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
+        // iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
+        iOUT_Step  := ST150_Uss_e.ERROR;
+        bOUT_Error := 8;
 
-        IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-iIN_StationNumber) THEN
-                ASSERT(0);
-            END_IF
-        END_IF
+        // IF __ISVALIDREF(Mover) THEN
+        //     IF NOT Mover.SetLastStation(-iIN_StationNumber) THEN
+        //         ASSERT(0);
+        //     END_IF
+        // END_IF
     END_IF
 
 ST150_Uss_e.mover_maintening_up:

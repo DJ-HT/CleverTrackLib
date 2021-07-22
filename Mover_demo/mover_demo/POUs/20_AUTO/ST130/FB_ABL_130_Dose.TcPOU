@@ -463,12 +463,14 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
 
 IO_BOX.Q0100_14_ST130_kammer_offnen_links :=
     fb_Kammer_Offnen_Links.xOUT_VALVE AND
+	NOT IO_BOX.Q0102_14_ST130_kammer_nachfullen_links AND
     ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
     (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
     (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0101_14_ST130_kammer_offnen_rechts :=
     fb_Kammer_Offnen_Rechts.xOUT_VALVE AND
+	NOT IO_BOX.Q0103_14_ST130_kammer_nachfullen_rechts AND
     ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
     (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
     (enIN_State = enState.StateMANU));

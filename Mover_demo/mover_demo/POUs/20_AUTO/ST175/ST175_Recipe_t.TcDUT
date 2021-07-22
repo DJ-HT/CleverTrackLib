@@ -3,7 +3,8 @@
   <DUT Name="ST175_Recipe_t" Id="{4e48d2da-cc5e-43a6-bc3e-2f0f9b670724}">
     <Declaration><![CDATA[TYPE ST175_Recipe_t :
 STRUCT
-    file_name : STRING;
+    isTypeSmartOrMini : BOOL; // do we need to run the laser twice on the same mover?
+    file_name         : STRING;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

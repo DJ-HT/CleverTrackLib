@@ -72,10 +72,11 @@ VAR
 
     (* Spezial *)
     xLASER_Result_OK : BOOL;
+    xLASER_First_mark : BOOL := FALSE;
 
 END_VAR
 VAR CONSTANT
-    LASER_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    LASER_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -104,7 +105,8 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
-fb_trumpf_laser(xIN_Start := FALSE);
+fb_trumpf_laser(xIN_Start    := ST175_LASER_e.LASER_start = iOUT_Step,
+                sIN_FileName := _20_AUTO.recipe.st175.file_name);
 
 // pneumatics
 fb_handling(xIN_Reset    := xIN_Reset OR (ST175_LASER_e.RESET = iOUT_Step),
@@ -215,6 +217,7 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          iAktStep,
                                          ST175_LASER_e.close_doors,
                                          ST175_LASER_e.SYNC_MOVER_LEAVE);
+
 (* BIG CHANGE IN OUTPUT, PLEASE UPDATE *)
 IO_BOX.Q5300_14_ST175_niederhalter :=
     fb_doorEntry.xOUT_VALVE AND NOT (LASER_SIMULATION AND CONST.USE_SIMULATION);
@@ -252,6 +255,8 @@ IF 0 = bOUT_Error THEN
         bOUT_Error := 12;
     ELSIF fb_doorExit.xOUT_ErrFlag THEN
         bOUT_Error := 13;
+    ELSIF fb_trumpf_laser.xOUT_ERROR THEN
+        bOUT_Error := 20;
     END_IF
 ELSIF iOUT_Step < ST175_LASER_e.ERROR THEN
     iOUT_Step := ST175_LASER_e.ERROR;
@@ -306,27 +311,47 @@ ST175_LASER_e.waitOnMover: (*  *)
 
 ST175_LASER_e.close_doors:
     IF fb_doorEntry.xOUT_inAS AND fb_doorExit.xOUT_inAS THEN
-        iOUT_Step := ST175_LASER_e.handling_down;
+        xLASER_First_mark := FALSE;
+        iOUT_Step         := ST175_LASER_e.handling_down;
     END_IF
 
 ST175_LASER_e.handling_down:
     IF fb_handling.xOUT_inAS THEN
-        iOUT_Step := ST175_LASER_e.LASER_start;
+        IF LASER_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST175_LASER_e.handling_up;
+        ELSE
+            iOUT_Step := ST175_LASER_e.LASER_start;
+        END_IF
     END_IF
 
 ST175_LASER_e.LASER_start:
-    IF TRUE THEN
+    IF fb_trumpf_laser.xOUT_BUSY THEN
         iOUT_Step := ST175_LASER_e.LASER_wait_on_finish;
     END_IF
 
 ST175_LASER_e.LASER_wait_on_finish:
-    IF TRUE THEN
+    IF fb_trumpf_laser.xOUT_DONE OR NOT fb_trumpf_laser.xOUT_BUSY THEN
         iOUT_Step := ST175_LASER_e.handling_up;
     END_IF
 
 ST175_LASER_e.handling_up:
     IF fb_handling.xOUT_inGS THEN
-        iOUT_Step := ST175_LASER_e.open_doors;
+        IF _20_AUTO.recipe.st175.isTypeSmartOrMini AND xLASER_First_mark THEN
+            iOUT_Step := ST175_LASER_e.open_doors;
+        ELSE
+            iOUT_Step := ST175_LASER_e.move_shuttle_to_left_piece;
+        END_IF
+    END_IF
+
+ST175_LASER_e.move_shuttle_to_left_piece:
+    IF xIN_NextStep AND __ISVALIDREF(Mover) AND_THEN Mover.MoveRelativeInsideStation(118.0) THEN
+        iOUT_Step := ST175_LASER_e.wait_shuttle_in_place;
+    END_IF
+
+ST175_LASER_e.wait_shuttle_in_place:
+    IF xIN_NextStep AND __ISVALIDREF(Mover) AND_THEN Mover.IsInStationPos() THEN
+        xLASER_First_mark := TRUE;
+        iOUT_Step         := ST175_LASER_e.handling_down;
     END_IF
 
 ST175_LASER_e.open_doors:

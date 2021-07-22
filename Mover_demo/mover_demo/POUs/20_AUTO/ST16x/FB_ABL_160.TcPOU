@@ -181,9 +181,9 @@ fb_capMainteningLeft(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Ste
                      tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
                                                     [ST160_Cylinders_e.Niederhalter_links].toGS_wait_time));
 
-simu_capMainteningLeft(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
-                       xIN_inGS   := IO_BOX.I3000_ST160_Wegmessenor_links < 10,
-                       xIN_inAS   := IO_BOX.I3000_ST160_Wegmessenor_links > 200,
+simu_capMainteningLeft(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
+                       xIN_inGS   := UINT_TO_INT(IO_BOX.I3000_ST160_Wegmessenor_links) < 10,
+                       xIN_inAS   := UINT_TO_INT(IO_BOX.I3000_ST160_Wegmessenor_links) > 200,
                        xIN_valve  := fb_capMainteningLeft.xOUT_VALVE,
                        tIN_GS_ms  := 200,  // ms
                        tIN_AS_ms  := 200); // ms
@@ -207,9 +207,9 @@ fb_capMainteningRight(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_St
                       tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
                                                      [ST160_Cylinders_e.Niederhalter_rechts].toGS_wait_time));
 
-simu_capMainteningRight(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
-                        xIN_inGS   := IO_BOX.I3100_ST160_Wegmessenor_rechts < 10,
-                        xIN_inAS   := IO_BOX.I3100_ST160_Wegmessenor_rechts > 200,
+simu_capMainteningRight(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
+                        xIN_inGS   := UINT_TO_INT(IO_BOX.I3100_ST160_Wegmessenor_rechts) < 10,
+                        xIN_inAS   := UINT_TO_INT(IO_BOX.I3100_ST160_Wegmessenor_rechts) > 200,
                         xIN_valve  := fb_capMainteningRight.xOUT_VALVE,
                         tIN_GS_ms  := 200,  // ms
                         tIN_AS_ms  := 200); // ms
@@ -297,11 +297,11 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          ST160_CETA_e.Init_pneumatics,
                                          ST160_CETA_e.SYNC_MOVER_LEAVE);
 
-IO_BOX.Q0300_14_ST160_niederhalter_links :=
-    fb_capMainteningLeft.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q0300_14_ST160_niederhalter_links := FALSE;
+    // fb_capMainteningLeft.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q0301_14_ST160_niederhalter_rechts :=
-    fb_capMainteningRight.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q0301_14_ST160_niederhalter_rechts := FALSE;
+    // fb_capMainteningRight.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
 IO_BOX.Q0302_14_ST160_dichtung_pruflocker_links := FALSE;
 //fb_dichtung_left.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);

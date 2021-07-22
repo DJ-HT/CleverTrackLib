@@ -9,6 +9,7 @@ END_VAR
 VAR_OUTPUT
     xOUT_DONE  : BOOL;
     xOUT_ERROR : BOOL;
+    xOUT_BUSY  : BOOL;
 END_VAR
 VAR
     iStep     : INT := 0;
@@ -172,7 +173,8 @@ CASE iStep OF
 END_CASE
 
 xOUT_DONE := 1300 = iStep;
-xOUT_ERROR := if_SingleCmds.bError;]]></ST>
+xOUT_BUSY := iStep >= 1000 AND iStep < 1300;
+xOUT_ERROR := if_TruMark.bError;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -168,51 +168,51 @@
     <Compile Include="POUs\20_AUTO\Axis_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_Status_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_u.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_Tc_To_BR_Command_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_Tc_to_BR_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Shuttle_Tc_to_BR_u.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_BR_to_TC_Status_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_BR_to_Tc_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_BR_to_Tc_u.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_Tc_to_BR_Command_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_Tc_to_BR_t.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\CT_Track_Tc_to_BR_u.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\20_AUTO\BuR SuperTrack com\gMoverAxis.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Alarm\FB_ALARM.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\Alarm\FB_ALARM32.TcPOU">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_Status_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Shuttle_BR_to_Tc_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Shuttle_Tc_To_BR_Command_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Shuttle_Tc_to_BR_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Shuttle_Tc_to_BR_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Track_BR_to_TC_Status_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Track_BR_to_Tc_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Track_BR_to_Tc_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Track_Tc_to_BR_Command_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Track_Tc_to_BR_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\CT_Track_Tc_to_BR_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com\gMoverAxis.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="POUs\20_AUTO\FB%27s\FB_WandlerForceSensor.TcPOU">
       <SubType>Code</SubType>
@@ -1057,6 +1057,7 @@
     <Folder Include="POUs\20_AUTO\FB%27s" />
     <Folder Include="POUs\20_AUTO\FB%27s\Achsen" />
     <Folder Include="POUs\20_AUTO\FB%27s\Alarm" />
+    <Folder Include="POUs\20_AUTO\FB%27s\BuR SuperTrack com" />
     <Folder Include="POUs\20_AUTO\FB%27s\Pneumatic" />
     <Folder Include="POUs\20_AUTO\FB%27s\RS Axis" />
     <Folder Include="POUs\20_AUTO\FB%27s\Vorlagen" />
@@ -1064,7 +1065,6 @@
     <Folder Include="POUs\20_AUTO" />
     <Folder Include="POUs\20_AUTO\Mover" />
     <Folder Include="POUs\20_AUTO\FileMan" />
-    <Folder Include="POUs\20_AUTO\BuR SuperTrack com" />
     <Folder Include="POUs\20_AUTO\ST105\Fanuc_robot" />
     <Folder Include="POUs\20_AUTO\ST170" />
     <Folder Include="POUs\20_AUTO\ST16x" />

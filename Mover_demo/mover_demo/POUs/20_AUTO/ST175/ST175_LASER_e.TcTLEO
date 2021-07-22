@@ -23,6 +23,8 @@ TYPE ST175_LASER_e :
     LASER_start, // 
     LASER_wait_on_finish, // 
     handling_up, // 
+	move_shuttle_to_left_piece,
+	wait_shuttle_in_place,
     open_doors, // 
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
@@ -98,6 +100,16 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"handling_up"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"move_shuttle_to_left_piece"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"wait_shuttle_in_place"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

@@ -303,6 +303,8 @@ VAR
     HMI_TimeMax    : DINT               := 1100;
     HMI_xStopMover : BOOL               := FALSE;
     HMI_iSelMover  : INT                := 1;
+	
+	HMI_send_all_shuttle_to_unload : BOOL;
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
@@ -393,6 +395,9 @@ CASE step OF
 
     step := 16;
 16:
+    IF HMI_send_all_shuttle_to_unload THEN
+        step := 15;
+    END_IF
 // do nothing, init done
 
 END_CASE
