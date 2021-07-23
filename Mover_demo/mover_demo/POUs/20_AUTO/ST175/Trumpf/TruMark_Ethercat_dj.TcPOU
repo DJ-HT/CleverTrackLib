@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <POU Name="TruMark_Ethercat" Id="{6b9421f5-af6d-4be3-a041-df1068a81edb}" SpecialFunc="None">
-    <Declaration><![CDATA[PROGRAM TruMark_Ethercat
+  <POU Name="TruMark_Ethercat_dj" Id="{6b9421f5-af6d-4be3-a041-df1068a81edb}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM TruMark_Ethercat_dj
 VAR
 	// EtherCat Zustand
 	uiECatStatus AT %I* : UINT;				// --> Status von ECAT-Klemme (101A2-InfoData-State)

@@ -907,7 +907,7 @@
     <Compile Include="POUs\20_AUTO\ST175\Trumpf\TruMarkLaserStatus.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\20_AUTO\ST175\Trumpf\TruMark_Ethercat.TcPOU">
+    <Compile Include="POUs\20_AUTO\ST175\Trumpf\TruMark_Ethercat_dj.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST175\Trumpf\TruMark_SingleCmds.TcPOU">
@@ -1183,6 +1183,11 @@
     <LibraryReference Include="VisuSymbols,3.5.10.0,System">
       <Namespace>VisuSymbols</Namespace>
     </LibraryReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="POUs\20_AUTO\ST175\Trumpf\TruMarkEthercat.xml">
+      <SubType>Content</SubType>
+    </Content>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>
