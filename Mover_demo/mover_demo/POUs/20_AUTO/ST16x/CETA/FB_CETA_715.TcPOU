@@ -157,5 +157,14 @@ xOUT_DataReady  := 300 = iStep;
 xOUT_Error_Flag := 1500 = iStep;
 ]]></ST>
     </Implementation>
+    <Method Name="GetParameter" Id="{90e8271d-7322-4297-b828-4a5666bdeb98}">
+      <Declaration><![CDATA[METHOD GetParameter : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
