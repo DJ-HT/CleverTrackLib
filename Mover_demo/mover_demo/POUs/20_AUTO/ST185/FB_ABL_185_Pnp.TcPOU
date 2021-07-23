@@ -425,7 +425,8 @@ IO_BOX.Q5407_14_ST185_Niederhalter_deckel_rechts :=
 
 // safety pneumatics
 IO_BOX.Q5409_14_ST185_Break_axis_02Z := NOT fb_simu_axis185_02Z.pIN_axisHW^.Status.Error AND
-                                        _02_SAFETY.xOUT_ESout AND _02_SAFETY.xOUT_MonOut AND
+                                        _02_SAFETY.xOUT_ESout AND
+                                        _02_SAFETY.xOUT_MonOut AND
                                         NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
@@ -521,7 +522,7 @@ ST185_Pnp_e.Init_Vertical_02_up:
             END_IF
         END_IF
     ELSE
-        IF fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_empty).xOUT_InPos THEN
+        IF fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_waiting_mover).xOUT_InPos THEN
             IF fb_axis185_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST185_Pnp_e.Init_HorizontalToTrack;
             ELSE
@@ -632,13 +633,6 @@ ST185_Pnp_e.hor_move_to_extraction_pipe:
 
 ST185_Pnp_e.ver_down_in_pipe:
     IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.down_full).xOUT_InPos THEN
-        iOUT_Step := ST185_Pnp_e.clamp_up_to_rest_position;
-    END_IF
-
-ST185_Pnp_e.clamp_up_to_rest_position:
-    IF xIN_NextStep AND
-       (NOT _20_AUTO.recipe.st185.xUseVerLeft OR fb_clampLeft.xOUT_inGS) AND
-       (NOT _20_AUTO.recipe.st185.xUseVerRight OR fb_clampRight.xOUT_inGS) THEN
         iOUT_Step := ST185_Pnp_e.open_griper_put_piece;
     END_IF
 
@@ -646,16 +640,29 @@ ST185_Pnp_e.open_griper_put_piece:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st185.xUseVerLeft OR fb_griperLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st185.xUseVerRight OR fb_griperRight.xOUT_inAS) THEN
+	   // We check if we need to move up or not, this is to avoid colision with 
+        iOUT_Step := ST185_Pnp_e.clamp_up_to_rest_position;
+    END_IF
+
+ST185_Pnp_e.clamp_up_to_rest_position:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st185.xUseVerLeft OR fb_clampLeft.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st185.xUseVerRight OR fb_clampRight.xOUT_inGS) THEN
         iOUT_Step := ST185_Pnp_e.ver_up_empty;
     END_IF
 
 ST185_Pnp_e.ver_up_empty:
-    IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_empty).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_after_unload).xOUT_InPos THEN
         iOUT_Step := ST185_Pnp_e.hor_to_track_pos;
     END_IF
 
 ST185_Pnp_e.hor_to_track_pos:
     IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST185_PnpHorPos_e.GS).xOUT_InPos THEN
+        iOUT_Step := ST185_Pnp_e.ver_down_waiting_for_mover;
+    END_IF
+	
+ST185_Pnp_e.ver_down_waiting_for_mover:
+    IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_waiting_mover).xOUT_InPos THEN
         iOUT_Step := ST185_Pnp_e.DONE;
     END_IF
 

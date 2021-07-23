@@ -336,7 +336,7 @@ ST175_LASER_e.LASER_wait_on_finish:
 
 ST175_LASER_e.handling_up:
     IF fb_handling.xOUT_inGS THEN
-        IF _20_AUTO.recipe.st175.isTypeSmartOrMini AND xLASER_First_mark THEN
+        IF NOT _20_AUTO.recipe.st175.isTypeSmartOrMini OR xLASER_First_mark THEN
             iOUT_Step := ST175_LASER_e.open_doors;
         ELSE
             iOUT_Step := ST175_LASER_e.move_shuttle_to_left_piece;

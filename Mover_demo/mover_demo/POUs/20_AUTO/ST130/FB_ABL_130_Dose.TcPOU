@@ -235,8 +235,8 @@ fb_Kammer_Offnen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iOUT_S
                        xIN_GS       := simu_Kammer_Offnen_Links.xOUT_inGS,
                        xIN_AS       := simu_Kammer_Offnen_Links.xOUT_inAS,
                        xIN_FREE     := TRUE,
-                       xINtoGS      := ST130_Dose_e.Init_close_down_feeder = iOUT_Step OR
-                                       ST130_Dose_e.close_down_feeder = iOUT_Step,
+                       xINtoGS := ST130_Dose_e.Init_close_down_feeder = iOUT_Step OR
+                                  ST130_Dose_e.close_down_feeder = iOUT_Step,
                        xINtoAS := _20_AUTO.recipe.st130.xUseVerRight AND
                                   ST130_Dose_e.open_down_feeder = iOUT_Step,
                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
@@ -463,14 +463,14 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
 
 IO_BOX.Q0100_14_ST130_kammer_offnen_links :=
     fb_Kammer_Offnen_Links.xOUT_VALVE AND
-	NOT IO_BOX.Q0102_14_ST130_kammer_nachfullen_links AND
+    NOT IO_BOX.Q0102_14_ST130_kammer_nachfullen_links AND
     ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
     (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
     (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0101_14_ST130_kammer_offnen_rechts :=
     fb_Kammer_Offnen_Rechts.xOUT_VALVE AND
-	NOT IO_BOX.Q0103_14_ST130_kammer_nachfullen_rechts AND
+    NOT IO_BOX.Q0103_14_ST130_kammer_nachfullen_rechts AND
     ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
     (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
     (enIN_State = enState.StateMANU));
@@ -579,7 +579,7 @@ ST130_Dose_e.INIT: (* Grundstellung ? *)
 
 ST130_Dose_e.Init_Vertical_01Z_at_position:
     IF fb_VerAxis_01.MoveTo(ST130_DosierkammerPos_e.down_AS).xOUT_InPos THEN
-        IF fb_axis130_10Z.xOUT_READY OR fb_axis130_10Z.xOUT_HOMED THEN
+        IF fb_axis130_10Z.xOUT_HOMED THEN
             iOUT_Step := ST130_Dose_e.Init_Vertical_10_Down;
         ELSE
             iOUT_Step := ST130_Dose_e.Init_HomeVertical_10;
