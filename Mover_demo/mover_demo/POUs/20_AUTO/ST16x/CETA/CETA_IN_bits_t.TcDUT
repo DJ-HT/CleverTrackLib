@@ -3,22 +3,22 @@
   <DUT Name="CETA_IN_bits_t" Id="{875d5eb3-ed36-43b5-a97f-e91792807fe3}">
     <Declaration><![CDATA[TYPE CETA_IN_bits_t :
 STRUCT
-    measurement_complete         : BIT; // measurement complete
-    parameters_received          : BIT; // parameters received
-    parameters_available         : BIT; // parameters available
-    error_code_available         : BIT; // error code available
-    front_panel_lock_state       : BIT; // front panel lock state
-    program_number_assigned      : BIT; // program number assigned
-    system_information_available : BIT; // system information available
-    cycle_counter_available      : BIT; // cycle counter available
-    error_bit                    : BIT; // error bit
-    communication_possible       : BIT; // communication possible
-    device_ready_to_start        : BIT; // device ready to start
-    result_block_handshake_bit   : BIT; // result block handshake bit
-    measuring_curve              : BIT; // measuring curve
-    res_b13                      : BIT;
-    res_b14                      : BIT;
-    res_b15                      : BIT;
+    b00_measurement_complete         : BIT; // measurement complete
+    b01_parameters_received          : BIT; // parameters received
+    b02_parameters_available         : BIT; // parameters available
+    b03_error_code_available         : BIT; // error code available
+    b04_front_panel_lock_state       : BIT; // front panel lock state
+    b05_program_number_assigned      : BIT; // program number assigned
+    b06_system_information_available : BIT; // system information available
+    b07_cycle_counter_available      : BIT; // cycle counter available
+    b08_error_bit                    : BIT; // error bit
+    b09_communication_possible       : BIT; // communication possible
+    b10_device_ready_to_start        : BIT; // device ready to start
+    b11_result_block_handshake_bit   : BIT; // result block handshake bit
+    b12_measuring_curve              : BIT; // measuring curve
+    b13_res_b13                      : BIT;
+    b14_res_b14                      : BIT;
+    b15_res_b15                      : BIT;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

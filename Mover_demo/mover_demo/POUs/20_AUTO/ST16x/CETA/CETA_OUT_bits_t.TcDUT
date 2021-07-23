@@ -3,22 +3,22 @@
   <DUT Name="CETA_OUT_bits_t" Id="{e32073c4-20c1-40c9-ae7e-779421b0f93a}">
     <Declaration><![CDATA[TYPE CETA_OUT_bits_t :
 STRUCT
-    start_stop                    : BIT; // start / stop (stop resets the device)
-    send_parameters               : BIT; // send parameters
-    request_parameters            : BIT; // request parameters
-    request_error_code            : BIT; // request error code
-    change_front_panel_lock_state : BIT; // change front panel lock state
-    assign_program_number         : BIT; // assign program number
-    request_system_information    : BIT; // request system information
-    request_cycle_counter         : BIT; // request cycle counter
-    reset_error_bit               : BIT; // reset error bit
-    res_b9                        : BIT; // res_b9
-    res_b10                       : BIT; // res_b10
-    request_next_result_block     : BIT; // request next result block
-    res_b12                       : BIT; // res_b12
-    res_b13                       : BIT; // res_b13
-    res_b14                       : BIT; // res_b14
-    res_b15                       : BIT; // res_b15
+    b00_start_stop                    : BIT; // start / stop (stop resets the device)
+    b01_send_parameters               : BIT; // send parameters
+    b02_request_parameters            : BIT; // request parameters
+    b03_request_error_code            : BIT; // request error code
+    b04_change_front_panel_lock_state : BIT; // change front panel lock state
+    b05_assign_program_number         : BIT; // assign program number
+    b06_request_system_information    : BIT; // request system information
+    b07_request_cycle_counter         : BIT; // request cycle counter
+    b08_reset_error_bit               : BIT; // reset error bit
+    b09_res_b9                        : BIT; // res_b9
+    b10_res_b10                       : BIT; // res_b10
+    b11_request_next_result_block     : BIT; // request next result block
+    b12_res_b12                       : BIT; // res_b12
+    b13_res_b13                       : BIT; // res_b13
+    b14_res_b14                       : BIT; // res_b14
+    b15_res_b15                       : BIT; // res_b15
 END_STRUCT
 END_TYPE
 ]]></Declaration>

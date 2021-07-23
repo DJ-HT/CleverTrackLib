@@ -24,6 +24,9 @@ VAR
 
     error_message : CETA_error_handling_t;
 END_VAR
+VAR CONSTANT
+	DEFAULT_COMMAND_BIT : UINT := 16#00;
+END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
@@ -34,13 +37,13 @@ CASE iStep OF
 0: // reset
     xOUT_CommandBits.raw := 0;
 
-    IF xIN_StatusBits.bits.communication_possible THEN
+    IF xIN_StatusBits.bits.b09_communication_possible THEN
         iStep := 100;
     END_IF
 
 100: // ready to take command
     // wait on command and read error when there is one
-    IF xIN_StatusBits.bits.error_bit THEN
+    IF xIN_StatusBits.bits.b08_error_bit THEN
         iStep := 1000;
     END_IF
 
@@ -51,38 +54,38 @@ CASE iStep OF
         bOUT_ErrorCode    := 0;
         sOUT_ErrorMessage := 'Command timeout';
 
-    ELSIF xOUT_CommandBits.bits.send_parameters THEN
-        IF xIN_StatusBits.bits.parameters_available THEN
+    ELSIF xOUT_CommandBits.bits.b01_send_parameters THEN
+        IF xIN_StatusBits.bits.b02_parameters_available THEN
             iStep := 300;
         END_IF
 
-    ELSIF xOUT_CommandBits.bits.request_parameters THEN
-        IF xIN_StatusBits.bits.parameters_available THEN
+    ELSIF xOUT_CommandBits.bits.b02_request_parameters THEN
+        IF xIN_StatusBits.bits.b02_parameters_available THEN
             iStep := 300;
         END_IF
 
-    ELSIF xOUT_CommandBits.bits.request_error_code THEN
-        IF xIN_StatusBits.bits.error_code_available THEN
+    ELSIF xOUT_CommandBits.bits.b03_request_error_code THEN
+        IF xIN_StatusBits.bits.b03_error_code_available THEN
             iStep := 300;
         END_IF
 
-    ELSIF xOUT_CommandBits.bits.change_front_panel_lock_state THEN
-        IF xIN_StatusBits.bits.front_panel_lock_state THEN // TODO
+    ELSIF xOUT_CommandBits.bits.b04_change_front_panel_lock_state THEN
+        IF xIN_StatusBits.bits.b04_front_panel_lock_state THEN // TODO
             iStep := 300;
         END_IF
 
-    ELSIF xOUT_CommandBits.bits.assign_program_number THEN
-        IF xIN_StatusBits.bits.program_number_assigned THEN
+    ELSIF xOUT_CommandBits.bits.b05_assign_program_number THEN
+        IF xIN_StatusBits.bits.b05_program_number_assigned THEN
             iStep := 300;
         END_IF
 
-    ELSIF xOUT_CommandBits.bits.request_system_information THEN
-        IF xIN_StatusBits.bits.system_information_available THEN
+    ELSIF xOUT_CommandBits.bits.b06_request_system_information THEN
+        IF xIN_StatusBits.bits.b06_system_information_available THEN
             iStep := 300;
         END_IF
 
-    ELSIF xOUT_CommandBits.bits.request_cycle_counter THEN
-        IF xIN_StatusBits.bits.cycle_counter_available THEN
+    ELSIF xOUT_CommandBits.bits.b07_request_cycle_counter THEN
+        IF xIN_StatusBits.bits.b07_cycle_counter_available THEN
             iStep := 300;
         END_IF
 
@@ -98,14 +101,14 @@ CASE iStep OF
 1000: // read error code
     xOUT_CommandBits.raw := 0;
     //
-    xOUT_CommandBits.bits.request_error_code := TRUE;
+    xOUT_CommandBits.bits.b03_request_error_code := TRUE;
 
     iStep := 1100;
 
 1100: // read error code
     IF ton_TimeOut.Q THEN
         iStep := 0; // reset .. there is nothing we can do
-    ELSIF xIN_StatusBits.bits.error_code_available THEN
+    ELSIF xIN_StatusBits.bits.b03_error_code_available THEN
         iStep := 1200;
     END_IF
 
@@ -117,25 +120,25 @@ CASE iStep OF
     IF 0 = error_message.command_in_error.raw THEN
         sOUT_ErrorMessage := 'CETA in error, not due to Ethercat communication';
 
-    ELSIF xOUT_CommandBits.bits.send_parameters THEN
+    ELSIF xOUT_CommandBits.bits.b01_send_parameters THEN
         sOUT_ErrorMessage := 'send_parameters command failed';
 
-    ELSIF xOUT_CommandBits.bits.request_parameters THEN
+    ELSIF xOUT_CommandBits.bits.b02_request_parameters THEN
         sOUT_ErrorMessage := 'request_parameters command failed';
 
-    ELSIF xOUT_CommandBits.bits.request_error_code THEN
+    ELSIF xOUT_CommandBits.bits.b03_request_error_code THEN
         sOUT_ErrorMessage := 'request_error_code command failed';
 
-    ELSIF xOUT_CommandBits.bits.change_front_panel_lock_state THEN
+    ELSIF xOUT_CommandBits.bits.b04_change_front_panel_lock_state THEN
         sOUT_ErrorMessage := 'change_front_panel_lock_state command failed';
 
-    ELSIF xOUT_CommandBits.bits.assign_program_number THEN
+    ELSIF xOUT_CommandBits.bits.b05_assign_program_number THEN
         sOUT_ErrorMessage := 'assign_program_number command failed';
 
-    ELSIF xOUT_CommandBits.bits.request_system_information THEN
+    ELSIF xOUT_CommandBits.bits.b06_request_system_information THEN
         sOUT_ErrorMessage := 'request_system_information command failed';
 
-    ELSIF xOUT_CommandBits.bits.request_cycle_counter THEN
+    ELSIF xOUT_CommandBits.bits.b07_request_cycle_counter THEN
         sOUT_ErrorMessage := 'request_cycle_counter command failed';
 
     END_IF
@@ -147,7 +150,7 @@ CASE iStep OF
         sOUT_ErrorMessage                     := '';
         bOUT_ErrorCode                        := 0;
         xOUT_CommandBits.raw                  := 0;
-        xOUT_CommandBits.bits.reset_error_bit := TRUE;
+        xOUT_CommandBits.bits.b08_reset_error_bit := TRUE;
         iStep                                 := 0;
     END_IF
 
