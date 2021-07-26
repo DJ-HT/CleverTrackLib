@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_Measurement_t" Id="{fd61ae1f-cda3-4659-be6a-f796c4095d43}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE CETA_Measurement_t :
+STRUCT
+	Block0 : CETA_Measurement_block1_t;
+	Block1 : CETA_Measurement_block2_t;
+	Block2 : CETA_Measurement_block3_t;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

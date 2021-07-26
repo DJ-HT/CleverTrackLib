@@ -809,6 +809,21 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_Measurement_t\CETA_Measurement_block1_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_Measurement_t\CETA_Measurement_block2_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_Measurement_t\CETA_Measurement_block3_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_Measurement_t\CETA_Measurement_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_Measurement_t\CETA_Res_Data_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_OUT_bits_t.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -819,6 +834,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_com_union\CETA_Parameter_blocks_u.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_Result_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST16x\CETA\CETA_Unit_e.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST16x\CETA\FB_CETA_715.TcPOU">
@@ -1083,6 +1104,7 @@
     <Folder Include="POUs\20_AUTO\ST105\Fanuc_robot" />
     <Folder Include="POUs\20_AUTO\ST16x\CETA\CETA_com_union" />
     <Folder Include="POUs\20_AUTO\ST16x\CETA\CETA_Parameter_blocks" />
+    <Folder Include="POUs\20_AUTO\ST16x\CETA\CETA_Measurement_t" />
     <Folder Include="POUs\20_AUTO\ST170" />
     <Folder Include="POUs\20_AUTO\ST16x" />
     <Folder Include="POUs\20_AUTO\ST128" />

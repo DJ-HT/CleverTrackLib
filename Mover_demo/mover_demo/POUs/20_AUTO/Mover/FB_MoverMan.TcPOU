@@ -334,14 +334,14 @@ CASE step OF
         step := 10;
     END_IF
 10: // turn power on
-    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enablePower := TRUE;
+    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enablePower := (HMI.enState <> enState.StateMANU);
 
     IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.powerOn THEN
         step := 11;
     END_IF
 
 11: // init all mover until they the first shuttle is found
-    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.startMoverNumberingSequence := TRUE;
+    gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.startMoverNumberingSequence := (HMI.enState <> enState.StateMANU);
 
     IF gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.allIdSet THEN
         gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.setShuttleNumber      := FALSE;

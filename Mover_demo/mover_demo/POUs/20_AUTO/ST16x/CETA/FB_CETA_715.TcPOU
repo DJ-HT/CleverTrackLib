@@ -16,21 +16,29 @@ VAR_OUTPUT
     xOUT_DataReady    : BOOL;
     xOUT_Error_Flag   : BOOL;
     bOUT_ErrorCode    : BYTE;
+    xOUT_MeasureOK    : BOOL; // TRUE when the last measurement was GOOD
     sOUT_ErrorMessage : STRING;
 END_VAR
 VAR
     iStep       : INT := 0;
     ton_TimeOut : TON;
 
+    iBlockNumber : INT := 0;
+
     error_message : CETA_error_handling_t;
+
+    ceta_measurement_data : CETA_Measurement_t;
+
+    xResultGood : BOOL := FALSE;
+
 END_VAR
 VAR CONSTANT
-	DEFAULT_COMMAND_BIT : UINT := 16#00;
+    DEFAULT_COMMAND_BIT : UINT := 16#00;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-ton_TimeOut(IN := 200 = iStep OR 1100 = iStep, PT := T#1S);
+ton_TimeOut(IN := 200 = iStep OR 1100 = iStep, PT := T#10S);
 
 CASE iStep OF
 
@@ -44,7 +52,8 @@ CASE iStep OF
 100: // ready to take command
     // wait on command and read error when there is one
     IF xIN_StatusBits.bits.b08_error_bit THEN
-        iStep := 1000;
+        iStep       := 1000;
+        xResultGood := FALSE;
     END_IF
 
 200: // command is sending, wait on a answer
@@ -53,6 +62,12 @@ CASE iStep OF
         iStep             := 1500;
         bOUT_ErrorCode    := 0;
         sOUT_ErrorMessage := 'Command timeout';
+
+    ELSIF xOUT_CommandBits.bits.b00_start_stop THEN
+        IF xIN_StatusBits.bits.b00_measurement_complete THEN
+            iStep        := 240;
+            iBlockNumber := 0;
+        END_IF
 
     ELSIF xOUT_CommandBits.bits.b01_send_parameters THEN
         IF xIN_StatusBits.bits.b02_parameters_available THEN
@@ -94,6 +109,41 @@ CASE iStep OF
         //         iStep := 300;
         //     END_IF
     END_IF
+
+240:
+
+    iStep := 250;
+
+    // copy 
+    CASE iBlockNumber OF
+    0:
+        MEMCPY(ADR(ceta_measurement_data.Block0), ADR(xIN_Data), SIZEOF(ceta_measurement_data.Block0));
+    1:
+        MEMCPY(ADR(ceta_measurement_data.Block1), ADR(xIN_Data), SIZEOF(ceta_measurement_data.Block1));
+    2:
+        MEMCPY(ADR(ceta_measurement_data.Block2), ADR(xIN_Data), SIZEOF(ceta_measurement_data.Block2));
+
+    ELSE
+        iStep := 1500; // should not read more than 3 blocks !
+    END_CASE
+
+    iBlockNumber := iBlockNumber + 1;
+
+250:
+    IF xIN_StatusBits.bits.b11_result_block_handshake_bit THEN
+        iStep := 260;
+    ELSE
+        iStep       := 300;
+        xResultGood := ceta_measurement_data.Block1.Result_chanel_1 = CETA_REsult_e.OK AND
+                       ceta_measurement_data.Block1.Result_chanel_2 = CETA_REsult_e.OK;
+    END_IF
+
+260:
+    IF NOT xIN_StatusBits.bits.b11_result_block_handshake_bit THEN
+        iStep := 240;
+    END_IF
+
+    xOUT_CommandBits.bits.b11_request_next_result_block := xIN_StatusBits.bits.b11_result_block_handshake_bit;
 
 300: // data available
 // Use the read() method to return to state 100
@@ -147,11 +197,11 @@ CASE iStep OF
 
 1500: // in error, wait on reset
     IF xIN_Reset THEN
-        sOUT_ErrorMessage                     := '';
-        bOUT_ErrorCode                        := 0;
-        xOUT_CommandBits.raw                  := 0;
+        sOUT_ErrorMessage                         := '';
+        bOUT_ErrorCode                            := 0;
+        xOUT_CommandBits.raw                      := 0;
         xOUT_CommandBits.bits.b08_reset_error_bit := TRUE;
-        iStep                                 := 0;
+        iStep                                     := 0;
     END_IF
 
 END_CASE
