@@ -197,9 +197,10 @@ fb_capMainteningRight(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_St
                       xIN_FREE     := TRUE,
                       xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
                                       (ST160_CETA_e.handling_up = iOUT_Step),
-                      xINtoAS   := _20_AUTO.recipe.st160.Use_element_right AND (ST160_CETA_e.handling_down = iOUT_Step),
-                      tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
-                                                    [ST160_Cylinders_e.Niederhalter_rechts].toAS_alarm_time),
+                      xINtoAS := _20_AUTO.recipe.st160.Use_element_right AND (ST160_CETA_e.handling_down = iOUT_Step),
+                      tIN_ErrAS
+                          := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                              [ST160_Cylinders_e.Niederhalter_rechts].toAS_alarm_time),
                       tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
                                                     [ST160_Cylinders_e.Niederhalter_rechts].toGS_alarm_time),
                       tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
@@ -297,17 +298,17 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          ST160_CETA_e.Init_pneumatics,
                                          ST160_CETA_e.SYNC_MOVER_LEAVE);
 
-IO_BOX.Q0300_14_ST160_niederhalter_links := FALSE;
-    // fb_capMainteningLeft.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q0300_14_ST160_niederhalter_links :=
+    fb_capMainteningLeft.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q0301_14_ST160_niederhalter_rechts := FALSE;
-    // fb_capMainteningRight.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q0301_14_ST160_niederhalter_rechts :=
+    fb_capMainteningRight.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q0302_14_ST160_dichtung_pruflocker_links := FALSE;
-//fb_dichtung_left.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q0302_14_ST160_dichtung_pruflocker_links :=
+    fb_dichtung_left.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q0302_12_ST160_dichtung_pruflocker_rechts := FALSE;
-//fb_dichtung_right.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q0302_12_ST160_dichtung_pruflocker_rechts :=
+    fb_dichtung_right.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)
@@ -417,18 +418,21 @@ ST160_CETA_e.seal_piece:
     END_IF
 
 ST160_CETA_e.CETA_start:
-    IF TRUE THEN
-        iOUT_Step := ST160_CETA_e.CETA_wait_on_result;
+    IF ref_fb_CETA.xOUT_ReadyToStart THEN
+        IF ref_fb_CETA.StartMeasurement() THEN
+            iOUT_Step := ST160_CETA_e.CETA_wait_on_result;
+        ELSE
+            bOUT_Error := 21;
+        END_IF
     END_IF
 
 ST160_CETA_e.CETA_wait_on_result:
-    IF TRUE THEN
-        iOUT_Step := ST160_CETA_e.CETA_read;
-    END_IF
-
-ST160_CETA_e.CETA_read:
-    IF TRUE THEN
-        iOUT_Step := ST160_CETA_e.unseal_piece;
+    IF ref_fb_CETA.xOUT_DataReady THEN
+        // this void call is needed to tell CETA function block
+        // that we have read the result
+        ref_fb_CETA.GetResult();
+        xCETA_Result_OK := ref_fb_CETA.xOUT_MeasureOK;
+        iOUT_Step       := ST160_CETA_e.unseal_piece;
     END_IF
 
 ST160_CETA_e.unseal_piece:

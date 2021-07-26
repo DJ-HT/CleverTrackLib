@@ -60,7 +60,7 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 ceta_160(xIN_StatusBits   := CETA_IO.I_ST160_StatusBits,
          xIN_Data         := CETA_IO.I_ST160_Data,
-         xIN_Reset        := xReset,
+         xIN_Reset        := xReset OR xIN_Quit,
          xOUT_CommandBits => CETA_IO.Q_ST160_CommandBits,
          xOUT_Data        => CETA_IO.Q_ST160_Data);
 

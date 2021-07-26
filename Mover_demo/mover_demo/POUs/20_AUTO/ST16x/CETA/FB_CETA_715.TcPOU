@@ -16,8 +16,9 @@ VAR_OUTPUT
     xOUT_DataReady    : BOOL;
     xOUT_Error_Flag   : BOOL;
     bOUT_ErrorCode    : BYTE;
-    xOUT_MeasureOK    : BOOL; // TRUE when the last measurement was GOOD
     sOUT_ErrorMessage : STRING;
+    xOUT_MeasureOK    : BOOL; // TRUE when the last measurement was GOOD
+    xOUT_ReadyToStart : BOOL; // you can send a start signal
 END_VAR
 VAR
     iStep       : INT := 0;
@@ -38,7 +39,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-ton_TimeOut(IN := 200 = iStep OR 1100 = iStep, PT := T#10S);
+ton_TimeOut(IN := 200 = iStep OR 1100 = iStep, PT := T#100000S);
 
 CASE iStep OF
 
@@ -146,6 +147,7 @@ CASE iStep OF
     xOUT_CommandBits.bits.b11_request_next_result_block := xIN_StatusBits.bits.b11_result_block_handshake_bit;
 
 300: // data available
+    xOUT_CommandBits.raw := 0;
 // Use the read() method to return to state 100
 
 1000: // read error code
@@ -206,8 +208,9 @@ CASE iStep OF
 
 END_CASE
 
-xOUT_DataReady  := 300 = iStep;
-xOUT_Error_Flag := 1500 = iStep;
+xOUT_DataReady    := 300 = iStep;
+xOUT_Error_Flag   := 1500 = iStep;
+xOUT_ReadyToStart := xIN_StatusBits.bits.b10_device_ready_to_start;
 ]]></ST>
     </Implementation>
     <Method Name="GetParameter" Id="{90e8271d-7322-4297-b828-4a5666bdeb98}">
@@ -217,6 +220,53 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetResult" Id="{8caaa0b1-0282-4f2e-901f-83ccbf17d128}">
+      <Declaration><![CDATA[METHOD GetResult : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF 300 = THIS^.iStep THEN
+    GetResult   := TRUE;
+    THIS^.iStep := 0;
+ELSE
+    GetResult := FALSE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetProgramNumber" Id="{d4cd72eb-e62e-4ba7-8b58-50ab6677d0f6}">
+      <Declaration><![CDATA[METHOD SetProgramNumber : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF 100 = THIS^.iStep THEN
+	THIS^.iStep := 200;
+	THIS^.xOUT_CommandBits.bits.b05_assign_program_number := TRUE;
+	SetProgramNumber := TRUE;
+ELSE
+	SetProgramNumber := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StartMeasurement" Id="{3a6f0f3a-903d-4e67-9032-25c962bd9a03}">
+      <Declaration><![CDATA[METHOD StartMeasurement : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF 100 = THIS^.iStep THEN
+    THIS^.iStep                                := 200;
+    THIS^.xOUT_CommandBits.bits.b00_start_stop := TRUE;
+    StartMeasurement                           := TRUE;
+ELSE
+    THIS^.iStep      := 0;
+    StartMeasurement := FALSE;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
   </POU>
