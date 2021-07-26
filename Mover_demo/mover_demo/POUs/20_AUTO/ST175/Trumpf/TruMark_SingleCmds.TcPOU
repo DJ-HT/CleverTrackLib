@@ -217,6 +217,10 @@ CASE iStep OF
 				ELSE
 					// Conditions not matched
 				END_IF
+				
+				// We may be blocked for nothing, so we retry the command
+			ELSIF NOT if_TruMark.bTlvCmd THEN
+					iStep := 40;
 			END_IF
 		END_IF
 

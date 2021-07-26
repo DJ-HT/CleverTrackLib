@@ -326,6 +326,12 @@ ST175_LASER_e.handling_down:
 
 ST175_LASER_e.LASER_start:
     IF fb_trumpf_laser.xOUT_BUSY THEN
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(-175) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
+
         iOUT_Step := ST175_LASER_e.LASER_wait_on_finish;
     END_IF
 
