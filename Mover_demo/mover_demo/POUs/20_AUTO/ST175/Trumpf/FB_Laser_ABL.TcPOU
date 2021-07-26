@@ -154,7 +154,7 @@ CASE iStep OF
     IF if_TruMark.Status.b0_Laser_On AND if_TruMark.Status.b1_Laser_Ready AND if_SingleCmds.bReady THEN
         if_SingleCmds.iStepNr := 50; // TLV - Activate Laser / Open Shutter
         if_SingleCmds.bStart  := TRUE;
-        iStep                 := 1300;
+        iStep                 := 1210;
     END_IF
 
 // is done when safety signals are FALSE
@@ -164,6 +164,16 @@ CASE iStep OF
 //         if_SingleCmds.bStart  := TRUE;
 //         iStep                 := 1300;
 //     END_IF
+
+1210:
+    IF if_TruMark.Status.b15_Mark_Active THEN
+        iStep := 1220;
+	END_IF
+
+1220:
+    IF NOT if_TruMark.Status.b15_Mark_Active THEN
+        iStep := 1300;
+	END_IF
 
 1300: (* Check GS Datumsringüberwachung *)
     IF NOT xIN_Start THEN
