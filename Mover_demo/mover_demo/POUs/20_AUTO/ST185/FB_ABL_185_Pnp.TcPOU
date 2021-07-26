@@ -633,6 +633,13 @@ ST185_Pnp_e.hor_move_to_extraction_pipe:
 
 ST185_Pnp_e.ver_down_in_pipe:
     IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.down_full).xOUT_InPos THEN
+        iOUT_Step := ST185_Pnp_e.clamp_up_to_rest_position;
+    END_IF
+
+ST185_Pnp_e.clamp_up_to_rest_position:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st185.xUseVerLeft OR fb_clampLeft.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st185.xUseVerRight OR fb_clampRight.xOUT_inGS) THEN
         iOUT_Step := ST185_Pnp_e.open_griper_put_piece;
     END_IF
 
@@ -641,13 +648,6 @@ ST185_Pnp_e.open_griper_put_piece:
        (NOT _20_AUTO.recipe.st185.xUseVerLeft OR fb_griperLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st185.xUseVerRight OR fb_griperRight.xOUT_inAS) THEN
 	   // We check if we need to move up or not, this is to avoid colision with 
-        iOUT_Step := ST185_Pnp_e.clamp_up_to_rest_position;
-    END_IF
-
-ST185_Pnp_e.clamp_up_to_rest_position:
-    IF xIN_NextStep AND
-       (NOT _20_AUTO.recipe.st185.xUseVerLeft OR fb_clampLeft.xOUT_inGS) AND
-       (NOT _20_AUTO.recipe.st185.xUseVerRight OR fb_clampRight.xOUT_inGS) THEN
         iOUT_Step := ST185_Pnp_e.ver_up_empty;
     END_IF
 
