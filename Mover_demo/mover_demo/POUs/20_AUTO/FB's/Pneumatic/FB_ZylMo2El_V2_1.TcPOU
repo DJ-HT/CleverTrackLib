@@ -135,6 +135,7 @@ CASE iState OF
 	(*Schrittkette zurückgesetzt*)
 			IF  xIN_GS THEN 
 				iState:= IN_GS;
+				xZYL := FALSE; // Roger S. 27.07.2021 When in GS during reset, you need to re-order the opening of your cylinder
 			ELSIF xIN_AS THEN
 				xZYL := TRUE;
 				iState:= IN_AS;
