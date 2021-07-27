@@ -309,7 +309,7 @@ ST105_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
 
 (***** START  ZYKLISCH *****)
 ST105_Pnp_e.START: (*  *)
-    IF xIN_NextStep AND pxFG_Freigabe^ THEN
+    IF xIN_NextStep AND pxFG_Freigabe^ AND (enIN_State <> enState.StateLEER) THEN
         iOUT_Step := ST105_Pnp_e.wait_on_feeder;
     END_IF;
 
