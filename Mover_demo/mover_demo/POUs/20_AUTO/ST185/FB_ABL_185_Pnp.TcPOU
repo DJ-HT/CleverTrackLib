@@ -84,9 +84,17 @@ VAR
     simu_clampLeft   : FB_Simu_Zyl2Pos;
     simu_clampRight  : FB_Simu_Zyl2Pos;
 
+    arrLrAvgCycleTime : ARRAY[0..AVERAGE_ARRAY_SIZE - 1] OF LREAL;
+    lrStartCycleTime  : UDINT;
+    indexAvgArray     : INT := 0;
+    sumAvgArray       : LREAL;
+    i                 : INT;
+
 END_VAR
 VAR CONSTANT
     PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+
+    AVERAGE_ARRAY_SIZE : INT := 16;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -580,7 +588,8 @@ ST185_Pnp_e.READY:    (* Start AUTO:END:LEER:STEP *)
 (***** START  ZYKLISCH *****)
 ST185_Pnp_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST185_Pnp_e.waitOnMover;
+        lrStartCycleTime := GetTick();
+        iOUT_Step        := ST185_Pnp_e.waitOnMover;
     END_IF;
 
 ST185_Pnp_e.waitOnMover:
@@ -647,7 +656,7 @@ ST185_Pnp_e.open_griper_put_piece:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st185.xUseVerLeft OR fb_griperLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st185.xUseVerRight OR fb_griperRight.xOUT_inAS) THEN
-	   // We check if we need to move up or not, this is to avoid colision with 
+        // We check if we need to move up or not, this is to avoid colision with 
         iOUT_Step := ST185_Pnp_e.ver_up_empty;
     END_IF
 
@@ -660,9 +669,20 @@ ST185_Pnp_e.hor_to_track_pos:
     IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST185_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST185_Pnp_e.ver_down_waiting_for_mover;
     END_IF
-	
+
 ST185_Pnp_e.ver_down_waiting_for_mover:
     IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_waiting_mover).xOUT_InPos THEN
+		
+		arrLrAvgCycleTime[indexAvgArray] := GetTick() - lrStartCycleTime;
+		
+		FOR i := 0 TO AVERAGE_ARRAY_SIZE-1 BY 1 DO
+			sumAvgArray := TO_LREAL(sumAvgArray + arrLrAvgCycleTime[i]);
+		END_FOR
+		
+		HMI.lrPiecePerMinute := 60000 / (sumAvgArray / AVERAGE_ARRAY_SIZE);
+		
+		HMI.PieceDoneTmp := HMI.PieceDoneTmp + TO_INT(_20_AUTO.recipe.st185.xUseVerLeft) + TO_INT(_20_AUTO.recipe.st185.xUseVerRight);
+		
         iOUT_Step := ST185_Pnp_e.DONE;
     END_IF
 

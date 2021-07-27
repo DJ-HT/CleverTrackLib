@@ -137,8 +137,12 @@ VAR_GLOBAL
     (*******************************************************************)
     (* Cycle Time [STATION]*)
     (*******************************************************************)
-    dwArStartTime : ARRAY[0..10] OF DWORD;
-    dwArCycleTime : ARRAY[0..10] OF DWORD;
+    dwArStartTime_ms : ARRAY[0..StationList_e._max - 1] OF DWORD;
+    dwArCycleTime_ms : ARRAY[0..StationList_e._max - 1] OF DWORD;
+
+    lrPiecePerMinute : LREAL;
+
+    PieceDoneTmp : DINT; // number of piece done since last reset
 
     (*******************************************************************)
     (* Recipe HMI management *)

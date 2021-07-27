@@ -151,7 +151,7 @@ OUT.Q000_LAMP_NRJ:= _10_HMI.x_BLINK_500 AND
 
 OUT.Q_CPX9_1_EnergiEin_led   := _02_SAFETY.xOUT_ESout;
 OUT.Q_CPX9_1_Process_running := HMI.enState > enState.StateSTOP OR HMI.enState = enState.StateREADY;
-OUT.Q_CPX9_1_Process_stopped := HMI.enState = enState.StateSTOP;
+OUT.Q_CPX9_1_Process_stopped := HMI.enState <= enState.StateSTOP;
 
 (***********************************************************************************************)
 (* HMI Alarme*)
@@ -169,6 +169,10 @@ END_FOR
 (***********************************************************************************************)
 _FB_SystemTime(timeLoDW => dw_ActTime, timeHiDW =>);
 dw_ActTime := dw_ActTime AND 16#FFFF0000;
+
+IF HMI.btArMain[8].rtrig THEN
+	HMI.PieceDoneTmp := 0;
+END_IF
 
 (***********************************************************************************************)
 (* Operating hours  *)
