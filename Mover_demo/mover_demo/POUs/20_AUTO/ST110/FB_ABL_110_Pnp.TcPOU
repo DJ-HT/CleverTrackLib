@@ -606,17 +606,27 @@ ST110_Pnp_e.waitOnMover: (*  *)
         IF Mover.GetLastStationDone() >= INT#110 THEN
             iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
-            iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleDown;
+            iOUT_Step := ST110_Pnp_e.Pnp_Handling_pin_up;
         END_IF
     END_IF;
 
+ST110_Pnp_e.Pnp_Handling_pin_up:
+    IF xIN_NextStep AND fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos THEN
+        iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleDown;
+    END_IF
+
 ST110_Pnp_e.PnP_Ver_ShuttleDown:
+    IF _20_AUTO.recipe.st110.xUseVerLeft THEN
+        fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullQuick);
+    END_IF
+
+    IF _20_AUTO.recipe.st110.xUseVerRight THEN
+        fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick);
+    END_IF
+
     IF xIN_NextStep AND
-       (NOT fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_Moving OR
-       NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
-       (NOT fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_Moving OR
-       NOT _20_AUTO.recipe.st110.xUseVerRight) AND
-       fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos THEN
+       (NOT _20_AUTO.recipe.st110.xUseVerLeft OR fb_axis110_02Z.xOUT_DONE) AND
+       (NOT _20_AUTO.recipe.st110.xUseVerRight OR fb_axis110_03Z.xOUT_DONE) THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
 
         IF __ISVALIDREF(Mover) THEN
