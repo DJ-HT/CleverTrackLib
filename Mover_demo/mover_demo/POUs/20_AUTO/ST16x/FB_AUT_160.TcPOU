@@ -79,7 +79,27 @@ fb_ABL_CETA(xIN_Reset       := xReset,
             // CleverTrackLib
             Mover := THIS^.Mover,
             // for multiple reference of the FB
-            ref_fb_CETA := ceta_160);
+            ref_fb_CETA := ceta_160,
+
+            refAxis_01Z_beckhoff         := ST16x_Axis.axis160_01Z,
+            constAxis_01Z_Beckhoff       := ST16x_Axis.const160_01Z,
+            axis_01Z_LinearConfig        := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST160_01Z],
+            iSelectedAxis                := Axis_e.ST160_01Z,
+            axis_01Z_parIN_Buttons       := ADR(AXIS.btTeachArAxis[Axis_e.ST160_01Z]),
+            refCylinderBp                := HMI.btManuCylinders[StationList_e.ST160],
+            refCylinderConf              := _20_AUTO.recipe.cylinder2Pos[StationList_e.ST160],
+            uiIN_DisplacementSensorLeft  := IO_BOX.I3000_ST160_Wegmessenor_links,
+            uiIN_DisplacementSensorRight := IO_BOX.I3100_ST160_Wegmessenor_rechts,
+            IN_recipe                    := _20_AUTO.recipe.st160,
+            iIN_StationNumber            := 160,
+
+            xOUT_niederhalter_links         => IO_BOX.Q0300_14_ST160_niederhalter_links,
+            xOUT_niederhalter_rechts        => IO_BOX.Q0301_14_ST160_niederhalter_rechts,
+            xOUT_dichtung_pruflocker_links  => IO_BOX.Q0302_14_ST160_dichtung_pruflocker_links,
+            xOUT_dichtung_pruflocker_rechts => IO_BOX.Q0302_12_ST160_dichtung_pruflocker_rechts,
+
+            axisRef_Hardware   := ST16x_Axis.axis160_01Z.axis,
+            axisRef_Simulation := SIMU.axis_ref[Axis_e.ST160_01Z]);
 
 (*******************************************************************)
 (* Mover reset flags *)

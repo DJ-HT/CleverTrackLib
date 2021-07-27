@@ -28,8 +28,21 @@ VAR_INPUT
     pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
 
     // Application specific
-    Mover       : REFERENCE TO FB_Mover;
-    ref_fb_CETA : REFERENCE TO FB_CETA_715;
+    Mover                  : REFERENCE TO FB_Mover;
+    ref_fb_CETA            : REFERENCE TO FB_CETA_715;
+    refAxis_01Z_beckhoff   : REFERENCE TO AxisBeckhoff_t; // reference of the axis GVL struct
+    constAxis_01Z_Beckhoff : AxisLinMotConst_t;
+    axis_01Z_LinearConfig  : LinearMotionMan_Config_t;
+    iSelectedAxis          : Axis_e;
+    axis_01Z_parIN_Buttons : POINTER TO ARRAY[0..8] OF structButton;
+    refCylinderBp          : REFERENCE TO ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF structButton;
+    refCylinderConf        : REFERENCE TO ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF Cylinder2Pos_config;
+
+    // inputs
+    uiIN_DisplacementSensorLeft  : UINT;
+    uiIN_DisplacementSensorRight : UINT;
+    IN_recipe                    : ST160_Recipe_t;
+    iIN_StationNumber            : INT;
 
 END_VAR
 VAR_OUTPUT
@@ -47,6 +60,13 @@ VAR_OUTPUT
 
     iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
     xOUT_MoverFree         : BOOL; // The mover is free to move
+
+    // outputs
+    xOUT_niederhalter_links         : BOOL;
+    xOUT_niederhalter_rechts        : BOOL;
+    xOUT_dichtung_pruflocker_links  : BOOL;
+    xOUT_dichtung_pruflocker_rechts : BOOL;
+
 END_VAR
 VAR
     (* Standard *)
@@ -68,19 +88,24 @@ VAR
     (* Spezial *)
     fb_capMainteningLeft  : FB_ZylMo2El_V2_1;
     fb_capMainteningRight : FB_ZylMo2El_V2_1;
-	
+
     simu_capMainteningLeft  : FB_Simu_Zyl2Pos;
     simu_capMainteningRight : FB_Simu_Zyl2Pos;
-	
+
     fb_dichtung_left  : FB_ZylMo2El_V2_1;
     fb_dichtung_right : FB_ZylMo2El_V2_1;
-	
+
     simu_dichtung_left  : FB_Simu_Zyl2Pos;
     simu_dichtung_right : FB_Simu_Zyl2Pos;
-	
-	xCETA_Result_OK : BOOL;
 
+    xCETA_Result_OK : BOOL;
 END_VAR
+
+VAR_IN_OUT
+    axisRef_Hardware   : AXIS_REF;
+    axisRef_Simulation : AXIS_REF;
+END_VAR
+
 VAR CONSTANT
     CETA_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
@@ -111,7 +136,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
-fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST160_01Z],
+fb_PnpVerAxis(config          := axis_01Z_LinearConfig,
               xIN_Init        := enIN_State = enState.StateINIT,
               xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis160_01Z.rOUT_ActPos,
@@ -121,15 +146,15 @@ fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST160_0
 
 simu_axis160_01Z(xIN_InSimu    := CETA_SIMULATION AND CONST.USE_SIMULATION,
                  rIN_PosActual := fb_axis160_01Z.rOUT_ActPos,
-                 pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST160_01Z]),
-                 pIN_axisHW    := ADR(ST160_Axis.axis160_01Z.axis),
-                 rIN_PosMax    := ST160_Axis.const160_01Z.POS_MAX,
-                 rIN_PosMin    := ST160_Axis.const160_01Z.POS_MIN,
+                 pIN_axisSimu  := ADR(axisRef_Simulation),
+                 pIN_axisHW    := ADR(axisRef_Hardware),
+                 rIN_PosMax    := constAxis_01Z_Beckhoff.POS_MAX,
+                 rIN_PosMin    := constAxis_01Z_Beckhoff.POS_MIN,
                  rIN_PixMax    := 80,
                  rIN_PixMin    := 0);
 
 fb_axis160_01Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST160_01Z]),
+               parIN_Buttons    := axis_01Z_parIN_Buttons,
                xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_AX5000       := TRUE,
@@ -137,11 +162,11 @@ fb_axis160_01Z(enIN_State       := enIN_State,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,
                xIN_FREE_HOME    := TRUE,
-               rIN_POSMIN       := ST160_Axis.const160_01Z.POS_MIN,
-               rIN_POSMAX       := ST160_Axis.const160_01Z.POS_MAX,
-               rIN_VELOMAX      := ST160_Axis.const160_01Z.VELO_MAX,
-               rIN_VELOMANU     := ST160_Axis.const160_01Z.VELO_MANU,
-               rIN_VELOOPEN     := ST160_Axis.const160_01Z.POS_MAX / 4,
+               rIN_POSMIN       := constAxis_01Z_Beckhoff.POS_MIN,
+               rIN_POSMAX       := constAxis_01Z_Beckhoff.POS_MAX,
+               rIN_VELOMAX      := constAxis_01Z_Beckhoff.VELO_MAX,
+               rIN_VELOMANU     := constAxis_01Z_Beckhoff.VELO_MANU,
+               rIN_VELOOPEN     := constAxis_01Z_Beckhoff.POS_MAX / 4,
                rIN_JogInc       := AXIS.rTeachIncAxis,
                rIN_VeloJogManu  := TO_REAL(AXIS.rJogVelo_pc),
                xIN_HomeExe      :=,
@@ -154,36 +179,36 @@ fb_axis160_01Z(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
-               rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST160_01Z]
-                                               .movesList[AXIS.bTeachPos[Axis_e.ST160_01Z]].lrPosition),
+               rIN_PosManu      := TO_REAL(axis_01Z_LinearConfig
+                                               .movesList[AXIS.bTeachPos[iSelectedAxis]].lrPosition),
                xIN_Reset := (ST160_CETA_e.RESET = iOUT_Step) OR xIN_Reset,
                // output
-               rOUT_ActPos => ST160_Axis.axis160_01Z.rActPos,
+               rOUT_ActPos => refAxis_01Z_beckhoff.rActPos,
                axisIN_REF  := simu_axis160_01Z.pOUT_axisRef^);
 
 // pneumatics
 fb_capMainteningLeft(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
                      xIN_Quit     := xIN_Quit,
                      xIN_Manu     := enState.StateMANU = enIN_State,
-                     pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][1]),
+                     pbtIN_Button := ADR(refCylinderBp[1]),
                      xIN_GS       := simu_capMainteningLeft.xOUT_inGS,
                      xIN_AS       := simu_capMainteningLeft.xOUT_inAS,
                      xIN_FREE     := TRUE,
                      xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
                                      (ST160_CETA_e.handling_up = iOUT_Step),
-                     xINtoAS   := _20_AUTO.recipe.st160.Use_element_left AND (ST160_CETA_e.handling_down = iOUT_Step),
-                     tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                     xINtoAS   := IN_recipe.Use_element_left AND (ST160_CETA_e.handling_down = iOUT_Step),
+                     tIN_ErrAS := DINT_TO_TIME(refCylinderConf
                                                    [ST160_Cylinders_e.Niederhalter_links].toAS_alarm_time),
-                     tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                     tIN_ErrGS := DINT_TO_TIME(refCylinderConf
                                                    [ST160_Cylinders_e.Niederhalter_links].toGS_alarm_time),
-                     tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                     tIN_WaitAS := DINT_TO_TIME(refCylinderConf
                                                     [ST160_Cylinders_e.Niederhalter_links].toAS_wait_time),
-                     tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                     tIN_WaitGS := DINT_TO_TIME(refCylinderConf
                                                     [ST160_Cylinders_e.Niederhalter_links].toGS_wait_time));
 
 simu_capMainteningLeft(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
-                       xIN_inGS   := UINT_TO_INT(IO_BOX.I3000_ST160_Wegmessenor_links) < 10,
-                       xIN_inAS   := UINT_TO_INT(IO_BOX.I3000_ST160_Wegmessenor_links) > 200,
+                       xIN_inGS   := UINT_TO_INT(uiIN_DisplacementSensorLeft) < 10,
+                       xIN_inAS   := UINT_TO_INT(uiIN_DisplacementSensorLeft) > 200,
                        xIN_valve  := fb_capMainteningLeft.xOUT_VALVE,
                        tIN_GS_ms  := 200,  // ms
                        tIN_AS_ms  := 200); // ms
@@ -191,26 +216,26 @@ simu_capMainteningLeft(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMU
 fb_capMainteningRight(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
                       xIN_Quit     := xIN_Quit,
                       xIN_Manu     := enState.StateMANU = enIN_State,
-                      pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][2]),
+                      pbtIN_Button := ADR(refCylinderBp[2]),
                       xIN_GS       := simu_capMainteningRight.xOUT_inGS,
                       xIN_AS       := simu_capMainteningRight.xOUT_inAS,
                       xIN_FREE     := TRUE,
                       xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
                                       (ST160_CETA_e.handling_up = iOUT_Step),
-                      xINtoAS := _20_AUTO.recipe.st160.Use_element_right AND (ST160_CETA_e.handling_down = iOUT_Step),
+                      xINtoAS := IN_recipe.Use_element_right AND (ST160_CETA_e.handling_down = iOUT_Step),
                       tIN_ErrAS
-                          := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                          := DINT_TO_TIME(refCylinderConf
                                               [ST160_Cylinders_e.Niederhalter_rechts].toAS_alarm_time),
-                      tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                      tIN_ErrGS := DINT_TO_TIME(refCylinderConf
                                                     [ST160_Cylinders_e.Niederhalter_rechts].toGS_alarm_time),
-                      tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                      tIN_WaitAS := DINT_TO_TIME(refCylinderConf
                                                      [ST160_Cylinders_e.Niederhalter_rechts].toAS_wait_time),
-                      tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                      tIN_WaitGS := DINT_TO_TIME(refCylinderConf
                                                      [ST160_Cylinders_e.Niederhalter_rechts].toGS_wait_time));
 
 simu_capMainteningRight(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
-                        xIN_inGS   := UINT_TO_INT(IO_BOX.I3100_ST160_Wegmessenor_rechts) < 10,
-                        xIN_inAS   := UINT_TO_INT(IO_BOX.I3100_ST160_Wegmessenor_rechts) > 200,
+                        xIN_inGS   := UINT_TO_INT(uiIN_DisplacementSensorRight) < 10,
+                        xIN_inAS   := UINT_TO_INT(uiIN_DisplacementSensorRight) > 200,
                         xIN_valve  := fb_capMainteningRight.xOUT_VALVE,
                         tIN_GS_ms  := 200,  // ms
                         tIN_AS_ms  := 200); // ms
@@ -218,23 +243,23 @@ simu_capMainteningRight(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIM
 fb_dichtung_left(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
                  xIN_Quit     := xIN_Quit,
                  xIN_Manu     := enState.StateMANU = enIN_State,
-                 pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][3]),
+                 pbtIN_Button := ADR(refCylinderBp[3]),
                  xIN_GS       := simu_dichtung_left.xOUT_inGS,
                  xIN_AS       := simu_dichtung_left.xOUT_inAS,
                  xIN_FREE     := TRUE,
                  xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
                                  (ST160_CETA_e.unseal_piece = iOUT_Step),
-                 xINtoAS   := _20_AUTO.recipe.st160.Use_element_left AND (ST160_CETA_e.seal_piece = iOUT_Step),
-                 tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                 xINtoAS   := IN_recipe.Use_element_left AND (ST160_CETA_e.seal_piece = iOUT_Step),
+                 tIN_ErrAS := DINT_TO_TIME(refCylinderConf
                                                [ST160_Cylinders_e.Dichtung_prufglocke_links].toAS_alarm_time),
-                 tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                 tIN_ErrGS := DINT_TO_TIME(refCylinderConf
                                                [ST160_Cylinders_e.Dichtung_prufglocke_links].toGS_alarm_time),
-                 tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                 tIN_WaitAS := DINT_TO_TIME(refCylinderConf
                                                 [ST160_Cylinders_e.Dichtung_prufglocke_links].toAS_wait_time),
-                 tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                 tIN_WaitGS := DINT_TO_TIME(refCylinderConf
                                                 [ST160_Cylinders_e.Dichtung_prufglocke_links].toGS_wait_time));
 
-simu_dichtung_left(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
+simu_dichtung_left(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
                    xIN_inGS   := NOT fb_dichtung_right.xOUT_VALVE, // no sensor here
                    xIN_inAS   := fb_dichtung_right.xOUT_VALVE,     // no sensor here
                    xIN_valve  := fb_dichtung_left.xOUT_VALVE,
@@ -244,23 +269,23 @@ simu_dichtung_left(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
 fb_dichtung_right(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
                   xIN_Quit     := xIN_Quit,
                   xIN_Manu     := enState.StateMANU = enIN_State,
-                  pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][4]),
+                  pbtIN_Button := ADR(refCylinderBp[4]),
                   xIN_GS       := simu_dichtung_right.xOUT_inGS,
                   xIN_AS       := simu_dichtung_right.xOUT_inAS,
                   xIN_FREE     := TRUE,
                   xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
                                   (ST160_CETA_e.unseal_piece = iOUT_Step),
-                  xINtoAS   := _20_AUTO.recipe.st160.Use_element_right AND (ST160_CETA_e.seal_piece = iOUT_Step),
-                  tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                  xINtoAS   := IN_recipe.Use_element_right AND (ST160_CETA_e.seal_piece = iOUT_Step),
+                  tIN_ErrAS := DINT_TO_TIME(refCylinderConf
                                                 [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toAS_alarm_time),
-                  tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                  tIN_ErrGS := DINT_TO_TIME(refCylinderConf
                                                 [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toGS_alarm_time),
-                  tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                  tIN_WaitAS := DINT_TO_TIME(refCylinderConf
                                                  [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toAS_wait_time),
-                  tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                  tIN_WaitGS := DINT_TO_TIME(refCylinderConf
                                                  [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toGS_wait_time));
 
-simu_dichtung_right(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
+simu_dichtung_right(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
                     xIN_inGS   := NOT fb_dichtung_right.xOUT_VALVE, // no sensor here
                     xIN_inAS   := fb_dichtung_right.xOUT_VALVE,     // no sensor here
                     xIN_valve  := fb_dichtung_right.xOUT_VALVE,
@@ -298,16 +323,16 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          ST160_CETA_e.Init_pneumatics,
                                          ST160_CETA_e.SYNC_MOVER_LEAVE);
 
-IO_BOX.Q0300_14_ST160_niederhalter_links :=
+xOUT_niederhalter_links :=
     fb_capMainteningLeft.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q0301_14_ST160_niederhalter_rechts :=
+xOUT_niederhalter_rechts :=
     fb_capMainteningRight.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q0302_14_ST160_dichtung_pruflocker_links :=
+xOUT_dichtung_pruflocker_links :=
     fb_dichtung_left.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q0302_12_ST160_dichtung_pruflocker_rechts :=
+xOUT_dichtung_pruflocker_rechts :=
     fb_dichtung_right.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
@@ -370,6 +395,11 @@ ST160_CETA_e.Init_pneumatics:
 
 ST160_CETA_e.Init_vertical_down:
     IF fb_PnpVerAxis.MoveTo(ST160_PnpVerPos_e.gs_down).xOUT_InPos THEN
+        iOUT_Step := ST160_CETA_e.Init_set_program_number;
+    END_IF
+
+ST160_CETA_e.Init_set_program_number:
+    IF ref_fb_CETA.SetProgramNumber(IN_recipe.Program_number) THEN
         iOUT_Step := ST160_CETA_e.READY;
     END_IF
 
@@ -388,7 +418,7 @@ ST160_CETA_e.START: (*  *)
 
 ST160_CETA_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
-        IF (Mover.GetLastStationDone() >= 160) OR Mover.IsPieceBad() THEN
+        IF (Mover.GetLastStationDone() >= iIN_StationNumber) OR Mover.IsPieceBad() THEN
             iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST160_CETA_e.handling_down;
@@ -396,8 +426,8 @@ ST160_CETA_e.waitOnMover: (*  *)
     END_IF;
 
 ST160_CETA_e.handling_down:
-    IF (NOT _20_AUTO.recipe.st160.Use_element_left OR fb_capMainteningLeft.xOUT_inAS) AND
-       (NOT _20_AUTO.recipe.st160.Use_element_right OR fb_capMainteningRight.xOUT_inAS) THEN
+    IF (NOT IN_recipe.Use_element_left OR fb_capMainteningLeft.xOUT_inAS) AND
+       (NOT IN_recipe.Use_element_right OR fb_capMainteningRight.xOUT_inAS) THEN
         iOUT_Step := ST160_CETA_e.vertical_up;
     END_IF
 
@@ -407,8 +437,8 @@ ST160_CETA_e.vertical_up:
     END_IF
 
 ST160_CETA_e.seal_piece:
-    IF (NOT _20_AUTO.recipe.st160.Use_element_left OR fb_dichtung_left.xOUT_inAS) AND
-       (NOT _20_AUTO.recipe.st160.Use_element_right OR fb_dichtung_right.xOUT_inAS) THEN
+    IF (NOT IN_recipe.Use_element_left OR fb_dichtung_left.xOUT_inAS) AND
+       (NOT IN_recipe.Use_element_right OR fb_dichtung_right.xOUT_inAS) THEN
         IF CETA_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step       := ST160_CETA_e.unseal_piece;
             xCETA_Result_OK := TRUE;
@@ -436,8 +466,8 @@ ST160_CETA_e.CETA_wait_on_result:
     END_IF
 
 ST160_CETA_e.unseal_piece:
-    IF (NOT _20_AUTO.recipe.st160.Use_element_left OR fb_dichtung_left.xOUT_inGS) AND
-       (NOT _20_AUTO.recipe.st160.Use_element_right OR fb_dichtung_right.xOUT_inGS) THEN
+    IF (NOT IN_recipe.Use_element_left OR fb_dichtung_left.xOUT_inGS) AND
+       (NOT IN_recipe.Use_element_right OR fb_dichtung_right.xOUT_inGS) THEN
         iOUT_Step := ST160_CETA_e.vertical_down;
     END_IF
 
@@ -451,11 +481,11 @@ ST160_CETA_e.handling_up:
         iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
 
         IF __ISVALIDREF(Mover) AND NOT xCETA_Result_OK THEN
-            IF NOT Mover.SetLastStation(-160) THEN
+            IF NOT Mover.SetLastStation(-iIN_StationNumber) THEN
                 ASSERT(0);
             END_IF
         ELSIF __ISVALIDREF(Mover) AND xCETA_Result_OK THEN
-            IF NOT Mover.SetLastStation(160) THEN
+            IF NOT Mover.SetLastStation(iIN_StationNumber) THEN
                 ASSERT(0);
             END_IF
         END_IF
