@@ -65,30 +65,30 @@ VAR_GLOBAL
 
     //-203A1
     (* Ventil Batterie 203 A *)
-    Q0300_14_ST160_niederhalter_links        AT %Q* : BOOL; // 
-    Q0300_12_                                AT %Q* : BOOL; // ST160 Niederhalter links ST160
-    Q0301_14_ST160_niederhalter_rechts       AT %Q* : BOOL; // 
-    Q0301_12_ST160_dichtung_pruflocker_aus   AT %Q* : BOOL; // ST160 Niederhalter rechts ST160
-    Q0302_14_ST160_dichtung_pruflocker_ein   AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts aus
-    Q0302_12_ST160_dichtung_pruflocker_aus_2 AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts ein
-    Q0303_14_ST160_dichtung_pruflocker_ein_2 AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts aus ???
-    Q0303_12_                                AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links/rechts ein ???
-    Q0304_14_ST165_niederhalter_links        AT %Q* : BOOL; // 
-    Q0304_12_                                AT %Q* : BOOL; // ST165 Niederhalter links ST160
-    Q0305_14_ST165_niederhalter_rechts       AT %Q* : BOOL; // 
-    Q0305_12_ST165_dichtung_pruflocker_aus   AT %Q* : BOOL; // ST165 Niederhalter rechts ST160
-    Q0306_14_ST165_dichtung_pruflocker_ein   AT %Q* : BOOL; // 
-    Q0306_12_ST165_dichtung_pruflocker_aus_2 AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts aus
-    Q0307_14_ST165_dichtung_pruflocker_ein_2 AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts ein
-    Q0307_12_                                AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts aus ???
-    Q0308_14_                                AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links/rechts ein ???
-    Q0308_12_                                AT %Q* : BOOL; // 
-    Q0309_14_                                AT %Q* : BOOL; // 
-    Q0309_12_                                AT %Q* : BOOL; // 
-    Q0310_14_                                AT %Q* : BOOL; // 
-    Q0310_12_                                AT %Q* : BOOL; // 
-    Q0311_14_                                AT %Q* : BOOL; // 
-    Q0311_12_                                AT %Q* : BOOL; // 
+    Q0300_14_ST160_niederhalter_links         AT %Q* : BOOL; // ST160 Niederhalter links ST160
+    Q0300_12_                                 AT %Q* : BOOL; // 
+    Q0301_14_ST160_niederhalter_rechts        AT %Q* : BOOL; // ST160 Niederhalter rechts ST160
+    Q0301_12_                                 AT %Q* : BOOL; // 
+    Q0302_14_ST160_dichtung_pruflocker_links  AT %Q* : BOOL; // ST160 Dichtung Prüfglocker links
+    Q0302_12_ST160_dichtung_pruflocker_rechts AT %Q* : BOOL; // ST160 Dichtung Prüfglocker rechts
+    Q0303_14_nc                               AT %Q* : BOOL; // ST160 not connected (yet?)
+    Q0303_12_nc                               AT %Q* : BOOL; // ST160 not connected (yet?)
+    Q0304_14_ST165_niederhalter_links         AT %Q* : BOOL; // ST165 Niederhalter links ST160   
+    Q0304_12_                                 AT %Q* : BOOL; //                                  
+    Q0305_14_ST165_niederhalter_rechts        AT %Q* : BOOL; // ST165 Niederhalter rechts ST160  
+    Q0305_12_                                 AT %Q* : BOOL; // 
+    Q0306_14_ST165_dichtung_pruflocker_links  AT %Q* : BOOL; // ST165 Dichtung Prüfglocker links 
+    Q0306_12_ST165_dichtung_pruflocker_rechts AT %Q* : BOOL; // ST165 Dichtung Prüfglocker rechts
+    Q0307_14_nc                               AT %Q* : BOOL; // ST165 not connected (yet?)       
+    Q0307_12_nc                               AT %Q* : BOOL; // ST165 not connected (yet?)       
+    Q0308_14_                                 AT %Q* : BOOL; // 
+    Q0308_12_                                 AT %Q* : BOOL; // 
+    Q0309_14_                                 AT %Q* : BOOL; // 
+    Q0309_12_                                 AT %Q* : BOOL; // 
+    Q0310_14_                                 AT %Q* : BOOL; // 
+    Q0310_12_                                 AT %Q* : BOOL; // 
+    Q0311_14_                                 AT %Q* : BOOL; // 
+    Q0311_12_                                 AT %Q* : BOOL; // 
 
     (* IO-Link Boxen 190A4 *)
     (*******************************************************************)
@@ -139,14 +139,15 @@ VAR_GLOBAL
     (*******************************************************************)
     //-5011
     (* Filterhut vorhanden ST130/135 I - 8x IO *)
-    I2000_ST130_filterhut_vorhanden_links    AT %I* : BOOL; // 0: ST130 Filterhut vorhanden links
-    I2001_ST130_filterhut_vorhanden_rechts   AT %I* : BOOL; // 1: ST130 Filterhut vorhanden rechts
-    I2002_ST130_filterhut_vorhanden_links_2  AT %I* : BOOL; // 2: ST130 Filterhut vorhanden links ???
-    I2003_ST130_filterhut_vorhanden_rechts_2 AT %I* : BOOL; // 3: ST130 Filferhut vorhanden rechts ???
-    I2004_ST130_filterhut_vorhanden_links    AT %I* : BOOL; // 4: ST135 Filterhut vorhanden links
-    I2005_ST130_filterhut_vorhanden_rechts   AT %I* : BOOL; // 5: ST135 Filterhut vorhanden rechts
-    I2006_ST130_filterhut_vorhanden_links_2  AT %I* : BOOL; // 6: ST135 Filterhut vorhanden links ???
-    I2007_ST130_filterhut_vorhanden_rechts_2 AT %I* : BOOL; // 7: ST135 Filterhut vorhanden rechts ???
+    I2000_ST128_filterhut_vorhanden AT %I* : BOOL; // 0: ST130 Filterhut vorhanden links
+    //
+    I2001_ AT %I* : BOOL; // 
+    I2002_ AT %I* : BOOL; // 
+    I2003_ AT %I* : BOOL; // 
+    I2004_ AT %I* : BOOL; // 
+    I2005_ AT %I* : BOOL; // 
+    I2006_ AT %I* : BOOL; // 
+    I2007_ AT %I* : BOOL; // 
 
     //-5012
     (* Niederhalter Patrone ST130/135 I - 8x IO *)
@@ -182,19 +183,19 @@ VAR_GLOBAL
     (*******************************************************************)
     //-960B2
     (* Wegmessenor ST160.02 *)
-    I3000_ AT %I* : BOOL;
+    I3000_ST160_Wegmessenor_links AT %I* : UINT;
 
     //-960B4
     (* Wegmessenor ST160.03 *)
-    I3100_ AT %I* : BOOL;
+    I3100_ST160_Wegmessenor_rechts AT %I* : UINT;
 
     //-960B6
     (* Wegmessenor ST165.02 *)
-    I3200_ AT %I* : BOOL;
+    I3200_ST165_Wegmessenor_links AT %I* : UINT;
 
     //-960B7
     (* Wegmessenor ST165.03 *)
-    I3300_ AT %I* : BOOL;
+    I3300_ST165_Wegmessenor_rechts AT %I* : UINT;
 
     (*******************************************************************)
     (* EINGÄNGE Schrank B *)
@@ -237,7 +238,7 @@ VAR_GLOBAL
     Q5210_12_                    AT %Q* : BOOL; //                               
     Q5211_14_ST125_greifer_solerohr_rechts  AT %Q* : BOOL; // Greifer Solerohr rechts ST125 
     Q5211_12_                    AT %Q* : BOOL; //                               
-    Q5212_14_                               AT %Q* : BOOL; // 
+    Q5212_14_ST120_stop_vertical_axis AT %Q* : BOOL; // 
     Q5212_12_                    AT %Q* : BOOL; // 
     Q5213_14_                               AT %Q* : BOOL; // 
     Q5213_12_                    AT %Q* : BOOL; // 
@@ -423,13 +424,39 @@ VAR_GLOBAL
     I8401_ST125_maximum_wf   AT %I* : BOOL; //  1: Maximum WF
     Q8402_ST125_freigabe_wf  AT %Q* : BOOL; // q2: Freigabe WF
 
-    //-???
-    (* feeder ST101 - 8x I *)
-    I8600_ST101_homing_rotation_table    AT %I* : BOOL; // should not be here
-    I8601_ST101_shuttle_pin_config_pro   AT %I* : BOOL; // 2: shuttle pin config pro/maxi blocked in pro position
-    I8602_ST101_shuttle_pin_config_maxi  AT %I* : BOOL; // 3: shuttle pin config pro/maxi blocked in maxi position
-    I8603_ST101_shuttle_ring_pro_present AT %I* : BOOL; // 4: pro ring present on the shuttle
-    I8604_ST101_first_shuttle_pin        AT %I* : BOOL; // 5: sensor to detect the first shuttle
+    //-5001
+    (* feeder ST105 and ST101 - 8x I *)
+    I8600_ST105_teil_in_vereinzelung     AT %I* : BOOL; // 1: Teil in Vereinzelung (RST)
+    I8601_ST105_shuttle_pin_config_pro   AT %I* : BOOL; // 2: Kontrolle WT-Hülsen Typ Pro
+    I8602_ST105_shuttle_pin_config_maxi  AT %I* : BOOL; // 3: Kontrolle WT- Schieber verriegelt
+    I8603_ST105_shuttle_ring_pro_present AT %I* : BOOL; // 4: Kontrolle WT- Schieber entriegelt
+    I8604_ST105_first_shuttle_pin        AT %I* : BOOL; // 5: Anwesenheit, Init. WT Nr.1
+
+    //-15500
+    (* feeder ST105 - 8x IO *)
+    I8700_ST105_Ausheber_unten_GS             AT %I* : BOOL; // 1: 
+    I8701_ST105_Ausheber_oben_AS              AT %I* : BOOL; // 2: 
+    I8702_ST105_Abschieber_zuruck_GS          AT %I* : BOOL; // 3: 
+    I8703_ST105_Abschieber_vor_AS             AT %I* : BOOL; // 4: 
+    I8704_ST105_Maximum_LF                    AT %I* : BOOL; // 5: 
+    I8705_ST105_Kontrolle_zwei_Filtergehiluse AT %I* : BOOL; // 6: 
+    I8706_ST105_                              AT %I* : BOOL; // 7: 
+    I8707_ST105_                              AT %I* : BOOL; // 8: 
+
+    //-10201B1
+    (* Ventilbat. 204 B - 12 slots *)
+    Q8800_14_Auschieber_ab_auf     AT %Q* : BOOL; //
+	Q8800_12_ AT %Q* : BOOL; // 
+    Q8801_14_Auschieber_vor_zuruck AT %Q* : BOOL; // 
+	Q8801_12_ AT %Q* : BOOL; // 
+    Q8802_14_                      AT %Q* : BOOL; // 
+	Q8802_12_ AT %Q* : BOOL; // 
+    Q8803_14_                      AT %Q* : BOOL; // 
+	Q8803_12_ AT %Q* : BOOL; // 
+    Q8804_14_                      AT %Q* : BOOL; // 
+	Q8804_12_ AT %Q* : BOOL; // 
+    Q8805_14_                      AT %Q* : BOOL; // 
+	Q8805_12_ AT %Q* : BOOL; // 
 
     (* IO-Link Boxen 10191A5 *)
     (*******************************************************************)
@@ -463,7 +490,13 @@ VAR_GLOBAL
 
     //-10960B2
     (* Wegmesssenor ST175 *)
-    I9300_ST175_wegmesssensor AT %I* : BOOL; // 0: Wegmesssenor ST175
+    I9300_ST175_wegmesssensor AT %I* : UINT; // 0: Wegmesssenor ST175
+
+    //-15506
+    (* feeder ST105 *)
+    Q9500_ST105_Freigabe_WF         AT %Q* : BOOL; // 1: Run vibrator feeder (nearest of the rotary table)
+    Q9501_ST105_Freigabe_LF         AT %Q* : BOOL; // 2 Run LF 
+    I9502_ST105_Fullstand_kontrolle AT %I* : BOOL; // 3: vibrator full of piece sensor
 
 END_VAR
 ]]></Declaration>

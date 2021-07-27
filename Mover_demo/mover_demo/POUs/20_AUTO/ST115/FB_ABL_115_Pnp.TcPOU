@@ -67,14 +67,17 @@ VAR
     fb_axis115_01Y : FB_AxisLM_V1_1;
     fb_axis115_02Z : FB_AxisLIN_V1_1;
     fb_axis115_03Z : FB_AxisLIN_V1_1;
+    fb_axis115_04Z : FB_AxisLIN_V1_1;
 
     fb_PnpHorAxis  : FB_LinearMotionMan;
     fb_PnpVerAxisL : FB_LinearMotionMan;
     fb_PnpVerAxisR : FB_LinearMotionMan;
+    fb_PnpVerAxisU : FB_LinearMotionMan;
 
     fb_simu_axis115_01Y : FB_Simu_AxisLM_V1_1;
     fb_simu_axis115_02Z : FB_Simu_AxisLIN_V1_1;
     fb_simu_axis115_03Z : FB_Simu_AxisLIN_V1_1;
+    fb_simu_axis115_04Z : FB_Simu_AxisLIN_V1_1;
 	
     fb_gripperLeft    : FB_ZylMo2El_V2_1;
     simu_gripperLeft  : FB_Simu_Zyl2Pos;
@@ -134,7 +137,7 @@ fb_simu_axis115_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis115_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST115_01Y]),
-               xIN_DisButtons   := ,
+               xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -153,8 +156,11 @@ fb_axis115_01Y(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_01Y].movesList[AXIS.bTeachPos[Axis_e.ST115_01Y]].lrPosition),
-               xIN_Reset        := (ST115_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST115_01Y].movesList[AXIS.bTeachPos[Axis_e.ST115_01Y]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Reset       := (ST115_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                // the simu fb gives the hardware signal when the simulation is disabled
                wAxisState    := fb_simu_axis115_01Y.wOUT_AxisState,
                bOUT_AxisCntr => ST115_Axis.axis115_01Y.bCtrlHi,
@@ -178,26 +184,26 @@ fb_simu_axis115_02Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
                     rIN_PixMax    := 80,
                     rIN_PixMin    := 0);
 
-fb_axis115_02Z(enIN_State     := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST115_02Z]),
-               xIN_DisButtons := ,
-               xIN_Quit       := xIN_Quit,
-               xIN_AX5000     := FALSE,
-               xIN_ENC_ABS    := TRUE, // TODO set accordingly
-               xIN_PARAMok    := TRUE,
-               xIN_FREE       := TRUE,
-               xIN_FREE_HOME  := TRUE,
-               rIN_POSMIN     := ST115_Axis.const115_02Z.POS_MIN,
-               rIN_POSMAX     := ST115_Axis.const115_02Z.POS_MAX,
-               rIN_VELOMAX    := ST115_Axis.const115_02Z.VELO_MAX,
-               rIN_VELOMANU   := ST115_Axis.const115_02Z.VELO_MANU,
-               rIN_VELOOPEN   := ST115_Axis.const115_02Z.POS_MAX / 4,
-               rIN_JogInc     := AXIS.rTeachIncAxis,
-               rIN_JogVelo    := AXIS.rTeachVelo,
-               xIN_HomeExe    :=,
-               xIN_HomeCalib  :=,
-               xIN_Execute    := (_20_AUTO.recipe.st115.xUseVerLeft OR (iOUT_Step < ST115_Pnp_e.READY)) AND
-                                 (fb_PnpVerAxisL.xOUT_Execute),
+fb_axis115_02Z(enIN_State      := enIN_State,
+               parIN_Buttons   := ADR(AXIS.btTeachArAxis[Axis_e.ST115_02Z]),
+               xIN_DisButtons  :=,
+               xIN_Quit        := xIN_Quit,
+               xIN_AX5000      := FALSE,
+               xIN_ENC_ABS     := TRUE, // TODO set accordingly
+               xIN_PARAMok     := TRUE,
+               xIN_FREE        := TRUE,
+               xIN_FREE_HOME   := TRUE,
+               rIN_POSMIN      := ST115_Axis.const115_02Z.POS_MIN,
+               rIN_POSMAX      := ST115_Axis.const115_02Z.POS_MAX,
+               rIN_VELOMAX     := ST115_Axis.const115_02Z.VELO_MAX,
+               rIN_VELOMANU    := ST115_Axis.const115_02Z.VELO_MANU,
+               rIN_VELOOPEN    := ST115_Axis.const115_02Z.POS_MAX / 4,
+               rIN_JogInc      := AXIS.rTeachIncAxis,
+               rIN_VeloJogManu := TO_REAL(AXIS.rJogVelo_pc),
+               xIN_HomeExe     :=,
+               xIN_HomeCalib   :=,
+               xIN_Execute     := (_20_AUTO.recipe.st115.xUseVerLeft OR (iOUT_Step < ST115_Pnp_e.READY)) AND
+                                  (fb_PnpVerAxisL.xOUT_Execute),
                xIN_HomeExe      := NOT CONST.USE_SIMULATION AND (ST115_Pnp_e.Init_HomeVerticals = iAktStep),
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrPosition),
@@ -205,8 +211,10 @@ fb_axis115_02Z(enIN_State     := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_02Z].movesList[AXIS.bTeachPos[Axis_e.ST115_02Z]].lrPosition),
-               xIN_Reset        := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST115_02Z].movesList[AXIS.bTeachPos[Axis_e.ST115_02Z]].lrPosition),
+               xIN_Reset := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                // output
                rOUT_ActPos => ST115_Axis.axis115_02Z.rActPos,
                axisIN_REF  := fb_simu_axis115_02Z.pOUT_axisRef^);
@@ -230,7 +238,7 @@ fb_simu_axis115_03Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
 
 fb_axis115_03Z(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST115_03Z]),
-               xIN_DisButtons := ,
+               xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE, (*TODO*)
                xIN_FREE       := TRUE,
@@ -250,13 +258,65 @@ fb_axis115_03Z(enIN_State     := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisR.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_03Z].movesList[AXIS.bTeachPos[Axis_e.ST115_03Z]].lrPosition),
-               xIN_Reset        := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
-               xIN_AX5000       := FALSE,
-               xIN_ENC_ABS      := TRUE,
-               rOUT_ActPos      => ST115_Axis.axis115_03Z.rActPos, // TODO set accordingl
-               axisIN_REF       := fb_simu_axis115_03Z.pOUT_axisRef^);
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST115_03Z].movesList[AXIS.bTeachPos[Axis_e.ST115_03Z]].lrPosition),
+               xIN_Reset   := (ST115_Pnp_e.RESET = iAktStep) OR xIN_Reset,
+               xIN_AX5000  := FALSE,
+               xIN_ENC_ABS := TRUE,
+               rOUT_ActPos => ST115_Axis.axis115_03Z.rActPos, // TODO set accordingl
+               axisIN_REF  := fb_simu_axis115_03Z.pOUT_axisRef^);
+			   
+fb_PnpVerAxisU(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST115_04Z],
+               xIN_Init        := enState.StateINIT = enIN_State,
+               xIN_Reset       := xIN_Reset,
+               lrIN_CurrPos    := ST115_Axis.axis115_04Z.rActPos,
+               lrIN_Delta_mm   := 0.5,
+               iIN_CurrentStep := iOUT_Step,
+               iIN_moveNumber  := ST115_PnpVerPushPos_e._max);
 
+fb_simu_axis115_04Z(xIN_InSimu    := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    rIN_PosActual := ST115_Axis.axis115_04Z.rActPos,
+                    pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST115_04Z]),
+                    pIN_axisHW    := ADR(ST115_Axis.axis115_04Z.axis),
+                    rIN_PosMax    := ST115_Axis.const115_04Z.POS_MAX,
+                    rIN_PosMin    := ST115_Axis.const115_04Z.POS_MIN,
+                    rIN_PixMax    := 80,
+                    rIN_PixMin    := 0);
+
+fb_axis115_04Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST115_04Z]),
+               xIN_DisButtons   :=,
+               xIN_Quit         := xIN_Quit,
+               xIN_AX5000       := TRUE,
+               xIN_ENC_ABS      := TRUE,
+               xIN_PARAMok      := TRUE,
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST115_Axis.const115_04Z.POS_MIN,
+               rIN_POSMAX       := ST115_Axis.const115_04Z.POS_MAX,
+               rIN_VELOMAX      := ST115_Axis.const115_04Z.VELO_MAX,
+               rIN_VELOMANU     := ST115_Axis.const115_04Z.VELO_MANU,
+               rIN_VELOOPEN     := ST115_Axis.const115_04Z.VELO_MANU / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               rIN_VeloJogManu  := TO_REAL(AXIS.rJogVelo_pc),
+               xIN_HomeExe      :=,
+               xIN_HomeCalib    := FALSE,
+               xIN_Execute      := fb_PnpVerAxisU.xOUT_Execute,
+               xIN_Relative     := FALSE,
+               rIN_Position     := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrPosition),
+               rIN_Velocity     := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrVelocity),
+               rIN_Acceleration := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrAccel),
+               rIN_Deceleration := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrDecel),
+               rIN_Jerk         := LREAL_TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrJerk),
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST115_04Z].movesList[AXIS.bTeachPos[Axis_e.ST115_04Z]].lrPosition),
+               xIN_Reset   := xIN_Reset,
+               rOUT_ActPos => ST115_Axis.axis115_04Z.rActPos,
+               axisIN_REF  := fb_simu_axis115_04Z.pOUT_axisRef^);
+
+// pneumatics
 fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST115_Pnp_e.RESET = iOUT_Step),
                xIN_Quit     := xIN_Quit,
                xIN_Manu     := enState.StateMANU = enIN_State,
@@ -317,7 +377,7 @@ xOUT_Busy := (iOUT_Step > ST115_Pnp_e.READY) AND (iOUT_Step < ST115_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
 xOUT_Done := (iOUT_Step = ST115_Pnp_e.DONE);
 // Process ready
-xOUT_Ready := (iOUT_Step = ST115_Pnp_e.READY);
+xOUT_Ready := (iOUT_Step = ST115_Pnp_e.READY) OR (iOUT_Step = ST115_Pnp_e.waitOnMover);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			

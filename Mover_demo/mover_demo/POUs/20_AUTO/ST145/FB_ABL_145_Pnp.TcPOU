@@ -132,7 +132,7 @@ fb_simu_axis145_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis145_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST145_01Y]),
-               xIN_DisButtons   := ,
+               xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -151,8 +151,11 @@ fb_axis145_01Y(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_01Y].movesList[AXIS.bTeachPos[Axis_e.ST145_01Y]].lrPosition),
-               xIN_Reset        := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST145_01Y].movesList[AXIS.bTeachPos[Axis_e.ST145_01Y]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Reset       := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                // The simu fb gives the hardware state when we are not in simu
                wAxisState    := fb_simu_axis145_01Y.wOUT_AxisState,
                rOUT_ActPos   => st145_axis.axis145_01Y.rActPos,
@@ -163,7 +166,7 @@ fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_0
               xIN_Init        := enIN_State = enState.StateINIT,
               xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis145_02Z.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.5,
+              lrIN_Delta_mm   := 0.75,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST145_PnpVerPos_e._max);
 
@@ -181,7 +184,7 @@ fb_simu_axis145_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis145_02Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST145_02Z]),
-               xIN_DisButtons   := ,
+               xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -200,8 +203,11 @@ fb_axis145_02Z(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_02Z].movesList[AXIS.bTeachPos[Axis_e.ST145_02Z]].lrPosition),
-               xIN_Reset        := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST145_02Z].movesList[AXIS.bTeachPos[Axis_e.ST145_02Z]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Reset       := (ST145_Pnp_e.RESET = iAktStep) OR xIN_Reset,
                // The simu fb gives the hardware state when we are not in simu
                wAxisState    := fb_simu_axis145_02Z.wOUT_AxisState,
                rOUT_ActPos   => st145_axis.axis145_02Z.rActPos,
@@ -227,7 +233,7 @@ fb_vakumGriperLeft(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step),
                    tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST145]
                                                   [ST145_Cylinders_e.VakuumgreiferLinks].toGS_wait_time));
 
-simu_vacumGriperLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_vacumGriperLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                      xIN_inGS   := NOT IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left,
                      xIN_inAS   := IO_BOX.I1600_ST145_vakum_teil_in_greiffer_left,
                      xIN_valve  := fb_vakumGriperLeft.xOUT_VALVE,
@@ -252,7 +258,7 @@ fb_vakumGriperRight(xIN_Reset    := xIN_Reset OR (ST145_Pnp_e.RESET = iOUT_Step)
                     tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST145]
                                                    [ST145_Cylinders_e.VakuumgreiferRechts].toGS_wait_time));
 
-simu_vacumGriperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+simu_vacumGriperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                       xIN_inGS   := NOT IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right,
                       xIN_inAS   := IO_BOX.I1601_ST145_vakum_teil_in_greiffer_right,
                       xIN_valve  := fb_vakumGriperRight.xOUT_VALVE,
@@ -365,7 +371,7 @@ ST145_Pnp_e.Init_HomeVerticals:
 ST145_Pnp_e.Init_VerticalsUp:
     IF fb_vakumGriperLeft.xIN_AS OR fb_vakumGriperRight.xIN_AS THEN
         IF fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpFull).xOUT_InPos THEN
-            IF fb_axis145_01Y.xOUT_READY OR fb_axis145_01Y.xOUT_HOMED THEN
+            IF fb_axis145_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST145_Pnp_e.Init_HorizontalsToTrack;
             ELSE
                 iOUT_Step := ST145_Pnp_e.Init_HomeHorizontals;
@@ -373,7 +379,7 @@ ST145_Pnp_e.Init_VerticalsUp:
         END_IF
     ELSE
         IF fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
-            IF fb_axis145_01Y.xOUT_READY OR fb_axis145_01Y.xOUT_HOMED THEN
+            IF fb_axis145_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST145_Pnp_e.Init_HorizontalsToTrack;
             ELSE
                 iOUT_Step := ST145_Pnp_e.Init_HomeHorizontals;
@@ -382,8 +388,6 @@ ST145_Pnp_e.Init_VerticalsUp:
     END_IF
 
 ST145_Pnp_e.Init_HomeHorizontals:
-    fb_axis145_01Y.rIN_Velocity := ST145_Axis.const145_01Y.VELO_MANU;
-
     IF fb_axis145_01Y.xOUT_HOMED THEN
         iOUT_Step := ST145_Pnp_e.Init_HorizontalsToTrack;
     END_IF
@@ -471,12 +475,22 @@ ST145_Pnp_e.Pnp_Hor_ToTrackPos:
 
 ST145_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST145] THEN
-        iOUT_Step := ST145_Pnp_e.Pnp_Ver_ShuttleDown;
+        IF Mover.GetLastStationDone() >= INT#145 THEN
+            iOUT_Step := ST145_Pnp_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST145_Pnp_e.Pnp_Ver_ShuttleDown;
+        END_IF
     END_IF;
 
 ST145_Pnp_e.Pnp_Ver_ShuttleDown:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.DownFullQuick).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.Vacum_off;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(-145) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF;
 
 // not used here, maybe later
@@ -494,12 +508,23 @@ ST145_Pnp_e.Vacum_off:
 ST145_Pnp_e.PnP_Ver_ShuttleUp:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST145_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(145) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF;
 
 ST145_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST145_Pnp_e.DONE;
+        IF (NOT _20_AUTO.recipe.st145.xUseVerLeft OR fb_vakumGriperLeft.xOUT_inAS) AND
+           (NOT _20_AUTO.recipe.st145.xUseVerRight OR fb_vakumGriperRight.xOUT_inAS) THEN
+            iOUT_Step := ST145_Pnp_e.waitOnMover;
+        ELSE
+            iOUT_Step := ST145_Pnp_e.DONE;
+        END_IF
     END_IF
 
 (***** DONE *****)

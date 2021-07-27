@@ -5,11 +5,11 @@
 // This configuration is typically stored inside a ricipies
 TYPE VectorMove1D_t :
 STRUCT
-    lrVelocity : REAL;  // Velocity to position
-    lrAccel    : REAL;  // acceleration to position
-    lrDecel    : REAL;  // deceleration to position
-    lrJerk     : REAL;  // jerk to position
-    lrPosition : LREAL; // Position to go
+    lrVelocity  : REAL;  // Velocity to position
+    lrAccel     : REAL;  // acceleration to position
+    lrDecel     : REAL;  // deceleration to position
+    lrJerk      : REAL;  // jerk to position
+    lrPosition  : LREAL; // Position to go
     TriggerType : INT;   // the kind of trigger used
     TriggerPos  : LREAL; // trigger position, ignore if TriggerType is None
     Timeout_ms  : DINT;  // timeout value for this movement vector expressed in milisecond

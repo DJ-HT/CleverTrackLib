@@ -162,7 +162,8 @@ fb_axis110_01Y(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
                rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST110_01Y]
                                                .movesList[AXIS.bTeachPos[Axis_e.ST110_01Y]].lrPosition),
-               xIN_Reset := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Reset       := (ST110_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                // the simu fb gives the hardware signal when not in simulation
                wAxisState    := fb_simu_axis110_01Y.wOUT_AxisState,
                rOUT_ActPos   => ST110_Axis.axis110_01Y.rActPos,
@@ -196,18 +197,18 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                xIN_FREE       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
                                  fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw) AND
                                  NOT (ST110_Pnp_e.PnP_Ver_quick_stop = iOUT_Step),
-               xIN_FREE_HOME := TRUE,
-               rIN_POSMIN    := ST110_Axis.const110_02Z.POS_MIN,
-               rIN_POSMAX    := ST110_Axis.const110_02Z.POS_MAX,
-               rIN_VELOMAX   := ST110_Axis.const110_02Z.VELO_MAX,
-               rIN_VELOMANU  := ST110_Axis.const110_02Z.VELO_MANU,
-               rIN_VELOOPEN  := ST110_Axis.const110_02Z.POS_MAX / 4,
-               rIN_JogInc    := AXIS.rTeachIncAxis,
-               rIN_JogVelo   := AXIS.rTeachVelo,
-               xIN_HomeExe   :=,
-               xIN_HomeCalib :=,
-               xIN_Execute   := (_20_AUTO.recipe.st110.xUseVerLeft OR (iOUT_Step < ST110_Pnp_e.READY)) AND
-                                (fb_PnpVerAxisL.xOUT_Execute),
+               xIN_FREE_HOME   := TRUE,
+               rIN_POSMIN      := ST110_Axis.const110_02Z.POS_MIN,
+               rIN_POSMAX      := ST110_Axis.const110_02Z.POS_MAX,
+               rIN_VELOMAX     := ST110_Axis.const110_02Z.VELO_MAX,
+               rIN_VELOMANU    := ST110_Axis.const110_02Z.VELO_MANU,
+               rIN_VELOOPEN    := ST110_Axis.const110_02Z.POS_MAX / 4,
+               rIN_JogInc      := AXIS.rTeachIncAxis,
+               rIN_VeloJogManu := TO_REAL(AXIS.rJogVelo_pc),
+               xIN_HomeExe     :=,
+               xIN_HomeCalib   :=,
+               xIN_Execute     := (_20_AUTO.recipe.st110.xUseVerLeft OR (iOUT_Step < ST110_Pnp_e.READY)) AND
+                                  (fb_PnpVerAxisL.xOUT_Execute),
                xIN_HomeExe      :=,
                xIN_Relative     :=,
                rIN_Position     := TO_REAL(fb_PnpVerAxisL.OUT_MoveProfile.lrPosition),
@@ -305,7 +306,7 @@ fb_axis110_04Z(enIN_State       := enIN_State,
                rIN_VELOMANU     := ST110_Axis.const110_04Z.VELO_MANU,
                rIN_VELOOPEN     := ST110_Axis.const110_04Z.VELO_MANU / 4,
                rIN_JogInc       := AXIS.rTeachIncAxis,
-               rIN_JogVelo      := AXIS.rTeachVelo,
+               rIN_VeloJogManu  := TO_REAL(AXIS.rJogVelo_pc),
                xIN_HomeExe      :=,
                xIN_HomeCalib    := FALSE,
                xIN_Execute      := fb_PnpVerAxisU.xOUT_Execute,
@@ -348,7 +349,7 @@ simu_gripperLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
                  xIN_inAS := (IO_BOX.I5500_ST110_vakumkontrolle_links / TO_INT(16#FFFF / 100)) >
                              _20_AUTO.recipe.st110.vakum_left_pc,
                  xIN_valve := fb_gripperLeft.xOUT_VALVE,
-                 tIN_GS_ms := 0,    //ms
+                 tIN_GS_ms := 200,  //ms
                  tIN_AS_ms := 200); //ms
 
 fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
@@ -375,7 +376,7 @@ simu_gripperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION
                   xIN_inAS := (IO_BOX.I5600_ST110_vakumkontrolle_rechts / TO_INT(16#FFFF / 100)) >
                               _20_AUTO.recipe.st110.vakum_right_pc,
                   xIN_valve := fb_gripperRight.xOUT_VALVE,
-                  tIN_GS_ms := 0,    //ms
+                  tIN_GS_ms := 200,  //ms
                   tIN_AS_ms := 200); //ms
 
 // kraft sensor
@@ -392,7 +393,7 @@ xOUT_Busy := (iOUT_Step > ST110_Pnp_e.READY) AND (iOUT_Step < ST110_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
 xOUT_Done := (iOUT_Step = ST110_Pnp_e.DONE);
 // Process ready
-xOUT_Ready := (iOUT_Step = ST110_Pnp_e.READY);
+xOUT_Ready := (iOUT_Step = ST110_Pnp_e.READY) OR (iOUT_Step = ST110_Pnp_e.waitOnMover);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
@@ -437,6 +438,24 @@ END_IF
 
 (* START *)
 rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis110_01Y.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_axis110_02Z.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_axis110_03Z.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    ELSIF fb_axis110_04Z.xOUT_ErrFlag THEN
+        bOUT_Error := 14;
+    ELSIF fb_gripperLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 20;
+    ELSIF fb_gripperRight.xOUT_ErrFlag THEN
+        bOUT_Error := 21;
+    END_IF
+ELSIF iOUT_Step < ST110_Pnp_e.ERROR THEN
+    iOUT_Step := ST110_Pnp_e.ERROR;
+END_IF
 
 (*******************************************************************)
 (* Schrittkette  *)
@@ -584,17 +603,37 @@ ST110_Pnp_e.PnP_Hor_ToTrackPos:
 
 ST110_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST110]) THEN
-        iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleDown;
+        IF Mover.GetLastStationDone() >= INT#110 THEN
+            iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST110_Pnp_e.Pnp_Handling_pin_up;
+        END_IF
     END_IF;
 
+ST110_Pnp_e.Pnp_Handling_pin_up:
+    IF xIN_NextStep AND fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos THEN
+        iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleDown;
+    END_IF
+
 ST110_Pnp_e.PnP_Ver_ShuttleDown:
+    IF _20_AUTO.recipe.st110.xUseVerLeft THEN
+        fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullQuick);
+    END_IF
+
+    IF _20_AUTO.recipe.st110.xUseVerRight THEN
+        fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick);
+    END_IF
+
     IF xIN_NextStep AND
-       (NOT fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_Moving OR
-       NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
-       (NOT fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullQuick).xOUT_Moving OR
-       NOT _20_AUTO.recipe.st110.xUseVerRight) AND
-       fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.up).xOUT_InPos THEN
+       (NOT _20_AUTO.recipe.st110.xUseVerLeft OR fb_axis110_02Z.xOUT_DONE) AND
+       (NOT _20_AUTO.recipe.st110.xUseVerRight OR fb_axis110_03Z.xOUT_DONE) THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(-110) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF;
 
 // We need a fb that enables for us torque control. Here we just go a bit further
@@ -610,8 +649,11 @@ ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
 
         END_IF
 
-    ELSIF fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw AND
-          fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw THEN
+    ELSIF
+        (NOT _20_AUTO.recipe.st110.xUseVerLeft OR (fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw)
+            ) AND
+        (NOT _20_AUTO.recipe.st110.xUseVerRight OR (fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw)
+            ) THEN
         iOUT_Step := ST110_Pnp_e.PnP_Ver_quick_stop;
     END_IF;
 
@@ -633,12 +675,22 @@ ST110_Pnp_e.PnP_Ver_ShuttleUp:
        NOT _20_AUTO.recipe.st110.xUseVerRight) AND
        fb_PnpVerAxisU.MoveTo(ST110_PnpVerPushPos_e.down).xOUT_InPos THEN
         iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(110) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF;
 
 ST110_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST110_Pnp_e.DONE;
+        IF fb_gripperLeft.xOUT_inGS AND fb_gripperRight.xOUT_inGS THEN
+            iOUT_Step := ST110_Pnp_e.DONE;
+        ELSE
+            iOUT_Step := ST110_Pnp_e.waitOnMover;
+        END_IF
     END_IF
 
 (***** DONE *****)

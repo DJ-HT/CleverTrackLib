@@ -144,24 +144,24 @@ fb_simu_axis130_01Z(xIN_InSimu    := DOSE_SIMULATION AND CONST.USE_SIMULATION,
                     rIN_PixMax    := 60,
                     rIN_PixMin    := 0);
 
-fb_axis130_01Z(enIN_State       := enIN_State,
-               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST130_01Z]),
-               xIN_DisButtons   := FALSE,
-               xIN_Quit         := xIN_Quit,
-               xIN_AX5000       := FALSE,
-               xIN_ENC_ABS      := TRUE,
-               xIN_PARAMok      := TRUE,
-               xIN_FREE         := TRUE,
-               xIN_FREE_HOME    := TRUE,
-               rIN_POSMIN       := ST130_Axis.const130_01Z.POS_MIN,
-               rIN_POSMAX       := ST130_Axis.const130_01Z.POS_MAX,
-               rIN_VELOMAX      := ST130_Axis.const130_01Z.VELO_MAX,
-               rIN_VELOMANU     := ST130_Axis.const130_01Z.VELO_MANU,
-               rIN_VELOOPEN     := ST130_Axis.const130_01Z.VELO_MANU / 4,
-               rIN_JogInc       := AXIS.rTeachIncAxis,
-               rIN_JogVelo      := AXIS.rTeachVelo,
-               rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_01Z]
-                                               .movesList[AXIS.bTeachPos[Axis_e.ST130_01Z]].lrPosition),
+fb_axis130_01Z(enIN_State      := enIN_State,
+               parIN_Buttons   := ADR(AXIS.btTeachArAxis[Axis_e.ST130_01Z]),
+               xIN_DisButtons  := FALSE,
+               xIN_Quit        := xIN_Quit,
+               xIN_AX5000      := FALSE,
+               xIN_ENC_ABS     := TRUE,
+               xIN_PARAMok     := TRUE,
+               xIN_FREE        := TRUE,
+               xIN_FREE_HOME   := TRUE,
+               rIN_POSMIN      := ST130_Axis.const130_01Z.POS_MIN,
+               rIN_POSMAX      := ST130_Axis.const130_01Z.POS_MAX,
+               rIN_VELOMAX     := ST130_Axis.const130_01Z.VELO_MAX,
+               rIN_VELOMANU    := ST130_Axis.const130_01Z.VELO_MANU,
+               rIN_VELOOPEN    := ST130_Axis.const130_01Z.VELO_MANU / 4,
+               rIN_JogInc      := AXIS.rTeachIncAxis,
+               rIN_VeloJogManu := TO_REAL(AXIS.rJogVelo_pc),
+               rIN_PosManu     := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_01Z]
+                                              .movesList[AXIS.bTeachPos[Axis_e.ST130_01Z]].lrPosition),
                xIN_HomeExe      := FALSE,
                xIN_HomeCalib    := FALSE,
                xIN_Execute      := fb_VerAxis_01.xOUT_Execute,
@@ -179,7 +179,7 @@ fb_VerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_1
               xIN_Init        := enIN_State = enState.StateINIT,
               xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis130_10Z.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.5,
+              lrIN_Delta_mm   := 0.75,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST130_PatroneAushebenPos_e._max);
 
@@ -219,12 +219,13 @@ fb_axis130_10Z(enIN_State       := enIN_State,
                rIN_Jerk         := TO_REAL(fb_VerAxis_10.OUT_MoveProfile.lrJerk),
                rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_10Z]
                                                .movesList[AXIS.bTeachPos[Axis_e.ST130_10Z]].lrPosition),
-               xIN_Home         := ST130_Dose_e.Init_HomeVertical_10 = iOUT_Step,
-               xIN_Reset        := (ST130_Dose_e.RESET = iOUT_Step) OR xIN_Reset,
-               wAxisState       := fb_simu_axis130_10Z.wOUT_AxisState,
-               bOUT_AxisCntr    => ST130_Axis.axis130_10Z.bCtrlHi,
-               rOUT_ActPos      => ST130_Axis.axis130_10Z.rActPos,
-               axisIN_REF       := fb_simu_axis130_10Z.pOUT_axisRef^);
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST130_Dose_e.Init_HomeVertical_10 = iOUT_Step,
+               xIN_Reset       := (ST130_Dose_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState      := fb_simu_axis130_10Z.wOUT_AxisState,
+               bOUT_AxisCntr   => ST130_Axis.axis130_10Z.bCtrlHi,
+               rOUT_ActPos     => ST130_Axis.axis130_10Z.rActPos,
+               axisIN_REF      := fb_simu_axis130_10Z.pOUT_axisRef^);
 
 //////////////////////////////////
 fb_Kammer_Offnen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iOUT_Step),
@@ -234,8 +235,8 @@ fb_Kammer_Offnen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iOUT_S
                        xIN_GS       := simu_Kammer_Offnen_Links.xOUT_inGS,
                        xIN_AS       := simu_Kammer_Offnen_Links.xOUT_inAS,
                        xIN_FREE     := TRUE,
-                       xINtoGS      := ST130_Dose_e.Init_close_down_feeder = iOUT_Step OR
-                                       ST130_Dose_e.close_down_feeder = iOUT_Step,
+                       xINtoGS := ST130_Dose_e.Init_close_down_feeder = iOUT_Step OR
+                                  ST130_Dose_e.close_down_feeder = iOUT_Step,
                        xINtoAS := _20_AUTO.recipe.st130.xUseVerRight AND
                                   ST130_Dose_e.open_down_feeder = iOUT_Step,
                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
@@ -288,10 +289,13 @@ fb_Kammer_nachfullen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iO
                            xIN_GS       := simu_Kammer_nachfullen_Links.xOUT_inGS,
                            xIN_AS       := simu_Kammer_nachfullen_Links.xOUT_inAS,
                            xIN_FREE     := TRUE,
-                           xINtoGS      := ST130_Dose_e.close_up_feeder = iOUT_Step,
-                           xINtoAS      := _20_AUTO.recipe.st130.xUseVerLeft AND
-                                           (ST130_Dose_e.open_up_feeder = iOUT_Step OR
-                                           ST130_Dose_e.Init_open_up_feeder = iOUT_Step),
+                           xINtoGS      := (ST130_Dose_e.close_up_feeder = iOUT_Step) OR
+                                           (ST130_Dose_e.Init_close_up_feeder = iOUT_Step) OR
+                                           (enIN_State < enState.StateSTEP),
+                           xINtoAS := _20_AUTO.recipe.st130.xUseVerLeft AND
+                                      (enIN_State >= enState.StateSTEP) AND
+                                      (ST130_Dose_e.open_up_feeder = iOUT_Step OR
+                                      ST130_Dose_e.open_up_feeder_first = iOUT_Step),
                            tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                          [ST130_Cylinders_e.Kammer_nachfullen_Links]
                                                          .toAS_alarm_time),
@@ -316,10 +320,13 @@ fb_Kammer_nachfullen_Rechts(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = i
                             xIN_GS       := simu_Kammer_nachfullen_Rechts.xOUT_inGS,
                             xIN_AS       := simu_Kammer_nachfullen_Rechts.xOUT_inAS,
                             xIN_FREE     := TRUE,
-                            xINtoGS      := ST130_Dose_e.close_up_feeder = iOUT_Step,
-                            xINtoAS      := _20_AUTO.recipe.st130.xUseVerRight AND
-                                            (ST130_Dose_e.open_up_feeder = iOUT_Step OR
-                                            ST130_Dose_e.Init_open_up_feeder = iOUT_Step),
+                            xINtoGS      := (ST130_Dose_e.close_up_feeder = iOUT_Step) OR
+                                            (ST130_Dose_e.Init_close_up_feeder = iOUT_Step) OR
+                                            (enIN_State < enState.StateSTEP),
+                            xINtoAS := _20_AUTO.recipe.st130.xUseVerRight AND
+                                       (enIN_State >= enState.StateSTEP) AND
+                                       (ST130_Dose_e.open_up_feeder = iOUT_Step OR
+                                       ST130_Dose_e.open_up_feeder_first = iOUT_Step),
                             tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
                                                           [ST130_Cylinders_e.Kammer_nachfullen_Rechts]
                                                           .toAS_alarm_time),
@@ -430,11 +437,12 @@ xOUT_Busy := (iOUT_Step > ST130_Dose_e.READY) AND (iOUT_Step < ST130_Dose_e.DONE
 // Baustein hat den Ablauf beendet
 xOUT_Done := (iOUT_Step = ST130_Dose_e.DONE);
 // Process ready
-xOUT_Ready := (iOUT_Step = ST130_Dose_e.READY);
+xOUT_Ready := (iOUT_Step = ST130_Dose_e.READY) OR (iOUT_Step = ST130_Dose_e.waitOnMover);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
 xOUT_InitDone := (iOUT_Step = ST130_Dose_e.READY) OR
+                 (iOUT_Step = ST130_Dose_e.waitOnMover) OR
                  (iOUT_Step = ST130_Dose_e.DONE);
 
 // Aktueller Schritt			
@@ -454,25 +462,42 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST130_Dose_e.DONE);
 
 IO_BOX.Q0100_14_ST130_kammer_offnen_links :=
-    fb_Kammer_Offnen_Links.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Kammer_Offnen_Links.xOUT_VALVE AND
+    NOT IO_BOX.Q0102_14_ST130_kammer_nachfullen_links AND
+    ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
+    (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0101_14_ST130_kammer_offnen_rechts :=
-    fb_Kammer_Offnen_Rechts.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Kammer_Offnen_Rechts.xOUT_VALVE AND
+    NOT IO_BOX.Q0103_14_ST130_kammer_nachfullen_rechts AND
+    ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
+    (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0102_14_ST130_kammer_nachfullen_links :=
-    fb_Kammer_nachfullen_Links.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Kammer_nachfullen_Links.xOUT_VALVE AND
+    ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
+    (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0103_14_ST130_kammer_nachfullen_rechts :=
-    fb_Kammer_nachfullen_Rechts.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Kammer_nachfullen_Rechts.xOUT_VALVE AND
+    ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
+    (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0104_14_ST130_vibrieren_kammer_links :=
-    fb_viebrieren_kammer_links.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_viebrieren_kammer_links.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0104_12_ST130_vibrieren_kammer_rechts :=
-    fb_viebrieren_kammer_rechts.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_viebrieren_kammer_rechts.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0105_14_ST130_niederhalter_patrone :=
-    fb_Niederhalter_Patrone.xOUT_VALVE AND NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION);
+    fb_Niederhalter_Patrone.xOUT_VALVE AND
+    (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION) OR (enIN_State = enState.StateMANU));
 
 _20_AUTO.recipe.st130.uiVibroUnderneath := LIMIT(UINT#0, _20_AUTO.recipe.st130.uiVibroUnderneath, UINT#100);
 
@@ -554,7 +579,7 @@ ST130_Dose_e.INIT: (* Grundstellung ? *)
 
 ST130_Dose_e.Init_Vertical_01Z_at_position:
     IF fb_VerAxis_01.MoveTo(ST130_DosierkammerPos_e.down_AS).xOUT_InPos THEN
-        IF fb_axis130_10Z.xOUT_READY OR fb_axis130_10Z.xOUT_HOMED THEN
+        IF fb_axis130_10Z.xOUT_HOMED THEN
             iOUT_Step := ST130_Dose_e.Init_Vertical_10_Down;
         ELSE
             iOUT_Step := ST130_Dose_e.Init_HomeVertical_10;
@@ -574,12 +599,12 @@ ST130_Dose_e.Init_Vertical_10_Down:
 ST130_Dose_e.Init_close_down_feeder:
     IF (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_Offnen_Links.xOUT_inGS) AND
        (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_Offnen_Rechts.xOUT_inGS) THEN
-        iOUT_Step := ST130_Dose_e.Init_open_up_feeder;
+        iOUT_Step := ST130_Dose_e.Init_close_up_feeder;
     END_IF
 
-ST130_Dose_e.Init_open_up_feeder:
-    IF (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_nachfullen_Links.xOUT_inAS) AND
-       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_nachfullen_Rechts.xOUT_inAS) THEN
+ST130_Dose_e.Init_close_up_feeder:
+    IF (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_nachfullen_Links.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_nachfullen_Rechts.xOUT_inGS) THEN
         iOUT_Step := ST130_Dose_e.Init_clamp_up;
     END_IF
 
@@ -597,8 +622,15 @@ ST130_Dose_e.READY:   (* Start AUTO:END:LEER:STEP *)
 (***** START  ZYKLISCH *****)
 ST130_Dose_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST130_Dose_e.fill_kammer;
+        iOUT_Step := ST130_Dose_e.open_up_feeder_first;
     END_IF;
+
+ST130_Dose_e.open_up_feeder_first:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_nachfullen_Links.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_nachfullen_Rechts.xOUT_inAS) THEN
+        iOUT_Step := ST130_Dose_e.fill_kammer;
+    END_IF
 
 ST130_Dose_e.fill_kammer:
     IF xIN_NextStep AND TON_load_kammer.Q THEN
@@ -607,7 +639,11 @@ ST130_Dose_e.fill_kammer:
 
 ST130_Dose_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST130] THEN
-        iOUT_Step := ST130_Dose_e.check_filterhut_presence;
+        IF Mover.GetLastStationDone() >= INT#130 THEN
+            iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST130_Dose_e.check_filterhut_presence;
+        END_IF
     END_IF
 
 ST130_Dose_e.check_filterhut_presence:
@@ -624,7 +660,11 @@ ST130_Dose_e.close_up_feeder:
 
 ST130_Dose_e.lift_up_piece_in_workposition:
     IF xIN_NextStep AND fb_VerAxis_10.MoveTo(ST130_PatroneAushebenPos_e.up_AS).xOUT_InPos THEN
-        iOUT_Step := ST130_Dose_e.open_down_feeder;
+        IF DOSE_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST130_Dose_e.load_powder_and_vibrate;
+        ELSE
+            iOUT_Step := ST130_Dose_e.open_down_feeder;
+        END_IF
     END_IF
 
 ST130_Dose_e.open_down_feeder:
@@ -632,6 +672,12 @@ ST130_Dose_e.open_down_feeder:
        (NOT _20_AUTO.recipe.st130.xUseVerLeft OR fb_Kammer_Offnen_Links.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st130.xUseVerRight OR fb_Kammer_Offnen_Rechts.xOUT_inAS) THEN
         iOUT_Step := ST130_Dose_e.load_powder_and_vibrate;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(-130) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF
 
 ST130_Dose_e.load_powder_and_vibrate:
@@ -666,6 +712,12 @@ ST130_Dose_e.clamp_down:
 ST130_Dose_e.clamp_up:
     IF xIN_NextStep AND fb_Niederhalter_Patrone.xOUT_inGS THEN
         iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(130) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF
 
 ST130_Dose_e.SYNC_MOVER_LEAVE:

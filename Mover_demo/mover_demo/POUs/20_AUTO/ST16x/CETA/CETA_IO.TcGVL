@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="CETA_IO" Id="{73476ca6-7717-43e9-927b-f0178e94f982}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    I_ST160_StatusBits  AT %I* : CETA_IN_u;            // connect this to the 2 first byte of the input of the CETATEST
+    I_ST160_Data        AT %I* : ARRAY[0..61] OF BYTE; // connect those 62 bytes right after xIN_StatusBits
+    Q_ST160_CommandBits AT %Q* : CETA_OUT_u;           // connect this to the 2 first byte of the Output of the CETATEST
+    Q_ST160_Data        AT %Q* : ARRAY[0..29] OF BYTE; // connect those 30 bytes right after xIN_StatusBits
+	
+    I_ST165_StatusBits  AT %I* : CETA_IN_u;            // connect this to the 2 first byte of the input of the CETATEST
+    I_ST165_Data        AT %I* : ARRAY[0..61] OF BYTE; // connect those 62 bytes right after xIN_StatusBits
+    Q_ST165_CommandBits AT %Q* : CETA_OUT_u;           // connect this to the 2 first byte of the Output of the CETATEST
+    Q_ST165_Data        AT %Q* : ARRAY[0..29] OF BYTE; // connect those 30 bytes right after xIN_StatusBits
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

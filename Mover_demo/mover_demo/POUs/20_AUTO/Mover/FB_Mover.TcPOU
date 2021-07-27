@@ -15,8 +15,10 @@ VAR
     _State : MoverState_e := MoverState_e.WaitOnNextStation; // current mover state
 
     _ActualTargetOffset  : LREAL; // final offset to apply to the current/next target
-    _MovingProcessOffset : LREAL; // added offset by the process, 
-                                  // used to compute the new position of the shuttle inside the station
+    _MovingProcessOffset : LREAL; (* added offset by the process, 
+                                     used to compute the new position of the shuttle inside the station *)
+
+    _LastStationDone : INT; // the number of the last station done. If negative, the piece is not good at this station
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
@@ -90,6 +92,17 @@ THIS^._Station REF=0;
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="GetLastStationDone" Id="{cfcf4c70-0bf5-4b76-a872-6dddf7d5257b}">
+      <Declaration><![CDATA[// Get the last station done. The number is always positive
+// To know if the piece is bad, you have to use the IsPieceBad method
+METHOD PUBLIC GetLastStationDone : INT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetLastStationDone := ABS(THIS^._LastStationDone);]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="IsBehind" Id="{1364b0b6-81a4-4545-a8c6-935b8f76ea04}">
       <Declaration><![CDATA[// Is this mover behind a given position?
 // this method do the opposit as IsInFront
@@ -128,9 +141,15 @@ IF CONST.BIND_WITH_TRACK THEN
     //                                    THIS^._AttachedTool.PosOffset -
     //                                    THIS^.Station.Offset);
     IF __ISVALIDREF(THIS^.Station) THEN
+        //IsInStationPos :=
+        //    gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.at_target AND
+        //    (gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bDestinationStation = THIS^.Station.SuperTrackNumber);
         IsInStationPos :=
-            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.at_target AND
-            (gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bDestinationStation = THIS^.Station.SuperTrackNumber);
+            THIS^.Station.Position.isInPos(gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
+                                           THIS^._AttachedTool.PosOffset -
+                                           THIS^.Station.Offset -
+                                           THIS^._MovingProcessOffset) AND
+            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.at_target;
     ELSE
         IsInStationPos := FALSE;
     END_IF
@@ -139,6 +158,17 @@ ELSE
         .isInPos(THIS^.MoverAxis.CurrentPos - THIS^._AttachedTool.PosOffset - THIS^.Station.Offset);
 END_IF
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsPieceBad" Id="{686730a8-52e6-424a-8de7-342567669f56}">
+      <Declaration><![CDATA[// Is the carried piece bad? A piece is bad when the last visited station
+// is negative
+METHOD PUBLIC IsPieceBad : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPieceBad := THIS^._LastStationDone < 0;]]></ST>
       </Implementation>
     </Method>
     <Property Name="MoverAxis" Id="{667c64f3-25b7-4e93-87f1-34db05ea3af9}">
@@ -237,6 +267,30 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="SetLastStation" Id="{6eeb15ca-bd96-4e70-bcf9-69f9b8c0ae17}">
+      <Declaration><![CDATA[// Set the last station visited as soon as you won't redo the process
+// again on your piece. It is recommanded to first set the piece as bad
+// (negative current station number) as soon as the process has begun,
+// then if the process has ended successfuly, you can again set
+// the last station visited with the positive current station number.
+// This method returns FALSE when the absolute value of the given station
+// number is smaller than the current value
+// To remove pieces from the shuttle, use the UnloadPieces method
+METHOD PUBLIC SetLastStation : BOOL
+VAR_INPUT
+    value : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ABS(value) < ABS(THIS^._LastStationDone) THEN
+    SetLastStation := FALSE;
+ELSE
+    THIS^._LastStationDone := value;
+    SetLastStation         := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="SetPieceHolder" Id="{3656c226-034e-4545-af0f-2c2902573b50}">
       <Declaration><![CDATA[// Set a specic piece holder. This will affect the station position offset
 METHOD SetPieceHolder : REFERENCE TO FB_Mover
@@ -339,6 +393,22 @@ VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[ToString := CONCAT('FB_Mover_', TO_STRING(THIS^._iID));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UnloadPieces" Id="{46c806c8-1d14-4c11-9ac5-810173d6edc3}">
+      <Declaration><![CDATA[// Unload all the pieces. This sets the _LastStationDone to 0
+METHOD PUBLIC UnloadPieces : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^._LastStationDone <> 0 THEN
+    UnloadPieces           := TRUE;
+    THIS^._LastStationDone := 0;
+ELSE
+    UnloadPieces := FALSE;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
   </POU>

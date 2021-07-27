@@ -46,7 +46,7 @@ VAR_INPUT
 	rIN_VELOOPEN	: REAL := 25;
 	//JOG
 	rIN_JogInc		: REAL := 0.1;		//Jog Mode Inching Value
-	rIN_JogVelo		: REAL := 50;		//Jog Mode Velocity
+	rIN_VeloJogManu : REAL := REAL#10.0; //Speed in manual jog in %
 	//HOMING
 	xIN_HomeExe		: BOOL := FALSE;	//Start Homing
 	xIN_HomeCalib	: BOOL := FALSE;	//Kalibriernocken
@@ -140,7 +140,7 @@ END_VAR
 	_MC_MoveRel( Axis:= axisIN_REF );
 
 	_MC_Jog (	Position := rIN_JogInc,
-				Velocity := rIN_JogVelo,
+				Velocity := (rIN_VeloJogManu * rIN_VELOMAX) / REAL#100.0,
 				Axis:= axisIN_REF );
 
 	_MC_ReadStatus(	Enable:= TRUE ,
@@ -275,7 +275,7 @@ END_VAR
 			//*********************************************
 			//Jog
 			ELSIF (bJogMode>0) THEN
-				_MC_Jog.Mode := MC_JOGMODE_STANDARD_SLOW;
+				_MC_Jog.Mode := MC_JOGMODE_CONTINOUS;
 				IF (bJogMode=1) THEN
 					_MC_Jog.Mode := MC_JOGMODE_INCHING;
 				ELSIF (bJogMode=3) THEN

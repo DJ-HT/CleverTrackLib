@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST105_Fanuc_command_t" Id="{e5ae7b81-47d3-439d-a560-25e2bcd986ca}">
+    <Declaration><![CDATA[TYPE ST105_Fanuc_command_t :
+STRUCT
+    FG_Pick          : BIT; // Pick pieces at the feeder side
+    FG_Place         : BIT; // Place pieces at the mover side
+    Cycle_end        : BIT; // Tell the robot to stop working and go full up when finished
+    One_cycle        : BIT; // Tell the robot to do just one cycleand and go full up when finished
+    Use_griper_left  : BIT; // Use the left griper
+    Use_griper_right : BIT; // Use the right griper
+    reserve_b6       : BIT; // 
+    reserve_b7       : BIT; // 
+    ZOff             : BIT; // negative flag for the Z offset
+    XOff             : BIT; // negative flag for the X offset
+    YOff             : BIT; // negative flag for the Y offset
+    reserve_b11      : BIT; // 
+    reserve_b12      : BIT; // 
+    reserve_b13      : BIT; // 
+    reserve_b14      : BIT; // 
+    reserve_b15      : BIT; // 
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,11 +1,11 @@
-﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/09/21 17:28:17
+﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/27/21 09:28:34
 #!-- Spider Control PPO CSV File version 5 since Jan 2016 utf8 support in editor and server and clients 
 #!-- Spider Control PPO CSV File version 6 since July2020 init ppo val col support in editor and server and clients 
 #!-- Start PPO INIT File
 #!-- VERSION = 6
 #!-- TYPE = 1
-#!-- TS = 60e86b11
-#!-- N = 2819
+#!-- TS = 60ffb5a2
+#!-- N = 2829
 EMPTY_VAR_NAME;EMPTY_VAR_NAME; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo105Z11@];PLC1.AXIS.bInPos[@CO_AxisNo105Z11@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Y01@];PLC1.AXIS.bInPos[@CO_AxisNo110Y01@]; ; ; ; ; ; ; ; ; ; ;
@@ -911,6 +911,7 @@ PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].button;PLC1.AXIS.btTeachArAxis[@CO
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].disable;PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].disable; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].error;PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].error; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].on;PLC1.AXIS.btTeachArAxis[@CO_AxisNo185Z10@][7].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.AXIS.rJogVelo_pc;PLC1.AXIS.rJogVelo_pc; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st105_aut._Mover._ID;PLC1.GVL.st105_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st105_aut.fb_Feeder.fb_axis105_10W.rOUT_ActPos;PLC1.GVL.st105_aut.fb_Feeder.fb_axis105_10W.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st105_aut.fb_Pnp.fb_axis105_11Z.rOUT_ActPos;PLC1.GVL.st105_aut.fb_Pnp.fb_axis105_11Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
@@ -932,10 +933,6 @@ PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gri
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_AS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_GS;PLC1.GVL.st115_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st120_aut._Mover._ID;PLC1.GVL.st120_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st120_aut.fb_Feeder.fb_hubladerLeft.xIN_AS;PLC1.GVL.st120_aut.fb_Feeder.fb_hubladerLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st120_aut.fb_Feeder.fb_hubladerLeft.xIN_GS;PLC1.GVL.st120_aut.fb_Feeder.fb_hubladerLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
@@ -953,16 +950,20 @@ PLC1.GVL.st120_aut.fb_Pnp.fb_gripperRight.xIN_AS;PLC1.GVL.st120_aut.fb_Pnp.fb_gr
 PLC1.GVL.st120_aut.fb_Pnp.fb_gripperRight.xIN_GS;PLC1.GVL.st120_aut.fb_Pnp.fb_gripperRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut._Mover._ID;PLC1.GVL.st125_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Feeder.fb_axis125_10W.rOUT_ActPos;PLC1.GVL.st125_aut.fb_Feeder.fb_axis125_10W.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrLeft.xIN_AS;PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrRight.xIN_AS;PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrRight.xIN_GS;PLC1.GVL.st125_aut.fb_Feeder.fb_handlingSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_axis125_01Y.rOUT_ActPos;PLC1.GVL.st125_aut.fb_Pnp.fb_axis125_01Y.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_axis125_02Z.rOUT_ActPos;PLC1.GVL.st125_aut.fb_Pnp.fb_axis125_02Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutRight.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutRight.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperFilterhutRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_gripperSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut._Mover._ID;PLC1.GVL.st130_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut.fb_Dose.fb_axis130_01Z.rOUT_ActPos;PLC1.GVL.st130_aut.fb_Dose.fb_axis130_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut.fb_Dose.fb_axis130_10Z.rOUT_ActPos;PLC1.GVL.st130_aut.fb_Dose.fb_axis130_10Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
@@ -995,11 +996,11 @@ PLC1.GVL.st155_aut._Mover._ID;PLC1.GVL.st155_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st155_aut.fb_Feeder.fb_moverMaintening.xIN_AS;PLC1.GVL.st155_aut.fb_Feeder.fb_moverMaintening.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st155_aut.fb_Feeder.fb_moverMaintening.xIN_GS;PLC1.GVL.st155_aut.fb_Feeder.fb_moverMaintening.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st160_aut._Mover._ID;PLC1.GVL.st160_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st160_aut.fb_Feeder.fb_niederhalterLeft.xIN_AS;PLC1.GVL.st160_aut.fb_Feeder.fb_niederhalterLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st160_aut.fb_Feeder.fb_niederhalterLeft.xIN_GS;PLC1.GVL.st160_aut.fb_Feeder.fb_niederhalterLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st160_aut.fb_Feeder.fb_niederhalterRight.xIN_AS;PLC1.GVL.st160_aut.fb_Feeder.fb_niederhalterRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st160_aut.fb_Feeder.fb_niederhalterRight.xIN_GS;PLC1.GVL.st160_aut.fb_Feeder.fb_niederhalterRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st160_aut.fb_Pnp.fb_axis160_01Z.rOUT_ActPos;PLC1.GVL.st160_aut.fb_Pnp.fb_axis160_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st160_aut.fb_ABL_CETA.fb_axis160_01Z.rOUT_ActPos;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_axis160_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningLeft.xIN_AS;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningLeft.xIN_GS;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningRight.xIN_AS;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningRight.xIN_GS;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st165_aut._Mover._ID;PLC1.GVL.st165_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterLeft.xIN_AS;PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterLeft.xIN_GS;PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
@@ -1007,15 +1008,15 @@ PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterRight.xIN_AS;PLC1.GVL.st165_aut.fb_F
 PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterRight.xIN_GS;PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st165_aut.fb_Pnp.fb_axis165_01Z.rOUT_ActPos;PLC1.GVL.st165_aut.fb_Pnp.fb_axis165_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st170_aut._Mover._ID;PLC1.GVL.st170_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st170_aut.fb_Pnp.fb_axis170_01Z.rOUT_ActPos;PLC1.GVL.st170_aut.fb_Pnp.fb_axis170_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st170_aut.fb_ABL_RFID.fb_axis170_01Z.rOUT_ActPos;PLC1.GVL.st170_aut.fb_ABL_RFID.fb_axis170_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st174_aut._Mover._ID;PLC1.GVL.st174_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st175_aut._Mover._ID;PLC1.GVL.st175_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st175_aut.fb_laser.fb_cabineIn.xIN_AS;PLC1.GVL.st175_aut.fb_laser.fb_cabineIn.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st175_aut.fb_laser.fb_cabineIn.xIN_GS;PLC1.GVL.st175_aut.fb_laser.fb_cabineIn.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st175_aut.fb_laser.fb_cabineOut.xIN_AS;PLC1.GVL.st175_aut.fb_laser.fb_cabineOut.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st175_aut.fb_laser.fb_cabineOut.xIN_GS;PLC1.GVL.st175_aut.fb_laser.fb_cabineOut.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st175_aut.fb_laser.fb_niederhalter.xIN_AS;PLC1.GVL.st175_aut.fb_laser.fb_niederhalter.xIN_AS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st175_aut.fb_laser.fb_niederhalter.xIN_GS;PLC1.GVL.st175_aut.fb_laser.fb_niederhalter.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st175_aut.fb_doorEntry.fb_handling.xIN_AS;PLC1.GVL.st175_aut.fb_doorEntry.fb_handling.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st175_aut.fb_doorEntry.fb_handling.xIN_GS;PLC1.GVL.st175_aut.fb_doorEntry.fb_handling.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st175_aut.fb_doorExit.fb_handling.xIN_AS;PLC1.GVL.st175_aut.fb_doorExit.fb_handling.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st175_aut.fb_doorExit.fb_handling.xIN_GS;PLC1.GVL.st175_aut.fb_doorExit.fb_handling.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st175_aut.fb_laser.fb_handling.xIN_AS;PLC1.GVL.st175_aut.fb_laser.fb_handling.xIN_AS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st175_aut.fb_laser.fb_handling.xIN_GS;PLC1.GVL.st175_aut.fb_laser.fb_handling.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st180_aut._Mover._ID;PLC1.GVL.st180_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st180_aut.fb_Pnp.fb_axis180_01Y.rOUT_ActPos;PLC1.GVL.st180_aut.fb_Pnp.fb_axis180_01Y.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st180_aut.fb_Pnp.fb_axis180_02Z.rOUT_ActPos;PLC1.GVL.st180_aut.fb_Pnp.fb_axis180_02Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
@@ -1040,6 +1041,7 @@ PLC1.GVL.st185_aut.fb_Pnp.fb_gripperLeft.xIN_AS;PLC1.GVL.st185_aut.fb_Pnp.fb_gri
 PLC1.GVL.st185_aut.fb_Pnp.fb_gripperLeft.xIN_GS;PLC1.GVL.st185_aut.fb_Pnp.fb_gripperLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st185_aut.fb_Pnp.fb_gripperRight.xIN_AS;PLC1.GVL.st185_aut.fb_Pnp.fb_gripperRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st185_aut.fb_Pnp.fb_gripperRight.xIN_GS;PLC1.GVL.st185_aut.fb_Pnp.fb_gripperRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.HMI.PieceDoneTmp;PLC1.HMI.PieceDoneTmp; ; ;int; ; ; ; ; ; ; ;
 PLC1.HMI._FB_Keba.s_in;PLC1.HMI._FB_Keba.s_in; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btArMain[0].button;PLC1.HMI.btArMain[0].button; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btArMain[0].disable;PLC1.HMI.btArMain[0].disable; ; ; ; ; ; ; ; ; ; ;
@@ -1093,6 +1095,10 @@ PLC1.HMI.btArMain[7].button;PLC1.HMI.btArMain[7].button; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btArMain[7].disable;PLC1.HMI.btArMain[7].disable; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btArMain[7].error;PLC1.HMI.btArMain[7].error; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btArMain[7].on;PLC1.HMI.btArMain[7].on; ; ; ; ; ; ; ; ; ; ;
+PLC1.HMI.btArMain[8].button;PLC1.HMI.btArMain[8].button; ; ; ; ; ; ; ; ; ; ;
+PLC1.HMI.btArMain[8].disable;PLC1.HMI.btArMain[8].disable; ; ; ; ; ; ; ; ; ; ;
+PLC1.HMI.btArMain[8].error;PLC1.HMI.btArMain[8].error; ; ; ; ; ; ; ; ; ; ;
+PLC1.HMI.btArMain[8].on;PLC1.HMI.btArMain[8].on; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btManuCylinders[@CO_StatNo110@][1].button;PLC1.HMI.btManuCylinders[@CO_StatNo110@][1].button; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btManuCylinders[@CO_StatNo110@][1].disable;PLC1.HMI.btManuCylinders[@CO_StatNo110@][1].disable; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btManuCylinders[@CO_StatNo110@][1].error;PLC1.HMI.btManuCylinders[@CO_StatNo110@][1].error; ; ; ; ; ; ; ; ; ; ;
@@ -1419,6 +1425,7 @@ PLC1.HMI.btManuCylinders[@CO_StatNoXXX@][7].error;PLC1.HMI.btManuCylinders[@CO_S
 PLC1.HMI.btManuCylinders[@CO_StatNoXXX@][7].on;PLC1.HMI.btManuCylinders[@CO_StatNoXXX@][7].on; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.enState;PLC1.HMI.enState; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.iSelectJogAxis;PLC1.HMI.iSelectJogAxis; ; ; ; ; ; ; ; ; ; ;
+PLC1.HMI.lrPiecePerMinute;PLC1.HMI.lrPiecePerMinute; ; ;double; ; ; ; ; ; ; ;
 PLC1.HMI.sCurrentHMI1;PLC1.HMI.sCurrentHMI1; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.sCurrentHMI2;PLC1.HMI.sCurrentHMI2; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.xArAlarmHMI[100];PLC1.HMI.xArAlarmHMI[100]; ; ; ; ; ; ; ; ; ; ;
@@ -2661,6 +2668,8 @@ PLC1.PERS.udiTempNOK;PLC1.PERS.udiTempNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTempOK;PLC1.PERS.udiTempOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalNOK;PLC1.PERS.udiTotalNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalOK;PLC1.PERS.udiTotalOK; ; ; ; ; ; ; ; ; ; ;
+PLC1._10_HMI._key_keba_1.s_in;PLC1._10_HMI._key_keba_1.s_in; ; ; ; ; ; ; ; ; ; ;
+PLC1._10_HMI._key_keba_2.s_in;PLC1._10_HMI._key_keba_2.s_in; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toGS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toGS_wait_time; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo110@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo110@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;
@@ -2780,6 +2789,7 @@ PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo125Z02@].movesList[3].lrPosition;PL
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo125Z02@].movesList[4].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo125Z02@].movesList[4].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo125Z02@].movesList[5].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo125Z02@].movesList[5].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo130Z01@].movesList[0].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo130Z01@].movesList[0].lrPosition; ; ; ; ; ; ; ; ; ; ;
+PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo130Z01@].movesList[1].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo130Z01@].movesList[1].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo130Z10@].movesList[0].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo130Z10@].movesList[0].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo130Z10@].movesList[1].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo130Z10@].movesList[1].lrPosition; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo135Z01@].movesList[0].lrPosition;PLC1._20_AUTO.recipe.linearAxis[@CO_LinAxisNo135Z01@].movesList[0].lrPosition; ; ; ; ; ; ; ; ; ; ;

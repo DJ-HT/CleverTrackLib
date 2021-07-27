@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_Res_Data_t" Id="{29331152-f08d-4625-9af1-892c23c15a75}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE CETA_Res_Data_t :
+STRUCT
+    Data  : INT;
+    Unit  : CETA_Unit_e;
+    Digit : USINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

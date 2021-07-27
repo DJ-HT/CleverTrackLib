@@ -80,7 +80,7 @@ PERS.recipeList[0].linearAxis[LinearAxis_e.ST125_02Z].movesList[5].lrPosition :=
 // ST130
 PERS.recipeList[0].linearAxis[LinearAxis_e.ST130_01Z].movesList[0].lrPosition := 10;
 PERS.recipeList[0].linearAxis[LinearAxis_e.ST130_01Z].movesList[1].lrPosition := 260;
-                                              
+
 PERS.recipeList[0].linearAxis[LinearAxis_e.ST130_10Z].movesList[0].lrPosition := 10;
 PERS.recipeList[0].linearAxis[LinearAxis_e.ST130_10Z].movesList[1].lrPosition := 50;
 
@@ -187,9 +187,11 @@ PERS.recipeList[0].st130.diLoadPatrone_ms  := 3000;
 PERS.recipeList[0].st130.uiVibroUnderneath := 30;
 
 // recipe ST140
-PERS.recipeList[0].st140.rMaxHeightSensor   := 10;
-PERS.recipeList[0].st140.rMinHeightSensor   := 20;
-PERS.recipeList[0].st140.xIsTypeMiniOrSmart := TRUE;
+PERS.recipeList[0].st140.rMaxHeightSensorLeft  := 15;
+PERS.recipeList[0].st140.rMinHeightSensorLeft  := 25;
+PERS.recipeList[0].st140.rMaxHeightSensorRight := 15;
+PERS.recipeList[0].st140.rMinHeightSensorRight := 25;
+PERS.recipeList[0].st140.xIsTypeMiniOrSmart    := TRUE;
 
 // recipe ST145
 PERS.recipeList[0].st145.FeederConfig.InFilterDelay := 3000;

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST128_Recipe_t" Id="{cfff7e9c-b0c5-46d0-a0ff-b42f6b2382b6}">
+    <Declaration><![CDATA[TYPE ST128_Recipe_t :
+STRUCT
+    xIsTypeMiniOrSmart    : BOOL; // do we have 2 pieces (smart and mini) or just one (others)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

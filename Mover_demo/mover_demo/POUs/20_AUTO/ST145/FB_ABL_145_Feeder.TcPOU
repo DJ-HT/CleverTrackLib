@@ -164,7 +164,7 @@ simu_axis145_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis145_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST145_10W]),
-               xIN_DisButtons := ,
+               xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE,
                xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
@@ -183,10 +183,10 @@ fb_axis145_10W(enIN_State     := enIN_State,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
                rIN_Position     :=, // Is set above
-               rIN_Velocity     := TO_REAL(720.0),
-               rIN_Acceleration := TO_REAL(7200.0),
-               rIN_Deceleration := TO_REAL(7200.0),
-               rIN_Jerk         := TO_REAL(720000.0),
+               rIN_Velocity     := TO_REAL(100.0),
+               rIN_Acceleration := TO_REAL(720.0),
+               rIN_Deceleration := TO_REAL(720.0),
+               rIN_Jerk         := TO_REAL(7200.0),
                xIN_Home         := ST145_feeder_e.Init_home_table = iOUT_Step,
                xIN_Reset        := xIN_Reset OR ST145_feeder_e.RESET = iOUT_Step,
                // The simu fb gives us the hardware signal when we are not in simulation
@@ -221,7 +221,10 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 xOUT_Wait := (iOUT_Step = ST145_Feeder_e.DONE);
 
 // TODO add simulation constant to prevent the output to be set
-IO_BOX.Q2402_ST145_reigabe_wf   := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q2402_ST145_reigabe_wf := fb_feeder.xOUT_EnableFeeder AND
+                                 NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
+                                 (NOT IO_BOX.I2401_ST145_maximum_wf);
+
 IO_BOX.Q2400_ST145_freigabe_REO := ((iOUT_Step = ST145_Feeder_e.wait_on_a_piece) OR IO_BOX.Q2402_ST145_reigabe_wf) AND
                                    NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
@@ -292,7 +295,7 @@ ST145_Feeder_e.Init_table_go_to_zero:
 ST145_Feeder_e.Init_reset_search_index:
     iSearchIndex := 0;
     fifo.Empty();
-    iOUT_Step := ST145_Feeder_e.Init_set_table_pos;
+    iOUT_Step := ST145_Feeder_e.READY; // Bypass search algorithm, unusful
 
 ST145_Feeder_e.Init_set_table_pos:
     IF fb_axis145_10W.xOUT_DONE THEN

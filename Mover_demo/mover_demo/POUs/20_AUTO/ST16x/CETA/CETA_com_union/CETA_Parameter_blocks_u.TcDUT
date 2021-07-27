@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_Parameter_blocks_u" Id="{c5159aa2-8c7a-4448-84a3-ae6422944b75}">
+    <Declaration><![CDATA[TYPE CETA_Parameter_blocks_u :
+UNION
+	as_struct : CETA_Parameter_blocks_t;
+	as_2d_array : ARRAY[0..16#1F] OF ARRAY[0..59] OF BYTE;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

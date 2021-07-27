@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_AUT_170" Id="{b44c4edd-e8fa-4b1a-a291-1430c99cf0c2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_170 EXTENDS FB_AUT_ABSTRACT
+(****************************************************************************)
+(*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
+(*	Status				ungetestet											*)
+(*  Version:			1.0													*)
+(*	Beschrieb:																*)
+(*																			*)
+(*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
+(*																			*)
+(*																			*)
+(* 	25.09.2019/Dj															*)
+(****************************************************************************)
+(*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
+(****************************************************************************)
+VAR_INPUT
+    (* spezifische Eingänge *)
+
+END_VAR
+VAR_OUTPUT
+    (* spezifische Ausgänge *)
+
+END_VAR
+VAR
+    (* Bausteine *)
+    fb_ABL_RFID : FB_ABL_170;
+
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+
+(*******************************************************************)
+(* Flanken / Merker *)
+(*******************************************************************)
+//MANU CYCLE
+IF (enIN_State = StateMANU) AND xIN_ManuCycle THEN
+    xManuCycle := TRUE;
+END_IF;
+
+IF (enIN_State <> StateMANU) OR xOUT_Done THEN
+    xManuCycle := FALSE;
+END_IF
+
+//NEXT STEP
+xNextStep := (enIN_State > StateSTEP) OR
+             ((enIN_State = StateSTEP) AND xIN_Step) OR
+             ((enIN_State = StateMANU) AND xManuCycle);
+
+//RESET
+xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
+
+(*******************************************************************)
+(* Bausteinaufrufe Abläufe *)
+(*******************************************************************)
+fb_ABL_RFID(xIN_Reset       := xReset,
+            xIN_Init        := xIN_Init,
+            xIN_Quit        := xIN_Quit,
+            xIN_Start       := enIN_State = enState.StateAUTO,
+            xIN_Sperre      := NOT xIN_On,
+            xIN_NextStep    := xNextStep,
+            xIN_AlarmAktiv  := xIN_AlarmAktiv,
+            xIN_DryCycle    := xIN_DryCycle,
+            xIN_RestartCYCL := enIN_State = enState.StateAUTO,
+            enIN_State      := enIN_State,
+            tIN_Timeout     := tIN_Timeout,
+            pxFG_Freigabe   := ADR(xDummy),
+            // CleverTrackLib
+            Mover := THIS^.Mover);
+
+(*******************************************************************)
+(* Mover reset flags *)
+(*******************************************************************)
+
+(*******************************************************************)
+(* OUTPUT *)
+(*******************************************************************)
+xOUT_InitDone := fb_ABL_RFID.xOUT_InitDone;
+xOUT_Ready    := fb_ABL_RFID.xOUT_Ready;
+xOUT_Done     := fb_ABL_RFID.xOUT_Done;
+xOUT_ErrFlag  := fb_ABL_RFID.xOUT_ErrFlag;
+xOUT_Wait     := fb_ABL_RFID.xOUT_Wait;
+xOUT_AlarmST  := xOUT_ErrFlag;
+
+(*******************************************************************)
+(* Bausteinaufruf Error Station *)
+(*******************************************************************)
+// POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
+]]></ST>
+    </Implementation>
+    <Property Name="iCompletionPC" Id="{a4b3240e-f2c7-43ea-921a-08c38885bfee}">
+      <Declaration><![CDATA[(* % of completion of the process *)
+PROPERTY iCompletionPC : INT
+]]></Declaration>
+      <Get Name="Get" Id="{b130b544-15d3-474c-870f-41e93d63803c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iCompletionPC := THIS^.fb_ABL_RFID.iOUT_ProcessCompletion;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ProcessExecution" Id="{2cc123ee-165c-46a7-aa2f-1bcb46c0279b}">
+      <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
+      <Get Name="Get" Id="{5ffa0c9b-5005-4efe-bd47-13df28235f77}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ProcessExecution := THIS^._ProcessExecution;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{6738ef2f-af40-4ae5-9a25-7440e7aa7fa6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._ProcessExecution := ProcessExecution;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xBusy" Id="{f4f37dc0-1298-4de3-8319-f93ab071a10c}">
+      <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{61c839a0-df50-4e0d-95f1-275130dc3d0c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xBusy := THIS^.fb_ABL_RFID.xOUT_Busy;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{bfda9d32-1c40-42ec-819c-e256d28633c5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xDone" Id="{152ca47c-d9f2-4880-ba58-619806ea1446}">
+      <Declaration><![CDATA[PROPERTY xDone : BOOL]]></Declaration>
+      <Get Name="Get" Id="{63c894c6-e7ab-4418-8107-ccdbd8fdeebb}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xDone := THIS^.fb_ABL_RFID.xOUT_Ready OR THIS^.fb_ABL_RFID.xOUT_Done;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="xMoverPathFree" Id="{23c8f82d-b4ff-4c93-b0d3-5bcb90a66ecf}">
+      <Declaration><![CDATA[PROPERTY xMoverPathFree : BOOL]]></Declaration>
+      <Get Name="Get" Id="{61a9ea44-8269-47cc-a426-c8e4a834c200}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverPathFree := THIS^.fb_ABL_RFID.xOUT_MoverFree OR THIS^.fb_ABL_RFID.xOUT_Ready OR THIS^.fb_ABL_RFID.xOUT_Done;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="xMoverShouldLeave" Id="{8c4c6edd-e120-4f22-8d2f-0f82840525f0}">
+      <Declaration><![CDATA[PROPERTY xMoverShouldLeave : BOOL]]></Declaration>
+      <Get Name="Get" Id="{484bd483-4b23-4f68-b62d-cbbafad90cce}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_ABL_RFID.iOUT_Step = ST170_RFID_e.SYNC_MOVER_LEAVE;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

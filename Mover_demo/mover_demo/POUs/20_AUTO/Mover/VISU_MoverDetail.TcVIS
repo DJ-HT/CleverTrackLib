@@ -3026,10 +3026,10 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                                 <v>TL_ElementProperties.Points</v>
                                 <v>DescriptionUseFromParent</v>
                                 <v></v>
-                                <v>''NORMAL__COMMENT</v>
-                                <v> There is no more information than the parent provides</v>
                                 <v>DefaultArraySize</v>
                                 <v>500</v>
+                                <v>''NORMAL__COMMENT</v>
+                                <v> There is no more information than the parent provides</v>
                               </d>
                               <v n="ConvDone">true</v>
                             </o>
@@ -3082,6 +3082,8 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                         <o n="TypeNodeAttributes" t="TypeNodeAttributes2">
                           <v n="AttrFlags">81920UL</v>
                           <d n="TypeNodeAttributesData" t="CaseInsensitiveHashtable" ckt="String" cvt="String">
+                            <v>PolygonPoints</v>
+                            <v></v>
                             <v>DescriptionTextId</v>
                             <v>TL_ElementProperties.Desc_StaticLinePos</v>
                             <v>DisplayTextId</v>
@@ -3098,8 +3100,6 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                             <v>visu_elemdev</v>
                             <v>Storable</v>
                             <v>True</v>
-                            <v>PolygonPoints</v>
-                            <v></v>
                           </d>
                           <v n="ConvDone">true</v>
                         </o>
@@ -4945,7 +4945,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[0]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST105]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5125,7 +5125,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[1]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST110]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5305,7 +5305,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[2]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST115]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5485,7 +5485,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[3]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST120]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5665,7 +5665,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[4]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST125]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -5845,7 +5845,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[5]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST130]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6025,7 +6025,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[6]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST135]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6205,7 +6205,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[7]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST140]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6385,7 +6385,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[8]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST145]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6565,7 +6565,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[9]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST150]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -6874,7 +6874,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[10]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST155]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7054,7 +7054,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[17]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST185]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7234,7 +7234,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[16]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST180]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7414,7 +7414,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[15]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST176]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7594,7 +7594,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[14]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST175]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7774,7 +7774,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[13]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST170]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -7954,7 +7954,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[12]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST165]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -8134,7 +8134,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                     </o>
                     <o>
                       <v n="Id">2477733581L</v>
-                      <v n="Value">"_20_AUTO.recipe.stationOffsets[11]"</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST160]  "</v>
                     </o>
                     <o>
                       <v n="Id">823443203L</v>
@@ -17909,6 +17909,355 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
                 <v n="VisualElementId">320</v>
                 <l n="UserManagementAccessRights" t="ArrayList" />
               </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-2830136</v>
+                          <v n="CanonicalName">"Element-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-1</v>
+                          <v n="CanonicalName">"Element-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-65536</v>
+                          <v n="CanonicalName">"Element-Alarm-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-12337</v>
+                          <v n="CanonicalName">"Element-Alarm-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"HCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"&lt;toggle/tap variable&gt;"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value">9</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value">672</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value">80</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleFont">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="CanonicalName">"Font-Standard"</v>
+                          <v n="FontName">"Arial"</v>
+                          <v n="FontSize">12</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-16777216</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">1337389588L</v>
+                      <v n="Value">"FROM_STYLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value">1U</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"%.3f"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2477733581L</v>
+                      <v n="Value">"_20_AUTO.recipe.stationOffsets[StationList_e.ST128]  "</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"1316"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Textfield"</v>
+                <v n="VisualElementTypeName">"VisuFbElemTextfield"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_321"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" ckt="String" cvt="InputBoxInputAction[]">
+                  <v>OnMouseDown</v>
+                  <a cet="InputBoxInputAction">
+                    <o>
+                      <v n="InputBoxVariable">""</v>
+                      <v n="InputType">"Default"</v>
+                      <v n="InputBoxMin">""</v>
+                      <v n="InputBoxMax">""</v>
+                      <v n="InputBoxDialogTitle">""</v>
+                      <v n="Password">false</v>
+                      <v n="UseTextOutputVariable">true</v>
+                      <v n="TextOutputVariableInitialized">true</v>
+                      <v n="OtherVarConversion">""</v>
+                      <v n="Format">""</v>
+                      <v n="DialogPosition" t="DialogPositionSetting">UseGlobalSetting</v>
+                      <v n="DialogXPos">""</v>
+                      <v n="DialogYPos">""</v>
+                    </o>
+                  </a>
+                </d>
+                <v n="VisualElementIdentification">{bb73132b-8ac7-44ee-b331-6d9bedaf799e}</v>
+                <v n="VisualElementOwningObjectGuid">{3c60e503-48c2-4a6b-81a1-aaecffae9186}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">323</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
+              <o>
+                <a n="ConfiguredComplexInputs" et="ComplexInput" />
+                <l n="Elements" t="ArrayList" />
+                <n n="VisualElementDescription" />
+                <o n="VisualElemMemberList" t="VisualElemMemberList">
+                  <l n="VisualElemMemberList" t="VisualElemMemberCollection" cet="VisualElemMember">
+                    <o>
+                      <v n="Id">571893170L</v>
+                      <v n="Value">""</v>
+                    </o>
+                    <o>
+                      <v n="Id">494569607L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-16777216</v>
+                          <v n="CanonicalName">"BasicElement-Frame-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2812299069L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-1</v>
+                          <v n="CanonicalName">"BasicElement-Fill-Color"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">135947015L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-16777216</v>
+                          <v n="CanonicalName">"Black"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">493260384L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleColor">
+                        <o>
+                          <v n="Color">-256</v>
+                          <v n="CanonicalName">"Yellow"</v>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">2340015797L</v>
+                      <v n="Value">"HCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">2565699834L</v>
+                      <v n="Value">"VCENTER"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4134387352L</v>
+                      <v n="Value">"NONE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1603690730L</v>
+                      <v n="Value">"Arial"</v>
+                    </o>
+                    <o>
+                      <v n="Id">4253639993L</v>
+                      <v n="Value" t="Int16">12</v>
+                    </o>
+                    <o>
+                      <v n="Id">2729990903L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1213979116L</v>
+                      <v n="Value">0U</v>
+                    </o>
+                    <o>
+                      <v n="Id">3488306084L</v>
+                      <v n="Value">4278190080U</v>
+                    </o>
+                    <o>
+                      <v n="Id">1999528970L</v>
+                      <v n="Value">"NOT GVL.st125_aut.xMoverPathFree"</v>
+                    </o>
+                    <o>
+                      <v n="Id">3719097617L</v>
+                      <v n="Value">0</v>
+                    </o>
+                    <o>
+                      <v n="Id">1649127785L</v>
+                      <v n="Value" t="Int16">99</v>
+                    </o>
+                    <o>
+                      <v n="Id">357335551L</v>
+                      <v n="Value" t="Int16">673</v>
+                    </o>
+                    <o>
+                      <v n="Id">2422045748L</v>
+                      <v n="Value" t="Int16">60</v>
+                    </o>
+                    <o>
+                      <v n="Id">2134141914L</v>
+                      <v n="Value" t="Int16">20</v>
+                    </o>
+                    <o>
+                      <v n="Id">3729828405L</v>
+                      <l n="Value" t="ArrayList" cet="NamedStyleFont">
+                        <o>
+                          <v n="FontStyle">0</v>
+                          <v n="AdditionalFontStyle" t="UInt16">0</v>
+                          <v n="ExplicitColor">-16777216</v>
+                          <v n="CanonicalName">"Font-Standard"</v>
+                          <v n="FontName">"Arial"</v>
+                          <v n="FontSize">12</v>
+                          <v n="ScriptIdentification">0</v>
+                          <v n="DoubleFontSize" t="Double">0</v>
+                          <o n="NamedColor" t="NamedStyleColor">
+                            <v n="Color">-16777216</v>
+                            <v n="CanonicalName">"Font-Default-Color"</v>
+                          </o>
+                        </o>
+                      </l>
+                    </o>
+                    <o>
+                      <v n="Id">550940142L</v>
+                      <v n="Value">179</v>
+                    </o>
+                    <o>
+                      <v n="Id">1473355128L</v>
+                      <v n="Value">690</v>
+                    </o>
+                    <o>
+                      <v n="Id">2678395525L</v>
+                      <v n="Value">1U</v>
+                    </o>
+                    <o>
+                      <v n="Id">564465120L</v>
+                      <v n="Value">"VISU_ST_RECTANGLE"</v>
+                    </o>
+                    <o>
+                      <v n="Id">390574330L</v>
+                      <v n="Value">"ST128"</v>
+                    </o>
+                    <o>
+                      <v n="Id">1375557818L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">2597686782L</v>
+                      <v n="Value">false</v>
+                    </o>
+                    <o>
+                      <v n="Id">823443203L</v>
+                      <v n="Value">"810"</v>
+                    </o>
+                  </l>
+                </o>
+                <v n="VisualElementName">"Rectangle"</v>
+                <v n="VisualElementTypeName">"VisuFbElemSimple"</v>
+                <v n="VisualElementIsRectangle">true</v>
+                <v n="VisualElementIdentifier">"GenElemInst_323"</v>
+                <n n="VisualElementOfflinePaintCommands" />
+                <n n="VisualElementFrameInformation" />
+                <d n="VisualElementInputActions" t="Hashtable" />
+                <v n="VisualElementIdentification">{f8095cfc-7dfa-49f2-a416-892fe3b43888}</v>
+                <v n="VisualElementOwningObjectGuid">{3c60e503-48c2-4a6b-81a1-aaecffae9186}</v>
+                <a n="LMGuids" et="Guid" />
+                <d n="SubElements" t="Hashtable" />
+                <v n="VisualElementId">325</v>
+                <l n="UserManagementAccessRights" t="ArrayList" />
+              </o>
             </l>
             <v n="BackgroundBitmapId">""</v>
             <v n="BackgroundColor">16777215</v>
@@ -18058,7 +18407,7 @@ MAIN.MoverMan.SetAllTimers(ADR(PERS.iStationTimeDef2), 500);"</v>
             </o>
             <v n="DialogDut">{322b7bdc-9641-4e49-847d-1fdead0e90ef}</v>
           </o>
-          <v n="LastUsedIdForIdentifier">319</v>
+          <v n="LastUsedIdForIdentifier">323</v>
           <o n="TextDocument" t="TextDocument">
             <a n="TextLines" cet="TextLine">
               <o>
