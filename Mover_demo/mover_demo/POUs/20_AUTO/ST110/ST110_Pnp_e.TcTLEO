@@ -20,20 +20,21 @@ ST110_Pnp_e :
     START := 1000,      // Start Zyklisch
     MOVER_FREE_OP,      // Ab here, operation without mover can be done
 
-	PnP_Hor_ToRotTablePos,
-	PnP_WaitOnFeeder,
-	PnP_Ver_RotTableDown,
-	Vacum_on,
-	PnP_Ver_RotTableUp,
-	PnP_Hor_ToTrackPos,
-    waitOnMover,        // wait until the mover is there
+	PnP_Hor_ToRotTablePos := 1010,
+	PnP_WaitOnFeeder := 1020,
+	PnP_Ver_RotTableDown := 1030,
+	Vacum_on := 1040,
+	PnP_Ver_RotTableUp := 1050,
+	PnP_Hor_ToTrackPos := 1060,
+    waitOnMover := 1070,        // wait until the mover is there
     MOVER_NEEDED_OP,    // Since here, a mover in position is needed to perform the action
 
-	PnP_Ver_ShuttleDown,
-	PnP_Ver_ShuttleTorqueControl,
-	PnP_Ver_quick_stop,
-	Vacum_off,
-	PnP_Ver_ShuttleUp,
+	Pnp_Handling_pin_up := 1210,
+	PnP_Ver_ShuttleDown := 1220,
+	PnP_Ver_ShuttleTorqueControl := 1230,
+	PnP_Ver_quick_stop := 1240,
+	Vacum_off := 1250,
+	PnP_Ver_ShuttleUp := 1260,
 	
     SYNC_MOVER_LEAVE,   // MoverMan need to take the mover
     DONE := 8000,       // Ablauf beendet 
@@ -98,37 +99,37 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"PnP_Hor_ToRotTablePos"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1010"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"PnP_WaitOnFeeder"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1020"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"PnP_Ver_RotTableDown"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1030"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Vacum_on"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1040"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"PnP_Ver_RotTableUp"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1050"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"PnP_Hor_ToTrackPos"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1060"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"waitOnMover"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1070"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -137,28 +138,33 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"Pnp_Handling_pin_up"</v>
+              <v n="TextDefault">"1210"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"PnP_Ver_ShuttleDown"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1220"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"PnP_Ver_ShuttleTorqueControl"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1230"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"PnP_Ver_quick_stop"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1240"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Vacum_off"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1250"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"PnP_Ver_ShuttleUp"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1260"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

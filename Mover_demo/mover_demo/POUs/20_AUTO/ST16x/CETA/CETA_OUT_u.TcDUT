@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_OUT_u" Id="{a03ec92a-9a3a-4294-8308-1a3307d09b82}">
+    <Declaration><![CDATA[TYPE CETA_OUT_u :
+UNION
+    bits : CETA_OUT_bits_t;
+    raw  : UINT;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

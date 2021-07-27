@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Keba_key" Id="{177113b3-3990-4d18-a202-04569fe1b3cc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Keba_key
+VAR_INPUT
+	s_in	: STRING(20);	// must be linked to @MB_FKEY_EVENT
+END_VAR
+VAR_OUTPUT
+	F1			: structButton;
+	F2			: structButton;
+	F3			: structButton;
+	F4			: structButton;
+	F5			: structButton;
+	F6			: structButton;
+	F7			: structButton;
+	F8			: structButton;
+	F9			: structButton;
+	F10			: structButton;
+	F11			: structButton;
+	F12			: structButton;
+	START		: structButton;
+	STOP		: structButton;
+	ESC			: structButton;
+	ALARM		: structButton;
+	HELP		: structButton;
+	SECOND		: structButton;
+	ENTER		: structButton;
+	MENU		: structButton;
+END_VAR
+VAR
+	fb_btn_F1			: FB_BUTTON;
+    fb_btn_F2			: FB_BUTTON;
+    fb_btn_F3			: FB_BUTTON;
+    fb_btn_F4			: FB_BUTTON;
+    fb_btn_F5			: FB_BUTTON;
+    fb_btn_F6			: FB_BUTTON;
+    fb_btn_F7			: FB_BUTTON;
+    fb_btn_F8			: FB_BUTTON;
+    fb_btn_F9			: FB_BUTTON;
+    fb_btn_F10			: FB_BUTTON;
+    fb_btn_F11			: FB_BUTTON;
+    fb_btn_F12			: FB_BUTTON;
+    fb_btn_START		: FB_BUTTON;
+    fb_btn_STOP		    : FB_BUTTON;
+    fb_btn_ESC			: FB_BUTTON;
+    fb_btn_ALARM		: FB_BUTTON;
+    fb_btn_HELP		    : FB_BUTTON;
+    fb_btn_SECOND		: FB_BUTTON;
+    fb_btn_ENTER		: FB_BUTTON;
+    fb_btn_MENU		    : FB_BUTTON;
+END_VAR
+
+VAR CONSTANT                           
+	KEY1	: STRING :=	'FKEY_1';
+	KEY2	: STRING := 'FKEY_2';
+	KEY3	: STRING := 'FKEY_3';
+	KEY4	: STRING := 'FKEY_4';
+	KEY5	: STRING := 'FKEY_5';
+	KEY6	: STRING := 'FKEY_6';
+	KEY7	: STRING := 'FKEY_7';
+	KEY8	: STRING := 'FKEY_8';
+	KEY9	: STRING := 'FKEY_9';
+	KEY10	: STRING := 'FKEY_10';
+	KEY11	: STRING := 'FKEY_11';
+	KEY12	: STRING := 'FKEY_12';
+	KEY13	: STRING := 'CTRL-FKEY_1';
+	KEY14	: STRING := 'CTRL-FKEY_2';
+	KEY15	: STRING := 'CTRL-FKEY_3';
+	KEY16	: STRING := 'CTRL-FKEY_4';
+	KEY17	: STRING := 'CTRL-FKEY_5';
+	KEY18	: STRING := 'CTRL-FKEY_6';
+	KEY19	: STRING := 'CTRL-FKEY_7';
+    KEY20	: STRING := 'CTRL-FKEY_8';
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[F1			.button := 0=memcmp(ADR(s_in), ADR(KEY1 ), 	TO_UDINT(LEN(KEY1 )+1));
+F2			.button := 0=memcmp(ADR(s_in), ADR(KEY2 ), 	TO_UDINT(LEN(KEY2 )+1));
+F3			.button := 0=memcmp(ADR(s_in), ADR(KEY3 ), 	TO_UDINT(LEN(KEY3 )+1));
+F4			.button := 0=memcmp(ADR(s_in), ADR(KEY4 ), 	TO_UDINT(LEN(KEY4 )+1));
+F5			.button := 0=memcmp(ADR(s_in), ADR(KEY5 ), 	TO_UDINT(LEN(KEY5 )+1));
+F6			.button := 0=memcmp(ADR(s_in), ADR(KEY6 ), 	TO_UDINT(LEN(KEY6 )+1));
+F7			.button := 0=memcmp(ADR(s_in), ADR(KEY7 ), 	TO_UDINT(LEN(KEY7 )+1));
+F8			.button := 0=memcmp(ADR(s_in), ADR(KEY8 ), 	TO_UDINT(LEN(KEY8 )+1));
+F9			.button := 0=memcmp(ADR(s_in), ADR(KEY9 ), 	TO_UDINT(LEN(KEY9 )+1));
+F10			.button := 0=memcmp(ADR(s_in), ADR(KEY10),	TO_UDINT(LEN(KEY10)+1));
+F11			.button := 0=memcmp(ADR(s_in), ADR(KEY11),	TO_UDINT(LEN(KEY11)+1));
+F12			.button := 0=memcmp(ADR(s_in), ADR(KEY12),	TO_UDINT(LEN(KEY12)+1));
+START		.button := 0=memcmp(ADR(s_in), ADR(KEY13),	TO_UDINT(LEN(KEY13)+1));
+STOP		.button := 0=memcmp(ADR(s_in), ADR(KEY14),	TO_UDINT(LEN(KEY14)+1));
+ESC			.button := 0=memcmp(ADR(s_in), ADR(KEY15),	TO_UDINT(LEN(KEY15)+1));
+ALARM		.button := 0=memcmp(ADR(s_in), ADR(KEY16),	TO_UDINT(LEN(KEY16)+1));
+HELP		.button := 0=memcmp(ADR(s_in), ADR(KEY17),	TO_UDINT(LEN(KEY17)+1));
+SECOND		.button := 0=memcmp(ADR(s_in), ADR(KEY18),	TO_UDINT(LEN(KEY18)+1));
+ENTER		.button := 0=memcmp(ADR(s_in), ADR(KEY19),	TO_UDINT(LEN(KEY19)+1));
+MENU		.button := 0=memcmp(ADR(s_in), ADR(KEY20),	TO_UDINT(LEN(KEY20)+1));
+
+fb_btn_F1		(pbtIn:=ADR(F1)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F2		(pbtIn:=ADR(F2)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F3		(pbtIn:=ADR(F3)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F4		(pbtIn:=ADR(F4)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F5		(pbtIn:=ADR(F5)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F6		(pbtIn:=ADR(F6)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F7		(pbtIn:=ADR(F7)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F8		(pbtIn:=ADR(F8)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F9		(pbtIn:=ADR(F9)		, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F10		(pbtIn:=ADR(F10)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F11		(pbtIn:=ADR(F11)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_F12		(pbtIn:=ADR(F12)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_START	(pbtIn:=ADR(START)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_STOP		(pbtIn:=ADR(STOP)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_ESC		(pbtIn:=ADR(ESC)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_ALARM	(pbtIn:=ADR(ALARM)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_HELP		(pbtIn:=ADR(HELP)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_SECOND	(pbtIn:=ADR(SECOND)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_ENTER	(pbtIn:=ADR(ENTER)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);
+fb_btn_MENU		(pbtIn:=ADR(MENU)	, xINdis:=FALSE, xINon := FALSE, xINerr:=FALSE);]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Laser_ABL" Id="{da082569-8ac6-4e90-8334-73d28c10a92f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Laser_ABL
+VAR_INPUT
+    xIN_Start    : BOOL;
+    sIN_FileName : STRING := 'Someting here please';
+	xIN_ResetData : BOOL; // reset all data, used to ensure that the marking data are in the laser
+END_VAR
+VAR_OUTPUT
+    xOUT_DONE  : BOOL;
+    xOUT_ERROR : BOOL;
+    xOUT_BUSY  : BOOL;
+END_VAR
+VAR
+    iStep     : INT := 0;
+    sDataTime : STRING(10);
+
+    sLastName : STRING;
+    sLastNum  : STRING(10);
+
+    fb_time : NT_GetTime;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[fb_time(NETID := '',
+        START :=,
+        TMOUT := T#1S);
+
+IF xIN_ResetData THEN
+    MEMSET(ADR(sDataTime), 0, SIZEOF(sDataTime));
+    MEMSET(ADR(sLastNum), 0, SIZEOF(sLastNum));
+END_IF
+
+CASE iStep OF
+
+0: (* wait on start *)
+    IF xIN_Start THEN
+        iStep := 1000;
+    END_IF
+
+1000: (* TruMark *)
+    IF if_SingleCmds.bReady THEN
+        IF if_TruMark.Status.b6_LaserMalfunction THEN
+            if_SingleCmds.iStepNr := 120; // TLV - Activate Laser / Open Shutter
+            if_SingleCmds.bStart  := TRUE;
+            iStep                 := 1010;
+        ELSIF if_TruMark.Status.b0_Laser_On THEN
+            iStep := 1040; // go to get the time
+        ELSE
+            iStep := 1020;
+        END_IF;
+    END_IF
+
+1010: (* Reset Done*)
+    IF if_SingleCmds.bReady THEN
+        iStep := 1020;
+    END_IF
+
+1020: (* Laser ON *)
+    IF if_SingleCmds.bReady THEN
+        if_SingleCmds.iStepNr := 10; // TLV - Activate Laser / Open Shutter
+        if_SingleCmds.bStart  := TRUE;
+        iStep                 := 1030;
+    END_IF;
+
+1030: (* ON DONE*)
+    IF if_SingleCmds.bReady THEN
+        iStep := 1040;
+    END_IF;
+
+1040: (* get time *)
+    fb_time.START := TRUE;
+    iStep         := 1050;
+
+1050: (* get time *)
+    IF NOT fb_time.BUSY THEN
+        fb_time.START := FALSE;
+        iStep         := 1100;
+    END_IF
+
+1100: (* New FILE ? todo *)
+    IF 0 = FIND(sLastName, SIMU.sLaserFileName) OR (LEN(sLastName) <> LEN(SIMU.sLaserFileName)) THEN
+        iStep := 1110;
+    ELSE
+        iStep := 1130;
+    END_IF
+
+1110: (* Load File *)
+    IF if_SingleCmds.bReady THEN
+        if_SingleCmds.iStepNr     := 20; // TLV - Load Marking-File with 2 variables
+        if_SingleCmds.sInputValue := CONCAT('C:\Aquis\', CONCAT(sIN_FileName, '.VLF'));
+        sLastName                 := SIMU.sLaserFileName;
+
+        if_SingleCmds.bStart := TRUE;
+        iStep                := 1120;
+    END_IF
+
+1120: (* Conversation *)
+    IF if_SingleCmds.bReady THEN
+        if_SingleCmds.iStepNr := 30; // TLV - Request state of conversion
+        if_SingleCmds.bStart  := TRUE;
+        iStep                 := 1130;
+    END_IF
+
+1130: (* New Var ? todo*)
+    // date format : Y1M1D1D2M2Y2-Sx
+    sDataTime[0] := F_ToASC(str := '0') + TO_BYTE((fb_time.TIMESTR.wYear MOD 100) / 10);  // Y1
+    sDataTime[1] := F_ToASC(str := '0') + TO_BYTE((fb_time.TIMESTR.wMonth MOD 100) / 10); // M1
+    sDataTime[2] := F_ToASC(str := '0') + TO_BYTE((fb_time.TIMESTR.wDay MOD 100) / 10);   // D1
+    sDataTime[3] := F_ToASC(str := '0') + TO_BYTE(fb_time.TIMESTR.wDay MOD 10);           // D2
+    sDataTime[4] := F_ToASC(str := '0') + TO_BYTE(fb_time.TIMESTR.wMonth MOD 10);         // M2
+    sDataTime[5] := F_ToASC(str := '0') + TO_BYTE(fb_time.TIMESTR.wYear MOD 10);          // Y2
+    sDataTime[6] := F_ToASC(str := '-');
+    sDataTime[7] := F_ToASC(str := 'S');
+    sDataTime[8] := F_ToASC(str := '1'); // TODO, team of the day
+    sDataTime[9] := 0;
+
+    IF 0 = FIND(sLastNum, sDataTime) OR
+       (LEN(sLastNum) <> LEN(sDataTime)) OR
+       ((sDataTime[2] = F_ToASC(str := '0')) AND (sDataTime[3] = F_ToASC(str := '0'))) THEN
+        iStep := 1140;
+    ELSE
+        iStep := 1170;
+    END_IF
+
+    MEMCPY(ADR(sLastNum), ADR(sDataTime), 10);
+
+1140: (* Set Var *)
+    IF if_SingleCmds.bReady THEN
+        if_SingleCmds.iStepNr := 35; // TLV - Set Variable
+        // Variable name = 'Var1'	value = '3374'		Delimiter = ; --> will be replased with 0x00 in TruMark_Ethercat
+        if_SingleCmds.sInputValue := CONCAT('Var1;', TO_STRING(sDataTime));
+
+        if_SingleCmds.bStart := TRUE;
+        iStep                := 1150;
+    END_IF
+
+1150: (* Var Done -> Convert *)
+    IF if_SingleCmds.bReady THEN
+        if_SingleCmds.iStepNr := 55; // TLV - Convert Marking File
+        if_SingleCmds.bStart  := TRUE;
+        iStep                 := 1160;
+    END_IF
+
+1160: (* Request Convert *)
+    IF if_SingleCmds.bReady THEN
+        if_SingleCmds.iStepNr := 30; // TLV - Request state of conversion
+        if_SingleCmds.bStart  := TRUE;
+        iStep                 := 1170;
+    END_IF
+
+1170: (* Request State *)
+    IF if_SingleCmds.bReady THEN
+        if_SingleCmds.iStepNr := 40; // TLV - Request Laser state
+        if_SingleCmds.bStart  := TRUE;
+        iStep                 := 1200;
+    END_IF
+
+1200: (* mark *)
+    IF if_TruMark.Status.b0_Laser_On AND if_TruMark.Status.b1_Laser_Ready AND if_SingleCmds.bReady THEN
+        if_SingleCmds.iStepNr := 50; // TLV - Activate Laser / Open Shutter
+        if_SingleCmds.bStart  := TRUE;
+        iStep                 := 1210;
+    END_IF
+
+// is done when safety signals are FALSE
+// 1210: (* release laser *)
+//     IF if_SingleCmds.bReady THEN
+//         if_SingleCmds.iStepNr := 12; // TLV - Desactivate Laser
+//         if_SingleCmds.bStart  := TRUE;
+//         iStep                 := 1300;
+//     END_IF
+
+1210:
+    IF if_TruMark.Status.b15_Mark_Active THEN
+        iStep := 1220;
+    END_IF
+
+1220:
+    IF NOT if_TruMark.Status.b15_Mark_Active THEN
+        iStep := 1300;
+    END_IF
+
+1300: (* Check GS Datumsringüberwachung *)
+    IF NOT xIN_Start THEN
+        iStep := 0;
+    END_IF
+
+END_CASE
+
+xOUT_DONE  := 1300 = iStep;
+xOUT_BUSY  := iStep >= 1000 AND iStep < 1300;
+xOUT_ERROR := if_TruMark.bError;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

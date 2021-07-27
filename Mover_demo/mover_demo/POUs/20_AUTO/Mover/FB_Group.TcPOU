@@ -89,6 +89,11 @@ ELSE
     THIS^._LastVisitedIndex := THIS^._LastVisitedIndex - 1;
 END_IF
 
+IF THIS^._LastVisitedIndex <= 1 THEN
+	ASSERT(0); // we use array of station from 1 to max_station
+	THIS^._LastVisitedIndex := 1;
+END_IF
+
 GetNextStation REF= THIS^._StationList[THIS^._LastVisitedIndex]^;
 ]]></ST>
       </Implementation>

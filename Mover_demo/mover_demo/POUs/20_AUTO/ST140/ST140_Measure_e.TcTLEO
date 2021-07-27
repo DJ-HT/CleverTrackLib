@@ -13,17 +13,16 @@ ST140_Measure_e :
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
-	
+
     waitOnMover,     // wait until the mover is there
     MOVER_NEEDED_OP, // Ab here, a mover in position is needed to perform the action
 
-    Measure_right_1,
-	Move_shuttle_to_pos_2,
-	Measure_right_2,
-	Move_shuttle_to_pos_3,
-	Measure_left_3,
-	Move_shuttle_to_pos_4,
-	Measure_left_4,
+    Measure_right,
+    Move_shuttle_relative_right,
+    Move_shuttle_to_pos_left,
+    Measure_left,
+    Move_shuttle_relative_left,
+    Save_result_in_mover,
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
     MOVER_FREE_OP,    // here, operation without mover can be done.
@@ -74,37 +73,32 @@ check level NIO Box
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Measure_right_1"</v>
+              <v n="TextID">"Measure_right"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Move_shuttle_to_pos_2"</v>
+              <v n="TextID">"Move_shuttle_relative_right"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Measure_right_2"</v>
+              <v n="TextID">"Move_shuttle_to_pos_left"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Move_shuttle_to_pos_3"</v>
+              <v n="TextID">"Measure_left"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Measure_left_3"</v>
+              <v n="TextID">"Move_shuttle_relative_left"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Move_shuttle_to_pos_4"</v>
-              <v n="TextDefault">""</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"Measure_left_4"</v>
+              <v n="TextID">"Save_result_in_mover"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

@@ -27,9 +27,12 @@ recipe    REF= PERS.recipeList[PERS.iRecipeCurrent];
 PERS.iRecipeCurrent := PERS.eRecipeCurrent;
 
 IF HMI.btCopyRecipe.rtrig THEN
-    // PERS.recipeList[iRecipeCopyDest] := PERS.recipeList[PERS.iRecipeCurrent];
+    PERS.recipeList[iRecipeCopyDest] := PERS.recipeList[PERS.iRecipeCurrent];
     // reset the position of iRecipeCopyDest to tell the user the saving is done
-    // iRecipeCopyDest := RecipeType_e._max;
+    iRecipeCopyDest := RecipeType_e._max;
+END_IF
+
+IF HMI.btSetDefault.rtrig THEN
     _21_CopyDefaultRecipe();
 END_IF
 
@@ -317,8 +320,6 @@ GVL.st185_aut(xIN_Init       := HMI.enState = enState.StateINIT,
               enIN_State     := enIN_State,
               tIN_Timeout    := T#10S,
               xIN_On         := TRUE);
-
-GVL.st1xx_aut();
 
 
 ]]></ST>

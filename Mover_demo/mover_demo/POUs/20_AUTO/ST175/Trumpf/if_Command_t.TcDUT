@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="if_Command_t" Id="{ad81b2f1-37b2-4685-b76f-3f9c2d2166d5}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE if_Command_t :
+STRUCT
+    iTlvHandshake : INT;
+    diTlvTag      : DINT;
+    diTlvLenght   : DINT;
+    abyTlvValues  : ARRAY[0..117] OF BYTE;
+    bit_command   : if_BitCommand_u;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

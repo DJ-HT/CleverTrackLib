@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_Unit_e" Id="{b42eda02-4f02-46bb-b540-6f2000be8054}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE CETA_Unit_e :
+(
+    Pa := 000,
+    Pa_per_s := 001,
+    ml_per_min := 002,
+    ml_per_h := 003,
+    mbar := 004,
+    bar := 005,
+    ml_per_min_2 := 006,
+    mbar_times_l_per_s := 007,
+    l_per_h := 008,
+    hPa_per_s := 009,
+    PSI := 010,
+    PSI_per_s := 011,
+    hPa := 012,
+    l_per_min := 013,
+    ml_per_h_2 := 014,
+    s_ := 017,
+    percent := 018,
+    mbar_per_s := 019,
+    bar_per_s := 020,
+    ms := 021,
+    mmHg := 022,
+    mmWs := 023,
+    Torr := 024,
+    V := 214,
+    deg_C := 215,
+    cm_3 := 216,
+    ml := 217,
+    _no_unit := 218,
+    L := 219,
+    deg_F := 220,
+    _no_unit_254 := 254,
+    _no_unit_255 := 255
+)USINT;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

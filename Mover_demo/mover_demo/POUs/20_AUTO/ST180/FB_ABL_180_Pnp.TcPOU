@@ -137,7 +137,7 @@ fb_simu_axis180_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis180_01Y(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST180_01Y]),
-               xIN_DisButtons   := ,
+               xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
                xIN_FREE         := TRUE,
@@ -156,8 +156,11 @@ fb_axis180_01Y(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_01Y].movesList[AXIS.bTeachPos[Axis_e.ST180_01Y]].lrPosition),
-               xIN_Reset        := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST180_01Y].movesList[AXIS.bTeachPos[Axis_e.ST180_01Y]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Reset       := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
                // The simu fb gives the hardware state when we are not in simu
                wAxisState    := fb_simu_axis180_01Y.wOUT_AxisState,
                bOUT_AxisCntr => st180_axis.axis180_01Y.bCtrlHi,
@@ -186,7 +189,7 @@ fb_simu_axis180_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis180_02Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST180_02Z]),
-               xIN_DisButtons   := ,
+               xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,
@@ -206,13 +209,16 @@ fb_axis180_02Z(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxis_02.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxis_02.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis_02.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_02Z].movesList[AXIS.bTeachPos[Axis_e.ST180_02Z]].lrPosition),
-               xIN_Home         := ST180_Pnp_e.Init_HomeVertical_02 = iOUT_Step,
-               xIN_Reset        := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-               wAxisState       := fb_simu_axis180_02Z.wOUT_AxisState,
-               bOUT_AxisCntr    => ST180_Axis.axis180_02Z.bCtrlHi,
-               rOUT_ActPos      => ST180_Axis.axis180_02Z.rActPos,
-               axisIN_REF       := fb_simu_axis180_02Z.pOUT_axisRef^);
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST180_02Z].movesList[AXIS.bTeachPos[Axis_e.ST180_02Z]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST180_Pnp_e.Init_HomeVertical_02 = iOUT_Step,
+               xIN_Reset       := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState      := fb_simu_axis180_02Z.wOUT_AxisState,
+               bOUT_AxisCntr   => ST180_Axis.axis180_02Z.bCtrlHi,
+               rOUT_ActPos     => ST180_Axis.axis180_02Z.rActPos,
+               axisIN_REF      := fb_simu_axis180_02Z.pOUT_axisRef^);
 
 fb_PnpVerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_10Z],
                  xIN_Init        := enIN_State = enState.StateINIT,
@@ -236,7 +242,7 @@ fb_simu_axis180_10Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis180_10Z(enIN_State       := enIN_State,
                parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST180_10Z]),
-               xIN_DisButtons   := ,
+               xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,
@@ -256,13 +262,16 @@ fb_axis180_10Z(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxis_10.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxis_10.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxis_10.OUT_MoveProfile.lrJerk),
-			   rIN_PosManu		:= TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST180_10Z].movesList[AXIS.bTeachPos[Axis_e.ST180_10Z]].lrPosition),
-               xIN_Home         := ST180_Pnp_e.Init_HomeVertical_10 = iOUT_Step,
-               xIN_Reset        := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-               wAxisState       := fb_simu_axis180_10Z.wOUT_AxisState,
-               bOUT_AxisCntr    => ST180_Axis.axis180_10Z.bCtrlHi,
-               rOUT_ActPos      => ST180_Axis.axis180_10Z.rActPos,
-               axisIN_REF       := fb_simu_axis180_10Z.pOUT_axisRef^);
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST180_10Z].movesList[AXIS.bTeachPos[Axis_e.ST180_10Z]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST180_Pnp_e.Init_HomeVertical_10 = iOUT_Step,
+               xIN_Reset       := (ST180_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState      := fb_simu_axis180_10Z.wOUT_AxisState,
+               bOUT_AxisCntr   => ST180_Axis.axis180_10Z.bCtrlHi,
+               rOUT_ActPos     => ST180_Axis.axis180_10Z.rActPos,
+               axisIN_REF      := fb_simu_axis180_10Z.pOUT_axisRef^);
 
 //////////////////////////////////
 fb_griperLeft(xIN_Reset    := xIN_Reset OR (ST180_Pnp_e.RESET = iOUT_Step),
@@ -393,7 +402,8 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST180_Pnp_e.DONE);
 
-xOUT_MoverFree := NOT (iOUT_Step >= ST180_Pnp_e.MOVER_NEEDED_OP AND iOUT_Step < ST180_Pnp_e.MOVER_FREE_OP);
+xOUT_MoverFree := iOUT_Step >= ST180_Pnp_e.READY AND
+                  NOT (iOUT_Step >= ST180_Pnp_e.MOVER_NEEDED_OP AND iOUT_Step < ST180_Pnp_e.MOVER_FREE_OP);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST180_Pnp_e.lift_piece_and_down_to_pick,
@@ -416,7 +426,7 @@ IO_BOX.Q5403_14_ST180_Niederhalter_deckel_rechts :=
 
 // safety pneumatics
 IO_BOX.Q5408_14_ST180_Break_axis_02Z := NOT fb_simu_axis180_02Z.pIN_axisHW^.Status.Error AND
-                                        _02_SAFETY.xOUT_ESout AND
+                                        _02_SAFETY.xOUT_ESout AND _02_SAFETY.xOUT_MonOut AND
                                         NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
@@ -604,6 +614,10 @@ ST180_Pnp_e.take_out_piece_and_put_down_lifter:
        fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.up_full).xOUT_InPos AND
        fb_PnpVerAxis_10.MoveTo(ST180_PnpHorPos_e.GS).xOUT_InPos THEN
         iOUT_Step := ST180_Pnp_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            Mover.UnloadPieces();
+        END_IF
     END_IF
 
 ST180_Pnp_e.SYNC_MOVER_LEAVE:
@@ -619,13 +633,6 @@ ST180_Pnp_e.hor_move_to_extraction_pipe:
 
 ST180_Pnp_e.ver_down_in_pipe:
     IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST180_PnpVerPos_e.down_full).xOUT_InPos THEN
-        iOUT_Step := ST180_Pnp_e.open_griper_put_piece;
-    END_IF
-
-ST180_Pnp_e.open_griper_put_piece:
-    IF xIN_NextStep AND
-       (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_griperLeft.xOUT_inAS) AND
-       (NOT _20_AUTO.recipe.st180.xUseVerRight OR fb_griperRight.xOUT_inAS) THEN
         iOUT_Step := ST180_Pnp_e.clamp_up_to_rest_position;
     END_IF
 
@@ -633,6 +640,13 @@ ST180_Pnp_e.clamp_up_to_rest_position:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_clampLeft.xOUT_inGS) AND
        (NOT _20_AUTO.recipe.st180.xUseVerRight OR fb_clampRight.xOUT_inGS) THEN
+        iOUT_Step := ST180_Pnp_e.open_griper_put_piece;
+    END_IF
+	
+ST180_Pnp_e.open_griper_put_piece:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st180.xUseVerLeft OR fb_griperLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st180.xUseVerRight OR fb_griperRight.xOUT_inAS) THEN
         iOUT_Step := ST180_Pnp_e.ver_up_empty;
     END_IF
 

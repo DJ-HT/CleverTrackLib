@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_error_handling_t" Id="{6147cb8d-74fb-487e-aacf-767b9a4e11a6}">
+    <Declaration><![CDATA[TYPE CETA_error_handling_t :
+STRUCT
+    command_in_error : CETA_IN_u;
+    error_code       : BYTE;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

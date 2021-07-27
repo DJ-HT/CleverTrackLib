@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_Parameter_blocks_t" Id="{83d47c9c-c4a7-4a8c-87c8-a57351f92e54}">
+    <Declaration><![CDATA[TYPE CETA_Parameter_blocks_t :
+STRUCT
+    _00_program_name                : ARRAY[0..16] OF BYTE;
+    _01_test_mode                   : ARRAY[0..27] OF BYTE;
+    _02_delay                       : ARRAY[0..27] OF BYTE;
+    _03_fill                        : ARRAY[0..27] OF BYTE;
+    _04_stabilisation               : ARRAY[0..27] OF BYTE;
+    _05_test                        : ARRAY[0..27] OF BYTE;
+    _06_vent                        : ARRAY[0..27] OF BYTE;
+    _07_prefill_prevent             : ARRAY[0..27] OF BYTE;
+    _08_flood_sealed_component      : ARRAY[0..27] OF BYTE;
+    _09_flood_sealed_high_res       : ARRAY[0..27] OF BYTE;
+    _0A_fill_primary_pressure       : ARRAY[0..27] OF BYTE;
+    _0B_fill_ram_pressure           : ARRAY[0..27] OF BYTE;
+    _0C_automatic_function_check    : ARRAY[0..27] OF BYTE;
+    _0D_temperature_compensation    : ARRAY[0..27] OF BYTE;
+    _0E_control_valves              : ARRAY[0..27] OF BYTE;
+    _0F_option_switch               : ARRAY[0..27] OF BYTE;
+    _10_fill_reservoir              : ARRAY[0..27] OF BYTE;
+    _11_correction_factor           : ARRAY[0..27] OF BYTE;
+    _12_smotth_turbo_filling        : ARRAY[0..27] OF BYTE;
+    _13_pressure_stages             : ARRAY[0..27] OF BYTE;
+    _14_test_channel_two            : ARRAY[0..27] OF BYTE;
+    _15_usb_measurement_curve_id    : ARRAY[0..27] OF BYTE;
+    _16_program_series              : ARRAY[0..27] OF BYTE;
+    _17_primary_prefill_pressure    : ARRAY[0..27] OF BYTE;
+    _18_primary_pressure_smooth     : ARRAY[0..27] OF BYTE;
+    _19_nc                          : ARRAY[0..27] OF BYTE;
+    _1A_test_repetition             : ARRAY[0..27] OF BYTE;
+    _1B_test_repetition_channel_two : ARRAY[0..27] OF BYTE;
+    _1C_exponential_extrapolation   : ARRAY[0..27] OF BYTE;
+    _1D_pulse                       : ARRAY[0..27] OF BYTE;
+    _1E_vent_to                     : ARRAY[0..27] OF BYTE;
+    _1F_reference_atmosphere        : ARRAY[0..27] OF BYTE;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -65,11 +65,13 @@ VAR
     // Application specific
     fb_axis105_10W               : FB_AxisLMturn_V1_1;
     simu_axis105_10W             : FB_Simu_AxisLM_V1_1;
-    fb_feeder                    : FB_Feeder2Sensors;
+    fb_feeder_wf                 : FB_Feeder2Sensors;
     fifo                         : FB_Fifo(4);
     simu_feeder                  : FB_Simu_Feeder; // simulation of a feeder
     simu_fifo_feeder_to_rotTable : FB_Fifo(20);    // fifo to hold a piece
+    simu_fifo_feeder_lf          : FB_Fifo(20);    // fifo to hold a piece
     rtPutPiece                   : R_TRIG;         // trigger to add a piece
+    fb_feeder_lf                 : FB_Feeder2Sensors;
 
     rtPick : R_TRIG; // r_trig signal from the pick and place machine
 
@@ -79,11 +81,19 @@ VAR
 
     rDegreeToNextSlot : REAL; // how many degree is needed to rotate to the next slot
 
+    eSliderStep    : ST105_Slider_e := ST105_Slider_e.slider_pusher_in;
+    ton_two_pieces : TON; // TON for the detection of a piece inside one another
+
+    fb_slider   : FB_ZylMo2El_V2_1;
+    simu_slider : FB_Simu_Zyl2Pos;
+    fb_pusher   : FB_ZylMo2El_V2_1;
+    simu_pusher : FB_Simu_Zyl2Pos;
+
 END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 4; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -92,8 +102,9 @@ END_VAR
 (*******************************************************************)
 (* Zurücksetzen *)
 IF xIN_RESET THEN
-    iPreStep  := ST105_Feeder_e.RESET;
-    iOUT_Step := ST105_Feeder_e.RESET;
+    iPreStep    := ST105_Feeder_e.RESET;
+    iOUT_Step   := ST105_Feeder_e.RESET;
+    eSliderStep := ST105_Slider_e.slider_pusher_in;
 END_IF;
 
 (* Error Quittieren *)
@@ -117,23 +128,37 @@ END_IF
 TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
             PT := tIN_Timeout);
 
+ton_two_pieces(IN := IO_BOX.I8705_ST105_Kontrolle_zwei_Filtergehiluse,
+               PT := T#300MS);
+
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
 
-fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
-          xIN_PieceInEnd            := TRUE,  // IO_BOX.I6000_ST105_teil_in_vereinzelung, 
-          xIN_PieceMax              := FALSE, // IO_BOX.I8001_ST105_maximum,
-          xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
-          refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
-          iIN_FifoSetMaxSensorValue := 10,
-          diIN_SignlFilter_ms       := _20_AUTO.recipe.st105.FeederConfig.InFilterDelay,
-          diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,
-          diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,
-          diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);
+fb_feeder_wf(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+             xIN_PieceInEnd            := IO_BOX.I8600_ST105_teil_in_vereinzelung,
+             xIN_PieceMax              := IO_BOX.I8600_ST105_teil_in_vereinzelung,
+             xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+             refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
+             iIN_FifoSetMaxSensorValue := 10,
+             diIN_SignlFilter_ms       := _20_AUTO.recipe.st105.FeederConfig.InFilterDelay,
+             diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,
+             diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,
+             diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);
 
-simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
-            xIN_PceSensor      := fb_feeder.xIN_PieceInEnd,
+fb_feeder_lf(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
+             xIN_PieceInEnd            := NOT fb_feeder_wf.xOUT_EnableFeeder,
+             xIN_PieceMax              := IO_BOX.I8704_ST105_Maximum_LF,
+             xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+             refIN_SimulatedFifo       := simu_fifo_feeder_lf,
+             iIN_FifoSetMaxSensorValue := 10,
+             diIN_SignlFilter_ms       := 3000,
+             diIN_StartDelay_ms        := 1000,
+             diIN_StopDelay_ms         := 500,
+             diIN_EmptyDelay_ms        := 0);
+
+simu_feeder(xIN_Enable         := fb_feeder_wf.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+            xIN_PceSensor      := fb_feeder_wf.xIN_PieceInEnd,
             tIN_NewPieceTime   := 500,
             iIN_WaitTimeMin_ms := 500,
             iIN_WaitTimeMax_ms := 1000);
@@ -187,14 +212,14 @@ fb_axis105_10W(enIN_State     := enIN_State,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
                rIN_Position     :=, // Is set above
-               rIN_Velocity     := TO_REAL(360.0),
+               rIN_Velocity     := TO_REAL(100.0),
                rIN_Acceleration := TO_REAL(1440.0),
                rIN_Deceleration := TO_REAL(1440.0),
                rIN_Jerk         := TO_REAL(720000.0),
-               rIN_PosManu      := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST105_11Z]
-                   .movesList[AXIS.bTeachPos[Axis_e.ST105_11Z]].lrPosition,
-               xIN_Home         := ST105_feeder_e.Init_home_table = iOUT_Step,
-               xIN_Reset        := xIN_Reset OR ST105_feeder_e.RESET = iOUT_Step,
+               rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST105_11Z]
+                                               .movesList[AXIS.bTeachPos[Axis_e.ST105_11Z]].lrPosition),
+               xIN_Home  := ST105_feeder_e.Init_home_table = iOUT_Step,
+               xIN_Reset := xIN_Reset OR ST105_feeder_e.RESET = iOUT_Step,
                // The simu fb gives us the hardware signal when we are not in simulation
                wAxisState    := simu_axis105_10W.wOUT_AxisState,
                bOUT_AxisCntr => ST105_Axis.axis105_10W.bCtrlHi,
@@ -202,6 +227,57 @@ fb_axis105_10W(enIN_State     := enIN_State,
                axisIN_REF    := simu_axis105_10W.pOUT_axisRef^);
 
 ST105_Axis.axis105_10W.rActPos := LREAL_TO_REAL(simu_axis105_10W.pOUT_axisRef^.NcToPlc.ModuloActPos);
+
+// pneumatics
+fb_slider(xIN_Reset    := xIN_Reset OR (ST105_Feeder_e.RESET = iOUT_Step),
+          xIN_Quit     := xIN_Quit,
+          xIN_Manu     := enState.StateMANU = enIN_State,
+          pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST105][1]),
+          xIN_GS       := simu_slider.xOUT_inGS,
+          xIN_AS       := simu_slider.xOUT_inAS,
+          xIN_FREE     := TRUE,
+          xINtoGS      := ST105_Slider_e.slider_go_down = eSliderStep,
+          xINtoAS      := ST105_Slider_e.slider_go_up = eSliderStep,
+          tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST105]
+                                           [ST105_Cylinders_e.Ausschieber_ab_auf].toAS_alarm_time),
+          tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST105]
+                                        [ST105_Cylinders_e.Ausschieber_ab_auf].toGS_alarm_time),
+          tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST105]
+                                         [ST105_Cylinders_e.Ausschieber_ab_auf].toAS_wait_time),
+          tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST105]
+                                         [ST105_Cylinders_e.Ausschieber_ab_auf].toGS_wait_time));
+
+simu_slider(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+            xIN_inGS   := IO_BOX.I8700_ST105_Ausheber_unten_GS,
+            xIN_inAS   := IO_BOX.I8701_ST105_Ausheber_oben_AS,
+            xIN_valve  := fb_slider.xOUT_VALVE,
+            tIN_GS_ms  := 200,  //ms
+            tIN_AS_ms  := 200); //ms
+
+fb_pusher(xIN_Reset    := xIN_Reset OR (ST105_Feeder_e.RESET = iOUT_Step),
+          xIN_Quit     := xIN_Quit,
+          xIN_Manu     := enState.StateMANU = enIN_State,
+          pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST105][2]),
+          xIN_GS       := simu_pusher.xOUT_inGS,
+          xIN_AS       := simu_pusher.xOUT_inAS,
+          xIN_FREE     := TRUE,
+          xINtoGS      := ST105_Slider_e.slider_pusher_in = eSliderStep,
+          xINtoAS      := ST105_Slider_e.slider_push_out = eSliderStep,
+          tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST105]
+                                           [ST105_Cylinders_e.Ausschieber_ab_auf].toAS_alarm_time),
+          tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST105]
+                                        [ST105_Cylinders_e.Ausschieber_ab_auf].toGS_alarm_time),
+          tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST105]
+                                         [ST105_Cylinders_e.Ausschieber_ab_auf].toAS_wait_time),
+          tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST105]
+                                         [ST105_Cylinders_e.Ausschieber_ab_auf].toGS_wait_time));
+
+simu_pusher(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+            xIN_inGS   := IO_BOX.I8702_ST105_Abschieber_zuruck_GS,
+            xIN_inAS   := IO_BOX.I8703_ST105_Abschieber_vor_AS,
+            xIN_valve  := fb_pusher.xOUT_VALVE,
+            tIN_GS_ms  := 200,  //ms
+            tIN_AS_ms  := 200); //ms
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -226,17 +302,23 @@ bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
 xOUT_Wait := (iOUT_Step = ST105_Feeder_e.DONE);
 
-// TODO add simulation constant to prevent the output to be set
-// IO_BOX.Q8000_ST105_freigabe_wf    := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
-// IO_BOX.Q8003_ST105_forderband_ein :=
-//     (enIN_State >= enState.StateLEER) AND
-//     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
-// 
-// // blow out
-// 
-// IO_BOX.Q8005_ST105_blow_piece := fb_feeder.xOUT_EnableFeeder AND
-//                                  tof_color_sensor.Q AND
-//                                  NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q9500_ST105_Freigabe_WF := fb_feeder_wf.xOUT_EnableFeeder AND
+                                  NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
+                                  (ST105_Slider_e.slider_down = eSliderStep);
+
+IO_BOX.Q9501_ST105_Freigabe_LF := fb_feeder_lf.xOUT_EnableFeeder AND
+                                  IO_BOX.Q9500_ST105_Freigabe_WF AND
+                                  NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
+                                  NOT IO_BOX.I8704_ST105_Maximum_LF AND
+                                  (ST105_Slider_e.slider_down = eSliderStep);
+
+OUT.Q106_ST105_zusatz_band_on := IO_BOX.Q9501_ST105_Freigabe_LF;
+
+IO_BOX.Q8800_14_Auschieber_ab_auf :=
+    fb_slider.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q8801_14_Auschieber_vor_zuruck :=
+    fb_pusher.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 xOUT_PceReadyToPick := ST105_Feeder_e.DONE = iOUT_Step;
 
@@ -246,8 +328,9 @@ xOUT_PceReadyToPick := ST105_Feeder_e.DONE = iOUT_Step;
 
 (* Sperren *)
 IF xIN_Sperre THEN
-    iPreStep  := ST105_Feeder_e.RESET;
-    iOUT_Step := ST105_Feeder_e.RESET;
+    iPreStep    := ST105_Feeder_e.RESET;
+    iOUT_Step   := ST105_Feeder_e.RESET;
+    eSliderStep := ST105_Slider_e.slider_pusher_in;
     RETURN;
 END_IF;
 
@@ -259,6 +342,49 @@ END_IF
 
 (* START *)
 rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis105_10W.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_slider.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_pusher.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    END_IF
+ELSIF iOUT_Step < ST105_Feeder_e.ERROR THEN
+    iOUT_Step := ST105_Feeder_e.ERROR;
+END_IF
+
+(*******************************************************************)
+(* Schrittkette slider tower *)
+(*******************************************************************)
+CASE eSliderStep OF
+ST105_Slider_e.slider_down:
+    IF xIN_NextStep AND ton_two_pieces.Q AND enIN_State >= enState.StateSTEP THEN
+        eSliderStep := ST105_Slider_e.slider_go_up;
+    END_IF
+
+ST105_Slider_e.slider_go_up:
+    IF xIN_NextStep AND fb_slider.xOUT_inAS THEN
+        eSliderStep := ST105_Slider_e.slider_push_out;
+    END_IF
+
+ST105_Slider_e.slider_push_out:
+    IF xIN_NextStep AND fb_pusher.xOUT_inAS THEN
+        eSliderStep := ST105_Slider_e.slider_pusher_in;
+    END_IF
+
+ST105_Slider_e.slider_pusher_in:
+    IF xIN_NextStep AND fb_pusher.xOUT_inGS THEN
+        eSliderStep := ST105_Slider_e.slider_go_down;
+    END_IF
+
+ST105_Slider_e.slider_go_down:
+    IF xIN_NextStep AND fb_slider.xOUT_inGS THEN
+        eSliderStep := ST105_Slider_e.slider_down;
+    END_IF
+
+END_CASE
 
 (*******************************************************************)
 (* Schrittkette  *)
@@ -306,7 +432,7 @@ ST105_Feeder_e.Init_table_go_to_zero:
 ST105_Feeder_e.Init_reset_search_index:
     iSearchIndex := 0;
     fifo.Empty();
-    iOUT_Step := ST105_Feeder_e.Init_set_table_pos;
+    iOUT_Step := ST105_Feeder_e.READY; // bypass unusefull search cycle
 
 ST105_Feeder_e.Init_set_table_pos:
     IF fb_axis105_10W.xOUT_DONE THEN
@@ -339,7 +465,7 @@ ST105_Feeder_e.START: (*  *)
     END_IF;
 
 ST105_Feeder_e.check_if_feeding_necessary:
-    IF (fifo.GetLen() >= _20_AUTO.recipe.st105.FeederSize) THEN
+    IF (fifo.GetLen() >= _20_AUTO.recipe.st105.FeederSize) OR fifo.IsFull() THEN
         iOUT_Step := ST105_Feeder_e.DONE;
     ELSE
         iOUT_Step := ST105_Feeder_e.wait_on_a_piece;
@@ -347,7 +473,7 @@ ST105_Feeder_e.check_if_feeding_necessary:
 
 ST105_Feeder_e.wait_on_a_piece:
     IF (FEEDER_SIMULATION AND CONST.USE_SIMULATION AND NOT simu_fifo_feeder_to_rotTable.IsEmpty()) OR
-       (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND IO_BOX.I8600_ST101_homing_rotation_table) THEN
+       (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND IO_BOX.I8600_ST105_teil_in_vereinzelung) THEN
         iOUT_Step := ST105_Feeder_e.load_piece;
         simu_fifo_feeder_to_rotTable.Pop(1);
     END_IF

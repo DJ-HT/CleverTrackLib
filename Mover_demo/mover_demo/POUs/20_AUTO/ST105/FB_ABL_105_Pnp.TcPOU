@@ -80,9 +80,12 @@ VAR
     PickOffset_Y_deci AT %Q* : UINT; // Y offset of picking position
     PickUpPos_Z_deci  AT %Q* : UINT; // Z traveling height from pick to place position
 
+    hmi_force_place    : BOOL;
+    hmi_force_in_place : BOOL;
+
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -132,8 +135,8 @@ fb_simu_axis105_11Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATI
                     rIN_PixMin          := 0);
 
 fb_axis105_11Z(enIN_State       := enIN_State,
-               parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST105_11Z]),
-               xIN_DisButtons := FALSE,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST105_11Z]),
+               xIN_DisButtons   := FALSE,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE,
                xIN_FREE         := TRUE,
@@ -153,13 +156,15 @@ fb_axis105_11Z(enIN_State       := enIN_State,
                rIN_Acceleration := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrAccel),
                rIN_Deceleration := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrDecel),
                rIN_Jerk         := TO_REAL(fb_PnpVerAxisU.OUT_MoveProfile.lrJerk),
-               rIN_PosManu      :=,
-               xIN_Home         := ST105_Pnp_e.Init_HomeVertical = iOUT_Step,
-               xIN_Reset        := (ST105_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
-               wAxisState       := fb_simu_axis105_11Z.wOUT_AxisState,
-               bOUT_AxisCntr    => ST105_Axis.axis105_11Z.bCtrlHi,
-               rOUT_ActPos      => ST105_Axis.axis105_11Z.rActPos,
-               axisIN_REF       := fb_simu_axis105_11Z.pOUT_axisRef^);
+               rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST105_11Z]
+                                               .movesList[AXIS.bTeachPos[Axis_e.ST105_11Z]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Home        := ST105_Pnp_e.Init_HomeVertical = iOUT_Step,
+               xIN_Reset       := (ST105_Pnp_e.RESET = iOUT_Step) OR xIN_Reset,
+               wAxisState      := fb_simu_axis105_11Z.wOUT_AxisState,
+               bOUT_AxisCntr   => ST105_Axis.axis105_11Z.bCtrlHi,
+               rOUT_ActPos     => ST105_Axis.axis105_11Z.rActPos,
+               axisIN_REF      := fb_simu_axis105_11Z.pOUT_axisRef^);
 
 (*******************************************************************)
 (* OUTPUTS *)
@@ -171,7 +176,7 @@ xOUT_Busy := (iOUT_Step > ST105_Pnp_e.READY) AND (iOUT_Step < ST105_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
 xOUT_Done := (iOUT_Step = ST105_Pnp_e.DONE);
 // Process ready
-xOUT_Ready := (iOUT_Step = ST105_Pnp_e.READY);
+xOUT_Ready := (iOUT_Step = ST105_Pnp_e.READY) OR (iOUT_Step = ST105_Pnp_e.waitOnMover);
 // Timeout FB 				 		
 xOUT_Timeout := TON_Timeout.Q;
 // Itialisierung fertig			
@@ -208,11 +213,16 @@ PickOffset_Y_deci := _20_AUTO.recipe.st105.PickOffset_Y_deci;
 // add a constant to adjust the screw height of the rotative table
 PickUpPos_Z_deci := _20_AUTO.recipe.st105.PickUpPos_Z_deci + UINT#500;
 
-aut_cmd_to_robot.FG_Pick  := ST105_Pnp_e.Robot_Pick = iOUT_Step AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
-aut_cmd_to_robot.FG_Place := ST105_Pnp_e.Robot_place = iOUT_Step AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
-aut_cmd_to_robot.XOff     := _20_AUTO.recipe.st105.isPickOffset_X_neg;
-aut_cmd_to_robot.YOff     := _20_AUTO.recipe.st105.isPickOffset_Y_neg;
-aut_cmd_to_robot.ZOff     := _20_AUTO.recipe.st105.isPickUpPos_Z_neg;
+aut_cmd_to_robot.FG_Pick  := (ST105_Pnp_e.Robot_Pick = iOUT_Step) AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+aut_cmd_to_robot.FG_Place :=
+    ((ST105_Pnp_e.Robot_place = iOUT_Step) OR hmi_force_place) AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+	
+aut_cmd_to_robot.Use_griper_left := _20_AUTO.recipe.st105.xUseVerLeft;
+aut_cmd_to_robot.Use_griper_right := _20_AUTO.recipe.st105.xUseVerRight;
+
+aut_cmd_to_robot.XOff := _20_AUTO.recipe.st105.isPickOffset_X_neg;
+aut_cmd_to_robot.YOff := _20_AUTO.recipe.st105.isPickOffset_Y_neg;
+aut_cmd_to_robot.ZOff := _20_AUTO.recipe.st105.isPickUpPos_Z_neg;
 
 (*******************************************************************)
 (* Ablauf *)
@@ -284,7 +294,11 @@ ST105_Pnp_e.Init_RobotFallStartFlag:
 
 ST105_Pnp_e.Init_check_if_pces_handled:
     IF TRUE THEN
-        iOUT_Step := ST105_Pnp_e.READY;
+        IF aut_status_from_robot.Ready_to_place THEN
+            iOUT_Step := ST105_Pnp_e.waitOnMover;
+        ELSE
+            iOUT_Step := ST105_Pnp_e.READY;
+        END_IF
     END_IF
 
 (***** READY / INIT DONE *****)
@@ -295,7 +309,7 @@ ST105_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
 
 (***** START  ZYKLISCH *****)
 ST105_Pnp_e.START: (*  *)
-    IF xIN_NextStep AND pxFG_Freigabe^ THEN
+    IF xIN_NextStep AND pxFG_Freigabe^ AND (enIN_State <> enState.StateLEER) THEN
         iOUT_Step := ST105_Pnp_e.wait_on_feeder;
     END_IF;
 
@@ -307,22 +321,22 @@ ST105_Pnp_e.wait_on_feeder:
 ST105_Pnp_e.push_up_casing:
     IF xIN_NextStep AND fb_PnpVerAxisU.MoveTo(ST105_PnpVerPushPos_e.up).xOUT_InPos THEN
         IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
-			IF fb_axis105_11Z.xOUT_DONE THEN // needed beacause we perform 2 movements one after the other
-            	iOUT_Step := ST105_Pnp_e.pusher_down;
-			END_IF
+            IF fb_axis105_11Z.xOUT_DONE THEN // needed beacause we perform 2 movements one after the other
+                iOUT_Step := ST105_Pnp_e.pusher_down;
+            END_IF
         ELSE
             iOUT_Step := ST105_Pnp_e.Robot_Pick;
         END_IF
     END_IF
 
 ST105_Pnp_e.Robot_Pick:
-    IF xIN_NextStep AND aut_status_from_robot.Picked THEN
+    IF aut_status_from_robot.Picked THEN
         iOUT_Step := ST105_Pnp_e.Robot_wait_picked_falling;
     END_IF
 
 ST105_Pnp_e.Robot_wait_picked_falling:
     IF xIN_NextStep AND NOT aut_status_from_robot.Picked THEN
-        iOUT_Step := ST105_Pnp_e.pusher_down;
+        iOUT_Step          := ST105_Pnp_e.pusher_down;
     END_IF
 
 ST105_Pnp_e.pusher_down:
@@ -335,24 +349,44 @@ ST105_Pnp_e.waitOnMover: (*  *)
         IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
-            iOUT_Step := ST105_Pnp_e.Robot_place;
+            IF Mover.GetLastStationDone() >= INT#105 THEN
+                iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+            ELSE
+                iOUT_Step := ST105_Pnp_e.Robot_place;
+            END_IF
         END_IF
     END_IF;
 
 ST105_Pnp_e.Robot_place:
-    IF xIN_NextStep AND aut_status_from_robot.Placed THEN
+    IF aut_status_from_robot.Placed THEN
         iOUT_Step := ST105_Pnp_e.Robot_wait_placed_falling;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(-105) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF
 
 ST105_Pnp_e.Robot_wait_placed_falling:
     IF xIN_NextStep AND NOT aut_status_from_robot.Placed THEN
-        iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+        iOUT_Step          := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(105) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
     END_IF
 
 ST105_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        iOUT_Step := ST105_Pnp_e.DONE;
+        IF NOT aut_status_from_robot.Ready_to_place THEN
+            iOUT_Step := ST105_Pnp_e.DONE;
+        ELSE
+            iOUT_Step := ST105_Pnp_e.waitOnMover;
+        END_IF
     END_IF
 
 (***** DONE *****)

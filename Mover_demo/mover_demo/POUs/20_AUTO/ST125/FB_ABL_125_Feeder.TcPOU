@@ -88,7 +88,7 @@ END_VAR
 VAR CONSTANT
     MAX_SEARCH_TURN : INT := 3; // maximum search number
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -140,7 +140,7 @@ fb_feeder(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_St
           diIN_StopDelay_ms         := _20_AUTO.recipe.st125.FeederConfig.StopDelay,
           diIN_EmptyDelay_ms        := _20_AUTO.recipe.st125.FeederConfig.EmptyDelay);
 
-simu_feeder(xIN_Enable         := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
+simu_feeder(xIN_Enable         := fb_feeder.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
             xIN_PceSensor      := fb_feeder.xIN_PieceMax,
             tIN_NewPieceTime   := 500,
             iIN_WaitTimeMin_ms := 500,
@@ -194,7 +194,7 @@ fb_axis125_10W(enIN_State     := enIN_State,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
                rIN_Position     :=, // Is set above
-               rIN_Velocity     := TO_REAL(720.0),
+               rIN_Velocity     := TO_REAL(100.0),
                rIN_Acceleration := TO_REAL(2160.0),
                rIN_Deceleration := TO_REAL(2160.0),
                rIN_Jerk         := TO_REAL(720000.0),
@@ -306,7 +306,7 @@ ST125_Feeder_e.Init_table_go_to_zero:
 ST125_Feeder_e.Init_reset_search_index:
     iSearchIndex := 0;
     fifo.Empty();
-    iOUT_Step := ST125_Feeder_e.Init_set_table_pos;
+    iOUT_Step := ST125_Feeder_e.READY; // Bypass search algorithm, unusful
 
 ST125_Feeder_e.Init_set_table_pos:
     IF fb_axis125_10W.xOUT_DONE THEN

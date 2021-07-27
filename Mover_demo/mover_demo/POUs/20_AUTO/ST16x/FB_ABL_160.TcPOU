@@ -1,0 +1,492 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ABL_160" Id="{a49ae7f7-041e-4190-a5fb-bc08c536ebc2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ABL_160
+(****************************************************************************************)
+(*	TITEL				laden kristall- Modul	    										*)
+(*	Status				ungetestet                         								*)
+(*	Beschrieb:			Ablaufbeschreibung												*)
+(*																						*)
+(*	Steps:	self-explained using enum													*)
+(***********************************Revisionen*******************************************)
+(*	see github blames																	*)
+(****************************************************************************************)
+
+VAR_INPUT
+    xIN_Reset       : BOOL;          // Schrittkette zurücksetzen 
+    xIN_Init        : BOOL;          // Initialisieren
+    xIN_Quit        : BOOL;          // Fehler quittieren 
+    xIN_Start       : BOOL;          // Startbefehl
+    xIN_Sperre      : BOOL;          // FB Sperren 
+    xIN_NextStep    : BOOL;          // Nächsten Schritt ausführen 
+    xIN_AlarmAktiv  : BOOL;          // Anlage hat Alarm
+    xIN_DryCycle    : BOOL;          // Fahren ohne Teile
+    xIN_RestartCYCL : BOOL;          // Zyklus erneut starten im STEP, END, LEERFAHREN
+    enIN_State      : enState;       // Status Anlage
+    tIN_Timeout     : TIME := T#10s; // Timout
+
+    pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
+
+    // Application specific
+    Mover       : REFERENCE TO FB_Mover;
+    ref_fb_CETA : REFERENCE TO FB_CETA_715;
+
+END_VAR
+VAR_OUTPUT
+    (* standart Ausgänge *)
+    xOUT_ErrFlag  : BOOL;         // Error Flag 
+    xOUT_Busy     : BOOL;         // Baustein befindet sich im Ablauf 
+    xOUT_Done     : BOOL;         // Baustein hat den Ablauf beendet 		
+    xOUT_Ready    : BOOL;         // Ready to begin, should be the same state as done	
+    xOUT_Timeout  : BOOL;         // Timeout FB 
+    xOUT_InitDone : BOOL;         // initialisierung fertig
+    xOUT_Wait     : BOOL;         // Wartet auf Bedingung
+    iOUT_Step     : ST160_CETA_e; // Aktueller Schritt 
+    sOUT_Step     : STRING;       // Aktueller Schritt but in string format
+    bOUT_Error    : BYTE;         // Fehlernummer
+
+    iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
+    xOUT_MoverFree         : BOOL; // The mover is free to move
+END_VAR
+VAR
+    (* Standard *)
+    (* Schritt *)
+    iLastStep : ST160_CETA_e; // Merker letzter Schritt 
+    iPreStep  : ST160_CETA_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST160_CETA_e; // aktueller Schritt
+
+    // Trigger Starten 
+    rtSTART : R_TRIG;
+    // Timer TimeOut 
+    TON_Timeout : TON;
+
+    (* Bausteine *)
+    fb_PnpVerAxis    : FB_LinearMotionMan;
+    simu_axis160_01Z : FB_Simu_AxisLIN_V1_1;
+    fb_axis160_01Z   : FB_AxisLIN_V1_1;
+
+    (* Spezial *)
+    fb_capMainteningLeft  : FB_ZylMo2El_V2_1;
+    fb_capMainteningRight : FB_ZylMo2El_V2_1;
+	
+    simu_capMainteningLeft  : FB_Simu_Zyl2Pos;
+    simu_capMainteningRight : FB_Simu_Zyl2Pos;
+	
+    fb_dichtung_left  : FB_ZylMo2El_V2_1;
+    fb_dichtung_right : FB_ZylMo2El_V2_1;
+	
+    simu_dichtung_left  : FB_Simu_Zyl2Pos;
+    simu_dichtung_right : FB_Simu_Zyl2Pos;
+	
+	xCETA_Result_OK : BOOL;
+
+END_VAR
+VAR CONSTANT
+    CETA_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Trigger  *)
+(*******************************************************************)
+(* Zurücksetzen *)
+IF xIN_RESET THEN
+    iPreStep  := ST160_CETA_e.RESET;
+    iOUT_Step := ST160_CETA_e.RESET;
+END_IF;
+
+(* Error Quittieren *)
+IF (bOUT_Error <> 0) AND xIN_Quit THEN
+    xOUT_ErrFlag := FALSE;
+    bOUT_Error   := 0;
+    iOUT_Step    := ST160_CETA_e.INIT;
+END_IF;
+
+(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
+            PT := tIN_Timeout);
+
+(*******************************************************************)
+(* Bausteine *)
+(*******************************************************************)
+fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST160_01Z],
+              xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
+              lrIN_CurrPos    := fb_axis160_01Z.rOUT_ActPos,
+              lrIN_Delta_mm   := 0.05,
+              iIN_CurrentStep := iOUT_Step,
+              iIN_moveNumber  := ST160_PnpVerPos_e._max);
+
+simu_axis160_01Z(xIN_InSimu    := CETA_SIMULATION AND CONST.USE_SIMULATION,
+                 rIN_PosActual := fb_axis160_01Z.rOUT_ActPos,
+                 pIN_axisSimu  := ADR(SIMU.axis_ref[Axis_e.ST160_01Z]),
+                 pIN_axisHW    := ADR(ST160_Axis.axis160_01Z.axis),
+                 rIN_PosMax    := ST160_Axis.const160_01Z.POS_MAX,
+                 rIN_PosMin    := ST160_Axis.const160_01Z.POS_MIN,
+                 rIN_PixMax    := 80,
+                 rIN_PixMin    := 0);
+
+fb_axis160_01Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST160_01Z]),
+               xIN_DisButtons   :=,
+               xIN_Quit         := xIN_Quit,
+               xIN_AX5000       := TRUE,
+               xIN_ENC_ABS      := TRUE, // TODO set accordingly
+               xIN_PARAMok      := TRUE,
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST160_Axis.const160_01Z.POS_MIN,
+               rIN_POSMAX       := ST160_Axis.const160_01Z.POS_MAX,
+               rIN_VELOMAX      := ST160_Axis.const160_01Z.VELO_MAX,
+               rIN_VELOMANU     := ST160_Axis.const160_01Z.VELO_MANU,
+               rIN_VELOOPEN     := ST160_Axis.const160_01Z.POS_MAX / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               rIN_VeloJogManu  := TO_REAL(AXIS.rJogVelo_pc),
+               xIN_HomeExe      :=,
+               xIN_HomeCalib    :=,
+               xIN_Execute      := fb_PnpVerAxis.xOUT_Execute,
+               xIN_HomeExe      :=,
+               xIN_Relative     :=,
+               rIN_Position     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrPosition),
+               rIN_Velocity     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrVelocity),
+               rIN_Acceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrAccel),
+               rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
+               rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
+               rIN_PosManu      := TO_REAL(_20_AUTO.recipe.linearAxis[LinearAxis_e.ST160_01Z]
+                                               .movesList[AXIS.bTeachPos[Axis_e.ST160_01Z]].lrPosition),
+               xIN_Reset := (ST160_CETA_e.RESET = iOUT_Step) OR xIN_Reset,
+               // output
+               rOUT_ActPos => ST160_Axis.axis160_01Z.rActPos,
+               axisIN_REF  := simu_axis160_01Z.pOUT_axisRef^);
+
+// pneumatics
+fb_capMainteningLeft(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
+                     xIN_Quit     := xIN_Quit,
+                     xIN_Manu     := enState.StateMANU = enIN_State,
+                     pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][1]),
+                     xIN_GS       := simu_capMainteningLeft.xOUT_inGS,
+                     xIN_AS       := simu_capMainteningLeft.xOUT_inAS,
+                     xIN_FREE     := TRUE,
+                     xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
+                                     (ST160_CETA_e.handling_up = iOUT_Step),
+                     xINtoAS   := _20_AUTO.recipe.st160.Use_element_left AND (ST160_CETA_e.handling_down = iOUT_Step),
+                     tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                   [ST160_Cylinders_e.Niederhalter_links].toAS_alarm_time),
+                     tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                   [ST160_Cylinders_e.Niederhalter_links].toGS_alarm_time),
+                     tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                    [ST160_Cylinders_e.Niederhalter_links].toAS_wait_time),
+                     tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                    [ST160_Cylinders_e.Niederhalter_links].toGS_wait_time));
+
+simu_capMainteningLeft(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
+                       xIN_inGS   := UINT_TO_INT(IO_BOX.I3000_ST160_Wegmessenor_links) < 10,
+                       xIN_inAS   := UINT_TO_INT(IO_BOX.I3000_ST160_Wegmessenor_links) > 200,
+                       xIN_valve  := fb_capMainteningLeft.xOUT_VALVE,
+                       tIN_GS_ms  := 200,  // ms
+                       tIN_AS_ms  := 200); // ms
+
+fb_capMainteningRight(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
+                      xIN_Quit     := xIN_Quit,
+                      xIN_Manu     := enState.StateMANU = enIN_State,
+                      pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][2]),
+                      xIN_GS       := simu_capMainteningRight.xOUT_inGS,
+                      xIN_AS       := simu_capMainteningRight.xOUT_inAS,
+                      xIN_FREE     := TRUE,
+                      xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
+                                      (ST160_CETA_e.handling_up = iOUT_Step),
+                      xINtoAS := _20_AUTO.recipe.st160.Use_element_right AND (ST160_CETA_e.handling_down = iOUT_Step),
+                      tIN_ErrAS
+                          := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                              [ST160_Cylinders_e.Niederhalter_rechts].toAS_alarm_time),
+                      tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                    [ST160_Cylinders_e.Niederhalter_rechts].toGS_alarm_time),
+                      tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                     [ST160_Cylinders_e.Niederhalter_rechts].toAS_wait_time),
+                      tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                     [ST160_Cylinders_e.Niederhalter_rechts].toGS_wait_time));
+
+simu_capMainteningRight(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
+                        xIN_inGS   := UINT_TO_INT(IO_BOX.I3100_ST160_Wegmessenor_rechts) < 10,
+                        xIN_inAS   := UINT_TO_INT(IO_BOX.I3100_ST160_Wegmessenor_rechts) > 200,
+                        xIN_valve  := fb_capMainteningRight.xOUT_VALVE,
+                        tIN_GS_ms  := 200,  // ms
+                        tIN_AS_ms  := 200); // ms
+
+fb_dichtung_left(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
+                 xIN_Quit     := xIN_Quit,
+                 xIN_Manu     := enState.StateMANU = enIN_State,
+                 pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][3]),
+                 xIN_GS       := simu_dichtung_left.xOUT_inGS,
+                 xIN_AS       := simu_dichtung_left.xOUT_inAS,
+                 xIN_FREE     := TRUE,
+                 xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
+                                 (ST160_CETA_e.unseal_piece = iOUT_Step),
+                 xINtoAS   := _20_AUTO.recipe.st160.Use_element_left AND (ST160_CETA_e.seal_piece = iOUT_Step),
+                 tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                               [ST160_Cylinders_e.Dichtung_prufglocke_links].toAS_alarm_time),
+                 tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                               [ST160_Cylinders_e.Dichtung_prufglocke_links].toGS_alarm_time),
+                 tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                [ST160_Cylinders_e.Dichtung_prufglocke_links].toAS_wait_time),
+                 tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                [ST160_Cylinders_e.Dichtung_prufglocke_links].toGS_wait_time));
+
+simu_dichtung_left(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
+                   xIN_inGS   := NOT fb_dichtung_right.xOUT_VALVE, // no sensor here
+                   xIN_inAS   := fb_dichtung_right.xOUT_VALVE,     // no sensor here
+                   xIN_valve  := fb_dichtung_left.xOUT_VALVE,
+                   tIN_GS_ms  := 200,  // ms
+                   tIN_AS_ms  := 200); // ms
+
+fb_dichtung_right(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
+                  xIN_Quit     := xIN_Quit,
+                  xIN_Manu     := enState.StateMANU = enIN_State,
+                  pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST160][4]),
+                  xIN_GS       := simu_dichtung_right.xOUT_inGS,
+                  xIN_AS       := simu_dichtung_right.xOUT_inAS,
+                  xIN_FREE     := TRUE,
+                  xINtoGS      := (ST160_CETA_e.Init_pneumatics = iOUT_Step) OR
+                                  (ST160_CETA_e.unseal_piece = iOUT_Step),
+                  xINtoAS   := _20_AUTO.recipe.st160.Use_element_right AND (ST160_CETA_e.seal_piece = iOUT_Step),
+                  tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toAS_alarm_time),
+                  tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toGS_alarm_time),
+                  tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                 [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toAS_wait_time),
+                  tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST160]
+                                                 [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toGS_wait_time));
+
+simu_dichtung_right(xIN_Enable := CETA_SIMULATION AND CONST.USE_SIMULATION,
+                    xIN_inGS   := NOT fb_dichtung_right.xOUT_VALVE, // no sensor here
+                    xIN_inAS   := fb_dichtung_right.xOUT_VALVE,     // no sensor here
+                    xIN_valve  := fb_dichtung_right.xOUT_VALVE,
+                    tIN_GS_ms  := 200,  // ms
+                    tIN_AS_ms  := 200); // ms
+
+(*******************************************************************)
+(* OUTPUTS *)
+(*******************************************************************)
+// Error Flag 
+xOUT_ErrFlag := (bOUT_Error <> 0);
+// Baustein befindet sich im Ablauf 
+xOUT_Busy := (iOUT_Step > ST160_CETA_e.READY) AND (iOUT_Step < ST160_CETA_e.DONE);
+// Baustein hat den Ablauf beendet
+xOUT_Done := (iOUT_Step = ST160_CETA_e.DONE);
+// Process ready
+xOUT_Ready := (iOUT_Step = ST160_CETA_e.READY) OR (iOUT_Step = ST160_CETA_e.waitOnMover);
+// Timeout FB 				 		
+xOUT_Timeout := TON_Timeout.Q;
+// Itialisierung fertig			
+xOUT_InitDone := (iOUT_Step = ST160_CETA_e.READY) OR (iOUT_Step = ST160_CETA_e.waitOnMover);
+// Aktueller Schritt			
+iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
+sOUT_Step := TO_STRING(iOUT_Step);
+//Fehlernummer	 
+bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
+(* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
+xOUT_Wait := (iOUT_Step = ST160_CETA_e.DONE);
+
+xOUT_MoverFree := iOUT_Step >= ST160_CETA_e.MOVER_FREE_OP AND iOUT_Step < ST160_CETA_e.MOVER_NEEDED_OP;
+
+iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
+                                         iAktStep,
+                                         iAktStep,
+                                         ST160_CETA_e.Init_pneumatics,
+                                         ST160_CETA_e.SYNC_MOVER_LEAVE);
+
+IO_BOX.Q0300_14_ST160_niederhalter_links :=
+    fb_capMainteningLeft.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q0301_14_ST160_niederhalter_rechts :=
+    fb_capMainteningRight.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q0302_14_ST160_dichtung_pruflocker_links :=
+    fb_dichtung_left.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q0302_12_ST160_dichtung_pruflocker_rechts :=
+    fb_dichtung_right.xOUT_VALVE AND NOT (CETA_SIMULATION AND CONST.USE_SIMULATION);
+
+(*******************************************************************)
+(* Ablauf *)
+(*******************************************************************)
+
+(* Sperren *)
+IF xIN_Sperre THEN
+    iPreStep  := ST160_CETA_e.RESET;
+    iOUT_Step := ST160_CETA_e.RESET;
+    RETURN;
+END_IF;
+
+(* Schritt Merker *)
+IF iAktStep <> iOUT_Step THEN
+    iLastStep := iAktStep;
+    iAktStep  := iOUT_Step;
+END_IF
+
+(* START *)
+rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis160_01Z.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF fb_capMainteningLeft.xOUT_ErrFlag THEN
+        bOUT_Error := 12;
+    ELSIF fb_capMainteningRight.xOUT_ErrFlag THEN
+        bOUT_Error := 13;
+    END_IF
+ELSIF iOUT_Step < ST160_CETA_e.ERROR THEN
+    iOUT_Step := ST160_CETA_e.ERROR;
+END_IF
+
+(*******************************************************************)
+(* Schrittkette  *)
+(*******************************************************************)
+CASE iOUT_Step OF
+
+(***** RESET *****)
+ST160_CETA_e.RESET: (* Schritt 0-99 *)
+    //Initialisierungen
+    //Start Init Ablauf
+    IF xIN_Init THEN
+        iOUT_Step := ST160_CETA_e.INIT;
+        //Start Manu Ablauf
+    ELSIF enIN_State = StateMANU AND xIN_NextStep THEN
+        iOUT_Step := ST160_CETA_e.INIT;
+    END_IF;
+
+(***** INIT *****)
+ST160_CETA_e.INIT: (* Grundstellung ? *)
+    iOUT_Step := ST160_CETA_e.Init_pneumatics;
+
+ST160_CETA_e.Init_pneumatics:
+    IF (fb_capMainteningLeft.xOUT_inGS AND fb_capMainteningRight.xOUT_inGS) AND
+       (fb_dichtung_left.xOUT_inGS AND fb_dichtung_right.xOUT_inGS) THEN
+        iOUT_Step := ST160_CETA_e.Init_vertical_down;
+    END_IF
+
+ST160_CETA_e.Init_vertical_down:
+    IF fb_PnpVerAxis.MoveTo(ST160_PnpVerPos_e.gs_down).xOUT_InPos THEN
+        iOUT_Step := ST160_CETA_e.READY;
+    END_IF
+
+(***** READY / INIT DONE *****)
+ST160_CETA_e.READY:   (* Start AUTO,END,LEER,STEP *)
+    IF xIN_Start THEN //IF rtSTART.Q THEN
+        iOUT_Step := ST160_CETA_e.START;
+    END_IF
+
+(***** START  ZYKLISCH *****)
+ST160_CETA_e.START: (*  *)
+    IF xIN_NextStep AND pxFG_Freigabe^ THEN
+        iOUT_Step       := ST160_CETA_e.waitOnMover;
+        xCETA_Result_OK := FALSE;
+    END_IF;
+
+ST160_CETA_e.waitOnMover: (*  *)
+    IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
+        IF (Mover.GetLastStationDone() >= 160) OR Mover.IsPieceBad() THEN
+            iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST160_CETA_e.handling_down;
+        END_IF
+    END_IF;
+
+ST160_CETA_e.handling_down:
+    IF (NOT _20_AUTO.recipe.st160.Use_element_left OR fb_capMainteningLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st160.Use_element_right OR fb_capMainteningRight.xOUT_inAS) THEN
+        iOUT_Step := ST160_CETA_e.vertical_up;
+    END_IF
+
+ST160_CETA_e.vertical_up:
+    IF fb_PnpVerAxis.MoveTo(ST160_PnpVerPos_e.as_up).xOUT_InPos THEN
+        iOUT_Step := ST160_CETA_e.seal_piece;
+    END_IF
+
+ST160_CETA_e.seal_piece:
+    IF (NOT _20_AUTO.recipe.st160.Use_element_left OR fb_dichtung_left.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st160.Use_element_right OR fb_dichtung_right.xOUT_inAS) THEN
+        IF CETA_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step       := ST160_CETA_e.unseal_piece;
+            xCETA_Result_OK := TRUE;
+        ELSE
+            iOUT_Step := ST160_CETA_e.CETA_start;
+        END_IF
+    END_IF
+
+ST160_CETA_e.CETA_start:
+    IF ref_fb_CETA.xOUT_ReadyToStart THEN
+        IF ref_fb_CETA.StartMeasurement() THEN
+            iOUT_Step := ST160_CETA_e.CETA_wait_on_result;
+        ELSE
+            bOUT_Error := 21;
+        END_IF
+    END_IF
+
+ST160_CETA_e.CETA_wait_on_result:
+    IF ref_fb_CETA.xOUT_DataReady THEN
+        // this void call is needed to tell CETA function block
+        // that we have read the result
+        ref_fb_CETA.GetResult();
+        xCETA_Result_OK := ref_fb_CETA.xOUT_MeasureOK;
+        iOUT_Step       := ST160_CETA_e.unseal_piece;
+    END_IF
+
+ST160_CETA_e.unseal_piece:
+    IF (NOT _20_AUTO.recipe.st160.Use_element_left OR fb_dichtung_left.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st160.Use_element_right OR fb_dichtung_right.xOUT_inGS) THEN
+        iOUT_Step := ST160_CETA_e.vertical_down;
+    END_IF
+
+ST160_CETA_e.vertical_down:
+    IF fb_PnpVerAxis.MoveTo(ST160_PnpVerPos_e.gs_down).xOUT_InPos THEN
+        iOUT_Step := ST160_CETA_e.handling_up;
+    END_IF
+
+ST160_CETA_e.handling_up:
+    IF fb_capMainteningLeft.xOUT_inGS AND fb_capMainteningRight.xOUT_inGS THEN
+        iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) AND NOT xCETA_Result_OK THEN
+            IF NOT Mover.SetLastStation(-160) THEN
+                ASSERT(0);
+            END_IF
+        ELSIF __ISVALIDREF(Mover) AND xCETA_Result_OK THEN
+            IF NOT Mover.SetLastStation(160) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
+    END_IF
+
+ST160_CETA_e.SYNC_MOVER_LEAVE:
+    // The mover needs to be taken by MoverMan
+    IF NOT __ISVALIDREF(Mover) THEN
+        iOUT_Step := ST160_CETA_e.DONE;
+    END_IF
+
+(***** DONE *****)
+ST160_CETA_e.DONE: (* Letzter Schritt  *)
+    IF NOT xIN_AlarmAktiv THEN
+        //AUTO
+        IF (enIN_State = StateAUTO) AND xIN_RestartCYCL THEN
+            iOUT_Step := ST160_CETA_e.START;
+            //STEP / END / LEERFAHREN restart
+        ELSIF (enIN_State < StateAUTO) AND (enIN_State >= enState.StateSTEP) AND xIN_RestartCYCL THEN
+            iOUT_Step := ST160_CETA_e.START;
+            //STEP / END / LEERFAHREN fertig
+        ELSIF (enIN_State = StateREADY) THEN
+            iOUT_Step := ST160_CETA_e.READY;
+        END_IF;
+    END_IF;
+
+(************ ERROR *************)
+ST160_CETA_e.ERROR: (* ERROR *) ;
+
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

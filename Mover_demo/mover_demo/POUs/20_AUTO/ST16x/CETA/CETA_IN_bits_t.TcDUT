@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_IN_bits_t" Id="{875d5eb3-ed36-43b5-a97f-e91792807fe3}">
+    <Declaration><![CDATA[TYPE CETA_IN_bits_t :
+STRUCT
+    b08_error_bit                    : BIT; // error bit
+    b09_communication_possible       : BIT; // communication possible
+    b10_device_ready_to_start        : BIT; // device ready to start
+    b11_result_block_handshake_bit   : BIT; // result block handshake bit
+    b12_measuring_curve              : BIT; // measuring curve
+    b13_res_b13                      : BIT;
+    b14_res_b14                      : BIT;
+    b15_res_b15                      : BIT;
+    b00_measurement_complete         : BIT; // measurement complete
+    b01_parameters_received          : BIT; // parameters received
+    b02_parameters_available         : BIT; // parameters available
+    b03_error_code_available         : BIT; // error code available
+    b04_front_panel_lock_state       : BIT; // front panel lock state
+    b05_program_number_assigned      : BIT; // program number assigned
+    b06_system_information_available : BIT; // system information available
+    b07_cycle_counter_available      : BIT; // cycle counter available
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
