@@ -5,9 +5,9 @@
 {attribute 'strict'}
 TYPE RecipeType_e :
 (
-    Smart_Mini := 0,
-    Smart := 1,
-    // Blue := 2,
+    Smart := 0,
+    Pro := 1,
+    Mini := 2,
     // Smart_Kristall := 3,
     // Pro_Smart := 4,
     // Pro_Blue := 5,
@@ -23,13 +23,18 @@ END_TYPE
         <o xml:space="preserve" t="TextListEnumerationTextListObject">
           <l n="TextList" t="ArrayList" cet="TextListRow">
             <o>
-              <v n="TextID">"Smart_Mini"</v>
+              <v n="TextID">"Smart"</v>
               <v n="TextDefault">"0"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"Smart"</v>
+              <v n="TextID">"Pro"</v>
               <v n="TextDefault">"1"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Mini"</v>
+              <v n="TextDefault">"2"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
