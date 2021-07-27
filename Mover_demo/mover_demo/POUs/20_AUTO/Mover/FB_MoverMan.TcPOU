@@ -195,7 +195,7 @@ VAR
 
     _StationSet1 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
-                                                  -1, // ST110
+                                                  0, // ST110
                                                   -1, // ST115
                                                   -1, // ST120
                                                   0,  // ST125
