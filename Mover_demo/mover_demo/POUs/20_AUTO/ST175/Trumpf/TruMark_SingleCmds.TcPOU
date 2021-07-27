@@ -216,6 +216,7 @@ CASE iStep OF
 					iStep := 0;
 				ELSE
 					// Conditions not matched
+					iStep := 40;
 				END_IF
 				
 				// We may be blocked for nothing, so we retry the command
