@@ -13,7 +13,8 @@
 
 VAR
     //Startup HMI-Panel
-    TON_startup : TON;
+    TON_startup     : TON;
+    fb_startProcess : NT_StartProcess;
 
     //Reset Counter
     TON_ResetCounter : TON; // Reset Temparary Counter
@@ -62,6 +63,12 @@ END_VAR
 //Startup Terminal
 //***********************************************************************************************)
 TON_Startup(IN := TRUE, PT := T#5S);
+fb_startProcess(NETID     := '',
+                PATHSTR   := 'C:\Program Files\SpiderControl\MicroBrowser\MicroBrowser_XP.exe',
+                DIRNAME   := 'C:\Users\Administrator\AppData\Roaming\SpiderControl\Microbrowser',
+                COMNDLINE :=,
+                START     := TON_Startup.Q,
+                TMOUT     := T#10S);
 
 //***********************************************************************************************)
 //Parameter ÜBERPRÜFEN
@@ -117,8 +124,8 @@ _14_STATE();
 //***********************************************************************************************)
 _FB_LAMPE(enIN_State      := HMI.enState,
           xIN_AlarmAktiv  := GVL.st105_aut.xOUT_AlarmST,
-          xIN_SafetyError := FALSE,
-          xIN_NotAus      := FALSE,
+          xIN_SafetyError := _02_Safety.xOUT_SafetyError,
+          xIN_NotAus      := _02_Safety.xOUT_NotAusBetaetigt,
           xIN_Mel1        :=,
           xIN_Mel2        :=,
           xIN_Mel3        :=,
@@ -171,7 +178,7 @@ _FB_SystemTime(timeLoDW => dw_ActTime, timeHiDW =>);
 dw_ActTime := dw_ActTime AND 16#FFFF0000;
 
 IF HMI.btArMain[8].rtrig THEN
-	HMI.PieceDoneTmp := 0;
+    HMI.PieceDoneTmp := 0;
 END_IF
 
 (***********************************************************************************************)
