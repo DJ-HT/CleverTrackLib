@@ -215,6 +215,8 @@ ST128_TubeCapCheck_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST128] THEN
         IF Mover.GetLastStationDone() >= INT#128 THEN
             iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
+		ELSIF Mover.GetLastStationDone() < INT#125 THEN
+            iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST128_TubeCapCheck_e.Move_shuttle_relative_right;
         END_IF

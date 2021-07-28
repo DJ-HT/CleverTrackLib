@@ -415,7 +415,7 @@ END_FOR
 FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
 
-    IF HMI.enState = enState.StateAUTO OR HMI.enState = enState.StateSTEP THEN
+    IF HMI.enState = enState.StateAUTO OR HMI.enState = enState.StateSTEP OR HMI.enState = enState.StateLEER THEN
 
         CASE _MoverList[mv_i].State OF
 

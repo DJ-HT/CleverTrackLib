@@ -278,6 +278,8 @@ ST170_RFID_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF (Mover.GetLastStationDone() >= 170) THEN
             iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
+		ELSIF Mover.GetLastStationDone() < INT#110 THEN
+            iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST170_RFID_e.vertical_up;
         END_IF

@@ -499,12 +499,8 @@ ST105_Feeder_e.DONE: (* Letzter Schritt  *)
         IF (enIN_State = StateAUTO) AND xIN_RestartCYCL AND (fifo.GetLen() < _20_AUTO.recipe.st105.FeederSize)
             THEN
             iOUT_Step := ST105_Feeder_e.START;
-            //STEP / END / LEERFAHREN restart
-        ELSIF (enIN_State < StateAUTO) AND
-              (enIN_State >= enState.StateSTEP) AND
-              xIN_RestartCYCL AND
-              NOT (fifo.GetLen() >= _20_AUTO.recipe.st105.FeederSize) THEN
-            iOUT_Step := ST105_Feeder_e.START;
+            // We don't load pieces when not in auto
+			
             //STEP / END / LEERFAHREN fertig
         ELSIF (enIN_State = StateREADY) THEN
             iOUT_Step := ST105_Feeder_e.READY;

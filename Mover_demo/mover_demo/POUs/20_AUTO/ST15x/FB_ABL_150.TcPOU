@@ -262,6 +262,8 @@ ST150_Uss_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF Mover.GetLastStationDone() >= iIN_StationNumber THEN
             iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
+		ELSIF Mover.GetLastStationDone() < INT#145 THEN
+            iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST150_Uss_e.mover_maintening_up;
         END_IF

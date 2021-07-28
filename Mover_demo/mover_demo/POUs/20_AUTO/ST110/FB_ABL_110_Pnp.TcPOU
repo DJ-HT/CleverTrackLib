@@ -605,6 +605,8 @@ ST110_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST110]) THEN
         IF Mover.GetLastStationDone() >= INT#110 THEN
             iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
+		ELSIF Mover.GetLastStationDone() < INT#105 THEN
+            iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST110_Pnp_e.Pnp_Handling_pin_up;
         END_IF

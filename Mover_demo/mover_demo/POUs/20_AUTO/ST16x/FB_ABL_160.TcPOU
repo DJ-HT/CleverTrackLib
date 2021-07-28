@@ -420,6 +420,8 @@ ST160_CETA_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF (Mover.GetLastStationDone() >= iIN_StationNumber) OR Mover.IsPieceBad() THEN
             iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
+		ELSIF Mover.GetLastStationDone() < INT#150 THEN
+            iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST160_CETA_e.handling_down;
         END_IF

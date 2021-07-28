@@ -641,6 +641,8 @@ ST130_Dose_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST130] THEN
         IF Mover.GetLastStationDone() >= INT#130 THEN
             iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
+		ELSIF Mover.GetLastStationDone() < INT#125 THEN
+            iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST130_Dose_e.check_filterhut_presence;
         END_IF

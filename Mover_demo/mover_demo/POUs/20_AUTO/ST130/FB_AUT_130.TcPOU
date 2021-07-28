@@ -66,7 +66,7 @@ fb_Dose(xIN_Reset          := xReset,
        xIN_NextStep       := xNextStep,
        xIN_AlarmAktiv     := xIN_AlarmAktiv,
        xIN_DryCycle       := xIN_DryCycle,
-       xIN_RestartCYCL    := enIN_State = enState.StateAUTO, // only restart when the mover has move out
+       xIN_RestartCYCL    := enIN_State >= enState.StateLEER, // only restart when the mover has move out
        enIN_State         := enIN_State,
        tIN_Timeout        := tIN_Timeout,
        pxFG_Freigabe      := ADR(xDummy),
