@@ -135,6 +135,7 @@ CASE iState OF
 	(*Schrittkette zurückgesetzt*)
 			IF  xIN_GS THEN 
 				iState:= IN_GS;
+				xZYL := FALSE;
 			ELSIF xIN_AS THEN
 				xZYL := TRUE;
 				iState:= IN_AS;
