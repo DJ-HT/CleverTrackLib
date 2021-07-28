@@ -112,6 +112,7 @@ IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
     iOUT_Step    := iPreStep;
+    eSliderStep  := ST105_Slider_e.slider_pusher_in;
 END_IF;
 
 iCurrentTableIndex := iCurrentTableIndex MOD 3;
@@ -463,6 +464,7 @@ ST105_Feeder_e.READY: (* Start AUTO,END,LEER,STEP *)
 ST105_Feeder_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
         iOUT_Step := ST105_Feeder_e.check_if_feeding_necessary;
+		iPreStep  := ST105_Feeder_e.READY;
     END_IF;
 
 ST105_Feeder_e.check_if_feeding_necessary:
