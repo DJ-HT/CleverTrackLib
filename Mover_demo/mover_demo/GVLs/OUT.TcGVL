@@ -35,8 +35,8 @@ VAR_GLOBAL
     Q023_ST150_ultraschall_data_bit_1 AT %QX02.3 : BOOL; // Ultraschall 150.20 Data HEX2
     Q024_ST150_ultraschall_data_bit_2 AT %QX02.4 : BOOL; // Ultraschall 150.20 Data HEX4
     Q025_ST150_ultraschall_data_bit_3 AT %QX02.5 : BOOL; // Ultraschall 150.20 Data HEX8
-    Q026_ST170_rfid_test_links        AT %QX02.6 : BOOL; // RFID Test links 170.20
-    Q027_ST170_rfid_test_rechts       AT %QX02.7 : BOOL; // RFID Test rechts 170.21
+    Q026_ST170_rfid_start_links       AT %QX02.6 : BOOL; // RFID Test links 170.20
+    Q027_ST170_rfid_start_rechts      AT %QX02.7 : BOOL; // RFID Test rechts 170.21
 
     Q030_ST155_ultraschall_start      AT %QX03.0 : BOOL; // Ultraschall 155.20 Start    
     Q031_ST155_ultraschall_reset      AT %QX03.1 : BOOL; // Ultraschall 155.20 Reset    
@@ -48,14 +48,14 @@ VAR_GLOBAL
     Q037_                             AT %QX03.7 : BOOL; // 
 
     // 171D2
-    Q040_ AT %QX04.0 : BOOL; // 
-    Q041_ AT %QX04.1 : BOOL; // 
-    Q042_ AT %QX04.2 : BOOL; // 
-    Q043_ AT %QX04.3 : BOOL; // 
-    Q044_ AT %QX04.4 : BOOL; // 
-    Q045_ AT %QX04.5 : BOOL; // 
-    Q046_ AT %QX04.6 : BOOL; // 
-    Q047_ AT %QX04.7 : BOOL; // 
+    Q040_ST170_RFID_Links_Type_Bit_0  AT %QX04.0 : BOOL; // Bit 0 of the RFID type
+    Q041_ST170_RFID_Links_Type_Bit_1  AT %QX04.1 : BOOL; // Bit 1 of the RFID type
+    Q042_ST170_RFID_Links_Type_Bit_2  AT %QX04.2 : BOOL; // Bit 2 of the RFID type
+    Q043_ST170_RFID_Rechts_Type_Bit_0 AT %QX04.3 : BOOL; // Bit 0 of the RFID type
+    Q044_ST170_RFID_Rechts_Type_Bit_1 AT %QX04.4 : BOOL; // Bit 1 of the RFID type
+    Q045_ST170_RFID_Rechts_Type_Bit_2 AT %QX04.5 : BOOL; // Bit 2 of the RFID type
+    Q046_                             AT %QX04.6 : BOOL; // 
+    Q047_                      AT %QX04.7 : BOOL; // 
 
     Q050_ AT %QX05.0 : BOOL; // 
     Q051_ AT %QX05.1 : BOOL; // 

@@ -98,7 +98,7 @@ END_IF;
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
-    iOUT_Step    := ST150_Uss_e.INIT;
+    iOUT_Step    := iPreStep;
 END_IF;
 
 (*******************************************************************)
@@ -274,6 +274,7 @@ ST150_Uss_e.check_cap_present:
         // iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
         iOUT_Step  := ST150_Uss_e.ERROR;
         bOUT_Error := 8;
+		iPreStep := ST150_Uss_e.waitOnMover;
 
         // IF __ISVALIDREF(Mover) THEN
         //     IF NOT Mover.SetLastStation(-iIN_StationNumber) THEN
