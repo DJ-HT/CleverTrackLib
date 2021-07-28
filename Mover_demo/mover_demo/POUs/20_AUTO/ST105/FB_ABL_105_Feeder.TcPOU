@@ -304,7 +304,8 @@ xOUT_Wait := (iOUT_Step = ST105_Feeder_e.DONE);
 
 IO_BOX.Q9500_ST105_Freigabe_WF := fb_feeder_wf.xOUT_EnableFeeder AND
                                   NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
-                                  (ST105_Slider_e.slider_down = eSliderStep);
+                                  ((ST105_Slider_e.slider_down = eSliderStep) OR
+                                  ((ST105_Slider_e.slider_go_up = eSliderStep) AND ton_two_pieces.Q));
 
 IO_BOX.Q9501_ST105_Freigabe_LF := fb_feeder_lf.xOUT_EnableFeeder AND
                                   IO_BOX.Q9500_ST105_Freigabe_WF AND
