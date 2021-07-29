@@ -304,7 +304,7 @@ ST175_LASER_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF (Mover.GetLastStationDone() >= 175) THEN
             iOUT_Step := ST175_LASER_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#105 THEN
+		ELSIF Mover.GetLastStationDone() < INT#150 THEN
             iOUT_Step := ST175_LASER_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST175_LASER_e.close_doors;

@@ -477,7 +477,7 @@ ST145_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST145] THEN
         IF Mover.GetLastStationDone() >= INT#145 THEN
             iOUT_Step := ST145_Pnp_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#140 THEN
+		ELSIF Mover.GetLastStationDone() < INT#130 THEN
             iOUT_Step := ST145_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST145_Pnp_e.Pnp_Ver_ShuttleDown;
