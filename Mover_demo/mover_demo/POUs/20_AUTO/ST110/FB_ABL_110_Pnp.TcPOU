@@ -86,11 +86,13 @@ VAR
 
     fb_kraftLeft  : FB_WandlerForceSensor;
     fb_kraftRight : FB_WandlerForceSensor;
+	
+	xIsPiecesPicked : BOOL; // Do we have pieces picked by vacum
 
 END_VAR
 VAR CONSTANT
     PNP_SIMULATION       : BOOL := FALSE; // Set to TRUE to simulate this part of the program
-    PNP_DONT_CHECK_KRAFT : BOOL := FALSE;  // don't care of kraft sensor
+    PNP_DONT_CHECK_KRAFT : BOOL := FALSE; // don't care of kraft sensor
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -419,6 +421,10 @@ xOUT_PickPiece := iOUT_Step = ST110_Pnp_e.PnP_Hor_ToTrackPos;
 OUT.Q104_ST110_vacum_on_left  := fb_gripperLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 OUT.Q105_ST110_vacum_on_right := fb_gripperRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
+IF NOT IN.I004_druckwachter_luftdruck_ok THEN
+    xIsPiecesPicked := FALSE;
+END_IF
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)
@@ -540,7 +546,7 @@ ST110_Pnp_e.Init_check_if_pces_handled:
         bOUT_Error := 3;
         iOUT_Step  := ST110_Pnp_e.ERROR;
 
-    ELSIF NOT fb_gripperLeft.xOUT_inAS AND NOT fb_gripperRight.xOUT_inAS THEN
+    ELSIF (NOT fb_gripperLeft.xOUT_inAS AND NOT fb_gripperRight.xOUT_inAS) OR NOT xIsPiecesPicked THEN
         iOUT_Step := ST110_Pnp_e.READY;
 
     ELSE
@@ -582,7 +588,8 @@ ST110_Pnp_e.Vacum_on:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st110.xUseVerLeft OR simu_gripperLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st110.xUseVerRight OR simu_gripperRight.xOUT_inAS) THEN
-        iOUT_Step := ST110_Pnp_e.PnP_Ver_RotTableUp;
+        iOUT_Step       := ST110_Pnp_e.PnP_Ver_RotTableUp;
+        xIsPiecesPicked := TRUE;
     END_IF;
 
 ST110_Pnp_e.PnP_Ver_RotTableUp:
@@ -605,7 +612,7 @@ ST110_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST110]) THEN
         IF Mover.GetLastStationDone() >= INT#110 THEN
             iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#105 THEN
+        ELSIF Mover.GetLastStationDone() < INT#105 THEN
             iOUT_Step := ST110_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST110_Pnp_e.Pnp_Handling_pin_up;
@@ -629,7 +636,8 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st110.xUseVerLeft OR fb_axis110_02Z.xOUT_DONE) AND
        (NOT _20_AUTO.recipe.st110.xUseVerRight OR fb_axis110_03Z.xOUT_DONE) THEN
-        iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+        iOUT_Step       := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+        xIsPiecesPicked := FALSE;
 
         IF __ISVALIDREF(Mover) THEN
             IF NOT Mover.SetLastStation(-110) THEN
