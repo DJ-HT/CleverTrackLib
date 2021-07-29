@@ -171,7 +171,7 @@ VAR
                    (_PosList[17],
                     GVL.st175_aut,
                     0,
-                    ApproachScenario_e.WaitOnFinishedProcess,
+                    ApproachScenario_e.WaitOnFreeStation,
                     0,
                     75),
                    (_PosList[18],
@@ -207,7 +207,7 @@ VAR
                                                   2,  // ST150
                                                   0,  // ST155
                                                   3,  // ST160
-                                                  -1, // ST165
+                                                  3, // ST165
                                                   0,  // ST170
                                                   0,  // ST174
                                                   4,  // ST175
@@ -228,7 +228,7 @@ VAR
                                                   2,  // ST150
                                                   -1, // ST155
                                                   3,  // ST160
-                                                  -1, // ST165
+                                                  3, // ST165
                                                   0,  // ST170
                                                   0,  // ST174
                                                   4,  // ST175
@@ -236,26 +236,26 @@ VAR
                                                   -1, // ST180
                                                   0]; // ST185
     _StationSet3 :
-        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0,
-                                                  0];
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+                                                  0, // ST110
+                                                  -1, // ST115
+                                                  -1, // ST120
+                                                  0,  // ST125
+                                                  0,  // ST128
+                                                  1,  // ST130
+                                                  -1, // ST135
+                                                  0,  // ST140
+                                                  0,  // ST145
+                                                  2,  // ST150
+                                                  0,  // ST155
+                                                  3,  // ST160
+                                                  3,  // ST165
+                                                  0,  // ST170
+                                                  0,  // ST174
+                                                  4,  // ST175
+                                                  -1, // ST176
+                                                  -1, // ST180
+                                                  0]; // ST185
     _StationSet4 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,
                                                   0,
@@ -415,7 +415,7 @@ END_FOR
 FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
     _MoverList[mv_i].AttachedPieceHolder REF= _WorkStationList[PH_num].PieceHolder;
 
-    IF HMI.enState = enState.StateAUTO OR HMI.enState = enState.StateSTEP THEN
+    IF HMI.enState = enState.StateAUTO OR HMI.enState = enState.StateSTEP OR HMI.enState = enState.StateLEER THEN
 
         CASE _MoverList[mv_i].State OF
 
@@ -455,14 +455,8 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 END_IF
 
             ApproachScenario_e.WaitOnFreeStation:
-                // Are we in a waiting spot ?
-                IF __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
-
-                    iNumOfMoverOnTheWay := THIS^.GetNumOfMoverOnTheWay(_MoverList[mv_i]);
-
-                    IF 0 = iNumOfMoverOnTheWay THEN
-                        _MoverList[mv_i].MoveToStation();
-                    END_IF
+                IF NOT THIS^.GetPrevMover(_MoverList[mv_i]).Station.Equals(_MoverList[mv_i].Station) THEN
+                    _MoverList[mv_i].MoveToStation();
                 END_IF
 
             // wait on the previous station to be free (syncronize with the previous)
@@ -753,7 +747,8 @@ END_FOR]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetNextMover" Id="{f32fd12d-e722-40d2-a3bf-10f3112be7d9}">
-      <Declaration><![CDATA[METHOD GetNextMover : REFERENCE TO FB_Mover
+      <Declaration><![CDATA[// Get the mover with the next number (Means the mover behind)
+METHOD GetNextMover : REFERENCE TO FB_Mover
 VAR_INPUT
     Mover : REFERENCE TO FB_Mover;
 END_VAR
@@ -814,7 +809,8 @@ END_FOR
       </Implementation>
     </Method>
     <Method Name="GetPrevMover" Id="{2a592bc1-5769-4abc-8ff3-c03f54588b09}">
-      <Declaration><![CDATA[METHOD GetPrevMover : REFERENCE TO FB_Mover
+      <Declaration><![CDATA[// Get the mover with the previous number (Means the front mover)
+METHOD GetPrevMover : REFERENCE TO FB_Mover
 VAR_INPUT
     Mover : REFERENCE TO FB_Mover;
 END_VAR

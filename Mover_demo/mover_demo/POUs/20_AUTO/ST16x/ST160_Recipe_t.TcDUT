@@ -3,8 +3,9 @@
   <DUT Name="ST160_Recipe_t" Id="{34ae7bc1-90d5-4547-bc33-0df5746ede05}">
     <Declaration><![CDATA[TYPE ST160_Recipe_t :
 STRUCT
-    Use_element_left : BOOL; //a 
+    Use_element_left  : BOOL; //a 
     Use_element_right : BOOL; // 
+    Program_number    : USINT; // 
 END_STRUCT
 END_TYPE
 ]]></Declaration>

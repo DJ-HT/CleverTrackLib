@@ -3,9 +3,9 @@
   <POU Name="FB_Laser_ABL" Id="{da082569-8ac6-4e90-8334-73d28c10a92f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Laser_ABL
 VAR_INPUT
-    xIN_Start    : BOOL;
-    sIN_FileName : STRING := 'Someting here please';
-	xIN_ResetData : BOOL; // reset all data, used to ensure that the marking data are in the laser
+    xIN_Start     : BOOL;
+    sIN_FileName  : STRING := 'Someting here please';
+    xIN_ResetData : BOOL; // reset all data, used to ensure that the marking data are in the laser
 END_VAR
 VAR_OUTPUT
     xOUT_DONE  : BOOL;
@@ -16,8 +16,8 @@ VAR
     iStep     : INT := 0;
     sDataTime : STRING(10);
 
-    sLastName : STRING;
-    sLastNum  : STRING(10);
+    sLastName : STRING;     // var used to see if last value has changed or not
+    sLastNum  : STRING(10); // var used to see if last value has changed or not
 
     fb_time : NT_GetTime;
 END_VAR
@@ -28,7 +28,7 @@ END_VAR
         TMOUT := T#1S);
 
 IF xIN_ResetData THEN
-    MEMSET(ADR(sDataTime), 0, SIZEOF(sDataTime));
+    MEMSET(ADR(sLastName), 0, SIZEOF(sLastName));
     MEMSET(ADR(sLastNum), 0, SIZEOF(sLastNum));
 END_IF
 
@@ -80,7 +80,7 @@ CASE iStep OF
     END_IF
 
 1100: (* New FILE ? todo *)
-    IF 0 = FIND(sLastName, SIMU.sLaserFileName) OR (LEN(sLastName) <> LEN(SIMU.sLaserFileName)) THEN
+    IF 0 = FIND(sLastName, sIN_FileName) OR (LEN(sLastName) <> LEN(sIN_FileName)) THEN
         iStep := 1110;
     ELSE
         iStep := 1130;
@@ -90,7 +90,7 @@ CASE iStep OF
     IF if_SingleCmds.bReady THEN
         if_SingleCmds.iStepNr     := 20; // TLV - Load Marking-File with 2 variables
         if_SingleCmds.sInputValue := CONCAT('C:\Aquis\', CONCAT(sIN_FileName, '.VLF'));
-        sLastName                 := SIMU.sLaserFileName;
+        sLastName                 := sIN_FileName;
 
         if_SingleCmds.bStart := TRUE;
         iStep                := 1120;

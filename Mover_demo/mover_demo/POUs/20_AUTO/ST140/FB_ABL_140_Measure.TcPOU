@@ -208,6 +208,8 @@ ST140_Measure_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST140] THEN
         IF Mover.GetLastStationDone() >= INT#140 THEN
             iOUT_Step := ST140_Measure_e.SYNC_MOVER_LEAVE;
+		ELSIF Mover.GetLastStationDone() < INT#130 THEN
+            iOUT_Step := ST140_Measure_e.SYNC_MOVER_LEAVE;
         ELSE
             MEMSET(ADR(arr_rMeasureTrack_Right), 0, SIZEOF(arr_rMeasureTrack_Right));
             MEMSET(ADR(arr_rMeasureTrack_Left), 0, SIZEOF(arr_rMeasureTrack_Left));

@@ -86,7 +86,7 @@ END_IF;
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
-    iOUT_Step    := ST170_RFID_e.INIT;
+    iOUT_Step    := iPreStep;
 END_IF;
 
 (*******************************************************************)
@@ -182,6 +182,23 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          ST170_RFID_e.vertical_up,
                                          ST170_RFID_e.SYNC_MOVER_LEAVE);
 
+OUT.Q026_ST170_rfid_start_links :=
+    _20_AUTO.recipe.st170.Use_element_left AND
+    (ST170_RFID_e.RFID_start = iOUT_Step) AND
+    NOT (RFID_SIMULATION AND CONST.USE_SIMULATION);
+
+OUT.Q027_ST170_rfid_start_rechts :=
+    _20_AUTO.recipe.st170.Use_element_right AND
+    (ST170_RFID_e.RFID_start = iOUT_Step) AND
+    NOT (RFID_SIMULATION AND CONST.USE_SIMULATION);
+
+OUT.Q040_ST170_RFID_Links_Type_Bit_0  := _20_AUTO.recipe.st170.RFID_Type.0;
+OUT.Q041_ST170_RFID_Links_Type_Bit_1  := _20_AUTO.recipe.st170.RFID_Type.1;
+OUT.Q042_ST170_RFID_Links_Type_Bit_2  := _20_AUTO.recipe.st170.RFID_Type.2;
+OUT.Q043_ST170_RFID_Rechts_Type_Bit_0 := _20_AUTO.recipe.st170.RFID_Type.0;
+OUT.Q044_ST170_RFID_Rechts_Type_Bit_1 := _20_AUTO.recipe.st170.RFID_Type.1;
+OUT.Q045_ST170_RFID_Rechts_Type_Bit_2 := _20_AUTO.recipe.st170.RFID_Type.2;
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)
@@ -261,33 +278,50 @@ ST170_RFID_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF (Mover.GetLastStationDone() >= 170) THEN
             iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
+		ELSIF Mover.GetLastStationDone() < INT#110 THEN
+            iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST170_RFID_e.vertical_up;
         END_IF
     END_IF;
 
 ST170_RFID_e.vertical_up:
-    IF fb_PnpVerAxis.MoveTo(ST170_PnpVerPos_e.as_up).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST170_PnpVerPos_e.as_up).xOUT_InPos THEN
         iOUT_Step := ST170_RFID_e.RFID_start;
     END_IF
 
 ST170_RFID_e.RFID_start:
-    IF TRUE THEN
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st170.Use_element_left OR NOT IN.I030_rfid_test_link_out1_170_20) AND
+       (NOT _20_AUTO.recipe.st170.Use_element_right OR NOT IN.I033_rfid_test_link_out1_170_21) THEN
         iOUT_Step := ST170_RFID_e.RFID_wait_on_result;
+
+        IF __ISVALIDREF(Mover) AND_THEN NOT Mover.SetLastStation(-170) THEN
+            ASSERT(0);
+        END_IF
     END_IF
 
 ST170_RFID_e.RFID_wait_on_result:
-    IF TRUE THEN
-        iOUT_Step := ST170_RFID_e.RFID_read;
-    END_IF
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st170.Use_element_left OR IN.I030_rfid_test_link_out1_170_20) AND
+       (NOT _20_AUTO.recipe.st170.Use_element_right OR IN.I033_rfid_test_link_out1_170_21) THEN
 
-ST170_RFID_e.RFID_read:
-    IF TRUE THEN
-        iOUT_Step := ST170_RFID_e.vertical_down;
+        xRFID_Result_OK := (NOT _20_AUTO.recipe.st170.Use_element_left OR
+                           (IN.I031_rfid_test_link_out2_170_20 AND NOT IN.I032_rfid_test_link_out3_170_20)) AND
+                           (NOT _20_AUTO.recipe.st170.Use_element_right OR
+                           (IN.I034_rfid_test_link_out2_170_21 AND NOT IN.I035_rfid_test_link_out3_170_21));
+
+        IF xRFID_Result_OK THEN
+            iOUT_Step := ST170_RFID_e.vertical_down;
+        ELSE
+            iPreStep   := ST170_RFID_e.vertical_down;
+            bOUT_Error := 1; // shold not be in error
+        END_IF
+
     END_IF
 
 ST170_RFID_e.vertical_down:
-    IF fb_PnpVerAxis.MoveTo(ST170_PnpVerPos_e.gs_down).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST170_PnpVerPos_e.gs_down).xOUT_InPos THEN
         iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
 
         IF __ISVALIDREF(Mover) AND NOT xRFID_Result_OK THEN

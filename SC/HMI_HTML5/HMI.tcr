@@ -1,10 +1,10 @@
-﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/27/21 09:28:34
+﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/27/21 18:13:08
 #!-- Spider Control PPO CSV File version 5 since Jan 2016 utf8 support in editor and server and clients 
 #!-- Spider Control PPO CSV File version 6 since July2020 init ppo val col support in editor and server and clients 
 #!-- Start PPO INIT File
 #!-- VERSION = 6
 #!-- TYPE = 1
-#!-- TS = 60ffb5a2
+#!-- TS = 61003094
 #!-- N = 2829
 EMPTY_VAR_NAME;EMPTY_VAR_NAME; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo105Z11@];PLC1.AXIS.bInPos[@CO_AxisNo105Z11@]; ; ; ; ; ; ; ; ; ; ;
@@ -996,7 +996,6 @@ PLC1.GVL.st155_aut._Mover._ID;PLC1.GVL.st155_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st155_aut.fb_Feeder.fb_moverMaintening.xIN_AS;PLC1.GVL.st155_aut.fb_Feeder.fb_moverMaintening.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st155_aut.fb_Feeder.fb_moverMaintening.xIN_GS;PLC1.GVL.st155_aut.fb_Feeder.fb_moverMaintening.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st160_aut._Mover._ID;PLC1.GVL.st160_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st160_aut.fb_ABL_CETA.fb_axis160_01Z.rOUT_ActPos;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_axis160_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningLeft.xIN_AS;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningLeft.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningLeft.xIN_GS;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningRight.xIN_AS;PLC1.GVL.st160_aut.fb_ABL_CETA.fb_capMainteningRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
@@ -1006,7 +1005,6 @@ PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterLeft.xIN_AS;PLC1.GVL.st165_aut.fb_Fe
 PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterLeft.xIN_GS;PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterRight.xIN_AS;PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterRight.xIN_GS;PLC1.GVL.st165_aut.fb_Feeder.fb_niederhalterRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.GVL.st165_aut.fb_Pnp.fb_axis165_01Z.rOUT_ActPos;PLC1.GVL.st165_aut.fb_Pnp.fb_axis165_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st170_aut._Mover._ID;PLC1.GVL.st170_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st170_aut.fb_ABL_RFID.fb_axis170_01Z.rOUT_ActPos;PLC1.GVL.st170_aut.fb_ABL_RFID.fb_axis170_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st174_aut._Mover._ID;PLC1.GVL.st174_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
@@ -2668,6 +2666,8 @@ PLC1.PERS.udiTempNOK;PLC1.PERS.udiTempNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTempOK;PLC1.PERS.udiTempOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalNOK;PLC1.PERS.udiTotalNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalOK;PLC1.PERS.udiTotalOK; ; ; ; ; ; ; ; ; ; ;
+PLC1.ST16x_Axis.axis160_01Z.rActPos;PLC1.ST16x_Axis.axis160_01Z.rActPos; ; ;float; ; ; ; ; ; ; ;
+PLC1.ST16x_Axis.axis165_01Z.rActPos;PLC1.ST16x_Axis.axis165_01Z.rActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1._10_HMI._key_keba_1.s_in;PLC1._10_HMI._key_keba_1.s_in; ; ; ; ; ; ; ; ; ; ;
 PLC1._10_HMI._key_keba_2.s_in;PLC1._10_HMI._key_keba_2.s_in; ; ; ; ; ; ; ; ; ; ;
 PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toAS_wait_time;PLC1._20_AUTO.recipe.cylinder2Pos[@CO_StatNo105@][0].toAS_wait_time; ; ; ; ; ; ; ; ; ; ;

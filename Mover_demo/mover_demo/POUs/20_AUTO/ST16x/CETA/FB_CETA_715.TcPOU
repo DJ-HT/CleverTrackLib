@@ -39,7 +39,7 @@ END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-ton_TimeOut(IN := 200 = iStep OR 1100 = iStep, PT := T#100000S);
+ton_TimeOut(IN := 200 = iStep OR 1100 = iStep, PT := T#10S);
 
 CASE iStep OF
 
@@ -82,17 +82,17 @@ CASE iStep OF
 
     ELSIF xOUT_CommandBits.bits.b03_request_error_code THEN
         IF xIN_StatusBits.bits.b03_error_code_available THEN
-            iStep := 300;
+            iStep := 1200;
         END_IF
 
     ELSIF xOUT_CommandBits.bits.b04_change_front_panel_lock_state THEN
         IF xIN_StatusBits.bits.b04_front_panel_lock_state THEN // TODO
-            iStep := 300;
+            iStep := 0;
         END_IF
 
     ELSIF xOUT_CommandBits.bits.b05_assign_program_number THEN
         IF xIN_StatusBits.bits.b05_program_number_assigned THEN
-            iStep := 300;
+            iStep := 0;
         END_IF
 
     ELSIF xOUT_CommandBits.bits.b06_request_system_information THEN
@@ -240,14 +240,17 @@ END_IF
     <Method Name="SetProgramNumber" Id="{d4cd72eb-e62e-4ba7-8b58-50ab6677d0f6}">
       <Declaration><![CDATA[METHOD SetProgramNumber : BOOL
 VAR_INPUT
+	program_number : USINT;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF 100 = THIS^.iStep THEN
 	THIS^.iStep := 200;
 	THIS^.xOUT_CommandBits.bits.b05_assign_program_number := TRUE;
+	THIS^.xOUT_Data[0] := USINT_TO_BYTE(program_number);
 	SetProgramNumber := TRUE;
 ELSE
+    THIS^.iStep      := 0;
 	SetProgramNumber := FALSE;
 END_IF]]></ST>
       </Implementation>

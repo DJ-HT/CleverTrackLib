@@ -112,6 +112,7 @@ IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
     iOUT_Step    := iPreStep;
+    eSliderStep  := ST105_Slider_e.slider_pusher_in;
 END_IF;
 
 iCurrentTableIndex := iCurrentTableIndex MOD 3;
@@ -304,7 +305,8 @@ xOUT_Wait := (iOUT_Step = ST105_Feeder_e.DONE);
 
 IO_BOX.Q9500_ST105_Freigabe_WF := fb_feeder_wf.xOUT_EnableFeeder AND
                                   NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
-                                  (ST105_Slider_e.slider_down = eSliderStep);
+                                  ((ST105_Slider_e.slider_down = eSliderStep) OR
+                                  ((ST105_Slider_e.slider_go_up = eSliderStep) AND ton_two_pieces.Q));
 
 IO_BOX.Q9501_ST105_Freigabe_LF := fb_feeder_lf.xOUT_EnableFeeder AND
                                   IO_BOX.Q9500_ST105_Freigabe_WF AND
@@ -462,6 +464,7 @@ ST105_Feeder_e.READY: (* Start AUTO,END,LEER,STEP *)
 ST105_Feeder_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
         iOUT_Step := ST105_Feeder_e.check_if_feeding_necessary;
+		iPreStep  := ST105_Feeder_e.READY;
     END_IF;
 
 ST105_Feeder_e.check_if_feeding_necessary:
@@ -496,12 +499,8 @@ ST105_Feeder_e.DONE: (* Letzter Schritt  *)
         IF (enIN_State = StateAUTO) AND xIN_RestartCYCL AND (fifo.GetLen() < _20_AUTO.recipe.st105.FeederSize)
             THEN
             iOUT_Step := ST105_Feeder_e.START;
-            //STEP / END / LEERFAHREN restart
-        ELSIF (enIN_State < StateAUTO) AND
-              (enIN_State >= enState.StateSTEP) AND
-              xIN_RestartCYCL AND
-              NOT (fifo.GetLen() >= _20_AUTO.recipe.st105.FeederSize) THEN
-            iOUT_Step := ST105_Feeder_e.START;
+            // We don't load pieces when not in auto
+			
             //STEP / END / LEERFAHREN fertig
         ELSIF (enIN_State = StateREADY) THEN
             iOUT_Step := ST105_Feeder_e.READY;

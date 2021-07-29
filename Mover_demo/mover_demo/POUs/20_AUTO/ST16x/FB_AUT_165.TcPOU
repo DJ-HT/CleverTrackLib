@@ -27,7 +27,7 @@ VAR
     (* Bausteine *)
     fb_ABL_CETA : FB_ABL_160;
 	
-	ceta_165 : FB_CETA_715;
+	fb_CETA : FB_CETA_715;
 
 END_VAR]]></Declaration>
     <Implementation>
@@ -58,22 +58,48 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
+fb_CETA(xIN_StatusBits   := CETA_IO.I_ST165_StatusBits,
+        xIN_Data         := CETA_IO.I_ST165_Data,
+        xIN_Reset        := xReset OR xIN_Quit,
+        xOUT_CommandBits => CETA_IO.Q_ST165_CommandBits,
+        xOUT_Data        => CETA_IO.Q_ST165_Data);
+
 fb_ABL_CETA(xIN_Reset       := xReset,
             xIN_Init        := xIN_Init,
             xIN_Quit        := xIN_Quit,
-            xIN_Start       := enIN_State = enState.StateAUTO,
+            xIN_Start       := enIN_State >= enState.StateLEER,
             xIN_Sperre      := NOT xIN_On,
             xIN_NextStep    := xNextStep,
             xIN_AlarmAktiv  := xIN_AlarmAktiv,
             xIN_DryCycle    := xIN_DryCycle,
-            xIN_RestartCYCL := enIN_State = enState.StateAUTO,
+            xIN_RestartCYCL := enIN_State >= enState.StateLEER,
             enIN_State      := enIN_State,
             tIN_Timeout     := tIN_Timeout,
             pxFG_Freigabe   := ADR(xDummy),
             // CleverTrackLib
             Mover := THIS^.Mover,
-			// for multiple reference of the FB
-			ref_fb_CETA := ceta_165);
+            // for multiple reference of the FB
+            ref_fb_CETA := fb_CETA,
+
+            refAxis_01Z_beckhoff         := ST16x_Axis.axis165_01Z,
+            constAxis_01Z_Beckhoff       := ST16x_Axis.const165_01Z,
+            axis_01Z_LinearConfig        := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST165_01Z],
+            iSelectedAxis                := Axis_e.ST165_01Z,
+            axis_01Z_parIN_Buttons       := ADR(AXIS.btTeachArAxis[Axis_e.ST165_01Z]),
+            refCylinderBp                := HMI.btManuCylinders[StationList_e.ST165],
+            refCylinderConf              := _20_AUTO.recipe.cylinder2Pos[StationList_e.ST165],
+            uiIN_DisplacementSensorLeft  := IO_BOX.I3200_ST165_Wegmessenor_links,
+            uiIN_DisplacementSensorRight := IO_BOX.I3300_ST165_Wegmessenor_rechts,
+            IN_recipe                    := _20_AUTO.recipe.st165,
+            iIN_StationNumber            := 165,
+
+            xOUT_niederhalter_links         => IO_BOX.Q0304_14_ST165_niederhalter_links,
+            xOUT_niederhalter_rechts        => IO_BOX.Q0305_14_ST165_niederhalter_rechts,
+            xOUT_dichtung_pruflocker_links  => IO_BOX.Q0306_14_ST165_dichtung_pruflocker_links,
+            xOUT_dichtung_pruflocker_rechts => IO_BOX.Q0306_12_ST165_dichtung_pruflocker_rechts,
+
+            axisRef_Hardware   := ST16x_Axis.axis165_01Z.axis,
+            axisRef_Simulation := SIMU.axis_ref[Axis_e.ST165_01Z]);
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -180,7 +206,7 @@ END_VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_ABL_CETA.iOUT_Step = ST150_Uss_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_ABL_CETA.iOUT_Step = ST160_CETA_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>
