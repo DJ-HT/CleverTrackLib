@@ -98,7 +98,7 @@ _FB_btSTART(pbtIN  := ADR(HMI.btArMain[9]),
 //****************************************************************************
 fb_State(xIN_AutoInit   := FALSE,
          xIN_DoRef      := FALSE,
-         xIN_ENERGIE    := TRUE,
+         xIN_ENERGIE    := _02_SAFETY.xOUT_MonOut,
          xIN_AIR        := HMI.xAIRon,
          xIN_EINRICHTEN :=,
          xIN_AUTO       := HMI.btArMain[0].rtrig,
