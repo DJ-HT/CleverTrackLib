@@ -284,7 +284,7 @@ simu_pusher(xIN_Enable := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST105_Feeder_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST105_Feeder_e.READY) AND (iOUT_Step < ST105_Feeder_e.DONE);
 // Baustein hat den Ablauf beendet

@@ -315,7 +315,7 @@ END_IF
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST120_Feeder_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST120_Feeder_e.READY) AND (iOUT_Step < ST120_Feeder_e.DONE);
 // Baustein hat den Ablauf beendet

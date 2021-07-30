@@ -106,8 +106,8 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* OUTPUTS *)
 (*******************************************************************)
-// Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+// Error Flag
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST140_Measure_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST140_Measure_e.READY) AND (iOUT_Step < ST140_Measure_e.DONE);
 // Baustein hat den Ablauf beendet

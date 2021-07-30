@@ -371,7 +371,7 @@ simu_gripperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST115_Pnp_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST115_Pnp_e.READY) AND (iOUT_Step < ST115_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet

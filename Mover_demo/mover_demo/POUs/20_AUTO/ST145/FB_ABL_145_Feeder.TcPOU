@@ -167,7 +167,7 @@ fb_axis145_10W(enIN_State     := enIN_State,
                xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE,
-               xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
+               xIN_FREE       := TRUE,
                xIN_FREE_HOME  := TRUE,
                rIN_POSMIN     := ST145_Axis.const145_10W.POS_MIN,
                rIN_POSMAX     := ST145_Axis.const145_10W.POS_MAX,
@@ -178,15 +178,16 @@ fb_axis145_10W(enIN_State     := enIN_State,
                xIN_Execute    := ST145_Feeder_e.Init_set_table_pos = iOUT_Step OR
                                  ST145_Feeder_e.Init_table_go_to_zero = iOUT_Step OR
                                  ST145_Feeder_e.Init_simu_home_table = iOUT_Step OR
-                                 ST145_Feeder_e.load_piece = iOUT_Step,
-               xIN_Relative     := fb_axis145_10W.xIN_Execute,
+                                 ST145_Feeder_e.load_piece = iOUT_Step OR
+                                 ST145_Feeder_e.wait_rotary_table_done = iOUT_Step,
+               xIN_Relative     := TRUE,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
                rIN_Position     :=, // Is set above
                rIN_Velocity     := TO_REAL(100.0),
                rIN_Acceleration := TO_REAL(720.0),
                rIN_Deceleration := TO_REAL(720.0),
-               rIN_Jerk         := TO_REAL(7200.0),
+               rIN_Jerk         := TO_REAL(72000.0),
                xIN_Home         := ST145_feeder_e.Init_home_table = iOUT_Step,
                xIN_Reset        := xIN_Reset OR ST145_feeder_e.RESET = iOUT_Step,
                // The simu fb gives us the hardware signal when we are not in simulation
@@ -201,7 +202,7 @@ ST145_Axis.axis145_10W.rActPos := LREAL_TO_REAL(simu_axis145_10W.pOUT_axisRef^.N
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST145_Feeder_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST145_Feeder_e.READY) AND (iOUT_Step < ST145_Feeder_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -224,7 +225,10 @@ xOUT_Wait := (iOUT_Step = ST145_Feeder_e.DONE);
 IO_BOX.Q2402_ST145_reigabe_wf := fb_feeder.xOUT_EnableFeeder AND
                                  NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
-IO_BOX.Q2400_ST145_freigabe_REO := ((iOUT_Step = ST145_Feeder_e.wait_on_a_piece) OR IO_BOX.Q2402_ST145_reigabe_wf) AND
+IO_BOX.Q2400_ST145_freigabe_REO := ((iOUT_Step = ST145_Feeder_e.wait_on_a_piece) OR
+                                   IO_BOX.Q2402_ST145_reigabe_wf OR
+                                   ((iOUT_Step = ST145_Feeder_e.DONE) AND NOT IO_BOX.I2300_ST145_teil_in_vereinzelung)
+                                       ) AND
                                    NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
@@ -350,6 +354,11 @@ ST145_Feeder_e.wait_on_a_piece:
     END_IF
 
 ST145_Feeder_e.load_piece:
+    IF NOT fb_axis145_10W.xOUT_DONE THEN
+        iOUT_Step := ST145_Feeder_e.wait_rotary_table_done;
+    END_IF
+
+ST145_Feeder_e.wait_rotary_table_done:
     IF fb_axis145_10W.xOUT_DONE THEN
         fifo.Put(1);
         iOUT_Step := ST145_Feeder_e.check_if_feeding_necessary;

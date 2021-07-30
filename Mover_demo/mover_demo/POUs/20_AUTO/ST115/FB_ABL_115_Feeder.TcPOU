@@ -194,7 +194,8 @@ fb_axis115_10W(enIN_State     := enIN_State,
                xIN_Execute    := ST115_Feeder_e.Init_set_table_pos = iOUT_Step OR
                                  ST115_Feeder_e.Init_table_go_to_zero = iOUT_Step OR
                                  ST115_Feeder_e.Init_simu_home_table = iOUT_Step OR
-                                 ST115_Feeder_e.load_piece = iOUT_Step,
+                                 ST115_Feeder_e.load_piece = iOUT_Step OR
+                                 ST115_Feeder_e.wait_rotary_table_done = iOUT_Step,
                xIN_Relative     := fb_axis115_10W.xIN_Execute,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
@@ -217,7 +218,7 @@ ST115_Axis.axis115_10W.rActPos := LREAL_TO_REAL(simu_axis115_10W.pOUT_axisRef^.N
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST115_Feeder_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST115_Feeder_e.READY) AND (iOUT_Step < ST115_Feeder_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -360,6 +361,11 @@ ST115_Feeder_e.wait_on_a_piece:
     END_IF
 
 ST115_Feeder_e.load_piece:
+    IF NOT fb_axis115_10W.xOUT_DONE THEN
+        iOUT_Step := ST115_Feeder_e.wait_rotary_table_done;
+    END_IF
+
+ST115_Feeder_e.wait_rotary_table_done:
     IF fb_axis115_10W.xOUT_DONE THEN
         fifo.Put(1);
         iOUT_Step := ST115_Feeder_e.check_if_feeding_necessary;

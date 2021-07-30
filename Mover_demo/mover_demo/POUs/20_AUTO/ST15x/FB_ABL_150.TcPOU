@@ -143,7 +143,7 @@ simu_moverMaintening(xIN_Enable := USS_SIMULATION AND CONST.USE_SIMULATION,
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST150_Uss_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST150_Uss_e.READY) AND (iOUT_Step < ST150_Uss_e.DONE);
 // Baustein hat den Ablauf beendet

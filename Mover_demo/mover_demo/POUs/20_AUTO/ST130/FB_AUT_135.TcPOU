@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
-  <POU Name="FB_AUT_130" Id="{aabc6712-002c-446d-a55f-42f6063f8dd2}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_130 EXTENDS FB_AUT_ABSTRACT
+  <POU Name="FB_AUT_135" Id="{4b227072-0113-4f77-88e6-997805f8ddf5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_135 EXTENDS FB_AUT_ABSTRACT
 (****************************************************************************)
 (*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
 (*	Status				ungetestet											*)
@@ -25,7 +25,7 @@ VAR_OUTPUT
 END_VAR
 VAR
     (* Bausteine *)
-    fb_Dose : FB_ABL_130_Dose;
+    fb_Dose : FB_ABL_MODIFY_135;
 
 END_VAR
 ]]></Declaration>
@@ -59,19 +59,21 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
-fb_Dose(xIN_Reset       := xReset,
-        xIN_Init        := xIN_Init,
-        xIN_Quit        := xIN_Quit,
-        xIN_Start       := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
-        xIN_Sperre      := NOT xIN_On,
-        xIN_NextStep    := xNextStep,
-        xIN_AlarmAktiv  := xIN_AlarmAktiv,
-        xIN_DryCycle    := xIN_DryCycle,
-        xIN_RestartCYCL := enIN_State >= enState.StateLEER, // only restart when the mover has move out
-        enIN_State      := enIN_State,
-        tIN_Timeout     := tIN_Timeout,
-        pxFG_Freigabe   := ADR(xDummy),
-        Mover           := THIS^.Mover);
+fb_Dose(xIN_Reset         := xReset,
+        xIN_Init          := xIN_Init,
+        xIN_Quit          := xIN_Quit,
+        xIN_Start         := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+        xIN_Sperre        := NOT xIN_On,
+        xIN_NextStep      := xNextStep,
+        xIN_AlarmAktiv    := xIN_AlarmAktiv,
+        xIN_DryCycle      := xIN_DryCycle,
+        xIN_RestartCYCL   := enIN_State >= enState.StateLEER, // only restart when the mover has move out
+        enIN_State        := enIN_State,
+        tIN_Timeout       := tIN_Timeout,
+        pxFG_Freigabe     := ADR(xDummy),
+        Mover             := THIS^.Mover,
+        iProcessTimeMili1 := DINT_TO_UDINT(THIS^.iProcessTimeMili_1),
+        iProcessTimeMili2 := DINT_TO_UDINT(THIS^.iProcessTimeMili_2));
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -93,11 +95,11 @@ xOUT_AlarmST  := xOUT_ErrFlag;
 // POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
 ]]></ST>
     </Implementation>
-    <Property Name="iCompletionPC" Id="{a6312a84-bdfa-44ce-8e04-c9e231e2340c}">
+    <Property Name="iCompletionPC" Id="{e5afb44a-b839-4353-a822-6cb3a303b84e}">
       <Declaration><![CDATA[(* % of completion of the process *)
 PROPERTY iCompletionPC : INT
 ]]></Declaration>
-      <Get Name="Get" Id="{68ad4865-5843-4968-9afb-1ed0fc0d671f}">
+      <Get Name="Get" Id="{18d97c92-7b1d-47b2-ada2-7eca9255f0f1}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -106,9 +108,35 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="ProcessExecution" Id="{d87c4446-298f-49bd-be30-3867757bc7eb}">
+    <Property Name="iProcessTimeMili_1" Id="{8b8d3321-8551-47b7-947f-ce7944fdc144}">
+      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
+PROPERTY iProcessTimeMili_1 : DINT
+]]></Declaration>
+      <Get Name="Get" Id="{ca969f16-173f-4371-bf5a-27037ece7e47}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iProcessTimeMili_1 := TO_DINT(1000);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="iProcessTimeMili_2" Id="{f932a916-5671-4d73-b296-c72eae622a0f}">
+      <Declaration><![CDATA[(* Process time, expressed in milisecond *)
+PROPERTY iProcessTimeMili_2 : DINT
+]]></Declaration>
+      <Get Name="Get" Id="{63d571c7-1d88-4c08-ad74-cbd04b98c35f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iProcessTimeMili_2 := TO_DINT(1000);]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ProcessExecution" Id="{fe1cd809-adca-4ef1-bbda-9f7425ca332b}">
       <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
-      <Get Name="Get" Id="{ecf337d4-2712-419b-ad0b-e0ca1057b401}">
+      <Get Name="Get" Id="{f590280d-acd0-40ce-9104-c62466697a4d}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -117,7 +145,7 @@ END_VAR
 ]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{689f384d-3307-4429-b6ea-0a70259f8823}">
+      <Set Name="Set" Id="{2f4acef5-52a3-4f20-891a-42a55a951177}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -127,9 +155,9 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Property Name="xBusy" Id="{d7403fc9-ab79-40a2-b205-fdd7afb85837}">
+    <Property Name="xBusy" Id="{b3e416da-0b3a-40d3-921d-f54826459927}">
       <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
-      <Get Name="Get" Id="{8d8117ef-acf2-4a79-bfa3-f4beee5a809b}">
+      <Get Name="Get" Id="{8cfd0c2d-1582-4aae-acf3-de8785065b87}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -138,7 +166,7 @@ END_VAR
 ]]></ST>
         </Implementation>
       </Get>
-      <Set Name="Set" Id="{8a417c9c-b913-4c95-b965-485fa973e661}">
+      <Set Name="Set" Id="{998d78e3-50b8-433d-bf47-89265ab7118f}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -147,9 +175,9 @@ END_VAR
         </Implementation>
       </Set>
     </Property>
-    <Property Name="xDone" Id="{151d7923-ba15-4380-96a6-a22c27ea74e0}">
+    <Property Name="xDone" Id="{00c2234d-6989-48cc-8cf0-8ca8237a960c}">
       <Declaration><![CDATA[PROPERTY xDone : BOOL]]></Declaration>
-      <Get Name="Get" Id="{8c05b73b-594a-4c39-af60-b2a891e3b0cc}">
+      <Get Name="Get" Id="{178e1f5c-e02f-4e65-a152-0dc54d988d2a}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -159,9 +187,9 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="xMoverPathFree" Id="{72c8ed4a-52c7-4268-8661-42711cbe97bb}">
+    <Property Name="xMoverPathFree" Id="{c737ac33-8a58-44af-84b1-043cc57a5828}">
       <Declaration><![CDATA[PROPERTY xMoverPathFree : BOOL]]></Declaration>
-      <Get Name="Get" Id="{0de9805a-be8f-4322-a342-e80cba055a76}">
+      <Get Name="Get" Id="{2328b072-d040-4026-8300-7fe9bb4f9ca3}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -171,14 +199,14 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
-    <Property Name="xMoverShouldLeave" Id="{cc9a3f79-f20e-4845-acf0-98e6bde159cb}">
+    <Property Name="xMoverShouldLeave" Id="{a5559518-dfc3-4dc7-8ddd-24830ae2c058}">
       <Declaration><![CDATA[PROPERTY xMoverShouldLeave : BOOL]]></Declaration>
-      <Get Name="Get" Id="{3d3e22a4-131b-468d-b0c9-59c2cfe06f9a}">
+      <Get Name="Get" Id="{298ed05d-fbba-4f8c-a390-8c5233ae84f1}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Dose.iOUT_Step = ST130_Dose_e.SYNC_MOVER_LEAVE;
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_Dose.iOUT_Step = ST100_Modify_e.SYNC_MOVER_LEAVE;
 ]]></ST>
         </Implementation>
       </Get>

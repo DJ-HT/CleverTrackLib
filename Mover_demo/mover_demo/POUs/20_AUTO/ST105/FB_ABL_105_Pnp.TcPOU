@@ -170,7 +170,7 @@ fb_axis105_11Z(enIN_State       := enIN_State,
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST105_Pnp_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST105_Pnp_e.READY) AND (iOUT_Step < ST105_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet

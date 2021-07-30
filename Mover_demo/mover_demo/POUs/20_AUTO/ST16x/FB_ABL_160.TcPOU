@@ -296,7 +296,7 @@ simu_dichtung_right(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULAT
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST160_CETA_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST160_CETA_e.READY) AND (iOUT_Step < ST160_CETA_e.DONE);
 // Baustein hat den Ablauf beendet

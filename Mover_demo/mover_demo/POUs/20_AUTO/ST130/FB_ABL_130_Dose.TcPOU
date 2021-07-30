@@ -431,7 +431,7 @@ simu_Niederhalter_Patrone(xIN_Enable := DOSE_SIMULATION AND CONST.USE_SIMULATION
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST130_Dose_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST130_Dose_e.READY) AND (iOUT_Step < ST130_Dose_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -464,26 +464,26 @@ iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
 IO_BOX.Q0100_14_ST130_kammer_offnen_links :=
     fb_Kammer_Offnen_Links.xOUT_VALVE AND
     NOT IO_BOX.Q0102_14_ST130_kammer_nachfullen_links AND
-    ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
+    ((enIN_State >= enState.StateALARM) AND // we must ensure that kammer is closed when not in automatic mode
     (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
     (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0101_14_ST130_kammer_offnen_rechts :=
     fb_Kammer_Offnen_Rechts.xOUT_VALVE AND
     NOT IO_BOX.Q0103_14_ST130_kammer_nachfullen_rechts AND
-    ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
+    ((enIN_State >= enState.StateALARM) AND // we must ensure that kammer is closed when not in automatic mode
     (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
     (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0102_14_ST130_kammer_nachfullen_links :=
     fb_Kammer_nachfullen_Links.xOUT_VALVE AND
-    ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
+    ((enIN_State >= enState.StateALARM) AND // we must ensure that kammer is closed when not in automatic mode
     (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
     (enIN_State = enState.StateMANU));
 
 IO_BOX.Q0103_14_ST130_kammer_nachfullen_rechts :=
     fb_Kammer_nachfullen_Rechts.xOUT_VALVE AND
-    ((enIN_State >= enState.StateSTEP) AND // we must ensure that kammer is closed when not in automatic mode
+    ((enIN_State >= enState.StateALARM) AND // we must ensure that kammer is closed when not in automatic mode
     (NOT (DOSE_SIMULATION AND CONST.USE_SIMULATION)) OR
     (enIN_State = enState.StateMANU));
 
