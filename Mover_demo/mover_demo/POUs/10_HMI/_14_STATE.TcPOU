@@ -126,8 +126,26 @@ fb_State(xIN_AutoInit   := FALSE,
                            (GVL.st176_aut.xOUT_InitDone OR NOT GVL.st176_aut.xIN_On) AND
                            (GVL.st180_aut.xOUT_InitDone OR NOT GVL.st180_aut.xIN_On) AND
                            (GVL.st185_aut.xOUT_InitDone OR NOT GVL.st185_aut.xIN_On),
-         xIN_ALARM := (GVL.st105_aut.xOUT_AlarmST) AND
-                      (GVL.st105_aut.xOUT_ErrFlag OR GVL.st105_aut.xOUT_Wait OR NOT GVL.st105_aut.xIN_On),
+         xIN_ALARM := MAIN.MoverMan.xOUT_Error OR
+                      (GVL.st105_aut.xOUT_AlarmST) OR
+                      (GVL.st110_aut.xOUT_AlarmST) OR
+                      (GVL.st115_aut.xOUT_AlarmST) OR
+                      (GVL.st120_aut.xOUT_AlarmST) OR
+                      (GVL.st125_aut.xOUT_AlarmST) OR
+                      (GVL.st128_aut.xOUT_AlarmST) OR
+                      (GVL.st130_aut.xOUT_AlarmST) OR
+                      (GVL.st135_aut.xOUT_AlarmST) OR
+                      (GVL.st140_aut.xOUT_AlarmST) OR
+                      (GVL.st145_aut.xOUT_AlarmST) OR
+                      (GVL.st150_aut.xOUT_AlarmST) OR
+                      (GVL.st155_aut.xOUT_AlarmST) OR
+                      (GVL.st160_aut.xOUT_AlarmST) OR
+                      (GVL.st165_aut.xOUT_AlarmST) OR
+                      (GVL.st170_aut.xOUT_AlarmST) OR
+                      (GVL.st175_aut.xOUT_AlarmST) OR
+                      (GVL.st180_aut.xOUT_AlarmST) OR
+                      (GVL.st185_aut.xOUT_AlarmST),
+         //AND (GVL.st105_aut.xOUT_ErrFlag OR GVL.st105_aut.xOUT_Wait OR NOT GVL.st105_aut.xIN_On),
          xIN_LastDone  := MAIN.MoverMan.xOUT_AllMoverEmpty AND GVL.st185_aut.xOUT_Done,
          xIN_WaitFBs   := (GVL.st105_aut.xOUT_Wait OR NOT GVL.st105_aut.xIN_On),
          enINOUT_State := HMI.enState);

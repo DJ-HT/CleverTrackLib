@@ -244,10 +244,15 @@ END_VAR
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
     IF THIS^.Station.WaitPos <= (THIS^.Station.Position.lrWorkPosition - CONST.MAX_MOVER_SIZE) THEN
         THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
-        THIS^._MovingProcessOffset := 0;
-        THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset + THIS^.Station._WaitPosOffset;
-        THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
+    ELSE
+        THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition +
+                                      THIS^._AttachedTool.PosOffset +
+                                      THIS^.Station.Offset));
     END_IF
+
+    THIS^._MovingProcessOffset := 0;
+    THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset + THIS^.Station._WaitPosOffset;
+    THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
 ELSE
     ASSERT(0); // never use this command when we are in operation
 END_IF
