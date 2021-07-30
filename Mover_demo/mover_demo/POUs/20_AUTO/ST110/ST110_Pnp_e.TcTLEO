@@ -10,11 +10,12 @@ ST110_Pnp_e :
     RESET := 0,         // Reset
 	
     INIT := 100,        // Initialisieren 
-    Init_VerticalUp_04,      // move axis below the mover to its rest position
-    Init_VerticalUp_02_03,   // move the axis up to rest position
-	Init_HomeHorizontals,
-	Init_HorizontalsToTrack,
-	Init_check_if_pces_handled,
+    Init_VerticalUp_04 := 110,      // move axis below the mover to its rest position
+    Init_VerticalUp_02_03 := 120,   // move the axis up to rest position
+	Init_HomeHorizontals := 130,
+	Init_HorizontalsToTrack := 140,
+	Init_stop_vacum := 150,
+	Init_check_if_pces_handled := 160,
 	
     READY := 999,       // READY to Start, Init Done 
     START := 1000,      // Start Zyklisch
@@ -59,27 +60,32 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"Init_VerticalUp_04"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"110"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_VerticalUp_02_03"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"120"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_HomeHorizontals"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"130"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_HorizontalsToTrack"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"140"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_stop_vacum"</v>
+              <v n="TextDefault">"150"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_check_if_pces_handled"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"160"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

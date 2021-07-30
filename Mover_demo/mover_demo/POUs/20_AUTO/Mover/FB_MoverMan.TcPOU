@@ -5,6 +5,8 @@
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
+    xOUT_AllMoverEmpty : BOOL; // TRUE when LastStationVisited from all shuttle are 0
+    xOUT_Error         : BOOL; // CleverTrack is in error and needs a reset
 END_VAR
 VAR
     _PieceHolderList : ARRAY[1..2] OF FB_PieceHolder[(0),
@@ -195,7 +197,7 @@ VAR
 
     _StationSet1 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
-                                                  0, // ST110
+                                                  0,  // ST110
                                                   -1, // ST115
                                                   -1, // ST120
                                                   0,  // ST125
@@ -207,7 +209,7 @@ VAR
                                                   2,  // ST150
                                                   0,  // ST155
                                                   3,  // ST160
-                                                  3, // ST165
+                                                  3,  // ST165
                                                   0,  // ST170
                                                   0,  // ST174
                                                   4,  // ST175
@@ -228,7 +230,7 @@ VAR
                                                   2,  // ST150
                                                   -1, // ST155
                                                   3,  // ST160
-                                                  3, // ST165
+                                                  3,  // ST165
                                                   0,  // ST170
                                                   0,  // ST174
                                                   4,  // ST175
@@ -237,7 +239,7 @@ VAR
                                                   0]; // ST185
     _StationSet3 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
-                                                  0, // ST110
+                                                  0,  // ST110
                                                   -1, // ST115
                                                   -1, // ST120
                                                   0,  // ST125
@@ -303,8 +305,8 @@ VAR
     HMI_TimeMax    : DINT               := 1100;
     HMI_xStopMover : BOOL               := FALSE;
     HMI_iSelMover  : INT                := 1;
-	
-	HMI_send_all_shuttle_to_unload : BOOL;
+
+    HMI_send_all_shuttle_to_unload : BOOL;
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
@@ -317,7 +319,8 @@ VAR_STAT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[(* ---------------------------------------------------------------------------- *)
+(* THIS IS A PARTICULAR IMPLEMENTATION OF CLEVERTRAKLIB. THIS SHOULD BE REMOVED *)
 CASE step OF
 
 0: // setup everything
@@ -401,6 +404,8 @@ CASE step OF
 // do nothing, init done
 
 END_CASE
+
+(* ---------------------------------------------------------------------------- *)
 
 // should be done elsewhere ...
 SIMU.lrAccelMover := SIMU.lrAccelMoverSlider * SIMU.lrAccelMoverSlider;
@@ -678,7 +683,21 @@ IF NOT CONST.BIND_WITH_TRACK THEN
     _MoverList[MOVER_NUMBER].MoverAxis.IsColliding(_MoverList[1].MoverAxis); // do not forget to test this case, too
     _MoverList[MOVER_NUMBER].MoverAxis.WillCollide(_MoverList[1].MoverAxis);
 END_IF
+
 // end collision check **********************************************
+
+// start output affectation **********************************************
+xOUT_AllMoverEmpty := TRUE;
+
+FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
+    IF _MoverList[mv_i].GetLastStationDone() <> 0 THEN
+        xOUT_AllMoverEmpty := FALSE;
+    END_IF
+END_FOR
+
+xOUT_Error := gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.error;
+
+// end output affectation **********************************************
 ]]></ST>
     </Implementation>
     <Method Name="CheckWaitPosNotBehindStation" Id="{91490bb8-300b-4074-8087-f20c1e8574d1}">

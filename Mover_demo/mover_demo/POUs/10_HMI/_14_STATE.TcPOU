@@ -128,7 +128,7 @@ fb_State(xIN_AutoInit   := FALSE,
                            (GVL.st185_aut.xOUT_InitDone OR NOT GVL.st185_aut.xIN_On),
          xIN_ALARM := (GVL.st105_aut.xOUT_AlarmST) AND
                       (GVL.st105_aut.xOUT_ErrFlag OR GVL.st105_aut.xOUT_Wait OR NOT GVL.st105_aut.xIN_On),
-         xIN_LastDone  := (GVL.st105_aut.xOUT_Done OR NOT GVL.st105_aut.xIN_On),
+         xIN_LastDone  := MAIN.MoverMan.xOUT_AllMoverEmpty AND GVL.st185_aut.xOUT_Done,
          xIN_WaitFBs   := (GVL.st105_aut.xOUT_Wait OR NOT GVL.st105_aut.xIN_On),
          enINOUT_State := HMI.enState);
 

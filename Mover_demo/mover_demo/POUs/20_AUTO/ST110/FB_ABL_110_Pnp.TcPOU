@@ -334,7 +334,7 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                xIN_GS       := simu_gripperLeft.xOUT_inGS,
                xIN_AS       := simu_gripperLeft.xOUT_inAS,
                xIN_FREE     := TRUE,
-               xINtoGS      := ST110_Pnp_e.Vacum_off = iOUT_Step,
+               xINtoGS      := (ST110_Pnp_e.Vacum_off = iOUT_Step) OR (ST110_Pnp_e.Init_stop_vacum = iOUT_Step),
                xINtoAS      := _20_AUTO.recipe.st110.xUseVerLeft AND (ST110_Pnp_e.Vacum_on = iOUT_Step),
                tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
                                                 [ST110_Cylinders_e.VakuumgreiferLinks].toAS_alarm_time),
@@ -361,7 +361,7 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                 xIN_GS       := simu_gripperRight.xOUT_inGS,
                 xIN_AS       := simu_gripperRight.xOUT_inAS,
                 xIN_FREE     := TRUE,
-                xINtoGS      := ST110_Pnp_e.Vacum_off = iOUT_Step,
+                xINtoGS      := (ST110_Pnp_e.Vacum_off = iOUT_Step) OR (ST110_Pnp_e.Init_stop_vacum = iOUT_Step),
                 xINtoAS      := _20_AUTO.recipe.st110.xUseVerRight AND (ST110_Pnp_e.Vacum_on = iOUT_Step),
                 tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
                                                  [ST110_Cylinders_e.VakuumgreiferRechts].toAS_alarm_time),
@@ -520,8 +520,15 @@ ST110_Pnp_e.Init_HomeHorizontals:
 
 ST110_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST110_PnpHorPos_e.GS).xOUT_InPos THEN
-        iOUT_Step := ST110_Pnp_e.Init_check_if_pces_handled;
+        IF NOT xIsPiecesPicked THEN
+            iOUT_Step := ST110_Pnp_e.Init_stop_vacum;
+        ELSE
+            iOUT_Step := ST110_Pnp_e.Init_check_if_pces_handled;
+        END_IF
     END_IF
+
+ST110_Pnp_e.Init_stop_vacum:
+    iOUT_Step := ST110_Pnp_e.Init_check_if_pces_handled;
 
 ST110_Pnp_e.Init_check_if_pces_handled:
     IF (NOT _20_AUTO.recipe.st110.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) OR
@@ -562,7 +569,17 @@ ST110_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
 (***** START  ZYKLISCH *****)
 ST110_Pnp_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST110_Pnp_e.PnP_Hor_ToRotTablePos;
+        IF enState.StateLEER = enIN_State THEN
+            IF __ISVALIDREF(Mover) THEN
+                IF Mover.GetLastStationDone() > 0 THEN
+                    iOUT_Step := ST110_Pnp_e.PnP_Hor_ToRotTablePos;
+                ELSE
+                    iOUT_Step := ST110_Pnp_e.waitOnMover;
+                END_IF
+            END_IF
+        ELSE
+            iOUT_Step := ST110_Pnp_e.PnP_Hor_ToRotTablePos;
+        END_IF
     END_IF;
 
 ST110_Pnp_e.PnP_Hor_ToRotTablePos:

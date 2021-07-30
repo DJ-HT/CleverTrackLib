@@ -235,8 +235,8 @@ fb_Kammer_Offnen_Links(xIN_Reset    := xIN_Reset OR (ST130_Dose_e.RESET = iOUT_S
                        xIN_GS       := simu_Kammer_Offnen_Links.xOUT_inGS,
                        xIN_AS       := simu_Kammer_Offnen_Links.xOUT_inAS,
                        xIN_FREE     := TRUE,
-                       xINtoGS := ST130_Dose_e.Init_close_down_feeder = iOUT_Step OR
-                                  ST130_Dose_e.close_down_feeder = iOUT_Step,
+                       xINtoGS      := ST130_Dose_e.Init_close_down_feeder = iOUT_Step OR
+                                       ST130_Dose_e.close_down_feeder = iOUT_Step,
                        xINtoAS := _20_AUTO.recipe.st130.xUseVerRight AND
                                   ST130_Dose_e.open_down_feeder = iOUT_Step,
                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST130]
@@ -622,7 +622,17 @@ ST130_Dose_e.READY:   (* Start AUTO:END:LEER:STEP *)
 (***** START  ZYKLISCH *****)
 ST130_Dose_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST130_Dose_e.open_up_feeder_first;
+        IF enState.StateLEER = enIN_State THEN
+            IF __ISVALIDREF(Mover) THEN
+				IF Mover.GetLastStationDone() > 0 THEN
+                	iOUT_Step := ST130_Dose_e.open_up_feeder_first;
+				ELSE
+                	iOUT_Step := ST130_Dose_e.waitOnMover;
+				END_IF
+            END_IF
+        ELSE
+            iOUT_Step := ST130_Dose_e.open_up_feeder_first;
+        END_IF
     END_IF;
 
 ST130_Dose_e.open_up_feeder_first:
@@ -641,7 +651,7 @@ ST130_Dose_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST130] THEN
         IF Mover.GetLastStationDone() >= INT#130 THEN
             iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#125 THEN
+        ELSIF Mover.GetLastStationDone() < INT#125 THEN
             iOUT_Step := ST130_Dose_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST130_Dose_e.check_filterhut_presence;

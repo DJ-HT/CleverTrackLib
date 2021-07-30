@@ -61,7 +61,7 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 fb_Dose(xIN_Reset          := xReset,
        xIN_Init           := xIN_Init,
        xIN_Quit           := xIN_Quit,
-       xIN_Start          := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+       xIN_Start          := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
        xIN_Sperre         := NOT xIN_On,
        xIN_NextStep       := xNextStep,
        xIN_AlarmAktiv     := xIN_AlarmAktiv,

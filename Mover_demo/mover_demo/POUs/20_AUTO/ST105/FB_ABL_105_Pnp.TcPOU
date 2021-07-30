@@ -350,19 +350,13 @@ ST105_Pnp_e.pusher_down:
 
 ST105_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST105]) THEN
-        IF enState.StateLEER = enIN_State THEN
+        IF (PNP_SIMULATION AND CONST.USE_SIMULATION) OR (enState.StateLEER = enIN_State) THEN
             iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
-            iOUT_Step := ST105_Pnp_e.wait_on_feeder;
-
-            IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
+            IF Mover.GetLastStationDone() >= INT#105 THEN
                 iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
             ELSE
-                IF Mover.GetLastStationDone() >= INT#105 THEN
-                    iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
-                ELSE
-                    iOUT_Step := ST105_Pnp_e.Robot_place;
-                END_IF
+                iOUT_Step := ST105_Pnp_e.Robot_place;
             END_IF
         END_IF
     END_IF;

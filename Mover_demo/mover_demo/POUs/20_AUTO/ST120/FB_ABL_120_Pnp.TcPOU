@@ -471,7 +471,17 @@ ST120_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
 (***** START  ZYKLISCH *****)
 ST120_Pnp_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST120_Pnp_e.PnP_Hor_ToRotTablePos;
+        IF enState.StateLEER = enIN_State THEN
+            IF __ISVALIDREF(Mover) THEN
+                IF Mover.GetLastStationDone() > 0 THEN
+                    iOUT_Step := ST120_Pnp_e.PnP_Hor_ToRotTablePos;
+                ELSE
+                    iOUT_Step := ST120_Pnp_e.waitOnMover;
+                END_IF
+            END_IF
+        ELSE
+            iOUT_Step := ST120_Pnp_e.PnP_Hor_ToRotTablePos;
+        END_IF
     END_IF;
 
 ST120_Pnp_e.PnP_Hor_ToRotTablePos:
@@ -510,7 +520,7 @@ ST120_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST120] THEN
         IF Mover.GetLastStationDone() >= INT#120 THEN
             iOUT_Step := ST120_Pnp_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#105 THEN
+        ELSIF Mover.GetLastStationDone() < INT#105 THEN
             iOUT_Step := ST120_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleDown;
