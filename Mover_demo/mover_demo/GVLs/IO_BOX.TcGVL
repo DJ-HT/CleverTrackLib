@@ -11,7 +11,9 @@ VAR_GLOBAL
     (*******************************************************************)
     //-194A3
     (* BN Lampe *)
-    I0000_ AT %Q* : BOOL; // lampe
+    Q0000_Balluf_Lampe_1_word     AT %Q* : WORD; // lampe word to affect to segment color
+    Q0001_Balluf_Lampe_1_SycStart AT %Q* : BOOL; // lampe affect to SycStart
+    Q0002_Balluf_Lampe_1_SycImp   AT %Q* : BOOL; // lampe affect to SycImp
 
     //-201A1
     (* Ventil Batterie 201 A*)
@@ -205,7 +207,9 @@ VAR_GLOBAL
     (*******************************************************************)
     //-10194A3
     (* Meldeleuchte 3 Zonen mit Horni BNI0086 *)
-    Q5000_ : BOOL; // eldeleuchte 3 Zonen mit Horni BNI0086
+    Q5000_Balluf_Lampe_2_word     AT %Q* : WORD; // lampe word to affect to segment color
+    Q5001_Balluf_Lampe_2_SycStart AT %Q* : BOOL; // lampe affect to SycStart
+    Q5002_Balluf_Lampe_2_SycImp   AT %Q* : BOOL; // lampe affect to SycImp
 
     //-10201B1
     (* Ventilbat. 201 B *)

@@ -137,13 +137,14 @@ _FB_LAMPE(enIN_State      := HMI.enState,
           tIN_Impuls      := T#500ms,
           xOUT_ErrFlag    =>);
 
-//BALLUFF LAMPE
-//OUT.QW194A3:=_FB_LAMPE.wOUT_Lampe;
-//OUT.QW194A6:=_FB_LAMPE.wOUT_Lampe;
-//OUT.Q194A3_SycStart:=_FB_LAMPE.xOUT_SyncStart;
-//OUT.Q194A6_SycStart:=_FB_LAMPE.xOUT_SyncStart;
-//OUT.Q194A3_SycImp:=_FB_LAMPE.xOUT_SyncImp;
-//OUT.Q194A6_SycImp:=_FB_LAMPE.xOUT_SyncImp;
+// BALLUFF LAMPE
+IO_BOX.Q0000_Balluf_Lampe_1_word     := _FB_LAMPE.wOUT_Lampe;
+IO_BOX.Q5000_Balluf_Lampe_2_word     := _FB_LAMPE.wOUT_Lampe;
+IO_BOX.Q0001_Balluf_Lampe_1_SycStart := _FB_LAMPE.xOUT_SyncStart;
+IO_BOX.Q5001_Balluf_Lampe_2_SycStart := _FB_LAMPE.xOUT_SyncStart;
+IO_BOX.Q0002_Balluf_Lampe_1_SycImp   := _FB_LAMPE.xOUT_SyncImp;
+IO_BOX.Q5002_Balluf_Lampe_2_SycImp   := _FB_LAMPE.xOUT_SyncImp;
+
 //LAMPE ENERGIE EIN 
 (*
 OUT.Q000_LAMP_NRJ:= _10_HMI.x_BLINK_500 AND 
