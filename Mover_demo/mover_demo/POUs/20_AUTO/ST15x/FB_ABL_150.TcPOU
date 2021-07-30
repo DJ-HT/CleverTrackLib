@@ -256,13 +256,14 @@ ST150_Uss_e.READY:    (* Start AUTO,END,LEER,STEP *)
 ST150_Uss_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
         iOUT_Step := ST150_Uss_e.waitOnMover;
+        iPreStep  := ST150_Uss_e.INIT;
     END_IF;
 
 ST150_Uss_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF Mover.GetLastStationDone() >= iIN_StationNumber THEN
             iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#145 THEN
+        ELSIF Mover.GetLastStationDone() < INT#145 THEN
             iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST150_Uss_e.mover_maintening_up;
@@ -276,7 +277,6 @@ ST150_Uss_e.check_cap_present:
         // iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
         iOUT_Step  := ST150_Uss_e.ERROR;
         bOUT_Error := 8;
-		iPreStep := ST150_Uss_e.waitOnMover;
 
         // IF __ISVALIDREF(Mover) THEN
         //     IF NOT Mover.SetLastStation(-iIN_StationNumber) THEN
@@ -292,6 +292,7 @@ ST150_Uss_e.mover_maintening_up:
         ELSE
             IF xIN_welding_bits.Bereit THEN
                 iOUT_Step := ST150_Uss_e.uss_start;
+                iPreStep  := ST150_Uss_e.waitOnMover;
 
                 IF __ISVALIDREF(Mover) THEN
                     IF NOT Mover.SetLastStation(-150) THEN
