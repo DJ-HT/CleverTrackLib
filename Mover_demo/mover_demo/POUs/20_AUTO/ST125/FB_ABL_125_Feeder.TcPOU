@@ -175,7 +175,7 @@ simu_axis125_10W(xIN_Enable          := FEEDER_SIMULATION AND CONST.USE_SIMULATI
 
 fb_axis125_10W(enIN_State     := enIN_State,
                parIN_Buttons  := ADR(AXIS.btTeachArAxis[Axis_e.ST125_10W]),
-               xIN_DisButtons := ,
+               xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE,
                xIN_FREE       := NOT xIN_RotTableBlockedByPnp,
@@ -258,6 +258,18 @@ END_IF
 
 (* START *)
 rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis125_10W.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+        iPreStep   := ST145_Feeder_e.RESET;
+    ELSIF fb_feeder.xOUT_Empty THEN
+        bOUT_Error := 15;
+        iPreStep   := ST145_Feeder_e.READY;
+    END_IF
+ELSIF iOUT_Step < ST125_Feeder_e.ERROR THEN
+    iOUT_Step := ST125_Feeder_e.ERROR;
+END_IF
 
 (*******************************************************************)
 (* Schrittkette  *)
