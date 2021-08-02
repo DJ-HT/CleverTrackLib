@@ -284,9 +284,9 @@ VAR CONSTANT
     *)
     START_X     : DINT  := 0;
     START_Y     : DINT  := 0;
-    MAX_SIMU_DX : DINT  := 55; // 120;
+    MAX_SIMU_DX : DINT  := 120;
     MAX_SIMU_DY : DINT  := 800;
-    RADIUS_X    : LREAL := 22; //60.0;
+    RADIUS_X    : LREAL := 60.0;
     RADIUS_Y    : LREAL := 100.0;
 
     FIRST_RADIUS_START  : LREAL := 4000;

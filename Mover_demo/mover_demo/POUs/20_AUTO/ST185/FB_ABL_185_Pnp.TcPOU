@@ -437,6 +437,12 @@ IO_BOX.Q5409_14_ST185_Break_axis_02Z := NOT fb_simu_axis185_02Z.pIN_axisHW^.Stat
                                         _02_SAFETY.xOUT_MonOut AND
                                         NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
+OUT.Q102_ST185_entladen_ein :=
+    enIN_State >= enState.StateLEER AND
+    (iOUT_Step < ST185_Pnp_e.open_griper_put_piece) AND
+    (iOUT_Step > ST185_Pnp_e.hor_to_track_pos) AND
+    NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)
@@ -672,17 +678,18 @@ ST185_Pnp_e.hor_to_track_pos:
 
 ST185_Pnp_e.ver_down_waiting_for_mover:
     IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_waiting_mover).xOUT_InPos THEN
-		
-		arrLrAvgCycleTime[indexAvgArray] := GetTick() - lrStartCycleTime;
-		
-		FOR i := 0 TO AVERAGE_ARRAY_SIZE-1 BY 1 DO
-			sumAvgArray := TO_LREAL(sumAvgArray + arrLrAvgCycleTime[i]);
-		END_FOR
-		
-		HMI.lrPiecePerMinute := 60000 / (sumAvgArray / AVERAGE_ARRAY_SIZE);
-		
-		HMI.PieceDoneTmp := HMI.PieceDoneTmp + TO_INT(_20_AUTO.recipe.st185.xUseVerLeft) + TO_INT(_20_AUTO.recipe.st185.xUseVerRight);
-		
+
+        arrLrAvgCycleTime[indexAvgArray] := GetTick() - lrStartCycleTime;
+
+        FOR i := 0 TO AVERAGE_ARRAY_SIZE - 1 BY 1 DO
+            sumAvgArray := TO_LREAL(sumAvgArray + arrLrAvgCycleTime[i]);
+        END_FOR
+
+        HMI.lrPiecePerMinute := 60000 / (sumAvgArray / AVERAGE_ARRAY_SIZE);
+
+        HMI.PieceDoneTmp :=
+            HMI.PieceDoneTmp + TO_INT(_20_AUTO.recipe.st185.xUseVerLeft) + TO_INT(_20_AUTO.recipe.st185.xUseVerRight);
+
         iOUT_Step := ST185_Pnp_e.DONE;
     END_IF
 
