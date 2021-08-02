@@ -64,7 +64,7 @@ END_VAR
 //***********************************************************************************************)
 TON_Startup(IN := TRUE, PT := T#5S);
 fb_startProcess(NETID     := '',
-                PATHSTR   := 'C:\Program Files\SpiderControl\MicroBrowser\MicroBrowser_XP.exe',
+                PATHSTR   := 'C:\Program Files (x86)\SpiderControl\MicroBrowser\MicroBrowser_XP.exe',
                 DIRNAME   := 'C:\Users\Administrator\AppData\Roaming\SpiderControl\Microbrowser',
                 COMNDLINE :=,
                 START     := TON_Startup.Q,
