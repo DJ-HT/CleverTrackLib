@@ -72,7 +72,7 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    MEASURE_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    MEASURE_SIMULATION : BOOL := TRUE; // Set to TRUE to simulate this part of the program
     MEASURE_PER_PIECE  : INT  := 3;     // this must be greater than 1 !
 END_VAR
 ]]></Declaration>

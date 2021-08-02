@@ -93,8 +93,8 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION       : BOOL := FALSE; // Set to TRUE to simulate this part of the program
-    PNP_DONT_CHECK_KRAFT : BOOL := FALSE; // set to TRUE if you won't check kraft
+    PNP_SIMULATION       : BOOL := TRUE; // Set to TRUE to simulate this part of the program
+    PNP_DONT_CHECK_KRAFT : BOOL := TRUE; // set to TRUE if you won't check kraft
 END_VAR
 ]]></Declaration>
     <Implementation>
