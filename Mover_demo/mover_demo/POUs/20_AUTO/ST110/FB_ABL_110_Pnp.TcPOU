@@ -91,8 +91,8 @@ VAR
 
 END_VAR
 VAR CONSTANT
-    PNP_SIMULATION       : BOOL := TRUE; // Set to TRUE to simulate this part of the program
-    PNP_DONT_CHECK_KRAFT : BOOL := TRUE; // don't care of kraft sensor
+    PNP_SIMULATION       : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+    PNP_DONT_CHECK_KRAFT : BOOL := FALSE; // don't care of kraft sensor
 END_VAR
 ]]></Declaration>
     <Implementation>
