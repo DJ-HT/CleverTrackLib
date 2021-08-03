@@ -460,6 +460,7 @@ IF 0 = bOUT_Error THEN
         bOUT_Error := 21;
     END_IF
 ELSIF iOUT_Step < ST110_Pnp_e.ERROR THEN
+    iPreStep  := ST110_Pnp_e.INIT;
     iOUT_Step := ST110_Pnp_e.ERROR;
 END_IF
 
