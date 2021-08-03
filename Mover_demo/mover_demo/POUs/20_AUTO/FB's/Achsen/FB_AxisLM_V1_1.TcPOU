@@ -83,6 +83,8 @@ VAR_OUTPUT
 	xOUT_HOMED: BOOL := FALSE;
 	///MoveDone
 	xOUT_DONE: BOOL;
+	///In movement
+	xOUT_BUSY : BOOL;
 	/// Fehlernummer
 	bOUT_Error: BYTE;
 	///									1:
@@ -515,6 +517,8 @@ END_IF;
 					xIN_Free AND xIN_PARAMok AND NOT xOUT_ErrFlag ;
 	xOUT_DONE 	:= 	(NOT xIN_Relative AND _MC_MoveAbs.Done) OR
 					(xIN_Relative AND _MC_MoveRel.Done);
+					
+	xOUT_BUSY	:=	NOT axisIN_REF.Status.StandStill;
 					
 				]]></ST>
     </Implementation>

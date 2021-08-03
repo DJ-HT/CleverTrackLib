@@ -1092,6 +1092,10 @@
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
       <CompilerDefines>VISU_NO_EXCEPTION_HANDLING</CompilerDefines>
     </Compile>
+    <Compile Include="VISUs\VISU_Time.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
+    </Compile>
     <Compile Include="VISU_TASK.TcTTO">
       <SubType>Code</SubType>
     </Compile>

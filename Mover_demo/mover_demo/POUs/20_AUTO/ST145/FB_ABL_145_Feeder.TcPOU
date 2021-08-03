@@ -350,8 +350,10 @@ ST145_Feeder_e.check_if_feeding_necessary:
 ST145_Feeder_e.wait_on_a_piece:
     IF (FEEDER_SIMULATION AND CONST.USE_SIMULATION AND NOT simu_fifo_feeder_to_rotTable.IsEmpty()) OR
        (NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND IO_BOX.I2300_ST145_teil_in_vereinzelung) THEN
-        iOUT_Step := ST145_Feeder_e.load_piece;
-        simu_fifo_feeder_to_rotTable.Pop(1);
+        IF NOT xIN_RotTableBlockedByPnp THEN
+            iOUT_Step := ST145_Feeder_e.load_piece;
+            simu_fifo_feeder_to_rotTable.Pop(1);
+        END_IF
     END_IF
 
 ST145_Feeder_e.load_piece:

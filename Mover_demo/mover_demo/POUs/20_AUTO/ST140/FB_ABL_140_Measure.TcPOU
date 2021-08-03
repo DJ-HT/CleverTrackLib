@@ -90,7 +90,7 @@ END_IF;
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
-    iOUT_Step    := ST140_Measure_e.READY; // iPreStep;
+    iOUT_Step    := iPreStep; // iPreStep;
 END_IF;
 
 (*******************************************************************)
@@ -206,13 +206,14 @@ ST140_Measure_e.READY: (* Start AUTO:END:LEER:STEP *)
 ST140_Measure_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
         iOUT_Step := ST140_Measure_e.waitOnMover;
+        iPreStep  := ST140_Measure_e.waitOnMover;
     END_IF;
 
 ST140_Measure_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST140] THEN
         IF Mover.GetLastStationDone() >= INT#140 THEN
             iOUT_Step := ST140_Measure_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#130 THEN
+        ELSIF Mover.GetLastStationDone() < INT#130 THEN
             iOUT_Step := ST140_Measure_e.SYNC_MOVER_LEAVE;
         ELSE
             MEMSET(ADR(arr_rMeasureTrack_Right), 0, SIZEOF(arr_rMeasureTrack_Right));
@@ -250,6 +251,7 @@ ST140_Measure_e.Move_shuttle_relative_right:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(20.0 / (MEASURE_PER_PIECE - 1)) THEN
             iOUT_Step := ST140_Measure_e.Measure_right;
+            iPreStep  := ST140_Measure_e.Measure_right;
         END_IF
     ELSE
         bOUT_Error := 10;
@@ -260,10 +262,12 @@ ST140_Measure_e.Move_shuttle_to_pos_left:
         IF _20_AUTO.recipe.st140.xIsTypeMiniOrSmart THEN
             IF Mover.MoveRelativeInsideStation(100.0) THEN
                 iOUT_Step    := ST140_Measure_e.Measure_left;
+                iPreStep     := ST140_Measure_e.Measure_left;
                 measureIndex := 0;
             END_IF
         ELSE
             iOUT_Step := ST140_Measure_e.Save_result_in_mover;
+            iPreStep  := ST140_Measure_e.Save_result_in_mover;
         END_IF
     ELSE
         bOUT_Error := 11;
@@ -281,6 +285,7 @@ ST140_Measure_e.Measure_left:
 
         IF measureIndex >= MEASURE_PER_PIECE THEN
             iOUT_Step := ST140_Measure_e.Save_result_in_mover;
+            iPreStep  := ST140_Measure_e.Save_result_in_mover;
         ELSE
             iOUT_Step := ST140_Measure_e.Move_shuttle_relative_left;
         END_IF
@@ -290,6 +295,7 @@ ST140_Measure_e.Move_shuttle_relative_left:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(20.0 / (MEASURE_PER_PIECE - 1)) THEN
             iOUT_Step := ST140_Measure_e.Measure_left;
+            iPreStep  := ST140_Measure_e.Measure_left;
         END_IF
     ELSE
         bOUT_Error := 12;

@@ -93,7 +93,7 @@ END_IF;
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
-    iOUT_Step    := ST175_LASER_e.INIT;
+    iOUT_Step    := iPreStep;
 END_IF;
 
 (*******************************************************************)
@@ -105,9 +105,9 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
-fb_trumpf_laser(xIN_Start    := ST175_LASER_e.LASER_start = iOUT_Step,
-	xIN_WarmUpLaser := ST175_LASER_e.Init_laser_warmup = iOUT_Step,
-                sIN_FileName := _20_AUTO.recipe.st175.file_name);
+fb_trumpf_laser(xIN_Start       := ST175_LASER_e.LASER_start = iOUT_Step,
+                xIN_WarmUpLaser := ST175_LASER_e.Init_laser_warmup = iOUT_Step,
+                sIN_FileName    := _20_AUTO.recipe.st175.file_name);
 
 // pneumatics
 fb_handling(xIN_Reset    := xIN_Reset OR (ST175_LASER_e.RESET = iOUT_Step),
@@ -293,8 +293,8 @@ ST175_LASER_e.Init_pneumatics:
     END_IF
 
 ST175_LASER_e.Init_laser_warmup:
-        iOUT_Step := ST175_LASER_e.READY;
-	
+    iOUT_Step := ST175_LASER_e.READY;
+
 (***** READY / INIT DONE *****)
 ST175_LASER_e.READY:  (* Start AUTO,END,LEER,STEP *)
     IF xIN_Start THEN //IF rtSTART.Q THEN
@@ -305,6 +305,7 @@ ST175_LASER_e.READY:  (* Start AUTO,END,LEER,STEP *)
 ST175_LASER_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
         iOUT_Step        := ST175_LASER_e.waitOnMover;
+        iPreStep         := ST175_LASER_e.waitOnMover;
         xLASER_Result_OK := FALSE;
     END_IF;
 
@@ -312,7 +313,7 @@ ST175_LASER_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF (Mover.GetLastStationDone() >= 175) THEN
             iOUT_Step := ST175_LASER_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#150 THEN
+        ELSIF Mover.GetLastStationDone() < INT#150 THEN
             iOUT_Step := ST175_LASER_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST175_LASER_e.close_doors;
@@ -362,6 +363,7 @@ ST175_LASER_e.handling_up:
 ST175_LASER_e.move_shuttle_to_left_piece:
     IF xIN_NextStep AND __ISVALIDREF(Mover) AND_THEN Mover.MoveRelativeInsideStation(118.0) THEN
         iOUT_Step := ST175_LASER_e.wait_shuttle_in_place;
+        iPreStep  := ST175_LASER_e.handling_down;
     END_IF
 
 ST175_LASER_e.wait_shuttle_in_place:

@@ -200,7 +200,8 @@ fb_axis125_02Z(enIN_State       := enIN_State,
                xIN_DisButtons   :=,
                xIN_Quit         := xIN_Quit,
                xIN_PARAMok      := TRUE, (*TODO*)
-               xIN_FREE         := NOT (iOUT_Step = ST125_Pnp_e.PnP_Ver_quick_stop),
+               xIN_FREE         := TRUE,
+               xIN_STOP         := (iOUT_Step = ST125_Pnp_e.PnP_Ver_quick_stop),
                xIN_FREE_HOME    := TRUE,
                rIN_POSMIN       := ST125_Axis.const125_02Z.POS_MIN,
                rIN_POSMAX       := ST125_Axis.const125_02Z.POS_MAX,
@@ -741,7 +742,8 @@ ST125_Pnp_e.PnP_Ver_quick_stop:
 ST125_Pnp_e.Pnp_HandlingSolerohrRelease:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inGS) AND
-       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inGS) THEN
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inGS) AND
+       NOT fb_axis125_02Z.xOUT_BUSY THEN
         iOUT_Step := ST125_Pnp_e.Pnp_Ver_ShuttleFullUp;
     END_IF;
 

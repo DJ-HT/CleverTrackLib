@@ -270,7 +270,8 @@ ST150_Uss_e.waitOnMover: (*  *)
         ELSIF Mover.GetLastStationDone() < INT#145 THEN
             iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
         ELSE
-            iOUT_Step := ST150_Uss_e.mover_maintening_up;
+            iOUT_Step := ST150_Uss_e.check_cap_present;
+            iPreStep  := ST150_Uss_e.waitOnMover;
         END_IF
     END_IF;
 
@@ -278,15 +279,7 @@ ST150_Uss_e.check_cap_present:
     IF xIN_capDetector OR (USS_SIMULATION AND CONST.USE_SIMULATION) THEN
         iOUT_Step := ST150_Uss_e.mover_maintening_up;
     ELSE
-        // iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
-        iOUT_Step  := ST150_Uss_e.ERROR;
         bOUT_Error := 8;
-
-        // IF __ISVALIDREF(Mover) THEN
-        //     IF NOT Mover.SetLastStation(-iIN_StationNumber) THEN
-        //         ASSERT(0);
-        //     END_IF
-        // END_IF
     END_IF
 
 ST150_Uss_e.mover_maintening_up:

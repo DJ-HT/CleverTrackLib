@@ -50,6 +50,10 @@ END_IF
 
 IF rtDone.Q THEN
 
+    sum_InWait_ms     := 0;
+    sum_InRun_ms      := 0;
+    sum_DoneToDone_ms := 0;
+
     FOR i := 0 TO ARRAY_SIZE - 1 BY 1 DO
         sum_InWait_ms     := sum_InWait_ms + arr_InWait_ms[i];
         sum_InRun_ms      := sum_InRun_ms + arr_InRun_ms[i];

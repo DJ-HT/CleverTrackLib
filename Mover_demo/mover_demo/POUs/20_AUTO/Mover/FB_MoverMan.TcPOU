@@ -566,6 +566,9 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.OperationDone;
+				
+			ELSIF _MoverList[mv_i].Station.Process.xMoverShouldLeave THEN
+                _MoverList[mv_i].State := MoverState_e.OperationDone;
 
             ELSE
                 IF NOT _MoverList[mv_i].IsInStationPos() THEN

@@ -694,13 +694,13 @@ ST110_Pnp_e.PnP_Ver_StartTorqueControl:
 // We need a fb that enables for us torque control. Here we just go a bit further
 ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
 
-    IF _20_AUTO.recipe.st110.xUseVerLeft AND fb_axis110_02Z.xIN_FREE THEN
-        fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
-    END_IF
-
-    IF _20_AUTO.recipe.st110.xUseVerRight AND fb_axis110_03Z.xIN_FREE THEN
-        fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
-    END_IF
+    // IF _20_AUTO.recipe.st110.xUseVerLeft AND fb_axis110_02Z.xIN_FREE THEN
+    //     fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
+    // END_IF
+    // 
+    // IF _20_AUTO.recipe.st110.xUseVerRight AND fb_axis110_03Z.xIN_FREE THEN
+    //     fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
+    // END_IF
 
     IF (fb_PnpVerAxisL.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
