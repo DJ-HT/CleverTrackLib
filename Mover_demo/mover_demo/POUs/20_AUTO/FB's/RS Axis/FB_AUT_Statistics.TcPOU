@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_AUT_Statistics" Id="{63fcb8de-b440-4232-a48f-27d7b029c316}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_Statistics
+VAR_INPUT
+    xIN_Enable : BOOL; // Set it to TRUE when you machine is in END, LEER or AUTO mode
+    // Statistics are not perform if this input is FALSE
+    xIN_Waiting : BOOL; // Set it to TRUE when you are in a waiting steps
+    xIN_Running : BOOL; // Set it to TRUE when you are >= START and <= DONE. If xIN_Waiting is TRUE, then xIN_Running is ignored
+    xIN_Done    : BOOL; // Set it to TRUE when your step is DONE
+END_VAR
+VAR_OUTPUT
+    tOUT_avgInWait_ms     : DINT; // time in milisecond inside the cycle where we are waiting on a external action
+    tOUT_avgInRun_ms      : DINT; // time in milisecond inside the cycle is running (movement)
+    tOUT_avgDoneToDone_ms : DINT; // time in milisecond from one DONE to another DONE step
+END_VAR
+VAR
+    rtDone : R_TRIG; // trig for xIN_Done input
+
+    arr_InWait_ms     : ARRAY[0..ARRAY_SIZE - 1] OF DINT;
+    sum_InWait_ms     : DINT;
+    arr_InRun_ms      : ARRAY[0..ARRAY_SIZE - 1] OF DINT;
+    sum_InRun_ms      : DINT;
+    arr_DoneToDone_ms : ARRAY[0..ARRAY_SIZE - 1] OF DINT;
+    sum_DoneToDone_ms : DINT;
+
+    index : INT := 0;
+    i     : INT;
+END_VAR
+
+VAR CONSTANT
+    ARRAY_SIZE     : INT := 16;
+    TASK_PERIOD_MS : INT := 10; // task period in MS
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[rtDone(CLK := xIN_Done AND xIN_Enable);
+
+IF xIN_Enable AND NOT xIN_Done THEN
+    arr_DoneToDone_ms[index] := arr_DoneToDone_ms[index] + TASK_PERIOD_MS;
+END_IF
+
+IF xIN_Enable AND xIN_Waiting AND NOT xIN_Done THEN
+    arr_InWait_ms[index] := arr_InWait_ms[index] + TASK_PERIOD_MS;
+
+ELSIF xIN_Enable AND xIN_Running AND NOT xIN_Done THEN
+    arr_InRun_ms[index] := arr_InRun_ms[index] + TASK_PERIOD_MS;
+
+END_IF
+
+IF rtDone.Q THEN
+
+    FOR i := 0 TO ARRAY_SIZE - 1 BY 1 DO
+        sum_InWait_ms     := sum_InWait_ms + arr_InWait_ms[i];
+        sum_InRun_ms      := sum_InRun_ms + arr_InRun_ms[i];
+        sum_DoneToDone_ms := sum_DoneToDone_ms + arr_DoneToDone_ms[i];
+    END_FOR
+
+    tOUT_avgInWait_ms     := sum_InWait_ms / ARRAY_SIZE;
+    tOUT_avgInRun_ms      := sum_InRun_ms / ARRAY_SIZE;
+    tOUT_avgDoneToDone_ms := sum_DoneToDone_ms / ARRAY_SIZE;
+
+    index := index + 1;
+
+    IF index >= ARRAY_SIZE THEN
+        index := 0;
+    END_IF
+
+    arr_DoneToDone_ms[index] := 0;
+    arr_InWait_ms[index]     := 0;
+    arr_InRun_ms[index]      := 0;
+
+END_IF
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

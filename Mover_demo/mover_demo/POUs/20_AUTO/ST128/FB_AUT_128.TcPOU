@@ -26,6 +26,8 @@ END_VAR
 VAR
     (* Bausteine *)
     fb_TubeCapCheck : FB_ABL_128_TubeCapCheck; // 
+
+    fb_stat : FB_AUT_Statistics;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -72,6 +74,13 @@ fb_TubeCapCheck(xIN_Reset       := xReset,
                 tIN_Timeout     := tIN_Timeout,
                 pxFG_Freigabe   := ADR(xRelease),
                 Mover           := THIS^.Mover);
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_TubeCapCheck.xOUT_Wait,
+        xIN_Running := (fb_TubeCapCheck.iOUT_Step >= ST128_TubeCapCheck_e.START) AND
+                       (fb_TubeCapCheck.iOUT_Step <= ST128_TubeCapCheck_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_TubeCapCheck.iOUT_Step = ST128_TubeCapCheck_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)

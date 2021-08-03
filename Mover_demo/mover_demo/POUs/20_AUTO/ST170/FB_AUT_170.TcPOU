@@ -27,6 +27,8 @@ VAR
     (* Bausteine *)
     fb_ABL_RFID : FB_ABL_170;
 
+    fb_stat : FB_AUT_Statistics;
+
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(*******************************************************************)
@@ -73,6 +75,13 @@ fb_ABL_RFID(xIN_Reset       := xReset,
             pxFG_Freigabe   := ADR(xRelease),
             // CleverTrackLib
             Mover := THIS^.Mover);
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_ABL_RFID.xOUT_Wait,
+        xIN_Running := (fb_ABL_RFID.iOUT_Step >= ST170_RFID_e.START) AND
+                       (fb_ABL_RFID.iOUT_Step <= ST170_RFID_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_ABL_RFID.iOUT_Step = ST170_RFID_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)

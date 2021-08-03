@@ -29,6 +29,8 @@ VAR
 	
 	ceta_160 : FB_CETA_715;
 
+    fb_stat : FB_AUT_Statistics;
+
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(*******************************************************************)
@@ -103,6 +105,13 @@ fb_ABL_CETA(xIN_Reset       := xReset,
 
             axisRef_Hardware   := ST16x_Axis.axis160_01Z.axis,
             axisRef_Simulation := SIMU.axis_ref[Axis_e.ST160_01Z]);
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_ABL_CETA.xOUT_Wait,
+        xIN_Running := (fb_ABL_CETA.iOUT_Step >= ST160_CETA_e.START) AND
+                       (fb_ABL_CETA.iOUT_Step <= ST160_CETA_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_ABL_CETA.iOUT_Step = ST160_CETA_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)

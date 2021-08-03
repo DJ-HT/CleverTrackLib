@@ -27,6 +27,8 @@ VAR
     (* Bausteine *)
     fb_Pnp    : FB_ABL_180_Pnp;
 
+    fb_stat : FB_AUT_Statistics;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -74,6 +76,13 @@ fb_Pnp(xIN_Reset          := xReset,
        pxFG_Freigabe      := ADR(xRelease),
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := TRUE);
+
+fb_stat(xIN_Enable  := enIN_State = enState.StateAUTO,
+        xIN_Waiting := fb_Pnp.xOUT_Wait,
+        xIN_Running := (fb_Pnp.iOUT_Step >= ST180_Pnp_e.START) AND
+                       (fb_Pnp.iOUT_Step <= ST180_Pnp_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_Pnp.iOUT_Step = ST180_Pnp_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)

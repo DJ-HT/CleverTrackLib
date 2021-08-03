@@ -27,6 +27,9 @@ VAR
     (* Bausteine *)
     fb_Pnp    : FB_ABL_120_Pnp;
     fb_Feeder : FB_ABL_120_Feeder;
+
+    fb_stat_pnp    : FB_AUT_Statistics;
+    fb_stat_Feeder : FB_AUT_Statistics;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -75,22 +78,35 @@ fb_Pnp(xIN_Reset          := xReset,
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := ST120_Feeder_e.wait_pce_picked = fb_Feeder.iOUT_Step);
 
-fb_Feeder(xIN_Reset       := xReset,
-          xIN_Init        := xIN_Init,
-          xIN_Quit        := xIN_Quit,
-          xIN_Start       := enIN_State >= enState.StateLEER AND xRelease, 
-          xIN_Sperre      := NOT xIN_On,
-          xIN_NextStep    := xNextStep,
-          xIN_AlarmAktiv  := xIN_AlarmAktiv,
-          xIN_DryCycle    := xIN_DryCycle,
-          xIN_RestartCYCL := enIN_State >= enState.StateLEER,
-          enIN_State      := enIN_State,
-          tIN_Timeout     := tIN_Timeout,
-          pxFG_Freigabe   := ADR(xRelease),
-          xIN_PickPiece   := fb_Pnp.xOUT_PickPiece,
+fb_Feeder(xIN_Reset          := xReset,
+          xIN_Init           := xIN_Init,
+          xIN_Quit           := xIN_Quit,
+          xIN_Start          := enIN_State >= enState.StateLEER AND xRelease,
+          xIN_Sperre         := NOT xIN_On,
+          xIN_NextStep       := xNextStep,
+          xIN_AlarmAktiv     := xIN_AlarmAktiv,
+          xIN_DryCycle       := xIN_DryCycle,
+          xIN_RestartCYCL    := enIN_State >= enState.StateLEER,
+          enIN_State         := enIN_State,
+          tIN_Timeout        := tIN_Timeout,
+          pxFG_Freigabe      := ADR(xRelease),
+          xIN_PickPiece      := fb_Pnp.xOUT_PickPiece,
           xIN_PnpGripperOpen := TRUE, // TODO replace by sensor of gripper open
           xIN_PnpNotOnTheWay := (ST120_Axis.axis120_02Z.rActPos < 20.0) OR
                                 (ST120_Axis.axis120_01Y.rActPos < 100.0));
+
+fb_stat_pnp(xIN_Enable  := enState.StateAUTO = enIN_State,
+            xIN_Waiting := fb_Pnp.xOUT_Wait,
+            xIN_Running := (fb_Pnp.iOUT_Step >= ST120_Pnp_e.START) AND
+                           (fb_Pnp.iOUT_Step <= ST120_Pnp_e.DONE),
+            // Since we use a mover system, a cycle is done when we are waiting on a mover
+            xIN_Done := fb_Pnp.iOUT_Step = ST120_Pnp_e.waitOnMover);
+
+fb_stat_Feeder(xIN_Enable  := enState.StateAUTO = enIN_State,
+               xIN_Waiting := fb_feeder.xOUT_Wait,
+               xIN_Running := (fb_feeder.iOUT_Step >= ST120_Feeder_e.START) AND
+                              (fb_feeder.iOUT_Step <= ST120_Feeder_e.DONE),
+               xIN_Done := fb_feeder.iOUT_Step = ST120_Feeder_e.DONE);
 
 (*******************************************************************)
 (* Mover reset flags *)

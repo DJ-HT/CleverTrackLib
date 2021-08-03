@@ -28,6 +28,9 @@ VAR
     fb_Pnp    : FB_ABL_110_Pnp;
     fb_Feeder : FB_ABL_110_Feeder;
 
+    fb_stat_pnp    : FB_AUT_Statistics;
+    fb_stat_Feeder : FB_AUT_Statistics;
+
 END_VAR
 
 VAR CONSTANT
@@ -97,6 +100,19 @@ fb_Feeder(xIN_Reset       := xReset,
           xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
           xIN_RotTableBlockedByPnp := (ST110_Axis.axis110_01Y.rActPos > ROT_TABLE_FREE_MAX_Y) AND
                                       (ST110_Axis.axis110_02Z.rActPos > ROT_TABLE_FREE_MAX_Z));
+
+fb_stat_pnp(xIN_Enable  := enState.StateAUTO = enIN_State,
+            xIN_Waiting := fb_Pnp.xOUT_Wait,
+            xIN_Running := (fb_Pnp.iOUT_Step >= ST110_Pnp_e.START) AND
+                           (fb_Pnp.iOUT_Step <= ST110_Pnp_e.DONE),
+            // Since we use a mover system, a cycle is done when we are waiting on a mover
+            xIN_Done := fb_Pnp.iOUT_Step = ST110_Pnp_e.waitOnMover);
+
+fb_stat_Feeder(xIN_Enable  := enState.StateAUTO = enIN_State,
+               xIN_Waiting := fb_feeder.xOUT_Wait,
+               xIN_Running := (fb_feeder.iOUT_Step >= ST110_Feeder_e.START) AND
+                              (fb_feeder.iOUT_Step <= ST110_Feeder_e.DONE),
+               xIN_Done := fb_feeder.iOUT_Step = ST110_Feeder_e.DONE);
 
 (*******************************************************************)
 (* Mover reset flags *)

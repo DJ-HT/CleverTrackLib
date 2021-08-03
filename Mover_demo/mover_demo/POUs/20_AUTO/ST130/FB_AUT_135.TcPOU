@@ -27,6 +27,8 @@ VAR
     (* Bausteine *)
     fb_Dose : FB_ABL_MODIFY_135;
 
+    fb_stat : FB_AUT_Statistics;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -75,6 +77,13 @@ fb_Dose(xIN_Reset         := xReset,
         Mover             := THIS^.Mover,
         iProcessTimeMili1 := DINT_TO_UDINT(THIS^.iProcessTimeMili_1),
         iProcessTimeMili2 := DINT_TO_UDINT(THIS^.iProcessTimeMili_2));
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_Dose.xOUT_Wait,
+        xIN_Running := (fb_Dose.iOUT_Step >= ST130_Dose_e.START) AND
+                       (fb_Dose.iOUT_Step <= ST130_Dose_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_Dose.iOUT_Step = ST130_Dose_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)

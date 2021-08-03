@@ -27,6 +27,8 @@ VAR
     (* Bausteine *)
     fb_Uss : FB_ABL_150;
 
+    fb_stat : FB_AUT_Statistics;
+
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(*******************************************************************)
@@ -94,6 +96,13 @@ OUT.Q032_ST155_ultraschall_data_bit_0 := fb_Uss.xOUT_welding_bits.Data_Hex1;
 OUT.Q033_ST155_ultraschall_data_bit_1 := fb_Uss.xOUT_welding_bits.Data_Hex2;
 OUT.Q034_ST155_ultraschall_data_bit_2 := fb_Uss.xOUT_welding_bits.Data_Hex4;
 OUT.Q035_ST155_ultraschall_data_bit_3 := fb_Uss.xOUT_welding_bits.Data_Hex8;
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_Uss.xOUT_Wait,
+        xIN_Running := (fb_Uss.iOUT_Step >= ST150_Uss_e.START) AND
+                       (fb_Uss.iOUT_Step <= ST150_Uss_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_Uss.iOUT_Step = ST150_Uss_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)
