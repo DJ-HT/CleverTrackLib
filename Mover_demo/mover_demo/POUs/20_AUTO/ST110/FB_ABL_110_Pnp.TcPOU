@@ -196,8 +196,9 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                xIN_AX5000     := TRUE,
                xIN_ENC_ABS    := TRUE, // TODO set accordingly
                xIN_PARAMok    := TRUE,
-               xIN_FREE       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
-                                 fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw) AND
+               xIN_FREE       := TRUE,
+               xIN_Halt       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
+                                 fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw) AND
                                  NOT (ST110_Pnp_e.PnP_Ver_quick_stop = iOUT_Step),
                xIN_FREE_HOME   := TRUE,
                rIN_POSMIN      := ST110_Axis.const110_02Z.POS_MIN,
@@ -247,7 +248,8 @@ fb_axis110_03Z(enIN_State     := enIN_State,
                xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE, (*TODO*)
-               xIN_FREE       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
+               xIN_FREE       := TRUE,
+               xIN_Halt       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
                                  fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw) AND
                                  NOT (ST110_Pnp_e.PnP_Ver_quick_stop = iOUT_Step),
                xIN_FREE_HOME := TRUE,
@@ -659,7 +661,7 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st110.xUseVerLeft OR fb_axis110_02Z.xOUT_DONE) AND
        (NOT _20_AUTO.recipe.st110.xUseVerRight OR fb_axis110_03Z.xOUT_DONE) THEN
-        iOUT_Step       := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+        iOUT_Step       := ST110_Pnp_e.PnP_Ver_StartTorqueControl;
         xIsPiecesPicked := FALSE;
 
         IF __ISVALIDREF(Mover) THEN
@@ -669,12 +671,39 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
         END_IF
     END_IF;
 
+ST110_Pnp_e.PnP_Ver_StartTorqueControl:
+
+    IF _20_AUTO.recipe.st110.xUseVerLeft THEN
+        fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
+    END_IF
+
+    IF _20_AUTO.recipe.st110.xUseVerRight THEN
+        fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
+    END_IF
+
+    IF (fb_axis110_02Z.xOUT_BUSY OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
+       (fb_axis110_03Z.xOUT_BUSY OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
+        iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+
+    ELSIF (fb_PnpVerAxisL.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
+          (fb_PnpVerAxisR.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
+        bOUT_Error := 20;
+
+    END_IF
+
 // We need a fb that enables for us torque control. Here we just go a bit further
 ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
-    IF (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
-       NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
-       (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
-       NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
+
+    IF _20_AUTO.recipe.st110.xUseVerLeft AND fb_axis110_02Z.xIN_FREE THEN
+        fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
+    END_IF
+
+    IF _20_AUTO.recipe.st110.xUseVerRight AND fb_axis110_03Z.xIN_FREE THEN
+        fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
+    END_IF
+
+    IF (fb_PnpVerAxisL.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
+       (fb_PnpVerAxisR.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
         IF (PNP_SIMULATION AND CONST.USE_SIMULATION) OR PNP_DONT_CHECK_KRAFT THEN
             iOUT_Step := ST110_Pnp_e.PnP_Ver_quick_stop;
         ELSE

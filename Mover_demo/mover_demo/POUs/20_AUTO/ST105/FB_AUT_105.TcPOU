@@ -66,7 +66,7 @@ xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
 fb_Pnp(xIN_Reset       := xReset,
        xIN_Init        := xIN_Init,
        xIN_Quit        := xIN_Quit,
-       xIN_Start       := enIN_State = enState.StateAUTO AND xRelease,
+       xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
        xIN_Sperre      := NOT xIN_On,
        xIN_NextStep    := xNextStep,
        xIN_AlarmAktiv  := xIN_AlarmAktiv,
@@ -110,7 +110,7 @@ xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
 xOUT_Ready    := fb_Pnp.xOUT_Ready AND fb_Feeder.xOUT_Ready;
 xOUT_Done     := fb_Pnp.xOUT_Done AND fb_Feeder.xOUT_Done;
 xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
-xOUT_Wait     := fb_Pnp.xOUT_Wait AND fb_Feeder.xOUT_Wait;
+xOUT_Wait     := fb_Pnp.xOUT_Wait; // We don't wait on the feeder part here, too slow
 xOUT_AlarmST  := xOUT_ErrFlag;
 
 (*******************************************************************)

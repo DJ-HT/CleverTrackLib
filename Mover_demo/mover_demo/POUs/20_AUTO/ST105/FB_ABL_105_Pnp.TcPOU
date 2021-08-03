@@ -318,8 +318,8 @@ ST105_Pnp_e.START: (*  *)
         IF enState.StateLEER = enIN_State THEN
             IF aut_status_from_robot.Ready_to_place THEN
                 iOUT_Step := ST105_Pnp_e.waitOnMover;
-            ELSE
-                iOUT_Step := ST105_Pnp_e.READY;
+            ELSIF __ISVALIDREF(Mover) THEN
+                iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
             END_IF
         ELSE
             iOUT_Step := ST105_Pnp_e.wait_on_feeder;
@@ -345,6 +345,12 @@ ST105_Pnp_e.push_up_casing:
 ST105_Pnp_e.Robot_Pick:
     IF aut_status_from_robot.Picked THEN
         iOUT_Step := ST105_Pnp_e.Robot_wait_picked_falling;
+
+        // we don't generate an error here since this may hapen
+        // when we stop the machine during the robot movement
+    ELSIF aut_status_from_robot.Ready_to_place THEN
+        iOUT_Step := ST105_Pnp_e.waitOnMover;
+
     END_IF
 
 ST105_Pnp_e.Robot_wait_picked_falling:
@@ -380,6 +386,12 @@ ST105_Pnp_e.Robot_place:
                 ASSERT(0);
             END_IF
         END_IF
+
+        // we don't generate an error here since this may hapen
+        // when we stop the machine during the robot movement
+    ELSIF aut_status_from_robot.Ready_to_pick THEN
+        iOUT_Step := ST105_Pnp_e.wait_on_feeder;
+
     END_IF
 
 ST105_Pnp_e.Robot_wait_placed_falling:

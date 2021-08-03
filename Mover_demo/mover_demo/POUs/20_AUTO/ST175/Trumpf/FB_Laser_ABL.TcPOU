@@ -3,9 +3,10 @@
   <POU Name="FB_Laser_ABL" Id="{da082569-8ac6-4e90-8334-73d28c10a92f}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Laser_ABL
 VAR_INPUT
-    xIN_Start     : BOOL;
-    sIN_FileName  : STRING := 'Someting here please';
-    xIN_ResetData : BOOL; // reset all data, used to ensure that the marking data are in the laser
+    xIN_Start       : BOOL;
+    xIN_WarmUpLaser : BOOL; // activate laser, only possible when cycle is not started
+    sIN_FileName    : STRING := 'Someting here please';
+    xIN_ResetData   : BOOL; // reset all data, used to ensure that the marking data are in the laser
 END_VAR
 VAR_OUTPUT
     xOUT_DONE  : BOOL;
@@ -30,6 +31,11 @@ END_VAR
 IF xIN_ResetData THEN
     MEMSET(ADR(sLastName), 0, SIZEOF(sLastName));
     MEMSET(ADR(sLastNum), 0, SIZEOF(sLastNum));
+END_IF
+
+IF 0 = iStep AND xIN_WarmUpLaser AND if_SingleCmds.bReady THEN
+    if_SingleCmds.iStepNr := 10; // TLV - Activate Laser / Open Shutter
+    if_SingleCmds.bStart  := TRUE;
 END_IF
 
 CASE iStep OF
@@ -190,7 +196,7 @@ CASE iStep OF
 END_CASE
 
 xOUT_DONE  := 1300 = iStep;
-xOUT_BUSY  := iStep >= 1000 AND iStep < 1300;
+xOUT_BUSY  := (iStep >= 1000 AND iStep < 1300) OR NOT if_SingleCmds.bReady;
 xOUT_ERROR := if_TruMark.bError;
 ]]></ST>
     </Implementation>

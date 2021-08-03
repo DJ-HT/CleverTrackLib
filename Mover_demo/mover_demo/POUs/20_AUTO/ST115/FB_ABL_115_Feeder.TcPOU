@@ -235,7 +235,8 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST115_Feeder_e.DONE);
+xOUT_Wait := (iOUT_Step = ST115_Feeder_e.DONE) OR
+             (iOUT_Step = ST115_Feeder_e.READY);
 
 // // TODO add simulation constant to prevent the output to be set
 // IO_BOX.Q8000_ST115_freigabe_wf    := fb_feeder.xOUT_EnableFeeder; // AND SIMULATION CONSTANT

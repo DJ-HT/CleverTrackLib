@@ -32,6 +32,9 @@ ST110_Pnp_e :
 
 	Pnp_Handling_pin_up := 1210,
 	PnP_Ver_ShuttleDown := 1220,
+	PnP_Ver_StartTorqueControl := 1225, // this step is used to start the execution of the movement
+	                                    // even if the torque limit is passed. This way we ensure that
+										// twincat motion library accept the move_absolute command
 	PnP_Ver_ShuttleTorqueControl := 1230,
 	PnP_Ver_quick_stop := 1240,
 	Vacum_off := 1250,
@@ -151,6 +154,11 @@ END_TYPE
             <o>
               <v n="TextID">"PnP_Ver_ShuttleDown"</v>
               <v n="TextDefault">"1220"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"PnP_Ver_StartTorqueControl"</v>
+              <v n="TextDefault">"1225"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

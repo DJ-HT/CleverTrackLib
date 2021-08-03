@@ -106,6 +106,7 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (* Bausteine *)
 (*******************************************************************)
 fb_trumpf_laser(xIN_Start    := ST175_LASER_e.LASER_start = iOUT_Step,
+	xIN_WarmUpLaser := ST175_LASER_e.Init_laser_warmup = iOUT_Step,
                 sIN_FileName := _20_AUTO.recipe.st175.file_name);
 
 // pneumatics
@@ -288,9 +289,12 @@ ST175_LASER_e.INIT: (* Grundstellung ? *)
 
 ST175_LASER_e.Init_pneumatics:
     IF fb_handling.xOUT_inGS AND fb_doorEntry.xOUT_inGS AND fb_doorExit.xOUT_inGS THEN
-        iOUT_Step := ST175_LASER_e.READY;
+        iOUT_Step := ST175_LASER_e.Init_laser_warmup;
     END_IF
 
+ST175_LASER_e.Init_laser_warmup:
+        iOUT_Step := ST175_LASER_e.READY;
+	
 (***** READY / INIT DONE *****)
 ST175_LASER_e.READY:  (* Start AUTO,END,LEER,STEP *)
     IF xIN_Start THEN //IF rtSTART.Q THEN

@@ -68,7 +68,7 @@ xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
 fb_Pnp(xIN_Reset          := xReset,
        xIN_Init           := xIN_Init,
        xIN_Quit           := xIN_Quit,
-       xIN_Start          := enIN_State >= enState.StateLEER,
+       xIN_Start          := enIN_State >= enState.StateLEER AND xRelease,
        xIN_Sperre         := NOT xIN_On,
        xIN_NextStep       := xNextStep,
        xIN_AlarmAktiv     := xIN_AlarmAktiv,
