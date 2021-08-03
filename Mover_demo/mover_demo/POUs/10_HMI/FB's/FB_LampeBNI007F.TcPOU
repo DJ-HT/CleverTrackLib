@@ -34,13 +34,13 @@ VAR_INPUT
 	tIN_Impuls			:	TIME;		//Impulsdauer
 	xIN_AlarmAktiv		:	BOOL;		// Alarm steht an
 
-    xIN_Mel1            :   BOOL;       // Meldung 1 on  
-    xIN_Mel2            :   BOOL;       // Meldung 2 on  
-    xIN_Mel3            :   BOOL;       // Meldung 3 on  
-	xIN_Mel4            :   BOOL;	    // Meldung 4 on
-    xIN_Mel5            :   BOOL;       // Meldung 5 on
-    xIN_Mel6            :   BOOL;       // Meldung 6 on    
-    xIN_Mel7            :   BOOL;       // Meldung 7 on  
+    xIN_Mel_1_GN_GN_YE            :   BOOL;       // grün/grün/gelb
+    xIN_Mel_2_GN_YE_GN            :   BOOL;       // grün/gelb/grün
+    xIN_Mel_3_GN_YE_YE            :   BOOL;       // grün/gelb/gelb
+	xIN_Mel_4_YE_GN_GN            :   BOOL;	    // gelb/grün/grün
+    xIN_Mel_5_YE_GN_YE            :   BOOL;       // gelb/grün/gelb
+    xIN_Mel_6_YE_YE_GN            :   BOOL;       // gelb/gelb/grün
+    xIN_Mel_7_YE_YE_YE            :   BOOL;       // gelb/gelb/gelb
 	
 
     tIN_Meldungen       :   TIME;        // Meldungsswitsch Zeit
@@ -152,13 +152,13 @@ rt_Init(CLK := xIN_INIT);
 x_Meldung:=b_Meldungen>0;
 
 IF NOT x_Meldung THEN
-    b_Meldungen.1:=xIN_Mel1;
-    b_Meldungen.2:=xIN_Mel2;
-    b_Meldungen.3:=xIN_Mel3;
-    b_Meldungen.4:=xIN_Mel4;
-    b_Meldungen.5:=xIN_Mel5;
-    b_Meldungen.6:=xIN_Mel6;
-    b_Meldungen.7:=xIN_Mel7;    
+    b_Meldungen.1:=xIN_Mel_1_GN_GN_YE;
+    b_Meldungen.2:=xIN_Mel_2_GN_YE_GN;
+    b_Meldungen.3:=xIN_Mel_3_GN_YE_YE;
+    b_Meldungen.4:=xIN_Mel_4_YE_GN_GN;
+    b_Meldungen.5:=xIN_Mel_5_YE_GN_YE;
+    b_Meldungen.6:=xIN_Mel_6_YE_YE_GN;
+    b_Meldungen.7:=xIN_Mel_7_YE_YE_YE;    
 END_IF
 
 
@@ -338,33 +338,5 @@ END_CASE
 x_first:=TRUE;
 ]]></ST>
     </Implementation>
-    <LineIds Name="FB_LampeBNI007F">
-      <LineId Id="1614" Count="2" />
-      <LineId Id="1618" Count="15" />
-      <LineId Id="1636" Count="0" />
-      <LineId Id="1638" Count="8" />
-      <LineId Id="1860" Count="1" />
-      <LineId Id="1859" Count="0" />
-      <LineId Id="1647" Count="26" />
-      <LineId Id="1686" Count="5" />
-      <LineId Id="1980" Count="0" />
-      <LineId Id="1694" Count="73" />
-      <LineId Id="1866" Count="0" />
-      <LineId Id="1768" Count="0" />
-      <LineId Id="1770" Count="5" />
-      <LineId Id="2096" Count="0" />
-      <LineId Id="2100" Count="1" />
-      <LineId Id="2098" Count="0" />
-      <LineId Id="2097" Count="0" />
-      <LineId Id="1776" Count="68" />
-      <LineId Id="1848" Count="0" />
-      <LineId Id="1984" Count="0" />
-      <LineId Id="1849" Count="0" />
-      <LineId Id="1851" Count="5" />
-      <LineId Id="1863" Count="0" />
-      <LineId Id="1865" Count="0" />
-      <LineId Id="1864" Count="0" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

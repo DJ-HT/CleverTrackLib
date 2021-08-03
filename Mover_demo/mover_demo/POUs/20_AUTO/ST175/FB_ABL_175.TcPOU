@@ -208,7 +208,11 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST175_LASER_e.DONE);
+xOUT_Wait := (iOUT_Step = ST175_LASER_e.DONE) OR
+             (iOUT_Step = ST175_LASER_e.READY) OR
+             (iOUT_Step = ST175_LASER_e.START) OR
+             (iOUT_Step = ST175_LASER_e.waitOnMover) OR
+             (iOUT_Step = ST175_LASER_e.SYNC_MOVER_LEAVE);
 
 xOUT_MoverFree := fb_handling.xOUT_inGS AND fb_doorEntry.xOUT_inGS AND fb_doorExit.xOUT_inGS;
 

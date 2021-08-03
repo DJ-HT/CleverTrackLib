@@ -977,6 +977,20 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="IsProcessUsed" Id="{50177cad-7f94-4a42-a096-75439a7b8ec1}">
+      <Declaration><![CDATA[// Is the given process used by the current station configuration?
+METHOD IsProcessUsed : BOOL
+VAR_INPUT
+    this_process : REFERENCE TO FB_AUT_ABSTRACT;
+END_VAR
+VAR
+	i : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsProcessUsed := THIS^._WorkStationList[PH_num].IsProcessUsed(this_process);
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="SetAllScenario" Id="{0a5392ea-83a4-43a8-8809-208b7b2e49ea}">
       <Declaration><![CDATA[METHOD SetAllScenario : REFERENCE TO FB_MoverMan
 VAR_INPUT

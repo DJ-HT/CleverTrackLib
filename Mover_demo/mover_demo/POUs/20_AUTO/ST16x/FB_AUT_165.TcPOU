@@ -58,6 +58,9 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
+
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
 fb_CETA(xIN_StatusBits   := CETA_IO.I_ST165_StatusBits,
         xIN_Data         := CETA_IO.I_ST165_Data,
         xIN_Reset        := xReset OR xIN_Quit,
@@ -67,7 +70,7 @@ fb_CETA(xIN_StatusBits   := CETA_IO.I_ST165_StatusBits,
 fb_ABL_CETA(xIN_Reset       := xReset,
             xIN_Init        := xIN_Init,
             xIN_Quit        := xIN_Quit,
-            xIN_Start       := enIN_State >= enState.StateLEER,
+            xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
             xIN_Sperre      := NOT xIN_On,
             xIN_NextStep    := xNextStep,
             xIN_AlarmAktiv  := xIN_AlarmAktiv,
@@ -75,7 +78,7 @@ fb_ABL_CETA(xIN_Reset       := xReset,
             xIN_RestartCYCL := enIN_State >= enState.StateLEER,
             enIN_State      := enIN_State,
             tIN_Timeout     := tIN_Timeout,
-            pxFG_Freigabe   := ADR(xDummy),
+            pxFG_Freigabe   := ADR(xRelease),
             // CleverTrackLib
             Mover := THIS^.Mover,
             // for multiple reference of the FB

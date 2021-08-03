@@ -64,33 +64,35 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
 fb_Pnp(xIN_Reset          := xReset,
        xIN_Init           := xIN_Init,
        xIN_Quit           := xIN_Quit,
-       xIN_Start          := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+       xIN_Start          := enIN_State >= enState.StateLEER AND xRelease,
        xIN_Sperre         := NOT xIN_On,
        xIN_NextStep       := xNextStep,
        xIN_AlarmAktiv     := xIN_AlarmAktiv,
        xIN_DryCycle       := xIN_DryCycle,
-       xIN_RestartCYCL    := enIN_State >= enState.StateLEER, // only restart when the mover has move out
+       xIN_RestartCYCL    := enIN_State >= enState.StateLEER,
        enIN_State         := enIN_State,
        tIN_Timeout        := tIN_Timeout,
-       pxFG_Freigabe      := ADR(xDummy),
+       pxFG_Freigabe      := ADR(xRelease),
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := fb_Feeder.xOUT_Done);
 
 fb_Feeder(xIN_Reset       := xReset,
           xIN_Init        := xIN_Init,
           xIN_Quit        := xIN_Quit,
-          xIN_Start       := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
+          xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
           xIN_Sperre      := NOT xIN_On,
           xIN_NextStep    := xNextStep,
           xIN_AlarmAktiv  := xIN_AlarmAktiv,
           xIN_DryCycle    := xIN_DryCycle,
-          xIN_RestartCYCL := enIN_State >= enState.StateLEER, // only restart when the mover has move out
+          xIN_RestartCYCL := enIN_State >= enState.StateLEER,
           enIN_State      := enIN_State,
           tIN_Timeout     := tIN_Timeout,
-          pxFG_Freigabe   := ADR(xDummy),
+          pxFG_Freigabe   := ADR(xRelease),
           // special
           xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
           xIN_RotTableBlockedByPnp := (ST125_Axis.axis125_01Y.rActPos > ROT_TABLE_FREE_MAX_Y) AND

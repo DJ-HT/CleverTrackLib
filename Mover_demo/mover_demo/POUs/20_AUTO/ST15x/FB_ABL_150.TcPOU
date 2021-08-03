@@ -160,7 +160,11 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST150_Uss_e.DONE);
+xOUT_Wait := (iOUT_Step = ST150_Uss_e.DONE) OR
+             (iOUT_Step = ST150_Uss_e.READY) OR
+             (iOUT_Step = ST150_Uss_e.START) OR
+             (iOUT_Step = ST150_Uss_e.waitOnMover) OR
+             (iOUT_Step = ST150_Uss_e.SYNC_MOVER_LEAVE);
 
 xOUT_MoverFree := iOUT_Step >= ST150_Uss_e.MOVER_FREE_OP AND iOUT_Step < ST150_Uss_e.MOVER_NEEDED_OP;
 

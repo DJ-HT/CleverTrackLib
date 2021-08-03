@@ -50,7 +50,7 @@ VAR
     xManuCycle : BOOL; // Manueller Zylus aktiv	
     xNextStep  : BOOL; // Nächster Schritt erlaubt	
 
-    xDummy : BOOL := TRUE; // Platzhalter		
+    xRelease : BOOL := TRUE; // Platzhalter		
 
     i : INT;
 
@@ -69,6 +69,16 @@ END_VAR
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Equals" Id="{77f49e2c-088e-48f8-9c77-8f51b4850945}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
+VAR_INPUT
+    object : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="FB_init" Id="{657b0df4-0f9d-41d9-87f9-0136e5aa09ba}">
       <Declaration><![CDATA[METHOD FB_init : BOOL
 VAR_INPUT

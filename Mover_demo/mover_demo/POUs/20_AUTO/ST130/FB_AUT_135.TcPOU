@@ -49,8 +49,7 @@ END_IF
 //NEXT STEP
 xNextStep := (enIN_State > StateSTEP) OR
              ((enIN_State = StateSTEP) AND xIN_Step) OR
-             ((enIN_State = StateMANU) AND xManuCycle) OR
-             (enIN_State = StateALARM); // we have to finish the process event if other 
+             ((enIN_State = StateMANU) AND xManuCycle);
 
 //RESET
 xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
@@ -58,6 +57,8 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
+
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
 
 fb_Dose(xIN_Reset         := xReset,
         xIN_Init          := xIN_Init,
@@ -70,7 +71,7 @@ fb_Dose(xIN_Reset         := xReset,
         xIN_RestartCYCL   := enIN_State >= enState.StateLEER, // only restart when the mover has move out
         enIN_State        := enIN_State,
         tIN_Timeout       := tIN_Timeout,
-        pxFG_Freigabe     := ADR(xDummy),
+        pxFG_Freigabe     := ADR(xRelease),
         Mover             := THIS^.Mover,
         iProcessTimeMili1 := DINT_TO_UDINT(THIS^.iProcessTimeMili_1),
         iProcessTimeMili2 := DINT_TO_UDINT(THIS^.iProcessTimeMili_2));

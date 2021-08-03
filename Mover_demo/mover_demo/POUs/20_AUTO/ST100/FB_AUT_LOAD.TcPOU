@@ -69,7 +69,7 @@ _FB_ABL_100A(xIN_Reset    := xReset,
              xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out
              enIN_State      := enIN_State,
              tIN_Timeout     := tIN_Timeout,
-             pxFG_Freigabe   := ADR(xDummy),
+             pxFG_Freigabe   := ADR(xRelease),
              Mover           := THIS^.Mover,
              xOUT_ErrFlag    =>,
              xOUT_Busy       =>,

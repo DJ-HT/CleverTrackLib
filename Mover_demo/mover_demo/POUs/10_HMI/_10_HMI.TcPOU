@@ -122,20 +122,20 @@ _14_STATE();
 //***********************************************************************************************)
 //Lampen
 //***********************************************************************************************)
-_FB_LAMPE(enIN_State      := HMI.enState,
-          xIN_AlarmAktiv  := GVL.st105_aut.xOUT_AlarmST,
-          xIN_SafetyError := _02_Safety.xOUT_SafetyError,
-          xIN_NotAus      := _02_Safety.xOUT_NotAusBetaetigt,
-          xIN_Mel1        :=,
-          xIN_Mel2        :=,
-          xIN_Mel3        :=,
-          xIN_Mel4        :=,
-          xIN_Mel5        :=,
-          xIN_Mel6        :=,
-          xIN_Mel7        :=,
-          tIN_Meldungen   := T#1000MS,
-          tIN_Impuls      := T#500ms,
-          xOUT_ErrFlag    =>);
+_FB_LAMPE(enIN_State         := HMI.enState,
+          xIN_AlarmAktiv     := GVL.st105_aut.xOUT_AlarmST,
+          xIN_SafetyError    := _02_Safety.xOUT_SafetyError,
+          xIN_NotAus         := _02_Safety.xOUT_NotAusBetaetigt,
+          xIN_Mel_1_GN_GN_YE :=,
+          xIN_Mel_2_GN_YE_GN :=,
+          xIN_Mel_3_GN_YE_YE :=,
+          xIN_Mel_4_YE_GN_GN :=,
+          xIN_Mel_5_YE_GN_YE :=,
+          xIN_Mel_6_YE_YE_GN :=,
+          xIN_Mel_7_YE_YE_YE :=,
+          tIN_Meldungen      := T#1000MS,
+          tIN_Impuls         := T#500ms,
+          xOUT_ErrFlag       =>);
 
 // BALLUFF LAMPE
 IO_BOX.Q0000_Balluf_Lampe_1_word     := _FB_LAMPE.wOUT_Lampe;
