@@ -438,9 +438,8 @@ IO_BOX.Q5409_14_ST185_Break_axis_02Z := NOT fb_simu_axis185_02Z.pIN_axisHW^.Stat
                                         NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 OUT.Q102_ST185_entladen_ein :=
-    enIN_State >= enState.StateLEER AND
-    (iOUT_Step < ST185_Pnp_e.open_griper_put_piece) AND
-    (iOUT_Step > ST185_Pnp_e.hor_to_track_pos) AND
+    (enIN_State >= enState.StateEND) AND
+    ((iOUT_Step < ST185_Pnp_e.open_griper_put_piece) OR (iOUT_Step > ST185_Pnp_e.hor_to_track_pos)) AND
     NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
