@@ -316,7 +316,9 @@ ST175_LASER_e.waitOnMover: (*  *)
         ELSIF Mover.GetLastStationDone() < INT#150 THEN
             iOUT_Step := ST175_LASER_e.SYNC_MOVER_LEAVE;
         ELSE
-            iOUT_Step := ST175_LASER_e.close_doors;
+            IF NOT MAIN.MoverMan.IsMoverInRange(from_pos := 7750.0, to_pos := 8050.0) THEN
+                iOUT_Step := ST175_LASER_e.close_doors;
+            END_IF
         END_IF
     END_IF;
 

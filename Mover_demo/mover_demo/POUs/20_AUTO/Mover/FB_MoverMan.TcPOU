@@ -910,6 +910,45 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="IsMoverInRange" Id="{6965b54e-1f0e-4b71-958b-7a4c20eb19af}">
+      <Declaration><![CDATA[// Is a shuttle present in the given region?
+// If 'from_pos' is greater than 'to_pos', this means we look in
+// a region that include the begining of the track
+METHOD PUBLIC IsMoverInRange : BOOL
+VAR_INPUT
+    from_pos : LREAL; // begin of the tested region (included)
+    to_pos   : LREAL; // end of the tested region (included)
+END_VAR
+VAR
+    i       : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IsMoverInRange := FALSE;
+
+IF from_pos < to_pos THEN
+    FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+        IF (THIS^._MoverList[i].MoverAxis.CurrentPos >= from_pos) AND
+           (THIS^._MoverList[i].MoverAxis.CurrentPos <= to_pos) THEN
+		   IsMoverInRange := TRUE;
+		   EXIT;
+		   
+        END_IF
+    END_FOR
+ELSE // we test a region that pass by the maximum track length
+    FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+        IF (THIS^._MoverList[i].MoverAxis.CurrentPos >= from_pos) OR
+           (THIS^._MoverList[i].MoverAxis.CurrentPos <= to_pos) THEN
+		   IsMoverInRange := TRUE;
+		   EXIT;
+		   
+        END_IF
+    END_FOR
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="IsMoverLost" Id="{a86b0de5-72c6-4a8d-9bd7-0385975e09ca}">
       <Declaration><![CDATA[// If the target station of a mover is not between the target of the previous and the next mover
 // this function will return true. This function is attendend to debug only
