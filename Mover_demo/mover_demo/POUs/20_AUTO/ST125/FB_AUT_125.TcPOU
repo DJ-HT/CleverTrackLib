@@ -128,6 +128,14 @@ xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
 xOUT_Wait     := fb_Pnp.xOUT_Wait AND fb_Feeder.xOUT_Wait;
 xOUT_AlarmST  := xOUT_ErrFlag;
 
+IF fb_Pnp.xOUT_ErrFlag THEN
+    bOUT_ErrorNum := fb_Pnp.bOUT_Error;
+ELSIF fb_Feeder.xOUT_ErrFlag THEN
+    bOUT_ErrorNum := fb_Feeder.bOUT_Error;
+ELSE
+    bOUT_ErrorNum := 0;
+END_IF
+
 (*******************************************************************)
 (* Bausteinaufruf Error Station *)
 (*******************************************************************)
