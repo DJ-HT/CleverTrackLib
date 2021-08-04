@@ -37,6 +37,7 @@ VAR_OUTPUT
     xOUT_Done     : BOOL; // alle Abläufe fertig
     xOUT_Ready    : BOOL; // Station ist bereit (wartet auf Start)
     xOUT_ErrFlag  : BOOL; // Error Flag   
+    bOUT_ErrorNum : BYTE; // Error number
     xOUT_Wait     : BOOL; // alle Abläufe warten
     xOUT_AlarmST  : BOOL; // Station hat Alarm
 
@@ -58,7 +59,7 @@ VAR
 
     _ProcessExecution : ProcessExecution_e := ProcessExecution_e.ExecuteImmediately;
 
-    _Mover            : REFERENCE TO FB_Mover;
+    _Mover             : REFERENCE TO FB_Mover;
     _xMoverShouldLeave : BOOL; // flag to synchronise process and MoverMan, MoverMan needs to call TakeMover() to reset this flag
 
 END_VAR

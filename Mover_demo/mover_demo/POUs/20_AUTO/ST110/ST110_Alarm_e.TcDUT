@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST110_Alarm_e" Id="{0396803c-c8b0-46d1-9f1e-7f564222028c}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'to_string'}
+TYPE ST110_Alarm_e :
+(
+    no_error := 0,
+    Axis_110_01Y_error := 1,
+    Axis_110_02Z_error := 2,
+    Axis_110_03Z_error := 3,
+    Axis_110_04Z_error := 4,
+    Cylinder_vacuum_griper_left := 5,
+    Cylinder_vacuum_griper_right := 6,
+    Axis_110_10W_error := 7,
+    Feeder_error := 8,
+    Piece_in_unused_griper := 9,
+    Piece_missing_left_griper := 10,
+    Piece_missing_right_griper := 11,
+    Feeder_empty := 12,
+    _max := 20
+)BYTE;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

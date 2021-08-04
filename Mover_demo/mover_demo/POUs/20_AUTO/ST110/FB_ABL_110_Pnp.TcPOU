@@ -454,17 +454,17 @@ rtSTART(CLK := xIN_Start);
 
 IF 0 = bOUT_Error THEN
     IF fb_axis110_01Y.xOUT_ErrFlag THEN
-        bOUT_Error := 11;
+        bOUT_Error := ST110_Alarm_e.Axis_110_01Y_error;
     ELSIF fb_axis110_02Z.xOUT_ErrFlag THEN
-        bOUT_Error := 12;
+        bOUT_Error := ST110_Alarm_e.Axis_110_02Z_error;
     ELSIF fb_axis110_03Z.xOUT_ErrFlag THEN
-        bOUT_Error := 13;
+        bOUT_Error := ST110_Alarm_e.Axis_110_03Z_error;
     ELSIF fb_axis110_04Z.xOUT_ErrFlag THEN
-        bOUT_Error := 14;
+        bOUT_Error := ST110_Alarm_e.Axis_110_04Z_error;
     ELSIF fb_gripperLeft.xOUT_ErrFlag THEN
-        bOUT_Error := 20;
+        bOUT_Error := ST110_Alarm_e.Cylinder_vacuum_griper_left;
     ELSIF fb_gripperRight.xOUT_ErrFlag THEN
-        bOUT_Error := 21;
+        bOUT_Error := ST110_Alarm_e.Cylinder_vacuum_griper_right;
     END_IF
 ELSIF iOUT_Step < ST110_Pnp_e.ERROR THEN
     iPreStep  := ST110_Pnp_e.INIT;
@@ -542,7 +542,7 @@ ST110_Pnp_e.Init_check_if_pces_handled:
     IF (NOT _20_AUTO.recipe.st110.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) OR
        (NOT _20_AUTO.recipe.st110.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
         // ERROR: a piece is present in an unused gripper
-        bOUT_Error := 1;
+        bOUT_Error := ST110_Alarm_e.Piece_in_unused_griper;
         iOUT_Step  := ST110_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st110.xUseVerLeft AND
@@ -550,7 +550,7 @@ ST110_Pnp_e.Init_check_if_pces_handled:
           _20_AUTO.recipe.st110.xUseVerRight AND
           fb_gripperRight.xOUT_inAS THEN
         // ERROR:  Initialisation failed. A piece is missing in the left griper.
-        bOUT_Error := 2;
+        bOUT_Error := ST110_Alarm_e.Piece_missing_left_griper;
         iOUT_Step  := ST110_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st110.xUseVerLeft AND
@@ -558,7 +558,7 @@ ST110_Pnp_e.Init_check_if_pces_handled:
           _20_AUTO.recipe.st110.xUseVerRight AND
           NOT fb_gripperRight.xOUT_inAS THEN
         // ERROR:  Initialisation failed. A piece is missing in the right griper.
-        bOUT_Error := 3;
+        bOUT_Error := ST110_Alarm_e.Piece_missing_right_griper;
         iOUT_Step  := ST110_Pnp_e.ERROR;
 
     ELSIF (NOT fb_gripperLeft.xOUT_inAS AND NOT fb_gripperRight.xOUT_inAS) OR NOT xIsPiecesPicked THEN

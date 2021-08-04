@@ -164,7 +164,7 @@ OUT.Q_CPX9_1_Process_stopped := HMI.enState <= enState.StateSTOP;
 (***********************************************************************************************)
 (* HMI Alarme*)
 (***********************************************************************************************)
-FOR idx := 1 TO 100 BY 1 DO
+FOR idx := 1 TO 500 BY 1 DO
     HMI.xArAlarmHMI[idx] := HMI.strArALARM[idx].xAlarmOUT;
 END_FOR
 

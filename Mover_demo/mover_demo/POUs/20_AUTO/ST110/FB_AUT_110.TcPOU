@@ -35,7 +35,7 @@ END_VAR
 
 VAR CONSTANT
     ROT_TABLE_FREE_MAX_Y : REAL := 100.0; // If Y and Z axis is more than this value, the feeder cannot move
-    ROT_TABLE_FREE_MAX_Z : REAL := 50.0; // If Z and Y axis is more than this value, the feeder cannot move
+    ROT_TABLE_FREE_MAX_Z : REAL := 50.0;  // If Z and Y axis is more than this value, the feeder cannot move
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -128,10 +128,21 @@ xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
 xOUT_Wait     := fb_Pnp.xOUT_Wait AND fb_Feeder.xOUT_Wait;
 xOUT_AlarmST  := xOUT_ErrFlag;
 
+IF fb_Pnp.xOUT_ErrFlag THEN
+    bOUT_ErrorNum := fb_Pnp.bOUT_Error;
+ELSIF fb_Feeder.xOUT_ErrFlag THEN
+    bOUT_ErrorNum := fb_Feeder.bOUT_Error;
+ELSE
+	bOUT_ErrorNum := 0;
+END_IF
+
 (*******************************************************************)
 (* Bausteinaufruf Error Station *)
 (*******************************************************************)
-// POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
+POU_ALARM_110(xIN_QUIT      := xIN_Quit,
+              iIN_ArraySize := ST110_Alarm_e._max,
+              pstrIN_ALARM  := ADR(HMI.strArALARM[21]),
+              refPOU        := THIS^);
 ]]></ST>
     </Implementation>
     <Property Name="iCompletionPC" Id="{f03aab34-0709-45b8-80fe-12aa7c735bba}">
