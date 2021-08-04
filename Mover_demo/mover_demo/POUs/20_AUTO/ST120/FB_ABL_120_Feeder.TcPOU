@@ -348,11 +348,13 @@ IO_BOX.Q8303_ST120_hublader_rechts_valve :=
     fb_hubladerRight.xOUT_VALVE AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 IO_BOX.Q8201_ST120_forderband_ein_l :=
-    (enIN_State = enState.StateAUTO) AND
+    (enIN_State >= enState.StateLEER) AND
+    pxFG_Freigabe^ AND
     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 IO_BOX.Q8203_ST120_forderband_ein_r :=
-    (enIN_State = enState.StateAUTO) AND
+    (enIN_State >= enState.StateLEER) AND
+    pxFG_Freigabe^ AND
     NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
