@@ -378,13 +378,13 @@ rtSTART(CLK := xIN_Start);
 (* error management *)
 IF 0 = bOUT_Error THEN
     IF fb_pivotLeft.xOUT_ErrFlag THEN
-        bOUT_Error := 11;
+        bOUT_Error := ST120_Alarm_e.Cylinder_pivot_left;
     ELSIF fb_pivotRight.xOUT_ErrFlag THEN
-        bOUT_Error := 12;
+        bOUT_Error := ST120_Alarm_e.Cylinder_pivot_right;
     ELSIF fb_hubladerLeft.xOUT_ErrFlag THEN
-        bOUT_Error := 13;
+        bOUT_Error := ST120_Alarm_e.Cylinder_hublader_left;
     ELSIF fb_hubladerRight.xOUT_ErrFlag THEN
-        bOUT_Error := 14;
+        bOUT_Error := ST120_Alarm_e.Cylinder_hublader_right;
     END_IF
 ELSIF iOUT_Step < ST120_Feeder_e.ERROR THEN
     iOUT_Step := ST120_Feeder_e.ERROR;
@@ -419,8 +419,7 @@ ST120_Feeder_e.Init_pneumatics:
     ELSE
         IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND IO_BOX.I6404_ST120_teil_in_vereizelung_links) OR
            (NOT _20_AUTO.recipe.st120.xUseVerRight AND IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) THEN
-            // ERROR: a piece is present in an unused gripper
-            bOUT_Error := 1;
+            bOUT_Error := ST120_Alarm_e.Piece_in_unused_pivot;
             iOUT_Step  := ST120_Feeder_e.ERROR;
 
         ELSIF (IO_BOX.I6401_ST120_schwenken_links_in_horizontal AND
@@ -429,14 +428,12 @@ ST120_Feeder_e.Init_pneumatics:
 
         ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT IO_BOX.I6404_ST120_teil_in_vereizelung_links) AND
               (_20_AUTO.recipe.st120.xUseVerRight AND IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) THEN
-            // ERROR:  Initialisation failed. A piece is missing in the left griper.
-            bOUT_Error := 2;
+            bOUT_Error := ST120_Alarm_e.Piece_missing_left_pivot;
             iOUT_Step  := ST120_Feeder_e.ERROR;
 
         ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND IO_BOX.I6404_ST120_teil_in_vereizelung_links) AND
               (_20_AUTO.recipe.st120.xUseVerRight AND NOT IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts) THEN
-            // ERROR:  Initialisation failed. A piece is missing in the right griper.
-            bOUT_Error := 3;
+            bOUT_Error := ST120_Alarm_e.Piece_missing_right_pivor;
             iOUT_Step  := ST120_Feeder_e.ERROR;
 
         ELSIF NOT IO_BOX.I6404_ST120_teil_in_vereizelung_links AND NOT IO_BOX.I6405_ST120_teil_in_vereinzelung_rechts

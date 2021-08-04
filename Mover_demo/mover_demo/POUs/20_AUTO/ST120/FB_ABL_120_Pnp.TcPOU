@@ -339,13 +339,13 @@ rtSTART(CLK := xIN_Start);
 
 IF 0 = bOUT_Error THEN
     IF fb_axis120_01Y.xOUT_ErrFlag THEN
-        bOUT_Error := 11;
+        bOUT_Error := ST120_Alarm_e.Axis_120_01Y_error;
     ELSIF fb_axis120_02Z.xOUT_ErrFlag THEN
-        bOUT_Error := 12;
+        bOUT_Error := ST120_Alarm_e.Axis_120_02Z_error;
     ELSIF fb_gripperLeft.xOUT_ErrFlag THEN
-        bOUT_Error := 13;
+        bOUT_Error := ST120_Alarm_e.Cylinder_griper_left;
     ELSIF fb_gripperRight.xOUT_ErrFlag THEN
-        bOUT_Error := 14;
+        bOUT_Error := ST120_Alarm_e.Cylinder_griper_right;
     END_IF
 ELSIF iOUT_Step < ST120_Pnp_e.ERROR THEN
     iOUT_Step := ST120_Pnp_e.ERROR;
@@ -442,20 +442,17 @@ ST120_Pnp_e.Init_open_right_clamp:
 ST120_Pnp_e.Init_check_if_pces_handled:
     IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperLeft.xIN_AS) OR
        (NOT _20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperRight.xIN_AS) THEN
-        // ERROR: a piece is present in an unused gripper
-        bOUT_Error := 1;
+        bOUT_Error := ST120_Alarm_e.Piece_in_unused_griper;
         iOUT_Step  := ST120_Pnp_e.ERROR;
 
     ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) AND
           (_20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperRight.xOUT_inAS) THEN
-        // ERROR:  Initialisation failed. A piece is missing in the left griper.
-        bOUT_Error := 2;
+        bOUT_Error := ST120_Alarm_e.Piece_missing_left_griper;
         iOUT_Step  := ST120_Pnp_e.ERROR;
 
     ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperLeft.xOUT_inAS) AND
           (_20_AUTO.recipe.st120.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
-        // ERROR:  Initialisation failed. A piece is missing in the right griper.
-        bOUT_Error := 3;
+        bOUT_Error := ST120_Alarm_e.Piece_missing_right_griper;
         iOUT_Step  := ST120_Pnp_e.ERROR;
 
         // if both are open, we don't make further checks

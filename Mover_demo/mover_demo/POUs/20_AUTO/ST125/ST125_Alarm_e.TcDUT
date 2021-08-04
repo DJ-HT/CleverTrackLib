@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST125_Alarm_e" Id="{923c6ece-0c82-4088-86aa-4d2c615e8770}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'to_string'}
+TYPE ST125_Alarm_e :
+(
+    no_error := 0,
+    Axis_120_01Y_error := 1,
+    Axis_120_02Z_error := 2,
+    Cylinder_griper_filterhut_left := 3,
+    Cylinder_griper_filterhut_right := 4,
+    Cylinder_handling_solerohr_left := 5,
+    Cylinder_handling_solerohr_right := 6,
+    Cylinder_griper_solerohr_left := 7,
+    Cylinder_griper_solerohr_right := 8,
+    Piece_in_unused_griper := 9,
+    Piece_missing_left_griper := 10,
+    Piece_missing_right_griper := 11,
+    Feeder_empty := 12,
+    Feeder_error := 13,
+    Axis_120_10W_error := 14,
+    Distance_sensor_dirty := 15,
+
+    _max := 20
+) BYTE;
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

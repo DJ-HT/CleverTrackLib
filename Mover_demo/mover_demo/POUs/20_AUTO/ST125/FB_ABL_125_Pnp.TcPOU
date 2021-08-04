@@ -463,21 +463,21 @@ IO_BOX.Q5211_14_ST125_greifer_solerohr_rechts :=
 
 IF 0 = bOUT_Error THEN
     IF fb_axis125_01Y.xOUT_ErrFlag THEN
-        bOUT_Error := 11;
+        bOUT_Error := ST125_Alarm_e.Axis_120_01Y_error;
     ELSIF fb_axis125_02Z.xOUT_ErrFlag THEN
-        bOUT_Error := 12;
+        bOUT_Error := ST125_Alarm_e.Axis_120_02Z_error;
     ELSIF fb_gripperFilterhutLeft.xOUT_ErrFlag THEN
-        bOUT_Error := 13;
+        bOUT_Error := ST125_Alarm_e.Cylinder_griper_filterhut_left;
     ELSIF fb_gripperFilterhutRight.xOUT_ErrFlag THEN
-        bOUT_Error := 14;
+        bOUT_Error := ST125_Alarm_e.Cylinder_griper_filterhut_right;
     ELSIF fb_handlingSolerohrLeft.xOUT_ErrFlag THEN
-        bOUT_Error := 15;
+        bOUT_Error := ST125_Alarm_e.Cylinder_handling_solerohr_left;
     ELSIF fb_handlingSolerohrRight.xOUT_ErrFlag THEN
-        bOUT_Error := 16;
+        bOUT_Error := ST125_Alarm_e.Cylinder_handling_solerohr_right;
     ELSIF fb_gripperSolerohrLeft.xOUT_ErrFlag THEN
-        bOUT_Error := 17;
+        bOUT_Error := ST125_Alarm_e.Cylinder_griper_solerohr_left;
     ELSIF fb_gripperSolerohrRight.xOUT_ErrFlag THEN
-        bOUT_Error := 18;
+        bOUT_Error := ST125_Alarm_e.Cylinder_griper_solerohr_right;
     END_IF
 ELSIF iOUT_Step < ST125_Pnp_e.ERROR THEN
     iPreStep  := iOUT_Step;
@@ -604,7 +604,7 @@ ST125_Pnp_e.Init_check_if_pces_handled:
        (NOT _20_AUTO.recipe.st125.xUseVerRight AND
        NOT fb_gripperFilterhutRight.xIN_GS) THEN
         // ERROR: a piece is present in an unused gripper
-        bOUT_Error := 1;
+        bOUT_Error := ST125_Alarm_e.Piece_in_unused_griper;
         iOUT_Step  := ST125_Pnp_e.ERROR;
 
         // if both are open, we don't make further checks
@@ -614,13 +614,13 @@ ST125_Pnp_e.Init_check_if_pces_handled:
     ELSIF (_20_AUTO.recipe.st125.xUseVerLeft AND fb_gripperFilterhutLeft.xOUT_inGS) AND
           (_20_AUTO.recipe.st125.xUseVerRight AND NOT fb_gripperFilterhutRight.xOUT_inGS) THEN
         // ERROR: A piece is missing in the left griper.
-        bOUT_Error := 2;
+        bOUT_Error := ST125_Alarm_e.Piece_missing_left_griper;
         iOUT_Step  := ST125_Pnp_e.ERROR;
 
     ELSIF (_20_AUTO.recipe.st125.xUseVerLeft AND NOT fb_gripperFilterhutLeft.xOUT_inGS) AND
           (_20_AUTO.recipe.st125.xUseVerRight AND fb_gripperFilterhutRight.xOUT_inGS) THEN
         // ERROR: A piece is missing in the right griper.
-        bOUT_Error := 3;
+        bOUT_Error := ST125_Alarm_e.Piece_missing_right_griper;
         iOUT_Step  := ST125_Pnp_e.ERROR;
 
     ELSE

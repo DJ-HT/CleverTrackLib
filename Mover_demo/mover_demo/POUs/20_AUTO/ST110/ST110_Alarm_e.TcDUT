@@ -18,6 +18,7 @@ TYPE ST110_Alarm_e :
     Piece_missing_left_griper := 10,
     Piece_missing_right_griper := 11,
     Feeder_empty := 12,
+	Reach_end_pos_without_needed_torque := 13,
     _max := 20
 )BYTE;
 END_TYPE

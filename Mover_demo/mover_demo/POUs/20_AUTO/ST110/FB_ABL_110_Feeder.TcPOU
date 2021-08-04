@@ -282,7 +282,11 @@ rtSTART(CLK := xIN_Start);
 
 IF 0 = bOUT_Error THEN
     IF fb_axis110_10W.xOUT_ErrFlag THEN
-        bOUT_Error := 11;
+        bOUT_Error := ST110_Alarm_e.Axis_110_10W_error;
+		
+	ELSIF IO_BOX.I8002_ST110_alarm_forderband THEN
+        bOUT_Error := ST110_Alarm_e.Feeder_error;
+	
     END_IF
 ELSIF iOUT_Step < ST110_Feeder_e.ERROR THEN
     iOUT_Step := ST110_Feeder_e.ERROR;

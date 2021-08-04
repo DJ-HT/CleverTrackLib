@@ -687,7 +687,7 @@ ST110_Pnp_e.PnP_Ver_StartTorqueControl:
 
     ELSIF (fb_PnpVerAxisL.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
           (fb_PnpVerAxisR.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
-        bOUT_Error := 20;
+        bOUT_Error := ST110_Alarm_e.Reach_end_pos_without_needed_torque;
 
     END_IF
 

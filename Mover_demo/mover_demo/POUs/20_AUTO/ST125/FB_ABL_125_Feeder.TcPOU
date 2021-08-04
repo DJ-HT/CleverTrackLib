@@ -262,12 +262,18 @@ END_IF
 rtSTART(CLK := xIN_Start);
 
 IF 0 = bOUT_Error THEN
-    IF fb_axis125_10W.xOUT_ErrFlag THEN
-        bOUT_Error := 11;
-        iPreStep   := ST145_Feeder_e.RESET;
+    IF fb_axis125_10W.xOUT_ErrFlag THEN 
+        bOUT_Error := ST125_Alarm_e.Axis_120_10W_error;
+        iPreStep   := ST145_Feeder_e.INIT;
+		
     ELSIF fb_feeder.xOUT_Empty THEN
-        bOUT_Error := 15;
+        bOUT_Error := ST125_Alarm_e.Feeder_empty;
         iPreStep   := ST145_Feeder_e.READY;
+		
+	ELSIF IN.I504_distanzsensor_verschmutzung_125 THEN
+        bOUT_Error := ST125_Alarm_e.Distance_sensor_dirty;
+        iPreStep   := ST145_Feeder_e.INIT;
+	
     END_IF
 ELSIF iOUT_Step < ST125_Feeder_e.ERROR THEN
     iOUT_Step := ST125_Feeder_e.ERROR;

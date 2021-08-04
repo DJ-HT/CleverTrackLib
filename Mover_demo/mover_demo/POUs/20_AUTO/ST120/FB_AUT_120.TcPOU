@@ -125,7 +125,10 @@ xOUT_AlarmST  := xOUT_ErrFlag;
 (*******************************************************************)
 (* Bausteinaufruf Error Station *)
 (*******************************************************************)
-// POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
+POU_ALARM_120(xIN_QUIT      := xIN_Quit,
+              iIN_ArraySize := ST120_Alarm_e._max,
+              pstrIN_ALARM  := ADR(HMI.strArALARM[61]),
+              refPOU        := THIS^);
 ]]></ST>
     </Implementation>
     <Property Name="iCompletionPC" Id="{03075cd2-bd5e-4e2b-8611-2038c53b61b5}">
