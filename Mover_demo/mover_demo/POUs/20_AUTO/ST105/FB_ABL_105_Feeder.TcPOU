@@ -142,21 +142,21 @@ fb_feeder_wf(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN
              xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
              refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
              iIN_FifoSetMaxSensorValue := 10,
-             diIN_SignlFilter_ms       := _20_AUTO.recipe.st105.FeederConfig.InFilterDelay,
-             diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,
-             diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,
-             diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);
+             diIN_SignlFilter_ms       := 500,
+             diIN_StartDelay_ms        := 0,
+             diIN_StopDelay_ms         := 10000,
+             diIN_EmptyDelay_ms        := 0);
 
 fb_feeder_lf(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN_State = enState.StateSTEP,
-             xIN_PieceInEnd            := NOT fb_feeder_wf.xOUT_EnableFeeder,
+             xIN_PieceInEnd            := IO_BOX.I8704_ST105_Maximum_LF,
              xIN_PieceMax              := IO_BOX.I8704_ST105_Maximum_LF,
              xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
              refIN_SimulatedFifo       := simu_fifo_feeder_lf,
              iIN_FifoSetMaxSensorValue := 10,
-             diIN_SignlFilter_ms       := 3000,
-             diIN_StartDelay_ms        := 1000,
-             diIN_StopDelay_ms         := 500,
-             diIN_EmptyDelay_ms        := 0);
+             diIN_SignlFilter_ms       := _20_AUTO.recipe.st105.FeederConfig.InFilterDelay,
+             diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,   
+             diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,    
+             diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);  
 
 simu_feeder(xIN_Enable         := fb_feeder_wf.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
             xIN_PceSensor      := fb_feeder_wf.xIN_PieceInEnd,
@@ -312,7 +312,6 @@ IO_BOX.Q9500_ST105_Freigabe_WF := fb_feeder_wf.xOUT_EnableFeeder AND
 IO_BOX.Q9501_ST105_Freigabe_LF := fb_feeder_lf.xOUT_EnableFeeder AND
                                   IO_BOX.Q9500_ST105_Freigabe_WF AND
                                   NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION) AND
-                                  NOT IO_BOX.I8704_ST105_Maximum_LF AND
                                   (ST105_Slider_e.slider_down = eSliderStep);
 
 OUT.Q106_ST105_zusatz_band_on := IO_BOX.Q9501_ST105_Freigabe_LF;
@@ -363,7 +362,7 @@ END_IF
 (*******************************************************************)
 CASE eSliderStep OF
 ST105_Slider_e.slider_down:
-    IF xIN_NextStep AND ton_two_pieces.Q AND enIN_State >= enState.StateSTEP THEN
+    IF xIN_NextStep AND ton_two_pieces.Q AND enIN_State >= enState.StateAUTO THEN
         eSliderStep := ST105_Slider_e.slider_go_up;
     END_IF
 

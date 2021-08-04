@@ -345,7 +345,7 @@ fb_gripperSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_St
                        xINtoGS      := (ST125_Pnp_e.Pnp_HandlingSolerohrRelease = iOUT_Step) OR
                                        (ST125_Pnp_e.Init_open_solenohr_gripper = iOUT_Step),
                        xINtoAS := _20_AUTO.recipe.st125.xUseVerLeft AND
-                                  (ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper = iOUT_Step OR
+                                  (ST125_Pnp_e.Pnp_closeTubeGriper = iOUT_Step OR
                                   ST125_Pnp_e.Pnp_Ver_pushCapTorqueControl = iOUT_Step) AND
                                   fb_handlingSolerohrLeft.xOUT_inAS,
                        tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
@@ -359,10 +359,13 @@ fb_gripperSolerohrLeft(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_St
 
 simu_gripperSolerohrLeft(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                          xIN_inGS   := IO_BOX.I6605_ST125_greifer_solerohr_links_offen,
-                         xIN_inAS   := IO_BOX.I6604_ST125_greifer_solerohr_links_geschlossen,
-                         xIN_valve  := fb_gripperSolerohrLeft.xOUT_VALVE,
-                         tIN_GS_ms  := 300,  //ms
-                         tIN_AS_ms  := 300); //ms
+                         // Usually you will use the sensor value, but we have too much dispersion of the pieces
+                         // so it is impossible to use the sensor correctly with all kind of pices
+                         // xIN_inAS   := IO_BOX.I6604_ST125_greifer_solerohr_links_geschlossen,
+                         xIN_inAS  := NOT IO_BOX.I6605_ST125_greifer_solerohr_links_offen,
+                         xIN_valve := fb_gripperSolerohrLeft.xOUT_VALVE,
+                         tIN_GS_ms := 300,  //ms
+                         tIN_AS_ms := 300); //ms
 
 fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_Step),
                         xIN_Quit     := xIN_Quit,
@@ -374,7 +377,7 @@ fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
                         xINtoGS      := (ST125_Pnp_e.Pnp_HandlingSolerohrRelease = iOUT_Step) OR
                                         (ST125_Pnp_e.Init_open_solenohr_gripper = iOUT_Step),
                         xINtoAS := _20_AUTO.recipe.st125.xUseVerRight AND
-                                   (ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper = iOUT_Step OR
+                                   (ST125_Pnp_e.Pnp_closeTubeGriper = iOUT_Step OR
                                    ST125_Pnp_e.Pnp_Ver_pushCapTorqueControl = iOUT_Step) AND
                                    fb_handlingSolerohrRight.xOUT_inAS,
                         tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST125]
@@ -388,10 +391,13 @@ fb_gripperSolerohrRight(xIN_Reset    := xIN_Reset OR (ST125_Pnp_e.RESET = iOUT_S
 
 simu_gripperSolerohrRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
                           xIN_inGS   := IO_BOX.I6607_ST125_greifer_solerohr_rechts_offen,
-                          xIN_inAS   := IO_BOX.I6606_ST125_greifer_solerohr_rechts_geschlossen,
-                          xIN_valve  := fb_gripperSolerohrRight.xOUT_VALVE,
-                          tIN_GS_ms  := 300,  //ms
-                          tIN_AS_ms  := 300); //ms
+                          // Usually you will use the sensor value, but we have too much dispersion of the pieces
+                          // so it is impossible to use the sensor correctly with all kind of pices
+                          // xIN_inAS   := IO_BOX.I6606_ST125_greifer_solerohr_rechts_geschlossen,
+                          xIN_inAS  := NOT IO_BOX.I6607_ST125_greifer_solerohr_rechts_offen,
+                          xIN_valve := fb_gripperSolerohrRight.xOUT_VALVE,
+                          tIN_GS_ms := 300,  //ms
+                          tIN_AS_ms := 300); //ms
 
 // Force control
 fb_kraftLeft();
@@ -690,26 +696,27 @@ ST125_Pnp_e.Pnp_HandlingDown:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_handlingSolerohrLeft.xOUT_inAS) AND
        (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_handlingSolerohrRight.xOUT_inAS) THEN
-        iOUT_Step := ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper;
+        iOUT_Step := ST125_Pnp_e.Pnp_closeTubeGriper;
     END_IF;
 
-ST125_Pnp_e.Pnp_Ver_ShuttleDown_and_closeTubeGriper:
+ST125_Pnp_e.Pnp_closeTubeGriper:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inAS) THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_Ver_ShuttleDown;
+    END_IF;
+
+ST125_Pnp_e.Pnp_Ver_ShuttleDown:
     fb_PnpVerAxis.MoveTo(ST125_PnpVerPos_e.DownFullQuick);
-    IF xIN_NextStep AND fb_axis125_02Z.xOUT_DONE
-        THEN // we need the xOUT_DONE flag since we perform twice the same movement
-        iOUT_Step := ST125_Pnp_e.Pnp_Wait_on_tube_griper;
+
+    IF fb_axis125_02Z.xOUT_DONE THEN
+        iOUT_Step := ST125_Pnp_e.Pnp_placeCap;
 
         IF __ISVALIDREF(Mover) THEN
             IF NOT Mover.SetLastStation(-125) THEN
                 ASSERT(0);
             END_IF
         END_IF
-    END_IF;
-
-ST125_Pnp_e.Pnp_Wait_on_tube_griper:
-    IF (NOT _20_AUTO.recipe.st125.xUseVerLeft OR fb_gripperSolerohrLeft.xOUT_inAS) AND
-       (NOT _20_AUTO.recipe.st125.xUseVerRight OR fb_gripperSolerohrRight.xOUT_inAS) THEN
-        iOUT_Step := ST125_Pnp_e.Pnp_placeCap;
     END_IF
 
 ST125_Pnp_e.Pnp_placeCap:

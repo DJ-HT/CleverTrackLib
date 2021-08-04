@@ -279,7 +279,7 @@ VAR
                                                   0,  // ST155
                                                   3,  // ST160
                                                   3,  // ST165
-                                                  0,  // ST170
+                                                  -1, // ST170
                                                   0,  // ST174
                                                   4,  // ST175
                                                   -1, // ST176
@@ -307,8 +307,8 @@ VAR
                                                   0,
                                                   0];
 
-    _SelWorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF INT
-        := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4)];
+    _SelWorkStationList : ARRAY[1..5] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF INT
+        := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4), ADR(_StationSet5)];
 
     _WorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF
         FB_StationMan[(ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
