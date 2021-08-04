@@ -195,6 +195,7 @@ VAR
                     3,
                     85)];
 
+    // Smart
     _StationSet1 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
                                                   0,  // ST110
@@ -216,6 +217,8 @@ VAR
                                                   -1, // ST176
                                                   -1, // ST180
                                                   0]; // ST185
+
+    // Pro
     _StationSet2 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
                                                   0,  // ST110
@@ -237,6 +240,8 @@ VAR
                                                   -1, // ST176
                                                   -1, // ST180
                                                   0]; // ST185
+
+    // Mini
     _StationSet3 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
                                                   0,  // ST110
@@ -258,7 +263,29 @@ VAR
                                                   -1, // ST176
                                                   -1, // ST180
                                                   0]; // ST185
+    // Blue    
     _StationSet4 :
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+                                                  -1, // ST110
+                                                  -1, // ST115
+                                                  -1, // ST120
+                                                  0,  // ST125
+                                                  0,  // ST128
+                                                  1,  // ST130
+                                                  1,  // ST135
+                                                  0,  // ST140
+                                                  0,  // ST145
+                                                  2,  // ST150
+                                                  0,  // ST155
+                                                  3,  // ST160
+                                                  3,  // ST165
+                                                  0,  // ST170
+                                                  0,  // ST174
+                                                  4,  // ST175
+                                                  -1, // ST176
+                                                  -1, // ST180
+                                                  0]; // ST185
+    _StationSet5 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,
                                                   0,
                                                   0,
@@ -287,7 +314,14 @@ VAR
         FB_StationMan[(ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[2], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[3], _PieceHolderList[1]),
-                      (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[1])];
+                      (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1])];
 
     step : INT := 0; //test step
 
@@ -566,8 +600,8 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
             ELSIF NOT __ISVALIDREF(_MoverList[mv_i].Station.Process) THEN
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.OperationDone;
-				
-			ELSIF _MoverList[mv_i].Station.Process.xMoverShouldLeave THEN
+
+            ELSIF _MoverList[mv_i].Station.Process.xMoverShouldLeave THEN
                 _MoverList[mv_i].State := MoverState_e.OperationDone;
 
             ELSE
@@ -650,6 +684,9 @@ IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enabl
             // echo at position
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.echo_in_pos :=
                 gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.in_position;
+
+            // Quit
+            gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.resetErrors := HMI.btArMain[7].press;
         END_IF
     END_FOR
 END_IF

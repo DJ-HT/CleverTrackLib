@@ -95,7 +95,7 @@ VAR CONSTANT
     BAND_SIZE_FOR_TUBE_LEFT  : INT := 3; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
     BAND_SIZE_FOR_TUBE_RIGHT : INT := 2; // Band size, we assume that tubes pushe each other in order to move to the PNP machine
 
-    FEEDER_SIMULATION : BOOL := TRUE; // Simulate this code
+    FEEDER_SIMULATION : BOOL := FALSE; // Simulate this code
 END_VAR
 ]]></Declaration>
     <Implementation>

@@ -673,11 +673,11 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
 
 ST110_Pnp_e.PnP_Ver_StartTorqueControl:
 
-    IF _20_AUTO.recipe.st110.xUseVerLeft THEN
+    IF _20_AUTO.recipe.st110.xUseVerLeft AND NOT fb_axis110_02Z.xOUT_BUSY THEN
         fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
     END_IF
 
-    IF _20_AUTO.recipe.st110.xUseVerRight THEN
+    IF _20_AUTO.recipe.st110.xUseVerRight AND NOT fb_axis110_03Z.xOUT_BUSY THEN
         fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
     END_IF
 
@@ -693,14 +693,10 @@ ST110_Pnp_e.PnP_Ver_StartTorqueControl:
 
 // We need a fb that enables for us torque control. Here we just go a bit further
 ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
-
-    // IF _20_AUTO.recipe.st110.xUseVerLeft AND fb_axis110_02Z.xIN_FREE THEN
-    //     fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
-    // END_IF
-    // 
-    // IF _20_AUTO.recipe.st110.xUseVerRight AND fb_axis110_03Z.xIN_FREE THEN
-    //     fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
-    // END_IF
+    // If one of the axis have not started its movement, we do it again
+    IF NOT fb_axis110_02Z.xOUT_BUSY AND NOT fb_axis110_03Z.xOUT_BUSY THEN
+        iOUT_Step := ST110_Pnp_e.PnP_Ver_StartTorqueControl;
+    END_IF
 
     IF (fb_PnpVerAxisL.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
        (fb_PnpVerAxisR.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN

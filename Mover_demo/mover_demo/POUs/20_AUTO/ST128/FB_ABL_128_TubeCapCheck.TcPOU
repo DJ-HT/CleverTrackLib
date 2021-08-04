@@ -141,7 +141,8 @@ xOUT_Wait := (iOUT_Step = ST128_TubeCapCheck_e.DONE) OR
              (iOUT_Step = ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE);
 
 xOUT_MoverFree :=
-    NOT (iOUT_Step >= ST128_TubeCapCheck_e.MOVER_NEEDED_OP AND iOUT_Step < ST128_TubeCapCheck_e.MOVER_FREE_OP);
+    NOT ((iOUT_Step >= ST128_TubeCapCheck_e.MOVER_NEEDED_OP) AND (iOUT_Step < ST128_TubeCapCheck_e.MOVER_FREE_OP)) AND
+    (iOUT_Step >= ST128_TubeCapCheck_e.READY) AND (iOUT_Step < ST128_TubeCapCheck_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST128_TubeCapCheck_e.waitOnMover,
@@ -219,7 +220,7 @@ ST128_TubeCapCheck_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST128] THEN
         IF Mover.GetLastStationDone() >= INT#128 THEN
             iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#125 THEN
+        ELSIF Mover.GetLastStationDone() < INT#125 THEN
             iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST128_TubeCapCheck_e.Move_shuttle_relative_right;
@@ -277,6 +278,7 @@ ST128_TubeCapCheck_e.Save_result_in_mover:
        (_20_AUTO.recipe.st128.xIsTypeMiniOrSmart AND NOT capFoundLeft)) AND
        NOT (TUBE_CAP_CHECK_SIMULATION AND CONST.USE_SIMULATION) THEN
         iOUT_Step := ST128_TubeCapCheck_e.ERROR;
+
         IF __ISVALIDREF(Mover) THEN
             IF NOT Mover.SetLastStation(-128) THEN
                 ASSERT(0);
@@ -286,6 +288,7 @@ ST128_TubeCapCheck_e.Save_result_in_mover:
         bOUT_Error := 1;
     ELSE
         iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
+
         IF __ISVALIDREF(Mover) THEN
             IF NOT Mover.SetLastStation(128) THEN
                 ASSERT(0);

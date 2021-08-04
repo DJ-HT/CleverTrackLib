@@ -259,7 +259,7 @@ fb_dichtung_left(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
                  tIN_WaitGS := DINT_TO_TIME(refCylinderConf
                                                 [ST160_Cylinders_e.Dichtung_prufglocke_links].toGS_wait_time));
 
-simu_dichtung_left(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
+simu_dichtung_left(xIN_Enable := TRUE,                             // CETA_SIMULATION AND CONST.USE_SIMULATION,
                    xIN_inGS   := NOT fb_dichtung_right.xOUT_VALVE, // no sensor here
                    xIN_inAS   := fb_dichtung_right.xOUT_VALVE,     // no sensor here
                    xIN_valve  := fb_dichtung_left.xOUT_VALVE,
@@ -285,7 +285,7 @@ fb_dichtung_right(xIN_Reset    := xIN_Reset OR (ST160_CETA_e.RESET = iOUT_Step),
                   tIN_WaitGS := DINT_TO_TIME(refCylinderConf
                                                  [ST160_Cylinders_e.Dichtung_prufglocke_rechts].toGS_wait_time));
 
-simu_dichtung_right(xIN_Enable := TRUE, // CETA_SIMULATION AND CONST.USE_SIMULATION,
+simu_dichtung_right(xIN_Enable := TRUE,                             // CETA_SIMULATION AND CONST.USE_SIMULATION,
                     xIN_inGS   := NOT fb_dichtung_right.xOUT_VALVE, // no sensor here
                     xIN_inAS   := fb_dichtung_right.xOUT_VALVE,     // no sensor here
                     xIN_valve  := fb_dichtung_right.xOUT_VALVE,
@@ -319,7 +319,10 @@ xOUT_Wait := (iOUT_Step = ST160_CETA_e.DONE) OR
              (iOUT_Step = ST160_CETA_e.waitOnMover) OR
              (iOUT_Step = ST160_CETA_e.SYNC_MOVER_LEAVE);
 
-xOUT_MoverFree := iOUT_Step >= ST160_CETA_e.MOVER_FREE_OP AND iOUT_Step < ST160_CETA_e.MOVER_NEEDED_OP;
+xOUT_MoverFree :=
+    NOT (iOUT_Step >= ST160_CETA_e.MOVER_NEEDED_OP AND iOUT_Step < ST160_CETA_e.MOVER_FREE_OP) AND
+    (iOUT_Step >= ST160_CETA_e.READY) AND
+    (iOUT_Step < ST160_CETA_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          iAktStep,
@@ -424,7 +427,7 @@ ST160_CETA_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF (Mover.GetLastStationDone() >= iIN_StationNumber) OR Mover.IsPieceBad() THEN
             iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#150 THEN
+        ELSIF Mover.GetLastStationDone() < INT#150 THEN
             iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST160_CETA_e.handling_down;

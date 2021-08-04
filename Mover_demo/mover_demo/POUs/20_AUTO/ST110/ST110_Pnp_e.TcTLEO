@@ -17,9 +17,9 @@ ST110_Pnp_e :
 	Init_stop_vacum := 150,
 	Init_check_if_pces_handled := 160,
 	
+    MOVER_FREE_OP,      // Ab here, operation without mover can be done
     READY := 999,       // READY to Start, Init Done 
     START := 1000,      // Start Zyklisch
-    MOVER_FREE_OP,      // Ab here, operation without mover can be done
 
 	PnP_Hor_ToRotTablePos := 1010,
 	PnP_WaitOnFeeder := 1020,
@@ -92,6 +92,11 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"MOVER_FREE_OP"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"READY"</v>
               <v n="TextDefault">"999"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -99,11 +104,6 @@ END_TYPE
             <o>
               <v n="TextID">"START"</v>
               <v n="TextDefault">"1000"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"MOVER_FREE_OP"</v>
-              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

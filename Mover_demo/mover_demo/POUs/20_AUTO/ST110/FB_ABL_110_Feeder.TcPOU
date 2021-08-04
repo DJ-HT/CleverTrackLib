@@ -144,9 +144,8 @@ ELSIF (enIN_State <> enState.StateMANU) THEN
     btfb_feeder.xINon := FALSE;
 END_IF;
 
-fb_feeder(xIN_Enable := ((enIN_State <= enState.StateAUTO) AND (enIN_State >= enState.StateSTEP)) OR btfb_feeder.xINon,
-          xIN_PieceInEnd
-              := TRUE, // IO_BOX.I6000_ST110_teil_in_vereinzelung, 
+fb_feeder(xIN_Enable                := (enIN_State > enState.StateEND) OR btfb_feeder.xINon,
+          xIN_PieceInEnd            := IO_BOX.I8001_ST110_maximum,
           xIN_PieceMax              := IO_BOX.I8001_ST110_maximum,
           xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
           refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,

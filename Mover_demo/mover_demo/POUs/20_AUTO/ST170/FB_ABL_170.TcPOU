@@ -178,7 +178,9 @@ xOUT_Wait := (iOUT_Step = ST170_RFID_e.DONE) OR
              (iOUT_Step = ST170_RFID_e.waitOnMover) OR
              (iOUT_Step = ST170_RFID_e.SYNC_MOVER_LEAVE);
 
-xOUT_MoverFree := iOUT_Step >= ST170_RFID_e.MOVER_FREE_OP AND iOUT_Step < ST170_RFID_e.MOVER_NEEDED_OP;
+xOUT_MoverFree := NOT (iOUT_Step >= ST170_RFID_e.MOVER_NEEDED_OP AND iOUT_Step < ST170_RFID_e.MOVER_FREE_OP) AND
+                  (iOUT_Step >= ST170_RFID_e.READY) AND
+                  (iOUT_Step < ST170_RFID_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          iAktStep,
@@ -282,7 +284,7 @@ ST170_RFID_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
         IF (Mover.GetLastStationDone() >= 170) THEN
             iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#110 THEN
+        ELSIF Mover.GetLastStationDone() < INT#110 THEN
             iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST170_RFID_e.vertical_up;

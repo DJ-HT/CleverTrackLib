@@ -80,10 +80,10 @@ fb_Dose(xIN_Reset         := xReset,
 
 fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
         xIN_Waiting := fb_Dose.xOUT_Wait,
-        xIN_Running := (fb_Dose.iOUT_Step >= ST130_Dose_e.START) AND
-                       (fb_Dose.iOUT_Step <= ST130_Dose_e.DONE),
+        xIN_Running := (fb_Dose.iOUT_Step >= ST100_Modify_e.START) AND
+                       (fb_Dose.iOUT_Step <= ST100_Modify_e.DONE),
         // Since we use a mover system, a cycle is done when we are waiting on a mover
-        xIN_Done := fb_Dose.iOUT_Step = ST130_Dose_e.waitOnMover);
+        xIN_Done := fb_Dose.iOUT_Step = ST100_Modify_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)

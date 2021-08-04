@@ -172,7 +172,10 @@ xOUT_Wait := (iOUT_Step = ST150_Uss_e.DONE) OR
              (iOUT_Step = ST150_Uss_e.waitOnMover) OR
              (iOUT_Step = ST150_Uss_e.SYNC_MOVER_LEAVE);
 
-xOUT_MoverFree := iOUT_Step >= ST150_Uss_e.MOVER_FREE_OP AND iOUT_Step < ST150_Uss_e.MOVER_NEEDED_OP;
+xOUT_MoverFree :=
+    NOT (iOUT_Step >= ST150_Uss_e.MOVER_NEEDED_OP AND iOUT_Step < ST150_Uss_e.MOVER_FREE_OP) AND
+    (iOUT_Step >= ST150_Uss_e.READY) AND
+    (iOUT_Step < ST150_Uss_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          iAktStep,

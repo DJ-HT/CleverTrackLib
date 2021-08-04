@@ -14,20 +14,21 @@ TYPE ST170_RFID_e :
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
-    MOVER_FREE_OP, // Ab here, operation without mover can be done
 
     waitOnMover,     // wait until the mover is there
     MOVER_NEEDED_OP, // Since here, a mover in position is needed to perform the action
 
-    vertical_up,   // 
+    vertical_up,         // 
     RFID_start,    // 
     RFID_wait_on_result, // 
     RFID_read,     // 
-    vertical_down, // 
+    vertical_down,       // 
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
-    DONE := 8000,     // Ablauf beendet 
-    ERROR := 9000,    // Fehler 
+    MOVER_FREE_OP,       // Ab here, operation without mover can be done
+
+    DONE := 8000,  // Ablauf beendet 
+    ERROR := 9000, // Fehler 
     _max
 );
 END_TYPE
@@ -67,11 +68,6 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
-              <v n="TextID">"MOVER_FREE_OP"</v>
-              <v n="TextDefault">""</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
               <v n="TextID">"waitOnMover"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -108,6 +104,11 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"SYNC_MOVER_LEAVE"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MOVER_FREE_OP"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

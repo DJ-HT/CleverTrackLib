@@ -21,9 +21,9 @@ TYPE ST125_Pnp_e :
     Init_open_right_clamp,
     Init_check_if_pces_handled,
 
+    MOVER_FREE_OP, // Ab here, operation without mover can be done
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
-    MOVER_FREE_OP, // Ab here, operation without mover can be done
 
     Pnp_Hor_ToRotTablePos,
     Pnp_WaitOnFeeder,
@@ -122,6 +122,11 @@ END_TYPE
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
+              <v n="TextID">"MOVER_FREE_OP"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
               <v n="TextID">"READY"</v>
               <v n="TextDefault">"999"</v>
               <l n="LanguageTexts" t="ArrayList" />
@@ -129,11 +134,6 @@ END_TYPE
             <o>
               <v n="TextID">"START"</v>
               <v n="TextDefault">"1000"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"MOVER_FREE_OP"</v>
-              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
