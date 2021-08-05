@@ -18,7 +18,8 @@ VAR
     _MovingProcessOffset : LREAL; (* added offset by the process, 
                                      used to compute the new position of the shuttle inside the station *)
 
-    _LastStationDone : INT; // the number of the last station done. If negative, the piece is not good at this station
+    _LastStationDone : INT;    // the number of the last station done. If negative, the piece is not good at this station
+    _ErrorCode       : STRING; // The error code that comes with the last station done. reset afer 
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
@@ -272,6 +273,22 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="SetErrorCode" Id="{ec670e6e-8425-45b1-9a44-b348c0483370}">
+      <Declaration><![CDATA[METHOD SetErrorCode : BOOL
+VAR_INPUT
+	error_code : STRING; // error code in string format
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF LEN(THIS^._ErrorCode) > 0 THEN
+    SetErrorCode := FALSE;
+ELSE
+    THIS^._ErrorCode := error_code;
+    SetErrorCode     := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="SetLastStation" Id="{6eeb15ca-bd96-4e70-bcf9-69f9b8c0ae17}">
       <Declaration><![CDATA[// Set the last station visited as soon as you won't redo the process
 // again on your piece. It is recommanded to first set the piece as bad
@@ -290,6 +307,10 @@ END_VAR
         <ST><![CDATA[IF ABS(value) < ABS(THIS^._LastStationDone) THEN
     SetLastStation := FALSE;
 ELSE
+	IF THIS^._LastStationDone < 0 THEN
+		value := 0 - ABS(value);
+	END_IF
+	
     THIS^._LastStationDone := value;
     SetLastStation         := TRUE;
 END_IF
@@ -410,6 +431,7 @@ END_VAR
         <ST><![CDATA[IF THIS^._LastStationDone <> 0 THEN
     UnloadPieces           := TRUE;
     THIS^._LastStationDone := 0;
+    THIS^._ErrorCode       := '';
 ELSE
     UnloadPieces := FALSE;
 END_IF
