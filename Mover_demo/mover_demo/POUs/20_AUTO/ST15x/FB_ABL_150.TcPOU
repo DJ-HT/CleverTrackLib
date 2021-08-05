@@ -78,7 +78,8 @@ VAR
     fb_moverMaintening   : FB_ZylMo2El_V2_1;
     simu_moverMaintening : FB_Simu_Zyl2Pos;
 
-    TON_UssError : TON;
+    TON_UssError     : TON;
+    TON_CapDetection : TON;
 
 END_VAR
 VAR CONSTANT
@@ -110,6 +111,9 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 
 TON_UssError(IN := ST150_Uss_e.uss_start = iOUT_Step,
              PT := DINT_TO_TIME(_20_AUTO.recipe.st150.USS_ErrorTime_ms));
+
+TON_CapDetection(IN := ST150_Uss_e.check_cap_present = iOUT_Step,
+                 PT := T#500MS);
 
 (*******************************************************************)
 (* Bausteine *)
@@ -282,7 +286,7 @@ ST150_Uss_e.waitOnMover: (*  *)
 ST150_Uss_e.check_cap_present:
     IF xIN_capDetector OR (USS_SIMULATION AND CONST.USE_SIMULATION) THEN
         iOUT_Step := ST150_Uss_e.mover_maintening_up;
-    ELSE
+    ELSIF TON_CapDetection.Q THEN
         // Mover.SetErrorCode(CONCAT(CONCAT(INT_TO_STRING(iIN_StationNumber), '-B '), sIN_errorCodeSide));
         bOUT_Error := 8; // TODO to be removed
     END_IF
@@ -297,7 +301,7 @@ ST150_Uss_e.mover_maintening_up:
                 iPreStep  := ST150_Uss_e.waitOnMover;
 
                 IF __ISVALIDREF(Mover) THEN
-                    IF NOT Mover.SetLastStation(-150) THEN
+                    IF NOT Mover.SetLastStation(iIN_StationNumber) THEN
                         ASSERT(0);
                     END_IF
                 END_IF
