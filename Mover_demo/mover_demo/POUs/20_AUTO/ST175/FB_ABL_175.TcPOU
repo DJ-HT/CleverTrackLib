@@ -105,9 +105,11 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
-fb_trumpf_laser(xIN_Start       := ST175_LASER_e.LASER_start = iOUT_Step,
-                xIN_WarmUpLaser := ST175_LASER_e.Init_laser_warmup = iOUT_Step,
-                sIN_FileName    := _20_AUTO.recipe.st175.file_name);
+fb_trumpf_laser(xIN_Start          := ST175_LASER_e.LASER_start = iOUT_Step,
+                xIN_WarmUpLaser    := ST175_LASER_e.Init_laser_warmup = iOUT_Step,
+                sIN_FileName       := _20_AUTO.recipe.st175.file_name,
+                sIN_ErrorCode      :=, // set below
+                xIN_StationInError := __ISVALIDREF(Mover) AND_THEN Mover.IsPieceBad());
 
 // pneumatics
 fb_handling(xIN_Reset    := xIN_Reset OR (ST175_LASER_e.RESET = iOUT_Step),
@@ -340,6 +342,13 @@ ST175_LASER_e.handling_down:
 ST175_LASER_e.LASER_start:
     IF fb_trumpf_laser.xOUT_BUSY THEN
         IF __ISVALIDREF(Mover) THEN
+
+            IF NOT xLASER_First_mark THEN
+                fb_trumpf_laser.sIN_ErrorCode := CONCAT('L-', Mover.GetErrorCode());
+            ELSE
+                fb_trumpf_laser.sIN_ErrorCode := CONCAT('R-', Mover.GetErrorCode());
+            END_IF
+
             IF NOT Mover.SetLastStation(-175) THEN
                 ASSERT(0);
             END_IF

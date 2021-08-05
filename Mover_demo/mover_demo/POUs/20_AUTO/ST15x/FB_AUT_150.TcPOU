@@ -86,6 +86,7 @@ fb_Uss(xIN_Reset       := xReset,
        xIN_kraftubersetzunh_vor    := IO_BOX.I2302_ST150_kraftubersetzung_vor,
        xIN_welding_bits            :=, // set above
        iIN_StationNumber           := 150,
+       sIN_errorCodeSide           := 'Left',
        // hardware output
        xOUT_moverMaintening_valve => IO_BOX.Q0202_14_ST150_kraftubersetzung,
        xOUT_welding_bits          =>); // set below

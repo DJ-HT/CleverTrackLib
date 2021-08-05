@@ -36,7 +36,8 @@ VAR_INPUT
 
     xIN_welding_bits : Ultrasonic_IN_bits_t;
 
-    iIN_StationNumber : INT; // station number 
+    iIN_StationNumber : INT;    // station number 
+    sIN_errorCodeSide : STRING; // added string to the error code, (e.g. left or right)
 
 END_VAR
 VAR_OUTPUT
@@ -168,7 +169,8 @@ xOUT_Wait := (iOUT_Step = ST150_Uss_e.DONE) OR
 
 xOUT_MoverFree :=
     NOT (iOUT_Step >= ST150_Uss_e.MOVER_NEEDED_OP AND iOUT_Step < ST150_Uss_e.MOVER_FREE_OP) AND
-    (iOUT_Step >= ST150_Uss_e.READY) AND (iOUT_Step < ST150_Uss_e.ERROR);
+    (iOUT_Step >= ST150_Uss_e.READY) AND
+    (iOUT_Step < ST150_Uss_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          iAktStep,
@@ -281,7 +283,8 @@ ST150_Uss_e.check_cap_present:
     IF xIN_capDetector OR (USS_SIMULATION AND CONST.USE_SIMULATION) THEN
         iOUT_Step := ST150_Uss_e.mover_maintening_up;
     ELSE
-        bOUT_Error := 8;
+        // Mover.SetErrorCode(CONCAT(CONCAT(INT_TO_STRING(iIN_StationNumber), '-B '), sIN_errorCodeSide));
+        bOUT_Error := 8; // TODO to be removed
     END_IF
 
 ST150_Uss_e.mover_maintening_up:
@@ -299,7 +302,7 @@ ST150_Uss_e.mover_maintening_up:
                     END_IF
                 END_IF
             ELSE
-                bOUT_Error := 1; // welding not ready
+                // bOUT_Error := 1; // welding not ready
             END_IF
         END_IF;
     END_IF;

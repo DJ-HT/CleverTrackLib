@@ -490,6 +490,10 @@ ST160_CETA_e.handling_up:
         iOUT_Step := ST160_CETA_e.SYNC_MOVER_LEAVE;
 
         IF __ISVALIDREF(Mover) AND NOT xCETA_Result_OK THEN
+            Mover.SetErrorCode(CONCAT(INT_TO_STRING(iIN_StationNumber), '-C'));
+            bOUT_Error := 8; // TODO Remove
+            iPreStep   := ST160_CETA_e.SYNC_MOVER_LEAVE;
+
             IF NOT Mover.SetLastStation(-iIN_StationNumber) THEN
                 ASSERT(0);
             END_IF

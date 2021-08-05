@@ -142,7 +142,8 @@ xOUT_Wait := (iOUT_Step = ST128_TubeCapCheck_e.DONE) OR
 
 xOUT_MoverFree :=
     NOT ((iOUT_Step >= ST128_TubeCapCheck_e.MOVER_NEEDED_OP) AND (iOUT_Step < ST128_TubeCapCheck_e.MOVER_FREE_OP)) AND
-    (iOUT_Step >= ST128_TubeCapCheck_e.READY) AND (iOUT_Step < ST128_TubeCapCheck_e.ERROR);
+    (iOUT_Step >= ST128_TubeCapCheck_e.READY) AND
+    (iOUT_Step < ST128_TubeCapCheck_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST128_TubeCapCheck_e.waitOnMover,
@@ -280,6 +281,21 @@ ST128_TubeCapCheck_e.Save_result_in_mover:
         iOUT_Step := ST128_TubeCapCheck_e.ERROR;
 
         IF __ISVALIDREF(Mover) THEN
+
+            IF NOT capFoundLeft AND NOT capFoundRight THEN
+                Mover.SetErrorCode('128-B Left and Right');
+
+            ELSIF capFoundLeft THEN
+                Mover.SetErrorCode('128-B Left');
+
+            ELSIF capFoundRight THEN
+                Mover.SetErrorCode('128-B Right');
+
+            ELSE
+                ASSERT(0); // Read your code again, you should never go here !
+
+            END_IF
+
             IF NOT Mover.SetLastStation(-128) THEN
                 ASSERT(0);
             END_IF

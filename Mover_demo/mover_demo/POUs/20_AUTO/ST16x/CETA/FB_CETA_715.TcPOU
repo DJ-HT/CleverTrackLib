@@ -131,12 +131,17 @@ CASE iStep OF
     iBlockNumber := iBlockNumber + 1;
 
 250:
+
+    // Here we test for iBlockNumber 1 but we have increment the value before
+    IF 2 = iBlockNumber THEN
+        xResultGood := ceta_measurement_data.Block1.Result_chanel_1 = CETA_REsult_e.OK AND
+                       ceta_measurement_data.Block1.Result_chanel_2 = CETA_REsult_e.OK;
+    END_IF
+
     IF xIN_StatusBits.bits.b11_result_block_handshake_bit THEN
         iStep := 260;
     ELSE
-        iStep       := 300;
-        xResultGood := ceta_measurement_data.Block1.Result_chanel_1 = CETA_REsult_e.OK AND
-                       ceta_measurement_data.Block1.Result_chanel_2 = CETA_REsult_e.OK;
+        iStep := 300;
     END_IF
 
 260:
@@ -211,6 +216,7 @@ END_CASE
 xOUT_DataReady    := 300 = iStep;
 xOUT_Error_Flag   := 1500 = iStep;
 xOUT_ReadyToStart := xIN_StatusBits.bits.b10_device_ready_to_start;
+xOUT_MeasureOK    := xResultGood;
 ]]></ST>
     </Implementation>
     <Method Name="GetParameter" Id="{90e8271d-7322-4297-b828-4a5666bdeb98}">

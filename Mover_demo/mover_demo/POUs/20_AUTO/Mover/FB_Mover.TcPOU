@@ -93,6 +93,15 @@ THIS^._Station REF=0;
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="GetErrorCode" Id="{3d951b18-e05e-404b-a099-b7a7240b5ee2}">
+      <Declaration><![CDATA[METHOD GetErrorCode : STRING
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetErrorCode := THIS^._ErrorCode;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="GetLastStationDone" Id="{cfcf4c70-0bf5-4b76-a872-6dddf7d5257b}">
       <Declaration><![CDATA[// Get the last station done. The number is always positive
 // To know if the piece is bad, you have to use the IsPieceBad method

@@ -317,13 +317,7 @@ ST170_RFID_e.RFID_wait_on_result:
                            (NOT _20_AUTO.recipe.st170.Use_element_right OR
                            (IN.I034_rfid_test_link_out2_170_21 AND NOT IN.I035_rfid_test_link_out3_170_21));
 
-        IF xRFID_Result_OK THEN
-            iOUT_Step := ST170_RFID_e.vertical_down;
-        ELSE
-            iPreStep   := ST170_RFID_e.vertical_down;
-            bOUT_Error := 1; // shold not be in error
-        END_IF
-
+        iOUT_Step := ST170_RFID_e.vertical_down;
     END_IF
 
 ST170_RFID_e.vertical_down:
@@ -331,6 +325,8 @@ ST170_RFID_e.vertical_down:
         iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
 
         IF __ISVALIDREF(Mover) AND NOT xRFID_Result_OK THEN
+            Mover.SetErrorCode('170-B');
+			
             IF NOT Mover.SetLastStation(-170) THEN
                 ASSERT(0);
             END_IF
