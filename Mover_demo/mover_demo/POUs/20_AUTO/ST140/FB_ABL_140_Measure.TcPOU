@@ -316,28 +316,32 @@ ST140_Measure_e.Save_result_in_mover:
 
     IF NOT (MEASURE_SIMULATION AND CONST.USE_SIMULATION) THEN
 
-        FOR i := 0 TO MEASURE_PER_PIECE BY 1 DO
-            IF arr_rMeasureTrack_Right[i][LaserPlace_e.NearTrack] < _20_AUTO.recipe.st140.rMinHeightSensorRight OR
-               arr_rMeasureTrack_Right[i][LaserPlace_e.NearDoor] < _20_AUTO.recipe.st140.rMinHeightSensorRight THEN
-                testLevel_Min_Left_NOK := TRUE;
+        FOR i := 0 TO MEASURE_PER_PIECE - 1 BY 1 DO
+            IF arr_rMeasureTrack_Right[LaserPlace_e.NearTrack][i] < _20_AUTO.recipe.st140.rMinHeightSensorRight OR
+               arr_rMeasureTrack_Right[LaserPlace_e.NearDoor][i] < _20_AUTO.recipe.st140.rMinHeightSensorRight THEN
+                // min value of the sensor means maximum fill
+                testLevel_Max_Right_NOK := TRUE;
             END_IF
 
-            IF arr_rMeasureTrack_Right[i][LaserPlace_e.NearTrack] > _20_AUTO.recipe.st140.rMaxHeightSensorRight OR
-               arr_rMeasureTrack_Right[i][LaserPlace_e.NearDoor] > _20_AUTO.recipe.st140.rMaxHeightSensorRight THEN
-                testLevel_Min_Left_NOK := TRUE;
+            IF arr_rMeasureTrack_Right[LaserPlace_e.NearTrack][i] > _20_AUTO.recipe.st140.rMaxHeightSensorRight OR
+               arr_rMeasureTrack_Right[LaserPlace_e.NearDoor][i] > _20_AUTO.recipe.st140.rMaxHeightSensorRight THEN
+                // max value of the sensor means minimum fill
+                testLevel_Min_Right_NOK := TRUE;
             END_IF
         END_FOR
 
         IF _20_AUTO.recipe.st140.xIsTypeMiniOrSmart THEN
-            FOR i := 0 TO MEASURE_PER_PIECE BY 1 DO
-                IF arr_rMeasureTrack_Left[i][LaserPlace_e.NearTrack] < _20_AUTO.recipe.st140.rMinHeightSensorRight OR
-                   arr_rMeasureTrack_Left[i][LaserPlace_e.NearDoor] < _20_AUTO.recipe.st140.rMinHeightSensorRight THEN
-                    testLevel_Min_Right_NOK := TRUE;
+            FOR i := 0 TO MEASURE_PER_PIECE - 1 BY 1 DO
+                IF arr_rMeasureTrack_Left[LaserPlace_e.NearTrack][i] < _20_AUTO.recipe.st140.rMinHeightSensorLeft OR
+                   arr_rMeasureTrack_Left[LaserPlace_e.NearDoor][i] < _20_AUTO.recipe.st140.rMinHeightSensorLeft THEN
+                    // min value of the sensor means maximum fill
+                    testLevel_Max_Left_NOK := TRUE;
                 END_IF
 
-                IF arr_rMeasureTrack_Left[i][LaserPlace_e.NearTrack] > _20_AUTO.recipe.st140.rMaxHeightSensorRight OR
-                   arr_rMeasureTrack_Left[i][LaserPlace_e.NearDoor] > _20_AUTO.recipe.st140.rMaxHeightSensorRight THEN
-                    testLevel_Max_Right_NOK := TRUE;
+                IF arr_rMeasureTrack_Left[LaserPlace_e.NearTrack][i] > _20_AUTO.recipe.st140.rMaxHeightSensorLeft OR
+                   arr_rMeasureTrack_Left[LaserPlace_e.NearDoor][i] > _20_AUTO.recipe.st140.rMaxHeightSensorLeft THEN
+                    // max value of the sensor means minimum fill
+                    testLevel_Min_Left_NOK := TRUE;
                 END_IF
             END_FOR
         END_IF
