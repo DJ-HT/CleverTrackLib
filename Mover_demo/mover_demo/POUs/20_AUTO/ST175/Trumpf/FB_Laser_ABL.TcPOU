@@ -25,7 +25,7 @@ VAR
     fb_time : NT_GetTime;
 END_VAR
 VAR CONSTANT
-	NUM_STRING_LENGTH : INT := 32; // maximum string length for the number
+	NUM_STRING_LENGTH : UDINT := 32; // maximum string length for the number
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[fb_time(NETID := '',

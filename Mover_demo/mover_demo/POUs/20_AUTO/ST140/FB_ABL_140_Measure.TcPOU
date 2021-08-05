@@ -309,8 +309,10 @@ ST140_Measure_e.Move_shuttle_relative_left:
 
 ST140_Measure_e.Save_result_in_mover:
 
-    testLevel_Min_NOK := FALSE;
-    testLevel_Max_NOK := FALSE;
+    testLevel_Min_Left_NOK  := FALSE;
+    testLevel_Max_Left_NOK  := FALSE;
+    testLevel_Min_Right_NOK := FALSE;
+    testLevel_Max_Right_NOK := FALSE;
 
     IF NOT (MEASURE_SIMULATION AND CONST.USE_SIMULATION) THEN
 
