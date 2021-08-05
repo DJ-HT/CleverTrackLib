@@ -507,7 +507,7 @@ ST145_Pnp_e.Pnp_Ver_ShuttleDown:
         iOUT_Step := ST145_Pnp_e.Vacum_off;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-145) THEN
+            IF NOT Mover.SetLastStation(145) THEN
                 ASSERT(0);
             END_IF
         END_IF

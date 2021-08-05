@@ -343,13 +343,15 @@ ST175_LASER_e.LASER_start:
     IF fb_trumpf_laser.xOUT_BUSY THEN
         IF __ISVALIDREF(Mover) THEN
 
-            IF NOT xLASER_First_mark THEN
-                fb_trumpf_laser.sIN_ErrorCode := CONCAT('L-', Mover.GetErrorCode());
-            ELSE
+            IF NOT _20_AUTO.recipe.st175.isTypeSmartOrMini THEN
+                fb_trumpf_laser.sIN_ErrorCode := Mover.GetErrorCode();
+            ELSIF NOT xLASER_First_mark THEN
                 fb_trumpf_laser.sIN_ErrorCode := CONCAT('R-', Mover.GetErrorCode());
+            ELSE
+                fb_trumpf_laser.sIN_ErrorCode := CONCAT('L-', Mover.GetErrorCode());
             END_IF
 
-            IF NOT Mover.SetLastStation(-175) THEN
+            IF NOT Mover.SetLastStation(175) THEN
                 ASSERT(0);
             END_IF
         END_IF
@@ -359,7 +361,8 @@ ST175_LASER_e.LASER_start:
 
 ST175_LASER_e.LASER_wait_on_finish:
     IF fb_trumpf_laser.xOUT_DONE OR NOT fb_trumpf_laser.xOUT_BUSY THEN
-        iOUT_Step := ST175_LASER_e.handling_up;
+        iOUT_Step        := ST175_LASER_e.handling_up;
+        xLASER_Result_OK := NOT fb_trumpf_laser.xOUT_ERROR;
     END_IF
 
 ST175_LASER_e.handling_up:
@@ -388,6 +391,8 @@ ST175_LASER_e.open_doors:
         iOUT_Step := ST175_LASER_e.SYNC_MOVER_LEAVE;
 
         IF __ISVALIDREF(Mover) AND NOT xLASER_Result_OK THEN
+            Mover.SetErrorCode('175-B');
+
             IF NOT Mover.SetLastStation(-175) THEN
                 ASSERT(0);
             END_IF

@@ -382,7 +382,7 @@ ST105_Pnp_e.Robot_place:
         iOUT_Step := ST105_Pnp_e.Robot_wait_placed_falling;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-105) THEN
+            IF NOT Mover.SetLastStation(105) THEN
                 ASSERT(0);
             END_IF
         END_IF

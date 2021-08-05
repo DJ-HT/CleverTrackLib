@@ -179,7 +179,7 @@ fb_VerAxis_10(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST130_1
               xIN_Init        := enIN_State = enState.StateINIT,
               xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis130_10Z.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.75,
+              lrIN_Delta_mm   := 1.0,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST130_PatroneAushebenPos_e._max);
 
@@ -459,7 +459,8 @@ xOUT_Wait := (iOUT_Step = ST130_Dose_e.DONE) OR
 
 xOUT_MoverFree :=
     NOT (iOUT_Step >= ST130_Dose_e.MOVER_NEEDED_OP AND iOUT_Step < ST130_Dose_e.MOVER_FREE_OP) AND
-    (iOUT_Step >= ST130_Dose_e.READY) AND (iOUT_Step < ST130_Dose_e.ERROR);
+    (iOUT_Step >= ST130_Dose_e.READY) AND
+    (iOUT_Step < ST130_Dose_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST130_Dose_e.waitOnMover,
@@ -628,6 +629,9 @@ ST130_Dose_e.READY:   (* Start AUTO:END:LEER:STEP *)
 (***** START  ZYKLISCH *****)
 ST130_Dose_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
+
+        iPreStep := ST130_Dose_e.INIT;
+
         IF enState.StateLEER = enIN_State THEN
             IF __ISVALIDREF(Mover) THEN
                 IF Mover.GetLastStationDone() > 0 THEN
@@ -692,7 +696,7 @@ ST130_Dose_e.open_down_feeder:
         iOUT_Step := ST130_Dose_e.load_powder_and_vibrate;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-130) THEN
+            IF NOT Mover.SetLastStation(130) THEN
                 ASSERT(0);
             END_IF
         END_IF

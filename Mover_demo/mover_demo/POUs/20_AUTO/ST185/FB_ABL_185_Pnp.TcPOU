@@ -532,7 +532,7 @@ ST185_Pnp_e.Init_HomeVertical_02:
 
 ST185_Pnp_e.Init_Vertical_02_up:
     IF fb_griperLeft.xIN_GS OR fb_griperRight.xIN_GS THEN
-        IF fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_full).xOUT_InPos THEN
+        IF fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_after_unload).xOUT_InPos THEN
             IF fb_axis185_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST185_Pnp_e.Init_HorizontalToTrack;
             ELSE

@@ -215,7 +215,7 @@ VAR
                                                   0,  // ST174
                                                   4,  // ST175
                                                   -1, // ST176
-                                                  -1, // ST180
+                                                  0,  // ST180
                                                   0]; // ST185
 
     // Pro
@@ -238,7 +238,7 @@ VAR
                                                   0,  // ST174
                                                   4,  // ST175
                                                   -1, // ST176
-                                                  -1, // ST180
+                                                  0,  // ST180
                                                   0]; // ST185
 
     // Mini
@@ -261,7 +261,7 @@ VAR
                                                   0,  // ST174
                                                   4,  // ST175
                                                   -1, // ST176
-                                                  -1, // ST180
+                                                  0,  // ST180
                                                   0]; // ST185
     // Blue    
     _StationSet4 :
@@ -283,7 +283,7 @@ VAR
                                                   0,  // ST174
                                                   4,  // ST175
                                                   -1, // ST176
-                                                  -1, // ST180
+                                                  0,  // ST180
                                                   0]; // ST185
     _StationSet5 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,

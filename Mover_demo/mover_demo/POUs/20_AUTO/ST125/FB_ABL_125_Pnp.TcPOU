@@ -713,7 +713,7 @@ ST125_Pnp_e.Pnp_Ver_ShuttleDown:
         iOUT_Step := ST125_Pnp_e.Pnp_placeCap;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-125) THEN
+            IF NOT Mover.SetLastStation(125) THEN
                 ASSERT(0);
             END_IF
         END_IF

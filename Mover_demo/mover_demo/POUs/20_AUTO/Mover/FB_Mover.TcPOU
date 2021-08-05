@@ -316,10 +316,10 @@ END_VAR
         <ST><![CDATA[IF ABS(value) < ABS(THIS^._LastStationDone) THEN
     SetLastStation := FALSE;
 ELSE
-	IF THIS^._LastStationDone < 0 THEN
-		value := 0 - ABS(value);
-	END_IF
-	
+    IF THIS^._LastStationDone < 0 THEN
+        value := 0 - ABS(value);
+    END_IF
+
     THIS^._LastStationDone := value;
     SetLastStation         := TRUE;
 END_IF

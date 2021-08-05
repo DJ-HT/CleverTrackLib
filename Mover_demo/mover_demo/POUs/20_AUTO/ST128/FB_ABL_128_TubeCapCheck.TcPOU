@@ -85,7 +85,7 @@ END_IF;
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
-    iOUT_Step    := ST128_TubeCapCheck_e.READY; // iPreStep;
+    iOUT_Step    := iPreStep; // iPreStep;
 END_IF;
 
 (*******************************************************************)
@@ -232,6 +232,7 @@ ST128_TubeCapCheck_e.Move_shuttle_relative_right:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(40.0) THEN
             iOUT_Step := ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_right;
+            iPreStep  := ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_right;
         END_IF
     ELSE
         bOUT_Error := 10;
@@ -243,6 +244,7 @@ ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_right:
             iOUT_Step := ST128_TubeCapCheck_e.Move_shuttle_to_pos_left;
         ELSE
             iOUT_Step := ST128_TubeCapCheck_e.Save_result_in_mover;
+            iPreStep  := ST128_TubeCapCheck_e.Save_result_in_mover;
         END_IF
     END_IF
 
@@ -250,6 +252,7 @@ ST128_TubeCapCheck_e.Move_shuttle_to_pos_left:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(60.0) THEN
             iOUT_Step := ST128_TubeCapCheck_e.Wait_move_done_pos_left;
+            iPreStep  := ST128_TubeCapCheck_e.Wait_move_done_pos_left;
         END_IF
     ELSE
         bOUT_Error := 11;
@@ -264,6 +267,7 @@ ST128_TubeCapCheck_e.Move_shuttle_relative_left:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(40.0) THEN
             iOUT_Step := ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_left;
+            iPreStep  := ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_left;
         END_IF
     ELSE
         bOUT_Error := 12;
@@ -302,6 +306,7 @@ ST128_TubeCapCheck_e.Save_result_in_mover:
         END_IF
 
         bOUT_Error := 1;
+        iPreStep   := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
     ELSE
         iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
 

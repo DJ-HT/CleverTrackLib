@@ -302,7 +302,7 @@ ST170_RFID_e.RFID_start:
        (NOT _20_AUTO.recipe.st170.Use_element_right OR NOT IN.I033_rfid_test_link_out1_170_21) THEN
         iOUT_Step := ST170_RFID_e.RFID_wait_on_result;
 
-        IF __ISVALIDREF(Mover) AND_THEN NOT Mover.SetLastStation(-170) THEN
+        IF __ISVALIDREF(Mover) AND_THEN NOT Mover.SetLastStation(170) THEN
             ASSERT(0);
         END_IF
     END_IF

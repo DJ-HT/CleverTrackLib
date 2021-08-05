@@ -665,7 +665,7 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
         xIsPiecesPicked := FALSE;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-110) THEN
+            IF NOT Mover.SetLastStation(110) THEN
                 ASSERT(0);
             END_IF
         END_IF
