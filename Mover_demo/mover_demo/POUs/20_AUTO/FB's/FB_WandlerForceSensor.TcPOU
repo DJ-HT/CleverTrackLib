@@ -7,6 +7,7 @@
 // physical data
 FUNCTION_BLOCK FB_WandlerForceSensor
 VAR_INPUT
+	lrIN_MaxLimit : LREAL := 2.0; // maximum value allowed for this sensor, default is 2.0
 END_VAR
 VAR_OUTPUT
     lrOUT_value : LREAL;
@@ -30,6 +31,8 @@ END_VAR
       <ST><![CDATA[sined_exponent := BYTE_TO_SINT(Scale_Exponent);
 
 lrOUT_value := Process_Value * EXPT(10, sined_exponent);
+
+lrOUT_value := LIMIT(lrOUT_value, lrOUT_value, lrIN_MaxLimit);
 ]]></ST>
     </Implementation>
   </POU>

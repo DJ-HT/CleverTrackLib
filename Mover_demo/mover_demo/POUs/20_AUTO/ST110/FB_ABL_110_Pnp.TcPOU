@@ -384,8 +384,8 @@ simu_gripperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION
                   tIN_AS_ms := 200); //ms
 
 // kraft sensor
-fb_kraftLeft();
-fb_kraftRight();
+fb_kraftLeft(lrIN_MaxLimit := LREAL#2.0);
+fb_kraftRight(lrIN_MaxLimit := LREAL#2.0);
 
 (*******************************************************************)
 (* OUTPUTS *)
