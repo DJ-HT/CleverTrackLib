@@ -18,7 +18,7 @@ VAR_GLOBAL
     Q006_ AT %QX0.6 : BOOL; // 
     Q007_ AT %QX0.7 : BOOL; // 
 
-    Q010_Sauger_LN_230_Start     AT %QX1.0  : BOOL; // Sauger LN 230 Start
+    Q010_     AT %QX1.0  : BOOL; // Sauger LN 230 Start
     Q011_                        AT %QX1.1  : BOOL; // 
     Q012_                             AT %QX1.2 : BOOL; // 
     Q013_                        AT %QX1.3  : BOOL; // 
@@ -68,7 +68,7 @@ VAR_GLOBAL
 
     // 10170D2
     Q100_ST175_laser_fernschalfung AT %QX10.0 : BOOL; // Laser Fernschalfung
-    Q101_ST175_laser_start         AT %QX10.1 : BOOL; // Sauger Laser 175.21 Start
+    Q101_ST175_Sauger_LN_230_Start         AT %QX10.1 : BOOL; // Sauger Laser 175.21 Start
     Q102_ST185_entladen_ein        AT %QX10.2 : BOOL; // Entladeband 185.21 ein
     Q103_Doppel_tur_lock           AT %QX10.3 : BOOL; // Doppel Türe 5+6 Verriegelung
     Q104_ST110_vacum_on_left       AT %QX10.4 : BOOL; // ST110 Vacum greifer left on 

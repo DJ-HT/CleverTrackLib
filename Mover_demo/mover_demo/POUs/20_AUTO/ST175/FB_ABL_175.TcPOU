@@ -235,6 +235,12 @@ IO_BOX.Q5301_14_ST175_kabinentur_einlaufseite :=
 IO_BOX.Q5302_14_ST175_kabinentur_auflaufseite :=
     fb_handling.xOUT_VALVE AND NOT (LASER_SIMULATION AND CONST.USE_SIMULATION);
 
+OUT.Q101_ST175_Sauger_LN_230_Start :=
+    (enIN_State >= enState.StateEND) AND
+    (iOUT_Step > ST175_LASER_e.close_doors) AND
+    (iOUT_Step <= ST175_LASER_e.open_doors) AND
+    NOT (LASER_SIMULATION AND CONST.USE_SIMULATION);
+
 (*******************************************************************)
 (* Ablauf *)
 (*******************************************************************)
