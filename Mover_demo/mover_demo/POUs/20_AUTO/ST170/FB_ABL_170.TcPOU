@@ -28,7 +28,7 @@ VAR_INPUT
     pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
 
     // Application specific
-    Mover       : REFERENCE TO FB_Mover;
+    Mover : REFERENCE TO FB_Mover;
 
 END_VAR
 VAR_OUTPUT
@@ -65,7 +65,8 @@ VAR
     fb_axis170_01Z   : FB_AxisLM_V1_1;
 
     (* Spezial *)
-	xRFID_Result_OK : BOOL;
+    xRFID_Result_Left_OK  : BOOL;
+    xRFID_Result_Right_OK : BOOL;
 
 END_VAR
 VAR CONSTANT
@@ -191,11 +192,13 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
 OUT.Q026_ST170_rfid_start_links :=
     _20_AUTO.recipe.st170.Use_element_left AND
     (ST170_RFID_e.RFID_start = iOUT_Step) AND
+    NOT xRFID_Result_Left_OK AND // If we redo a flashing, it will generate an error
     NOT (RFID_SIMULATION AND CONST.USE_SIMULATION);
 
 OUT.Q027_ST170_rfid_start_rechts :=
     _20_AUTO.recipe.st170.Use_element_right AND
     (ST170_RFID_e.RFID_start = iOUT_Step) AND
+    NOT xRFID_Result_Right_OK AND // If we redo a flashing, it will generate an error
     NOT (RFID_SIMULATION AND CONST.USE_SIMULATION);
 
 OUT.Q040_ST170_RFID_Links_Type_Bit_0  := _20_AUTO.recipe.st170.RFID_Type.0;
@@ -276,8 +279,7 @@ ST170_RFID_e.READY:   (* Start AUTO,END,LEER,STEP *)
 (***** START  ZYKLISCH *****)
 ST170_RFID_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step       := ST170_RFID_e.waitOnMover;
-        xRFID_Result_OK := FALSE;
+        iOUT_Step := ST170_RFID_e.waitOnMover;
     END_IF;
 
 ST170_RFID_e.waitOnMover: (*  *)
@@ -293,7 +295,9 @@ ST170_RFID_e.waitOnMover: (*  *)
 
 ST170_RFID_e.vertical_up:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST170_PnpVerPos_e.as_up).xOUT_InPos THEN
-        iOUT_Step := ST170_RFID_e.RFID_start;
+        iOUT_Step             := ST170_RFID_e.RFID_start;
+        xRFID_Result_Left_OK  := NOT _20_AUTO.recipe.st170.Use_element_left;  // Force ok result when not used
+        xRFID_Result_Right_OK := NOT _20_AUTO.recipe.st170.Use_element_right; // Force ok result when not used
     END_IF
 
 ST170_RFID_e.RFID_start:
@@ -312,10 +316,11 @@ ST170_RFID_e.RFID_wait_on_result:
        (NOT _20_AUTO.recipe.st170.Use_element_left OR IN.I030_rfid_test_link_out1_170_20) AND
        (NOT _20_AUTO.recipe.st170.Use_element_right OR IN.I033_rfid_test_link_out1_170_21) THEN
 
-        xRFID_Result_OK := (NOT _20_AUTO.recipe.st170.Use_element_left OR
-                           (IN.I031_rfid_test_link_out2_170_20 AND NOT IN.I032_rfid_test_link_out3_170_20)) AND
-                           (NOT _20_AUTO.recipe.st170.Use_element_right OR
-                           (IN.I034_rfid_test_link_out2_170_21 AND NOT IN.I035_rfid_test_link_out3_170_21));
+        xRFID_Result_Left_OK := (NOT _20_AUTO.recipe.st170.Use_element_left OR
+                                 (IN.I031_rfid_test_link_out2_170_20 AND NOT IN.I032_rfid_test_link_out3_170_20));
+
+        xRFID_Result_Right_OK := (NOT _20_AUTO.recipe.st170.Use_element_right OR
+                                  (IN.I034_rfid_test_link_out2_170_21 AND NOT IN.I035_rfid_test_link_out3_170_21));
 
         iOUT_Step := ST170_RFID_e.vertical_down;
     END_IF
@@ -324,14 +329,24 @@ ST170_RFID_e.vertical_down:
     IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST170_PnpVerPos_e.gs_down).xOUT_InPos THEN
         iOUT_Step := ST170_RFID_e.SYNC_MOVER_LEAVE;
 
-        IF __ISVALIDREF(Mover) AND NOT xRFID_Result_OK THEN
-            Mover.SetErrorCode('170-B');
-			
-            IF NOT Mover.SetLastStation(-170) THEN
+        IF __ISVALIDREF(Mover) AND xRFID_Result_Left_OK AND xRFID_Result_Right_OK THEN
+            IF NOT Mover.SetLastStation(170) THEN
                 ASSERT(0);
             END_IF
-        ELSIF __ISVALIDREF(Mover) AND xRFID_Result_OK THEN
-            IF NOT Mover.SetLastStation(170) THEN
+        ELSIF __ISVALIDREF(Mover) THEN
+
+            IF NOT xRFID_Result_Left_OK AND NOT xRFID_Result_Right_OK THEN
+                Mover.SetErrorCode('170-B Both');
+
+            ELSIF NOT xRFID_Result_Left_OK THEN
+                Mover.SetErrorCode('170-B Left');
+
+            ELSIF NOT xRFID_Result_Right_OK THEN
+                Mover.SetErrorCode('170-B Right');
+
+            END_IF
+
+            IF NOT Mover.SetLastStation(-170) THEN
                 ASSERT(0);
             END_IF
         END_IF

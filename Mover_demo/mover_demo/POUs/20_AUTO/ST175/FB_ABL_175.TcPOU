@@ -60,8 +60,8 @@ VAR
     TON_Timeout : TON;
 
     (* Bausteine *)
-	fb_trumpf_laser : FB_Laser_ABL;
-	
+    fb_trumpf_laser : FB_Laser_ABL;
+
     fb_handling  : FB_ZylMo2El_V2_1;
     fb_doorEntry : FB_ZylMo2El_V2_1;
     fb_doorExit  : FB_ZylMo2El_V2_1;
@@ -71,8 +71,10 @@ VAR
     simu_doorExit  : FB_Simu_Zyl2Pos;
 
     (* Spezial *)
-    xLASER_Result_OK : BOOL;
+    xLASER_Result_OK  : BOOL;
     xLASER_First_mark : BOOL := FALSE;
+
+    sErrorSuffixFileName : STRING; // suffix used to tell the user to use the file for bad pieces
 
 END_VAR
 VAR CONSTANT
@@ -105,9 +107,17 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* Bausteine *)
 (*******************************************************************)
+
+// We manage the suffix of the laser file
+IF __ISVALIDREF(Mover) AND_THEN Mover.IsPieceBad() THEN
+    sErrorSuffixFileName := '_F';
+ELSE
+    sErrorSuffixFileName := '';
+END_IF
+
 fb_trumpf_laser(xIN_Start          := ST175_LASER_e.LASER_start = iOUT_Step,
                 xIN_WarmUpLaser    := ST175_LASER_e.Init_laser_warmup = iOUT_Step,
-                sIN_FileName       := _20_AUTO.recipe.st175.file_name,
+                sIN_FileName       := CONCAT(_20_AUTO.recipe.st175.file_name, sErrorSuffixFileName),
                 sIN_ErrorCode      :=, // set below
                 xIN_StationInError := __ISVALIDREF(Mover) AND_THEN Mover.IsPieceBad());
 
