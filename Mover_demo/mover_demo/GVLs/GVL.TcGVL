@@ -32,6 +32,9 @@ VAR_GLOBAL
     st176_aut : FB_AUT_MODIFY; // Laser B
     st180_aut : FB_AUT_180;    // Entladen schlecht
     st185_aut : FB_AUT_185;    // Entladen gut
+	
+	ST130_01Y_Feedback_Offset : LREAL; // Offset automatically adjusted by ST140
+	ST135_01Y_Feedback_Offset : LREAL; // Offset automatically adjusted by ST140
 
 END_VAR
 ]]></Declaration>

@@ -635,7 +635,11 @@ ST130_Dose_e.START: (*  *)
         IF enState.StateLEER = enIN_State THEN
             IF __ISVALIDREF(Mover) THEN
                 IF Mover.GetLastStationDone() > 0 THEN
-                    iOUT_Step := ST130_Dose_e.open_up_feeder_first;
+                    iOUT_Step := ST130_Dose_e.Adjust_Vertical_01Z_position;
+                    fb_VerAxis_01.config.movesList[ST130_DosierkammerPos_e.down_AS].lrPosition
+                        :=
+                        fb_VerAxis_01.config.movesList[ST130_DosierkammerPos_e.down_AS].lrPosition +
+                        GVL.ST130_01Y_Feedback_Offset;
                 ELSE
                     iOUT_Step := ST130_Dose_e.waitOnMover;
                 END_IF
@@ -644,6 +648,12 @@ ST130_Dose_e.START: (*  *)
             iOUT_Step := ST130_Dose_e.open_up_feeder_first;
         END_IF
     END_IF;
+
+ST130_Dose_e.Adjust_Vertical_01Z_position:
+    IF xIN_NextStep AND
+       fb_VerAxis_01.MoveTo(ST130_DosierkammerPos_e.down_AS).xOUT_InPos THEN
+        iOUT_Step := ST130_Dose_e.open_up_feeder_first;
+    END_IF
 
 ST130_Dose_e.open_up_feeder_first:
     IF xIN_NextStep AND

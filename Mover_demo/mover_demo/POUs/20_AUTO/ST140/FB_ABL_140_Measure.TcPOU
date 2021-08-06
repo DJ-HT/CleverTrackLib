@@ -72,6 +72,9 @@ VAR
     testLevel_Max_Right_NOK : BOOL; // TRUE when powder level is above the maximum
 
     visu_shuttle_x_position : LREAL; // position of the shuttle used in visu
+	
+	divisor_height_correction : LREAL := 4; // this divisor is used to reduce oscillation during height correction
+	// because we may not fix the height on the very next shuttle
 
 END_VAR
 VAR CONSTANT
@@ -397,6 +400,40 @@ ST140_Measure_e.Save_result_in_mover:
             IF NOT Mover.SetLastStation(140) THEN
                 ASSERT(0);
             END_IF
+        END_IF
+    END_IF
+
+	// Adding a value makes the axis go down
+	// Substracting a value makes the axis go up
+    IF __ISVALIDREF(Mover) AND_THEN Mover.GetLastStationDone() = 130 THEN
+        IF testLevel_Min_Left_NOK THEN
+            GVL.ST130_01Y_Feedback_Offset := GVL.ST130_01Y_Feedback_Offset - 0.1;
+        END_IF
+        IF testLevel_Max_Left_NOK THEN
+            GVL.ST130_01Y_Feedback_Offset := GVL.ST130_01Y_Feedback_Offset + 0.1;
+        END_IF
+        IF testLevel_Min_Right_NOK THEN
+            GVL.ST130_01Y_Feedback_Offset := GVL.ST130_01Y_Feedback_Offset - 0.1;
+        END_IF
+        IF testLevel_Max_Right_NOK THEN
+            GVL.ST130_01Y_Feedback_Offset := GVL.ST130_01Y_Feedback_Offset + 0.1;
+        END_IF
+    END_IF
+
+	// Adding a value makes the axis go down
+	// Substracting a value makes the axis go up
+    IF __ISVALIDREF(Mover) AND_THEN Mover.GetLastStationDone() = 135 THEN
+        IF testLevel_Min_Left_NOK THEN
+            GVL.ST135_01Y_Feedback_Offset := GVL.ST135_01Y_Feedback_Offset - 0.1;
+        END_IF
+        IF testLevel_Max_Left_NOK THEN
+            GVL.ST135_01Y_Feedback_Offset := GVL.ST135_01Y_Feedback_Offset + 0.1;
+        END_IF
+        IF testLevel_Min_Right_NOK THEN
+            GVL.ST135_01Y_Feedback_Offset := GVL.ST135_01Y_Feedback_Offset - 0.1;
+        END_IF
+        IF testLevel_Max_Right_NOK THEN
+            GVL.ST135_01Y_Feedback_Offset := GVL.ST135_01Y_Feedback_Offset + 0.1;
         END_IF
     END_IF
 
