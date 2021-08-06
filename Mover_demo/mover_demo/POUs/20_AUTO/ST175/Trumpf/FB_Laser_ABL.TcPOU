@@ -6,9 +6,9 @@ VAR_INPUT
     xIN_Start          : BOOL;
     xIN_WarmUpLaser    : BOOL; // activate laser, only possible when cycle is not started
     sIN_FileName       : STRING := 'Someting here please';
-    xIN_ResetData      : BOOL;       // reset all data, used to ensure that the marking data are in the laser
+    xIN_ResetData      : BOOL;                      // reset all data, used to ensure that the marking data are in the laser
     sIN_ErrorCode      : STRING(NUM_STRING_LENGTH); // error code to write when a station is in error
-    xIN_StationInError : BOOL;       // don't write normal data, write error data instead
+    xIN_StationInError : BOOL;                      // don't write normal data, write error data instead
 END_VAR
 VAR_OUTPUT
     xOUT_DONE  : BOOL;
@@ -19,14 +19,17 @@ VAR
     iStep     : INT := 0;
     sDataTime : STRING(NUM_STRING_LENGTH);
 
-    sLastName : STRING;     // var used to see if last value has changed or not
+    sLastName : STRING;                    // var used to see if last value has changed or not
     sLastNum  : STRING(NUM_STRING_LENGTH); // var used to see if last value has changed or not
+
+    sReadableTime : STRING; // used to form a readable text
 
     fb_time : NT_GetTime;
 END_VAR
 VAR CONSTANT
-	NUM_STRING_LENGTH : UDINT := 32; // maximum string length for the number
-END_VAR]]></Declaration>
+    NUM_STRING_LENGTH : UDINT := 50; // maximum string length for the number
+END_VAR
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[fb_time(NETID := '',
         START :=,
@@ -130,7 +133,15 @@ CASE iStep OF
         sDataTime[8] := F_ToASC(str := '1'); // TODO, team of the day
         sDataTime[9] := 0;
     ELSE
-		sDataTime := sIN_ErrorCode;
+        sReadableTime := '';
+        sReadableTime := CONCAT(CONCAT(sReadableTime, WORD_TO_STRING(fb_time.TIMESTR.wDay)), '.');
+        sReadableTime := CONCAT(CONCAT(sReadableTime, WORD_TO_STRING(fb_time.TIMESTR.wMonth)), '.');
+        sReadableTime := CONCAT(CONCAT(sReadableTime, WORD_TO_STRING(fb_time.TIMESTR.wYear)), ' ');
+        sReadableTime := CONCAT(CONCAT(sReadableTime, WORD_TO_STRING(fb_time.TIMESTR.wHour)), 'h');
+        sReadableTime := CONCAT(CONCAT(sReadableTime, WORD_TO_STRING(fb_time.TIMESTR.wMinute)), 'm');
+        sReadableTime := CONCAT(CONCAT(sReadableTime, WORD_TO_STRING(fb_time.TIMESTR.wSecond)), 's');
+
+        sDataTime := CONCAT(CONCAT(sIN_ErrorCode, '    '), sReadableTime);
     END_IF
 
     IF 0 = FIND(sLastNum, sDataTime) OR
