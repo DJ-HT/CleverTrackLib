@@ -154,9 +154,9 @@ fb_feeder_lf(xIN_Enable                := enIN_State = enState.StateAUTO OR enIN
              refIN_SimulatedFifo       := simu_fifo_feeder_lf,
              iIN_FifoSetMaxSensorValue := 10,
              diIN_SignlFilter_ms       := _20_AUTO.recipe.st105.FeederConfig.InFilterDelay,
-             diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,   
-             diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,    
-             diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);  
+             diIN_StartDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.StartDelay,
+             diIN_StopDelay_ms         := _20_AUTO.recipe.st105.FeederConfig.StopDelay,
+             diIN_EmptyDelay_ms        := _20_AUTO.recipe.st105.FeederConfig.EmptyDelay);
 
 simu_feeder(xIN_Enable         := fb_feeder_wf.xOUT_EnableFeeder AND FEEDER_SIMULATION AND CONST.USE_SIMULATION,
             xIN_PceSensor      := fb_feeder_wf.xIN_PieceInEnd,
@@ -174,6 +174,9 @@ END_IF
 IF ST105_Feeder_e.Init_simu_home_table = iOUT_Step THEN
     fb_axis105_10W.rIN_Position :=
         TO_REAL(rDegreeToNextSlot - LMOD(ST105_Axis.axis105_10W.rActPos, rDegreeToNextSlot));
+
+ELSIF ST105_Feeder_e.Init_apply_feeder_offset = iOUT_Step THEN
+    fb_axis105_10W.rIN_Position := _20_AUTO.recipe.st105.RotaryTableOffset;
 
 ELSE
     fb_axis105_10W.rIN_Position := rDegreeToNextSlot;
@@ -208,7 +211,8 @@ fb_axis105_10W(enIN_State     := enIN_State,
                xIN_Execute    := ST105_Feeder_e.Init_set_table_pos = iOUT_Step OR
                                  ST105_Feeder_e.Init_table_go_to_zero = iOUT_Step OR
                                  ST105_Feeder_e.Init_simu_home_table = iOUT_Step OR
-                                 ST105_Feeder_e.load_piece = iOUT_Step,
+                                 ST105_Feeder_e.load_piece = iOUT_Step OR
+                                 ST105_Feeder_e.Init_apply_feeder_offset = iOUT_Step,
                xIN_Relative     := fb_axis105_10W.xIN_Execute,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
@@ -413,7 +417,11 @@ ST105_Feeder_e.INIT: (* Grundstellung ? *)
 ST105_Feeder_e.Init_home_table:
     IF fb_axis105_10W.xOUT_HOMED THEN
         iCurrentTableIndex := 0;
+		iOUT_Step := ST105_Feeder_e.Init_apply_feeder_offset;
+    END_IF
 
+ST105_Feeder_e.Init_apply_feeder_offset:
+    IF fb_axis105_10W.xOUT_DONE THEN
         IF FEEDER_SIMULATION AND CONST.USE_SIMULATION THEN
             iOUT_Step := ST105_Feeder_e.Init_simu_home_table;
         ELSE
@@ -464,7 +472,7 @@ ST105_Feeder_e.READY: (* Start AUTO,END,LEER,STEP *)
 ST105_Feeder_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
         iOUT_Step := ST105_Feeder_e.check_if_feeding_necessary;
-		iPreStep  := ST105_Feeder_e.READY;
+        iPreStep  := ST105_Feeder_e.READY;
     END_IF;
 
 ST105_Feeder_e.check_if_feeding_necessary:
@@ -500,7 +508,7 @@ ST105_Feeder_e.DONE: (* Letzter Schritt  *)
             THEN
             iOUT_Step := ST105_Feeder_e.START;
             // We don't load pieces when not in auto
-			
+
             //STEP / END / LEERFAHREN fertig
         ELSIF (enIN_State = StateREADY) THEN
             iOUT_Step := ST105_Feeder_e.READY;
