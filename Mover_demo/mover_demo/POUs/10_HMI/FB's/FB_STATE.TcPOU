@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_STATE" Id="{cfe9e5f5-08d6-451d-9325-eb42e8c79465}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_STATE
 VAR_INPUT
@@ -38,7 +38,7 @@ END_VAR
 (* State - Machine  *)
 (***********************************************************************************************)
 TON_PLCoff(in:= enINOUT_State = StateOFF, PT := T#2S);
-rt_InitEnd(CLK:=xIN_InitEnd);
+rt_InitEnd(CLK:=xIN_InitEnd AND NOT xIN_INIT);
 CASE enINOUT_State OF
 
 	StateOFF:		(*	AUS	SPS am hochfahren oder NOT-AUS	*)
@@ -495,9 +495,5 @@ CASE enINOUT_State OF
 		
 END_CASE]]></ST>
     </Implementation>
-    <LineIds Name="FB_STATE">
-      <LineId Id="3" Count="458" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>
