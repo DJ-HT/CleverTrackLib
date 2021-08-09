@@ -306,9 +306,52 @@ VAR
                                                   0,
                                                   0,
                                                   0];
+    _StationSet6 :
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0];
+		// Pro Blue
+    _StationSet7 :
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+                                                  -1, // ST110
+                                                  -1, // ST115
+                                                  0,  // ST120
+                                                  0,  // ST125
+                                                  0,  // ST128
+                                                  1,  // ST130
+                                                  -1, // ST135
+                                                  0,  // ST140
+                                                  0,  // ST145
+                                                  2,  // ST150
+                                                  -1, // ST155
+                                                  3,  // ST160
+                                                  3,  // ST165
+                                                  -1, // ST170
+                                                  0,  // ST174
+                                                  4,  // ST175
+                                                  -1, // ST176
+                                                  0,  // ST180
+                                                  0]; // ST185
 
-    _SelWorkStationList : ARRAY[1..5] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF INT
-        := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4), ADR(_StationSet5)];
+    _SelWorkStationList : ARRAY[1..7] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF INT
+        := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4), ADR(_StationSet5), ADR(_StationSet6), ADR(_StationSet7)];
 
     _WorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF
         FB_StationMan[(ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
@@ -317,7 +360,7 @@ VAR
                       (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
-                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[7], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),

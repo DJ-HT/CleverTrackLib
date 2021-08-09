@@ -303,12 +303,6 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
 
 xOUT_PickPiece := iOUT_Step = ST120_Pnp_e.PnP_Ver_RotTableUp;
 
-// I7400_ST120_kraftsensor_links
-// I7500_ST120_kraftsensor_rechts
-// I6300_ST120_greifer_links_geschlossen 
-// I6301_ST120_greifer_links_offen       
-// I6302_ST120_greifer_rechts_geschlossen
-// I6303_ST120_greifer_rechts_offen 
 IO_BOX.Q5202_14_ST120_greifer_links  := fb_gripperLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 IO_BOX.Q5203_14_ST120_greifer_rechts := fb_gripperRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
