@@ -33,6 +33,7 @@ VAR_INPUT
     xIN_capDetector             : BOOL;
     xIN_kraftubersetzunh_zuruck : BOOL;
     xIN_kraftubersetzunh_vor    : BOOL;
+    pIN_ButtonMaintaining       : POINTER TO structButton;
 
     xIN_welding_bits : Ultrasonic_IN_bits_t;
 
@@ -121,7 +122,7 @@ TON_CapDetection(IN := ST150_Uss_e.check_cap_present = iOUT_Step,
 fb_moverMaintening(xIN_Reset    := xIN_Reset OR (ST150_Uss_e.RESET = iOUT_Step),
                    xIN_Quit     := xIN_Quit,
                    xIN_Manu     := enState.StateMANU = enIN_State,
-                   pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST150][1]),
+                   pbtIN_Button := pIN_ButtonMaintaining,
                    xIN_GS       := simu_moverMaintening.xOUT_inGS,
                    xIN_AS       := simu_moverMaintening.xOUT_inAS,
                    xIN_FREE     := TRUE,

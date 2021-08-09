@@ -84,6 +84,7 @@ fb_Uss(xIN_Reset       := xReset,
        xIN_capDetector             := IO_BOX.I2303_ST150_deckel_vohanden,
        xIN_kraftubersetzunh_zuruck := IO_BOX.I2301_ST150_kraftubersetzung_zuruck,
        xIN_kraftubersetzunh_vor    := IO_BOX.I2302_ST150_kraftubersetzung_vor,
+       pIN_ButtonMaintaining       := ADR(HMI.btManuCylinders[StationList_e.ST150][1]),
        xIN_welding_bits            :=, // set above
        iIN_StationNumber           := 150,
        sIN_errorCodeSide           := 'Left',
