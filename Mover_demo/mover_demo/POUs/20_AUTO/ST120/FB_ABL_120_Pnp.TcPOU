@@ -220,9 +220,9 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
                xIN_GS       := simu_gripperLeft.xOUT_inGS,
                xIN_AS       := simu_gripperLeft.xOUT_inAS,
                xIN_FREE     := TRUE,
-               xINtoGS      := _20_AUTO.recipe.st120.xUseVerLeft AND ST120_Pnp_e.Gripper_close = iOUT_Step,
-               xINtoAS      := (ST120_Pnp_e.Gripper_open = iOUT_Step) OR
+               xINtoGS      := (ST120_Pnp_e.Gripper_open = iOUT_Step) OR
                                (ST120_Pnp_e.Init_open_left_clamp = iOUT_Step),
+               xINtoAS      := _20_AUTO.recipe.st120.xUseVerLeft AND ST120_Pnp_e.Gripper_close = iOUT_Step,
                tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
                                              [ST120_Cylinders_e.GreiferLinks].toAS_alarm_time),
                tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
@@ -246,9 +246,9 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
                 xIN_GS       := simu_gripperRight.xOUT_inGS,
                 xIN_AS       := simu_gripperRight.xOUT_inAS,
                 xIN_FREE     := TRUE,
-                xINtoGS      := _20_AUTO.recipe.st120.xUseVerRight AND (ST120_Pnp_e.Gripper_close = iOUT_Step),
-                xINtoAS      := (ST120_Pnp_e.Gripper_open = iOUT_Step) OR
+                xINtoGS      := (ST120_Pnp_e.Gripper_open = iOUT_Step) OR
                                 (ST120_Pnp_e.Init_open_right_clamp = iOUT_Step),
+                xINtoAS      := _20_AUTO.recipe.st120.xUseVerRight AND (ST120_Pnp_e.Gripper_close = iOUT_Step),
                 tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
                                               [ST120_Cylinders_e.GreiferRechts].toAS_alarm_time),
                 tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
@@ -412,7 +412,7 @@ ST120_Pnp_e.Init_adjust_left_clamp:
     END_IF
 
 ST120_Pnp_e.Init_open_left_clamp:
-    IF fb_gripperLeft.xIN_AS THEN
+    IF fb_gripperLeft.xIN_GS THEN
         IF _20_AUTO.recipe.st120.xUseVerRight THEN
             iOUT_Step := ST120_Pnp_e.Init_adjust_right_clamp;
         ELSE
@@ -429,23 +429,23 @@ ST120_Pnp_e.Init_adjust_right_clamp:
     END_IF
 
 ST120_Pnp_e.Init_open_right_clamp:
-    IF fb_gripperRight.xIN_AS THEN
+    IF fb_gripperRight.xIN_GS THEN
         iOUT_Step := ST120_Pnp_e.Init_check_if_pces_handled;
     END_IF
 
 ST120_Pnp_e.Init_check_if_pces_handled:
-    IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperLeft.xIN_AS) OR
-       (NOT _20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperRight.xIN_AS) THEN
+    IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperLeft.xIN_GS) OR
+       (NOT _20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperRight.xIN_GS) THEN
         bOUT_Error := ST120_Alarm_e.Piece_in_unused_griper;
         iOUT_Step  := ST120_Pnp_e.ERROR;
 
-    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) AND
-          (_20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperRight.xOUT_inAS) THEN
+    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperLeft.xIN_GS) AND
+          (_20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperRight.xIN_GS) THEN
         bOUT_Error := ST120_Alarm_e.Piece_missing_left_griper;
         iOUT_Step  := ST120_Pnp_e.ERROR;
 
-    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperLeft.xOUT_inAS) AND
-          (_20_AUTO.recipe.st120.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
+    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperLeft.xIN_GS) AND
+          (_20_AUTO.recipe.st120.xUseVerRight AND fb_gripperRight.xIN_GS) THEN
         bOUT_Error := ST120_Alarm_e.Piece_missing_right_griper;
         iOUT_Step  := ST120_Pnp_e.ERROR;
 
@@ -497,8 +497,8 @@ ST120_Pnp_e.PnP_Ver_RotTableDown:
 
 ST120_Pnp_e.Gripper_close:
     IF xIN_NextStep AND
-       (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inGS) AND
-       (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inGS) THEN
+       (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
         iOUT_Step := ST120_Pnp_e.PnP_Ver_RotTableUp;
     END_IF;
 
@@ -542,8 +542,8 @@ ST120_Pnp_e.PnP_Ver_ShuttleTorqueControl:
 
 ST120_Pnp_e.Gripper_open:
     IF xIN_NextStep AND
-       (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
-       (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
+       (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inGS) THEN
         iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleUp;
     END_IF;
 
@@ -561,8 +561,8 @@ ST120_Pnp_e.PnP_Ver_ShuttleUp:
 ST120_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
-           (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
+        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inGS AND
+           (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inGS) THEN
             iOUT_Step := ST120_Pnp_e.DONE;
         ELSE
             iOUT_Step := ST120_Pnp_e.waitOnMover;
