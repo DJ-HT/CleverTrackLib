@@ -13,7 +13,6 @@ TYPE ST150_Uss_e :
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
-    MOVER_FREE_OP, // Ab here, operation without mover can be done
 
     waitOnMover,     // wait until the mover is there
     MOVER_NEEDED_OP, // Since here, a mover in position is needed to perform the action
@@ -23,14 +22,16 @@ TYPE ST150_Uss_e :
     uss_start,             // start signal is given
     uss_working,           // we wait until the uss is finished
     mover_maintening_down, // Kraftbstützung goes down
-	
-	// only used for xxxx_solo process
-	move_shuttle_120_mm,
-	wait_shuttle_in_pos,
+
+    // only used for xxxx_solo process
+    move_shuttle_120_mm,
+    wait_shuttle_in_pos,
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
-    DONE := 8000,     // Ablauf beendet 
-    ERROR := 9000,    // Fehler 
+    MOVER_FREE_OP,    // Ab here, operation without mover can be done
+
+    DONE := 8000,  // Ablauf beendet 
+    ERROR := 9000, // Fehler 
     _max
 );
 END_TYPE
@@ -62,11 +63,6 @@ END_TYPE
             <o>
               <v n="TextID">"START"</v>
               <v n="TextDefault">"1000"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"MOVER_FREE_OP"</v>
-              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -116,6 +112,11 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"SYNC_MOVER_LEAVE"</v>
+              <v n="TextDefault">""</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MOVER_FREE_OP"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>

@@ -117,7 +117,7 @@ VAR_GLOBAL
     (*******************************************************************)
     (* ALARME  *)
     (*******************************************************************)
-    strArALARM  : ARRAY[1..100] OF structAlarm;
+    strArALARM  : ARRAY[1..500] OF structAlarm;
     strArMSG    : ARRAY[1..100] OF structAlarm;
     xArAlarmHMI : ARRAY[1..9999] OF BOOL;
 

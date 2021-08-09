@@ -21,6 +21,7 @@ ST130_Dose_e :
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
   
+    Adjust_Vertical_01Z_position, // add the offset
 	open_up_feeder_first, // we ensure that the up clamp is open
 	fill_kammer, // we have to wait until the kammer is full 
 	
@@ -109,6 +110,11 @@ check level NIO Box
             <o>
               <v n="TextID">"START"</v>
               <v n="TextDefault">"1000"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Adjust_Vertical_01Z_position"</v>
+              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

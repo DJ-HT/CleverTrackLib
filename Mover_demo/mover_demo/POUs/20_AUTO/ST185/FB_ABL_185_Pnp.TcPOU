@@ -387,7 +387,7 @@ simu_clampRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST185_Pnp_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST185_Pnp_e.READY) AND (iOUT_Step < ST185_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -407,10 +407,15 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST185_Pnp_e.DONE);
+xOUT_Wait := (iOUT_Step = ST185_Pnp_e.DONE) OR
+             (iOUT_Step = ST185_Pnp_e.READY) OR
+             (iOUT_Step = ST185_Pnp_e.START) OR
+             (iOUT_Step = ST185_Pnp_e.waitOnMover) OR
+             (iOUT_Step = ST185_Pnp_e.SYNC_MOVER_LEAVE);
 
-xOUT_MoverFree := iOUT_Step >= ST185_Pnp_e.READY AND
-                  NOT (iOUT_Step >= ST185_Pnp_e.MOVER_NEEDED_OP AND iOUT_Step < ST185_Pnp_e.MOVER_FREE_OP);
+xOUT_MoverFree := NOT (iOUT_Step >= ST185_Pnp_e.MOVER_NEEDED_OP AND iOUT_Step < ST185_Pnp_e.MOVER_FREE_OP) AND
+                  (iOUT_Step >= ST185_Pnp_e.READY) AND
+                  (iOUT_Step < ST185_Pnp_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST185_Pnp_e.lift_piece_and_down_to_pick,
@@ -436,6 +441,11 @@ IO_BOX.Q5409_14_ST185_Break_axis_02Z := NOT fb_simu_axis185_02Z.pIN_axisHW^.Stat
                                         _02_SAFETY.xOUT_ESout AND
                                         _02_SAFETY.xOUT_MonOut AND
                                         NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+OUT.Q102_ST185_entladen_ein :=
+    (enIN_State >= enState.StateEND) AND
+    ((iOUT_Step < ST185_Pnp_e.open_griper_put_piece) OR (iOUT_Step > ST185_Pnp_e.hor_to_track_pos)) AND
+    NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
 
 (*******************************************************************)
 (* Ablauf *)
@@ -522,7 +532,7 @@ ST185_Pnp_e.Init_HomeVertical_02:
 
 ST185_Pnp_e.Init_Vertical_02_up:
     IF fb_griperLeft.xIN_GS OR fb_griperRight.xIN_GS THEN
-        IF fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_full).xOUT_InPos THEN
+        IF fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_after_unload).xOUT_InPos THEN
             IF fb_axis185_01Y.xOUT_HOMED THEN
                 iOUT_Step := ST185_Pnp_e.Init_HorizontalToTrack;
             ELSE
@@ -672,17 +682,18 @@ ST185_Pnp_e.hor_to_track_pos:
 
 ST185_Pnp_e.ver_down_waiting_for_mover:
     IF xIN_NextStep AND fb_PnpVerAxis_02.MoveTo(ST185_PnpVerPos_e.up_waiting_mover).xOUT_InPos THEN
-		
-		arrLrAvgCycleTime[indexAvgArray] := GetTick() - lrStartCycleTime;
-		
-		FOR i := 0 TO AVERAGE_ARRAY_SIZE-1 BY 1 DO
-			sumAvgArray := TO_LREAL(sumAvgArray + arrLrAvgCycleTime[i]);
-		END_FOR
-		
-		HMI.lrPiecePerMinute := 60000 / (sumAvgArray / AVERAGE_ARRAY_SIZE);
-		
-		HMI.PieceDoneTmp := HMI.PieceDoneTmp + TO_INT(_20_AUTO.recipe.st185.xUseVerLeft) + TO_INT(_20_AUTO.recipe.st185.xUseVerRight);
-		
+
+        arrLrAvgCycleTime[indexAvgArray] := GetTick() - lrStartCycleTime;
+
+        FOR i := 0 TO AVERAGE_ARRAY_SIZE - 1 BY 1 DO
+            sumAvgArray := TO_LREAL(sumAvgArray + arrLrAvgCycleTime[i]);
+        END_FOR
+
+        HMI.lrPiecePerMinute := 60000 / (sumAvgArray / AVERAGE_ARRAY_SIZE);
+
+        HMI.PieceDoneTmp :=
+            HMI.PieceDoneTmp + TO_INT(_20_AUTO.recipe.st185.xUseVerLeft) + TO_INT(_20_AUTO.recipe.st185.xUseVerRight);
+
         iOUT_Step := ST185_Pnp_e.DONE;
     END_IF
 

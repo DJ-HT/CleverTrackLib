@@ -27,6 +27,9 @@ VAR
     (* Bausteine *)
     fb_Pnp    : FB_ABL_105_Pnp;
     fb_Feeder : FB_ABL_105_Feeder;
+
+    fb_stat_pnp    : FB_AUT_Statistics;
+    fb_stat_Feeder : FB_AUT_Statistics;
 END_VAR
 
 VAR CONSTANT
@@ -61,10 +64,12 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
 fb_Pnp(xIN_Reset       := xReset,
        xIN_Init        := xIN_Init,
        xIN_Quit        := xIN_Quit,
-       xIN_Start       := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
+       xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
        xIN_Sperre      := NOT xIN_On,
        xIN_NextStep    := xNextStep,
        xIN_AlarmAktiv  := xIN_AlarmAktiv,
@@ -72,7 +77,7 @@ fb_Pnp(xIN_Reset       := xReset,
        xIN_RestartCYCL := enIN_State >= enState.StateLEER, //            
        enIN_State      := enIN_State,
        tIN_Timeout     := tIN_Timeout,
-       pxFG_Freigabe   := ADR(xDummy),
+       pxFG_Freigabe   := ADR(xRelease),
        // special
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := fb_Feeder.xOUT_PceReadyToPick);
@@ -80,20 +85,35 @@ fb_Pnp(xIN_Reset       := xReset,
 fb_Feeder(xIN_Reset       := xReset,
           xIN_Init        := xIN_Init,
           xIN_Quit        := xIN_Quit,
-          xIN_Start       := enIN_State = enState.StateAUTO, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
+          xIN_Start       := enIN_State = enState.StateAUTO AND xRelease,
           xIN_Sperre      := NOT xIN_On,
           xIN_NextStep    := xNextStep,
           xIN_AlarmAktiv  := xIN_AlarmAktiv,
           xIN_DryCycle    := xIN_DryCycle,
-          xIN_RestartCYCL := enIN_State = enState.StateAUTO, // only restart when the mover has move out
+          xIN_RestartCYCL := enIN_State = enState.StateAUTO,
           enIN_State      := enIN_State,
           tIN_Timeout     := tIN_Timeout,
-          pxFG_Freigabe   := ADR(xDummy),
+          pxFG_Freigabe   := ADR(xRelease),
           // special
           xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
           xIN_RotTableBlockedByPnp := fb_Pnp.iOUT_Step = ST105_Pnp_e.Robot_wait_picked_falling OR
                                       fb_Pnp.iOUT_Step = ST105_Pnp_e.Robot_Pick OR
-                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.pusher_down);
+                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.pusher_down OR
+                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.Init_HomeVertical OR
+                                      fb_Pnp.iOUT_Step = ST105_Pnp_e.Init_VerticalDown);
+
+fb_stat_pnp(xIN_Enable  := enState.StateAUTO = enIN_State,
+            xIN_Waiting := fb_Pnp.xOUT_Wait,
+            xIN_Running := (fb_Pnp.iOUT_Step >= ST105_Pnp_e.START) AND
+                           (fb_Pnp.iOUT_Step <= ST105_Pnp_e.DONE),
+            // Since we use a mover system, a cycle is done when we are waiting on a mover
+            xIN_Done := fb_Pnp.iOUT_Step = ST105_Pnp_e.waitOnMover);
+
+fb_stat_Feeder(xIN_Enable  := enState.StateAUTO = enIN_State,
+               xIN_Waiting := fb_feeder.xOUT_Wait,
+               xIN_Running := (fb_feeder.iOUT_Step >= ST105_Feeder_e.START) AND
+                              (fb_feeder.iOUT_Step <= ST105_Feeder_e.DONE),
+               xIN_Done := fb_feeder.iOUT_Step = ST105_Feeder_e.DONE);
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -106,7 +126,7 @@ xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
 xOUT_Ready    := fb_Pnp.xOUT_Ready AND fb_Feeder.xOUT_Ready;
 xOUT_Done     := fb_Pnp.xOUT_Done AND fb_Feeder.xOUT_Done;
 xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
-xOUT_Wait     := fb_Pnp.xOUT_Wait OR fb_Feeder.xOUT_Wait;
+xOUT_Wait     := fb_Pnp.xOUT_Wait; // We don't wait on the feeder part here, too slow
 xOUT_AlarmST  := xOUT_ErrFlag;
 
 (*******************************************************************)

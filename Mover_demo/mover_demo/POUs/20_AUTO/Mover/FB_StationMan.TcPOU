@@ -256,6 +256,26 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="IsProcessUsed" Id="{69372d72-88ea-42d0-bb1a-53a982b75346}">
+      <Declaration><![CDATA[METHOD IsProcessUsed : BOOL
+VAR_INPUT
+	process : REFERENCE TO FB_AUT_ABSTRACT;
+END_VAR
+VAR
+	i : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FOR i := 1 TO CONST.STATION_NUMBER BY 1 DO
+	IF (0 <> THIS^._WorkStationList[i]) AND_THEN __ISVALIDREF(THIS^._WorkStationList[i]^.Process) THEN
+		IF THIS^._WorkStationList[i]^.Process.Equals(process) THEN
+			IsProcessUsed := TRUE;
+			EXIT; 
+		END_IF
+	END_IF
+END_FOR]]></ST>
+      </Implementation>
+    </Method>
     <Property Name="PieceHolder" Id="{841d98de-2714-49eb-b307-1ba62a14bec0}">
       <Declaration><![CDATA[PROPERTY PieceHolder : REFERENCE TO FB_PieceHolder]]></Declaration>
       <Get Name="Get" Id="{5f76bd0d-1fb0-4d06-a07e-1a2b1b76d05d}">

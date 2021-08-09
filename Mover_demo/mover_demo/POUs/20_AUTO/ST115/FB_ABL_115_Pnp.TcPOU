@@ -371,7 +371,7 @@ simu_gripperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST115_Pnp_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST115_Pnp_e.READY) AND (iOUT_Step < ST115_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -388,7 +388,12 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST115_Pnp_e.DONE);
+xOUT_Wait := (iOUT_Step = ST115_Pnp_e.DONE) OR
+             (iOUT_Step = ST115_Pnp_e.READY) OR
+             (iOUT_Step = ST115_Pnp_e.START) OR
+             (iOUT_Step = ST115_Pnp_e.waitOnMover) OR
+             (iOUT_Step = ST115_Pnp_e.SYNC_MOVER_LEAVE) OR
+             (iOUT_Step = ST115_Pnp_e.PnP_WaitOnFeeder);
 
 xOUT_MoverFree := iOUT_Step >= ST115_Pnp_e.MOVER_FREE_OP AND iOUT_Step < ST115_Pnp_e.MOVER_NEEDED_OP;
 

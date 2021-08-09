@@ -29,6 +29,8 @@ VAR
 	
 	fb_CETA : FB_CETA_715;
 
+    fb_stat : FB_AUT_Statistics;
+
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(*******************************************************************)
@@ -58,6 +60,9 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
+
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
 fb_CETA(xIN_StatusBits   := CETA_IO.I_ST165_StatusBits,
         xIN_Data         := CETA_IO.I_ST165_Data,
         xIN_Reset        := xReset OR xIN_Quit,
@@ -67,7 +72,7 @@ fb_CETA(xIN_StatusBits   := CETA_IO.I_ST165_StatusBits,
 fb_ABL_CETA(xIN_Reset       := xReset,
             xIN_Init        := xIN_Init,
             xIN_Quit        := xIN_Quit,
-            xIN_Start       := enIN_State >= enState.StateLEER,
+            xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
             xIN_Sperre      := NOT xIN_On,
             xIN_NextStep    := xNextStep,
             xIN_AlarmAktiv  := xIN_AlarmAktiv,
@@ -75,7 +80,7 @@ fb_ABL_CETA(xIN_Reset       := xReset,
             xIN_RestartCYCL := enIN_State >= enState.StateLEER,
             enIN_State      := enIN_State,
             tIN_Timeout     := tIN_Timeout,
-            pxFG_Freigabe   := ADR(xDummy),
+            pxFG_Freigabe   := ADR(xRelease),
             // CleverTrackLib
             Mover := THIS^.Mover,
             // for multiple reference of the FB
@@ -100,6 +105,13 @@ fb_ABL_CETA(xIN_Reset       := xReset,
 
             axisRef_Hardware   := ST16x_Axis.axis165_01Z.axis,
             axisRef_Simulation := SIMU.axis_ref[Axis_e.ST165_01Z]);
+			
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_ABL_CETA.xOUT_Wait,
+        xIN_Running := (fb_ABL_CETA.iOUT_Step >= ST160_CETA_e.START) AND
+                       (fb_ABL_CETA.iOUT_Step <= ST160_CETA_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_ABL_CETA.iOUT_Step = ST160_CETA_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)

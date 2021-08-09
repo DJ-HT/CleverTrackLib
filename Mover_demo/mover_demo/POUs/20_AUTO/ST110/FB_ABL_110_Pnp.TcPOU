@@ -196,8 +196,9 @@ fb_axis110_02Z(enIN_State     := enIN_State,
                xIN_AX5000     := TRUE,
                xIN_ENC_ABS    := TRUE, // TODO set accordingly
                xIN_PARAMok    := TRUE,
-               xIN_FREE       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
-                                 fb_kraftLeft.lrOUT_value >= _20_AUTO.recipe.st110.kraft_left_raw) AND
+               xIN_FREE       := TRUE,
+               xIN_Halt       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
+                                 fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw) AND
                                  NOT (ST110_Pnp_e.PnP_Ver_quick_stop = iOUT_Step),
                xIN_FREE_HOME   := TRUE,
                rIN_POSMIN      := ST110_Axis.const110_02Z.POS_MIN,
@@ -247,7 +248,8 @@ fb_axis110_03Z(enIN_State     := enIN_State,
                xIN_DisButtons :=,
                xIN_Quit       := xIN_Quit,
                xIN_PARAMok    := TRUE, (*TODO*)
-               xIN_FREE       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
+               xIN_FREE       := TRUE,
+               xIN_Halt       := NOT ((ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl = iOUT_Step) AND
                                  fb_kraftRight.lrOUT_value >= _20_AUTO.recipe.st110.kraft_right_raw) AND
                                  NOT (ST110_Pnp_e.PnP_Ver_quick_stop = iOUT_Step),
                xIN_FREE_HOME := TRUE,
@@ -334,7 +336,7 @@ fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                xIN_GS       := simu_gripperLeft.xOUT_inGS,
                xIN_AS       := simu_gripperLeft.xOUT_inAS,
                xIN_FREE     := TRUE,
-               xINtoGS      := ST110_Pnp_e.Vacum_off = iOUT_Step,
+               xINtoGS      := (ST110_Pnp_e.Vacum_off = iOUT_Step) OR (ST110_Pnp_e.Init_stop_vacum = iOUT_Step),
                xINtoAS      := _20_AUTO.recipe.st110.xUseVerLeft AND (ST110_Pnp_e.Vacum_on = iOUT_Step),
                tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
                                                 [ST110_Cylinders_e.VakuumgreiferLinks].toAS_alarm_time),
@@ -361,7 +363,7 @@ fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST110_Pnp_e.RESET = iOUT_Step),
                 xIN_GS       := simu_gripperRight.xOUT_inGS,
                 xIN_AS       := simu_gripperRight.xOUT_inAS,
                 xIN_FREE     := TRUE,
-                xINtoGS      := ST110_Pnp_e.Vacum_off = iOUT_Step,
+                xINtoGS      := (ST110_Pnp_e.Vacum_off = iOUT_Step) OR (ST110_Pnp_e.Init_stop_vacum = iOUT_Step),
                 xINtoAS      := _20_AUTO.recipe.st110.xUseVerRight AND (ST110_Pnp_e.Vacum_on = iOUT_Step),
                 tIN_ErrAS    := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST110]
                                                  [ST110_Cylinders_e.VakuumgreiferRechts].toAS_alarm_time),
@@ -382,14 +384,14 @@ simu_gripperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION
                   tIN_AS_ms := 200); //ms
 
 // kraft sensor
-fb_kraftLeft();
-fb_kraftRight();
+fb_kraftLeft(lrIN_MaxLimit := LREAL#2.0);
+fb_kraftRight(lrIN_MaxLimit := LREAL#2.0);
 
 (*******************************************************************)
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST110_Pnp_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST110_Pnp_e.READY) AND (iOUT_Step < ST110_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -406,7 +408,12 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST110_Pnp_e.DONE);
+xOUT_Wait := (iOUT_Step = ST110_Pnp_e.DONE) OR
+             (iOUT_Step = ST110_Pnp_e.READY) OR
+             (iOUT_Step = ST110_Pnp_e.START) OR
+             (iOUT_Step = ST110_Pnp_e.waitOnMover) OR
+             (iOUT_Step = ST110_Pnp_e.SYNC_MOVER_LEAVE) OR
+             (iOUT_Step = ST110_Pnp_e.PnP_WaitOnFeeder);
 
 xOUT_MoverFree := iOUT_Step >= ST110_Pnp_e.MOVER_FREE_OP AND iOUT_Step < ST110_Pnp_e.MOVER_NEEDED_OP;
 
@@ -447,19 +454,20 @@ rtSTART(CLK := xIN_Start);
 
 IF 0 = bOUT_Error THEN
     IF fb_axis110_01Y.xOUT_ErrFlag THEN
-        bOUT_Error := 11;
+        bOUT_Error := ST110_Alarm_e.Axis_110_01Y_error;
     ELSIF fb_axis110_02Z.xOUT_ErrFlag THEN
-        bOUT_Error := 12;
+        bOUT_Error := ST110_Alarm_e.Axis_110_02Z_error;
     ELSIF fb_axis110_03Z.xOUT_ErrFlag THEN
-        bOUT_Error := 13;
+        bOUT_Error := ST110_Alarm_e.Axis_110_03Z_error;
     ELSIF fb_axis110_04Z.xOUT_ErrFlag THEN
-        bOUT_Error := 14;
+        bOUT_Error := ST110_Alarm_e.Axis_110_04Z_error;
     ELSIF fb_gripperLeft.xOUT_ErrFlag THEN
-        bOUT_Error := 20;
+        bOUT_Error := ST110_Alarm_e.Cylinder_vacuum_griper_left;
     ELSIF fb_gripperRight.xOUT_ErrFlag THEN
-        bOUT_Error := 21;
+        bOUT_Error := ST110_Alarm_e.Cylinder_vacuum_griper_right;
     END_IF
 ELSIF iOUT_Step < ST110_Pnp_e.ERROR THEN
+    iPreStep  := ST110_Pnp_e.INIT;
     iOUT_Step := ST110_Pnp_e.ERROR;
 END_IF
 
@@ -520,14 +528,21 @@ ST110_Pnp_e.Init_HomeHorizontals:
 
 ST110_Pnp_e.Init_HorizontalsToTrack:
     IF fb_PnpHorAxis.MoveTo(ST110_PnpHorPos_e.GS).xOUT_InPos THEN
-        iOUT_Step := ST110_Pnp_e.Init_check_if_pces_handled;
+        IF NOT xIsPiecesPicked THEN
+            iOUT_Step := ST110_Pnp_e.Init_stop_vacum;
+        ELSE
+            iOUT_Step := ST110_Pnp_e.Init_check_if_pces_handled;
+        END_IF
     END_IF
+
+ST110_Pnp_e.Init_stop_vacum:
+    iOUT_Step := ST110_Pnp_e.Init_check_if_pces_handled;
 
 ST110_Pnp_e.Init_check_if_pces_handled:
     IF (NOT _20_AUTO.recipe.st110.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) OR
        (NOT _20_AUTO.recipe.st110.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
         // ERROR: a piece is present in an unused gripper
-        bOUT_Error := 1;
+        bOUT_Error := ST110_Alarm_e.Piece_in_unused_griper;
         iOUT_Step  := ST110_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st110.xUseVerLeft AND
@@ -535,7 +550,7 @@ ST110_Pnp_e.Init_check_if_pces_handled:
           _20_AUTO.recipe.st110.xUseVerRight AND
           fb_gripperRight.xOUT_inAS THEN
         // ERROR:  Initialisation failed. A piece is missing in the left griper.
-        bOUT_Error := 2;
+        bOUT_Error := ST110_Alarm_e.Piece_missing_left_griper;
         iOUT_Step  := ST110_Pnp_e.ERROR;
 
     ELSIF _20_AUTO.recipe.st110.xUseVerLeft AND
@@ -543,7 +558,7 @@ ST110_Pnp_e.Init_check_if_pces_handled:
           _20_AUTO.recipe.st110.xUseVerRight AND
           NOT fb_gripperRight.xOUT_inAS THEN
         // ERROR:  Initialisation failed. A piece is missing in the right griper.
-        bOUT_Error := 3;
+        bOUT_Error := ST110_Alarm_e.Piece_missing_right_griper;
         iOUT_Step  := ST110_Pnp_e.ERROR;
 
     ELSIF (NOT fb_gripperLeft.xOUT_inAS AND NOT fb_gripperRight.xOUT_inAS) OR NOT xIsPiecesPicked THEN
@@ -562,7 +577,17 @@ ST110_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
 (***** START  ZYKLISCH *****)
 ST110_Pnp_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST110_Pnp_e.PnP_Hor_ToRotTablePos;
+        IF enState.StateLEER = enIN_State THEN
+            IF __ISVALIDREF(Mover) THEN
+                IF Mover.GetLastStationDone() > 0 THEN
+                    iOUT_Step := ST110_Pnp_e.PnP_Hor_ToRotTablePos;
+                ELSE
+                    iOUT_Step := ST110_Pnp_e.waitOnMover;
+                END_IF
+            END_IF
+        ELSE
+            iOUT_Step := ST110_Pnp_e.PnP_Hor_ToRotTablePos;
+        END_IF
     END_IF;
 
 ST110_Pnp_e.PnP_Hor_ToRotTablePos:
@@ -636,22 +661,45 @@ ST110_Pnp_e.PnP_Ver_ShuttleDown:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st110.xUseVerLeft OR fb_axis110_02Z.xOUT_DONE) AND
        (NOT _20_AUTO.recipe.st110.xUseVerRight OR fb_axis110_03Z.xOUT_DONE) THEN
-        iOUT_Step       := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+        iOUT_Step       := ST110_Pnp_e.PnP_Ver_StartTorqueControl;
         xIsPiecesPicked := FALSE;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-110) THEN
+            IF NOT Mover.SetLastStation(110) THEN
                 ASSERT(0);
             END_IF
         END_IF
     END_IF;
 
+ST110_Pnp_e.PnP_Ver_StartTorqueControl:
+
+    IF _20_AUTO.recipe.st110.xUseVerLeft AND NOT fb_axis110_02Z.xOUT_BUSY THEN
+        fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
+    END_IF
+
+    IF _20_AUTO.recipe.st110.xUseVerRight AND NOT fb_axis110_03Z.xOUT_BUSY THEN
+        fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl);
+    END_IF
+
+    IF (fb_axis110_02Z.xOUT_BUSY OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
+       (fb_axis110_03Z.xOUT_BUSY OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
+        iOUT_Step := ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+
+    ELSIF (fb_PnpVerAxisL.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
+          (fb_PnpVerAxisR.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
+        bOUT_Error := ST110_Alarm_e.Reach_end_pos_without_needed_torque;
+
+    END_IF
+
 // We need a fb that enables for us torque control. Here we just go a bit further
 ST110_Pnp_e.PnP_Ver_ShuttleTorqueControl:
-    IF (fb_PnpVerAxisL.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
-       NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
-       (fb_PnpVerAxisR.MoveTo(ST110_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos OR
-       NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
+    // If one of the axis have not started its movement, we do it again
+    IF NOT fb_axis110_02Z.xOUT_BUSY AND NOT fb_axis110_03Z.xOUT_BUSY THEN
+        iOUT_Step := ST110_Pnp_e.PnP_Ver_StartTorqueControl;
+    END_IF
+
+    IF (fb_PnpVerAxisL.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerLeft) AND
+       (fb_PnpVerAxisR.xOUT_InPos OR NOT _20_AUTO.recipe.st110.xUseVerRight) THEN
         IF (PNP_SIMULATION AND CONST.USE_SIMULATION) OR PNP_DONT_CHECK_KRAFT THEN
             iOUT_Step := ST110_Pnp_e.PnP_Ver_quick_stop;
         ELSE

@@ -27,6 +27,8 @@ VAR
     (* Bausteine *)
     fb_Measure : FB_ABL_140_Measure;
 
+    fb_stat : FB_AUT_Statistics;
+
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -58,19 +60,28 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
 fb_Measure(xIN_Reset       := xReset,
            xIN_Init        := xIN_Init,
            xIN_Quit        := xIN_Quit,
-           xIN_Start       := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+           xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
            xIN_Sperre      := NOT xIN_On,
            xIN_NextStep    := xNextStep,
            xIN_AlarmAktiv  := xIN_AlarmAktiv,
            xIN_DryCycle    := xIN_DryCycle,
-           xIN_RestartCYCL := enIN_State >= enState.StateLEER, // only restart when the mover has move out
+           xIN_RestartCYCL := enIN_State >= enState.StateLEER,
            enIN_State      := enIN_State,
            tIN_Timeout     := tIN_Timeout,
-           pxFG_Freigabe   := ADR(xDummy),
+           pxFG_Freigabe   := ADR(xRelease),
            Mover           := THIS^.Mover);
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_Measure.xOUT_Wait,
+        xIN_Running := (fb_Measure.iOUT_Step >= ST140_Measure_e.START) AND
+                       (fb_Measure.iOUT_Step <= ST140_Measure_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_Measure.iOUT_Step = ST140_Measure_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)

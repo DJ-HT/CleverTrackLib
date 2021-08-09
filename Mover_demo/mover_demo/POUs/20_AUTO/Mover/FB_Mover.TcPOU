@@ -18,7 +18,8 @@ VAR
     _MovingProcessOffset : LREAL; (* added offset by the process, 
                                      used to compute the new position of the shuttle inside the station *)
 
-    _LastStationDone : INT; // the number of the last station done. If negative, the piece is not good at this station
+    _LastStationDone : INT;    // the number of the last station done. If negative, the piece is not good at this station
+    _ErrorCode       : STRING; // The error code that comes with the last station done. reset afer 
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
@@ -90,6 +91,15 @@ THIS^._MoverAxis REF= MoverAxis;
 THIS^._AttachedTool REF=0;
 THIS^._Station REF=0;
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetErrorCode" Id="{3d951b18-e05e-404b-a099-b7a7240b5ee2}">
+      <Declaration><![CDATA[METHOD GetErrorCode : STRING
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetErrorCode := THIS^._ErrorCode;]]></ST>
       </Implementation>
     </Method>
     <Method Name="GetLastStationDone" Id="{cfcf4c70-0bf5-4b76-a872-6dddf7d5257b}">
@@ -244,10 +254,15 @@ END_VAR
         <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
     IF THIS^.Station.WaitPos <= (THIS^.Station.Position.lrWorkPosition - CONST.MAX_MOVER_SIZE) THEN
         THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
-        THIS^._MovingProcessOffset := 0;
-        THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset + THIS^.Station._WaitPosOffset;
-        THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
+    ELSE
+        THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition +
+                                      THIS^._AttachedTool.PosOffset +
+                                      THIS^.Station.Offset));
     END_IF
+
+    THIS^._MovingProcessOffset := 0;
+    THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset + THIS^.Station._WaitPosOffset;
+    THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
 ELSE
     ASSERT(0); // never use this command when we are in operation
 END_IF
@@ -267,6 +282,22 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="SetErrorCode" Id="{ec670e6e-8425-45b1-9a44-b348c0483370}">
+      <Declaration><![CDATA[METHOD SetErrorCode : BOOL
+VAR_INPUT
+	error_code : STRING; // error code in string format
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF LEN(THIS^._ErrorCode) > 0 THEN
+    SetErrorCode := FALSE;
+ELSE
+    THIS^._ErrorCode := error_code;
+    SetErrorCode     := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="SetLastStation" Id="{6eeb15ca-bd96-4e70-bcf9-69f9b8c0ae17}">
       <Declaration><![CDATA[// Set the last station visited as soon as you won't redo the process
 // again on your piece. It is recommanded to first set the piece as bad
@@ -285,6 +316,10 @@ END_VAR
         <ST><![CDATA[IF ABS(value) < ABS(THIS^._LastStationDone) THEN
     SetLastStation := FALSE;
 ELSE
+    IF THIS^._LastStationDone < 0 THEN
+        value := 0 - ABS(value);
+    END_IF
+
     THIS^._LastStationDone := value;
     SetLastStation         := TRUE;
 END_IF
@@ -405,6 +440,7 @@ END_VAR
         <ST><![CDATA[IF THIS^._LastStationDone <> 0 THEN
     UnloadPieces           := TRUE;
     THIS^._LastStationDone := 0;
+    THIS^._ErrorCode       := '';
 ELSE
     UnloadPieces := FALSE;
 END_IF

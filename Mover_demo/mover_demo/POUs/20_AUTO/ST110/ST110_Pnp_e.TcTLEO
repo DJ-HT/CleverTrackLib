@@ -10,15 +10,16 @@ ST110_Pnp_e :
     RESET := 0,         // Reset
 	
     INIT := 100,        // Initialisieren 
-    Init_VerticalUp_04,      // move axis below the mover to its rest position
-    Init_VerticalUp_02_03,   // move the axis up to rest position
-	Init_HomeHorizontals,
-	Init_HorizontalsToTrack,
-	Init_check_if_pces_handled,
+    Init_VerticalUp_04 := 110,      // move axis below the mover to its rest position
+    Init_VerticalUp_02_03 := 120,   // move the axis up to rest position
+	Init_HomeHorizontals := 130,
+	Init_HorizontalsToTrack := 140,
+	Init_stop_vacum := 150,
+	Init_check_if_pces_handled := 160,
 	
+    MOVER_FREE_OP,      // Ab here, operation without mover can be done
     READY := 999,       // READY to Start, Init Done 
     START := 1000,      // Start Zyklisch
-    MOVER_FREE_OP,      // Ab here, operation without mover can be done
 
 	PnP_Hor_ToRotTablePos := 1010,
 	PnP_WaitOnFeeder := 1020,
@@ -31,6 +32,9 @@ ST110_Pnp_e :
 
 	Pnp_Handling_pin_up := 1210,
 	PnP_Ver_ShuttleDown := 1220,
+	PnP_Ver_StartTorqueControl := 1225, // this step is used to start the execution of the movement
+	                                    // even if the torque limit is passed. This way we ensure that
+										// twincat motion library accept the move_absolute command
 	PnP_Ver_ShuttleTorqueControl := 1230,
 	PnP_Ver_quick_stop := 1240,
 	Vacum_off := 1250,
@@ -59,26 +63,36 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"Init_VerticalUp_04"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"110"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_VerticalUp_02_03"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"120"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_HomeHorizontals"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"130"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_HorizontalsToTrack"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"140"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_stop_vacum"</v>
+              <v n="TextDefault">"150"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"Init_check_if_pces_handled"</v>
+              <v n="TextDefault">"160"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"MOVER_FREE_OP"</v>
               <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
@@ -90,11 +104,6 @@ END_TYPE
             <o>
               <v n="TextID">"START"</v>
               <v n="TextDefault">"1000"</v>
-              <l n="LanguageTexts" t="ArrayList" />
-            </o>
-            <o>
-              <v n="TextID">"MOVER_FREE_OP"</v>
-              <v n="TextDefault">""</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -145,6 +154,11 @@ END_TYPE
             <o>
               <v n="TextID">"PnP_Ver_ShuttleDown"</v>
               <v n="TextDefault">"1220"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"PnP_Ver_StartTorqueControl"</v>
+              <v n="TextDefault">"1225"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

@@ -166,7 +166,7 @@ fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST145_0
               xIN_Init        := enIN_State = enState.StateINIT,
               xIN_Reset       := xIN_Reset,
               lrIN_CurrPos    := fb_axis145_02Z.rOUT_ActPos,
-              lrIN_Delta_mm   := 0.75,
+              lrIN_Delta_mm   := 1.0,
               iIN_CurrentStep := iOUT_Step,
               iIN_moveNumber  := ST145_PnpVerPos_e._max);
 
@@ -269,7 +269,7 @@ simu_vacumGriperRight(xIN_Enable := PNP_SIMULATION AND CONST.USE_SIMULATION,
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST145_Pnp_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST145_Pnp_e.READY) AND (iOUT_Step < ST145_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -286,7 +286,12 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST145_Pnp_e.DONE);
+xOUT_Wait := (iOUT_Step = ST145_Pnp_e.DONE) OR
+             (iOUT_Step = ST145_Pnp_e.READY) OR
+             (iOUT_Step = ST145_Pnp_e.START) OR
+             (iOUT_Step = ST145_Pnp_e.waitOnMover) OR
+             (iOUT_Step = ST145_Pnp_e.SYNC_MOVER_LEAVE) OR
+             (iOUT_Step = ST145_Pnp_e.PnP_WaitOnFeeder);
 
 xOUT_MoverFree := iOUT_Step >= ST145_Pnp_e.MOVER_FREE_OP AND iOUT_Step < ST145_Pnp_e.MOVER_NEEDED_OP;
 
@@ -296,7 +301,8 @@ iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
                                          ST145_Pnp_e.Pnp_Ver_ShuttleDown,
                                          ST145_Pnp_e.SYNC_MOVER_LEAVE);
 
-xOUT_PickPiece := iOUT_Step = ST145_Pnp_e.Pnp_Hor_ToTrackPos;
+xOUT_PickPiece := iOUT_Step = ST145_Pnp_e.Vacum_on; // the feeder needs to move only when 
+// the pnp is outside the feeder
 
 // TODO Valve should not be set when we are in simulation !
 IO_BOX.Q0200_14_ST145_vakum_greifer_links :=
@@ -336,6 +342,7 @@ IF 0 = bOUT_Error THEN
         bOUT_Error := 14;
     END_IF
 ELSIF iOUT_Step < ST145_Pnp_e.ERROR THEN
+    iPreStep  := ST145_Pnp_e.INIT;
     iOUT_Step := ST145_Pnp_e.ERROR;
 END_IF
 
@@ -395,7 +402,7 @@ ST145_Pnp_e.Init_HomeHorizontals:
 ST145_Pnp_e.Init_HorizontalsToTrack:
     fb_axis145_02Z.rIN_Velocity := ST145_Axis.const145_02Z.VELO_MANU;
 
-    IF fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.GS).xOUT_InPos THEN
+    IF fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.GS_Before_placement).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.Init_check_if_pces_handled;
     END_IF
 
@@ -433,16 +440,27 @@ ST145_Pnp_e.Init_check_if_pces_handled:
 ST145_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
     IF xIN_Start THEN //IF rtSTART.Q THEN
         iOUT_Step := ST145_Pnp_e.START;
+        iPreStep  := ST145_Pnp_e.INIT;
     END_IF
 
 (***** START  ZYKLISCH *****)
 ST145_Pnp_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
-        iOUT_Step := ST145_Pnp_e.Pnp_Hor_ToRotTablePos;
+        IF enState.StateLEER = enIN_State THEN
+            IF __ISVALIDREF(Mover) THEN
+                IF Mover.GetLastStationDone() > 0 THEN
+                    iOUT_Step := ST145_Pnp_e.Pnp_Hor_ToRotTablePos;
+                ELSE
+                    iOUT_Step := ST145_Pnp_e.waitOnMover;
+                END_IF
+            END_IF
+        ELSE
+            iOUT_Step := ST145_Pnp_e.Pnp_Hor_ToRotTablePos;
+        END_IF
     END_IF;
 
 ST145_Pnp_e.Pnp_Hor_ToRotTablePos:
-    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.AS).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.AS_to_feeder).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.Pnp_WaitOnFeeder;
     END_IF
 
@@ -469,7 +487,7 @@ ST145_Pnp_e.Pnp_Ver_RotTableUp:
     END_IF;
 
 ST145_Pnp_e.Pnp_Hor_ToTrackPos:
-    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.GS).xOUT_InPos THEN
+    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.GS_Before_placement).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.waitOnMover;
     END_IF
 
@@ -477,7 +495,7 @@ ST145_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST145] THEN
         IF Mover.GetLastStationDone() >= INT#145 THEN
             iOUT_Step := ST145_Pnp_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#130 THEN
+        ELSIF Mover.GetLastStationDone() < INT#130 THEN
             iOUT_Step := ST145_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST145_Pnp_e.Pnp_Ver_ShuttleDown;
@@ -489,7 +507,7 @@ ST145_Pnp_e.Pnp_Ver_ShuttleDown:
         iOUT_Step := ST145_Pnp_e.Vacum_off;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-145) THEN
+            IF NOT Mover.SetLastStation(145) THEN
                 ASSERT(0);
             END_IF
         END_IF
@@ -504,6 +522,11 @@ ST145_Pnp_e.Vacum_off:
     IF xIN_NextStep AND
        (NOT _20_AUTO.recipe.st145.xUseVerLeft OR fb_vakumGriperLeft.xOUT_inGS) AND
        (NOT _20_AUTO.recipe.st145.xUseVerRight OR fb_vakumGriperRight.xOUT_inGS) THEN
+        iOUT_Step := ST145_Pnp_e.Pnp_move_a_bit_to_feeder;
+    END_IF
+
+ST145_Pnp_e.Pnp_move_a_bit_to_feeder:
+    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST145_PnpHorPos_e.GS_After_placement).xOUT_InPos THEN
         iOUT_Step := ST145_Pnp_e.PnP_Ver_ShuttleUp;
     END_IF
 

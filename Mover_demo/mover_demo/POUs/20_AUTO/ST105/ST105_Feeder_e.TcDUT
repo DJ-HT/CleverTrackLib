@@ -14,6 +14,7 @@ TYPE ST105_Feeder_e :
     Init_reset_search_index,
     Init_set_table_pos,
     Init_see_if_piece_there,
+	Init_apply_feeder_offset, // If homing screw are not placed exactly at the same place, we fix that here
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch

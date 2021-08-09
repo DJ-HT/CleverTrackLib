@@ -11,14 +11,17 @@ VAR_INPUT
     xIN_Reset      : BOOL;                 // Reset errors
 END_VAR
 VAR_OUTPUT
-    xOUT_CommandBits  : CETA_OUT_u;           // connect this to the 2 first byte of the Output of the CETATEST
-    xOUT_Data         : ARRAY[0..29] OF BYTE; // connect those 30 bytes right after xIN_StatusBits
-    xOUT_DataReady    : BOOL;
-    xOUT_Error_Flag   : BOOL;
-    bOUT_ErrorCode    : BYTE;
-    sOUT_ErrorMessage : STRING;
-    xOUT_MeasureOK    : BOOL; // TRUE when the last measurement was GOOD
-    xOUT_ReadyToStart : BOOL; // you can send a start signal
+    xOUT_CommandBits    : CETA_OUT_u;           // connect this to the 2 first byte of the Output of the CETATEST
+    xOUT_Data           : ARRAY[0..29] OF BYTE; // connect those 30 bytes right after xIN_StatusBits
+    xOUT_DataReady      : BOOL;
+    xOUT_Error_Flag     : BOOL;
+    bOUT_ErrorCode      : BYTE;
+    sOUT_ErrorMessage   : STRING;
+    xOUT_Measure_1_GOOD : BOOL; // TRUE when the last measurement in canal 1 was GOOD
+    bOUT_Error_1        : BYTE;
+    xOUT_Measure_2_GOOD : BOOL; // TRUE when the last measurement in canal 2 was GOOD
+    bOUT_Error_2        : BYTE;
+    xOUT_ReadyToStart   : BOOL; // you can send a start signal
 END_VAR
 VAR
     iStep       : INT := 0;
@@ -66,8 +69,10 @@ CASE iStep OF
 
     ELSIF xOUT_CommandBits.bits.b00_start_stop THEN
         IF xIN_StatusBits.bits.b00_measurement_complete THEN
-            iStep        := 240;
-            iBlockNumber := 0;
+            iStep               := 240;
+            iBlockNumber        := 0;
+            xOUT_Measure_1_GOOD := FALSE;
+            xOUT_Measure_2_GOOD := FALSE;
         END_IF
 
     ELSIF xOUT_CommandBits.bits.b01_send_parameters THEN
@@ -131,12 +136,29 @@ CASE iStep OF
     iBlockNumber := iBlockNumber + 1;
 
 250:
+
+    // Here we test for iBlockNumber 1 but we have increment the value before
+    IF 2 = iBlockNumber THEN
+        xOUT_Measure_1_GOOD := ceta_measurement_data.Block1.Result_chanel_1 = CETA_REsult_e.OK;
+        xOUT_Measure_2_GOOD := ceta_measurement_data.Block1.Result_chanel_2 = CETA_REsult_e.OK;
+
+        IF NOT xOUT_Measure_1_GOOD THEN
+            bOUT_Error_1 := ceta_measurement_data.Block1.Result_chanel_1;
+        ELSE
+            bOUT_Error_1 := 0;
+        END_IF
+
+        IF NOT xOUT_Measure_2_GOOD THEN
+            bOUT_Error_2 := ceta_measurement_data.Block1.Result_chanel_2;
+        ELSE
+            bOUT_Error_2 := 0;
+        END_IF
+    END_IF
+
     IF xIN_StatusBits.bits.b11_result_block_handshake_bit THEN
         iStep := 260;
     ELSE
-        iStep       := 300;
-        xResultGood := ceta_measurement_data.Block1.Result_chanel_1 = CETA_REsult_e.OK AND
-                       ceta_measurement_data.Block1.Result_chanel_2 = CETA_REsult_e.OK;
+        iStep := 300;
     END_IF
 
 260:

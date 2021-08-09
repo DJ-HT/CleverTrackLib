@@ -8,12 +8,14 @@ TYPE RecipeType_e :
     Smart := 0,
     Pro := 1,
     Mini := 2,
-    // Smart_Kristall := 3,
-    // Pro_Smart := 4,
-    // Pro_Blue := 5,
-    // Pro_Smart_Kristall := 6,
-    // Pro_Smart_Maxi := 7,
-    // Pro_Smart_Maxi_Kristall := 8,
+    Blue := 3,
+    Smart_Kristall := 4,
+    Pro_Smart := 5,
+    Pro_Blue := 6,
+    Pro_Smart_Kristall := 7,
+    Pro_Smart_Maxi := 8,
+    Pro_Smart_Maxi_Kristall := 9,
+    Reserve := 10,
     _max
 );
 END_TYPE
@@ -35,6 +37,46 @@ END_TYPE
             <o>
               <v n="TextID">"Mini"</v>
               <v n="TextDefault">"2"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Blue"</v>
+              <v n="TextDefault">"3"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Smart_Kristall"</v>
+              <v n="TextDefault">"4"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Pro_Smart"</v>
+              <v n="TextDefault">"5"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Pro_Blue"</v>
+              <v n="TextDefault">"6"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Pro_Smart_Kristall"</v>
+              <v n="TextDefault">"7"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Pro_Smart_Maxi"</v>
+              <v n="TextDefault">"8"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Pro_Smart_Maxi_Kristall"</v>
+              <v n="TextDefault">"9"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Reserve"</v>
+              <v n="TextDefault">"10"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

@@ -61,12 +61,15 @@ VAR_INPUT
 	rIN_PosManu		: REAL :=0;			//Positionen für Manuellfahrt
 	//RESET
 	xIN_Reset		: BOOL := FALSE;	//Reset von Extern
+	//Halt
+	xIN_Halt		: BOOL := FALSE;	//Halt current movement
 END_VAR
 VAR_OUTPUT
 	//ALLGEMEIN
 	xOUT_ErrFlag	:	BOOL;	//Error Flag 
 	xOUT_READY		:	BOOL;	//Achse Bereit für Positionierung
 	xOUT_DONE		:	BOOL;	//MoveDone
+	xOUT_BUSY		:	BOOL;	//Axis in movement
 	bOUT_Error		:	WORD;	(* Fehlernummer
 									1: FB_SoEReset; 		// Drive Reset nach Leistung enable (AX5000)
 								 	2: MC_Power;			// Freigabe
@@ -98,6 +101,7 @@ VAR
 	_MC_Stop		: MC_Stop;			// Stopp
 	_MC_Home		: MC_Home;			// Homing
 	_MC_ReadStatus	: MC_ReadStatus;	//Status aktualisieren
+	_MC_Halt		: MC_Halt;			// Halt the axis
 	//Flags
 	xOFF			: BOOL;				//Achse Disabled
 	xParamValid		: BOOL;				//Parameter gültig
@@ -136,7 +140,7 @@ END_VAR
 
 	_MC_Stop( Axis:= axisIN_REF );
 
-	_MC_MoveAbs( Axis:= axisIN_REF );
+	_MC_MoveAbs( Axis:= axisIN_REF  );
 	_MC_MoveRel( Axis:= axisIN_REF );
 
 	_MC_Jog (	Position := rIN_JogInc,
@@ -148,6 +152,9 @@ END_VAR
 		
 	_MC_Home(	Axis:= axisIN_REF, 
 						bCalibrationCam:= xIN_HomeCalib );
+						
+	_MC_Halt( 	Axis := axisIN_REF,
+				Execute := xIN_Halt OR (xOUT_BUSY AND NOT xIN_FREE) );
 						
 //***************************** Buttons ************************************
 		//	Jog Mode OFF 
@@ -427,7 +434,9 @@ END_VAR
 					(axisIN_REF.Status.Homed OR xIN_ENC_ABS) AND 
 					xIN_Free AND xIN_PARAMok AND NOT xOUT_ErrFlag ;
 	xOUT_DONE 	:= 	(NOT xIN_Relative AND _MC_MoveAbs.Done) OR
-					(xIN_Relative AND _MC_MoveRel.Done);]]></ST>
+					(xIN_Relative AND _MC_MoveRel.Done);
+						
+	xOUT_BUSY	:=	_MC_MoveAbs.Busy OR _MC_MoveRel.Busy;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

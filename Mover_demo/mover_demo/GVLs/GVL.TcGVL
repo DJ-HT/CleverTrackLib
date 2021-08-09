@@ -20,7 +20,7 @@ VAR_GLOBAL
     st125_aut : FB_AUT_125;    // Laden filterhut
     st128_aut : FB_AUT_128;    // Control filterhut
     st130_aut : FB_AUT_130;    // Dosieren A
-    st135_aut : FB_AUT_MODIFY; // Dosieren B
+    st135_aut : FB_AUT_135;    // Dosieren B
     st140_aut : FB_AUT_140;    // Niveaukontrolle
     st145_aut : FB_AUT_145;    // Laden Patronendeckel
     st150_aut : FB_AUT_150;    // Utralson A
@@ -32,6 +32,9 @@ VAR_GLOBAL
     st176_aut : FB_AUT_MODIFY; // Laser B
     st180_aut : FB_AUT_180;    // Entladen schlecht
     st185_aut : FB_AUT_185;    // Entladen gut
+	
+	ST130_01Y_Feedback_Offset : LREAL; // Offset automatically adjusted by ST140
+	ST135_01Y_Feedback_Offset : LREAL; // Offset automatically adjusted by ST140
 
 END_VAR
 ]]></Declaration>

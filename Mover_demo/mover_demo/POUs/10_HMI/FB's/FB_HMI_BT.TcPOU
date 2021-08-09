@@ -131,8 +131,9 @@ HMI.movesNames[LinearAxis_e.ST125_02Z][4] := TO_STRING("Ab Voll Kraft");
 HMI.movesNames[LinearAxis_e.ST125_02Z][5] := TO_STRING("Auf handling");
 
 // ST145
-HMI.movesNames[LinearAxis_e.ST145_01Y][0] := TO_STRING("Zurück");
-HMI.movesNames[LinearAxis_e.ST145_01Y][1] := TO_STRING("Vor");
+HMI.movesNames[LinearAxis_e.ST145_01Y][0] := TO_STRING("Zurück 0");
+HMI.movesNames[LinearAxis_e.ST145_01Y][1] := TO_STRING("Zurück 1");
+HMI.movesNames[LinearAxis_e.ST145_01Y][2] := TO_STRING("Vor");
 
 HMI.movesNames[LinearAxis_e.ST145_02Z][0] := TO_STRING("Auf Leer");
 HMI.movesNames[LinearAxis_e.ST145_02Z][1] := TO_STRING("Ab Leer");
@@ -159,6 +160,7 @@ HMI.movesNames[LinearAxis_e.ST185_02Z][0] := TO_STRING("Auf Leer");
 HMI.movesNames[LinearAxis_e.ST185_02Z][1] := TO_STRING("Ab Leer");
 HMI.movesNames[LinearAxis_e.ST185_02Z][2] := TO_STRING("Auf Voll");
 HMI.movesNames[LinearAxis_e.ST185_02Z][3] := TO_STRING("Ab Voll");
+HMI.movesNames[LinearAxis_e.ST185_02Z][4] := TO_STRING("Wieder auf");
 
 HMI.movesNames[LinearAxis_e.ST185_10Z][0] := TO_STRING("Auf");
 HMI.movesNames[LinearAxis_e.ST185_10Z][1] := TO_STRING("Ab");

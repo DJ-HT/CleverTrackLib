@@ -217,6 +217,15 @@
     <Compile Include="POUs\20_AUTO\FB%27s\FB_WandlerForceSensor.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\RS Axis\BowlBandFeeder_Config_t.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\RS Axis\FB_AUT_Statistics.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\FB%27s\RS Axis\FB_BowlBandFeeder.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\LinearAxis_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -483,6 +492,12 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\POU_ALARM_110.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST110\ST110_Alarm_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST110\ST110_Cylinders_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -576,6 +591,12 @@
     <Compile Include="POUs\20_AUTO\ST120\FB_AUT_120.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST120\POU_ALARM_120.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST120\ST120_Alarm_e.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST120\ST120_Cylinders_e.TcTLEO">
       <SubType>Code</SubType>
     </Compile>
@@ -613,6 +634,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST125\FB_AUT_125.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\POU_ALARM_125.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST125\ST125_Alarm_e.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST125\ST125_Cylinders_e.TcTLEO">
@@ -668,7 +695,13 @@
     <Compile Include="POUs\20_AUTO\ST130\FB_ABL_130_Dose.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\FB_ABL_MODIFY_135.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\20_AUTO\ST130\FB_AUT_130.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\20_AUTO\ST130\FB_AUT_135.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\20_AUTO\ST130\ST130_Axis.TcGVL">
@@ -1076,6 +1109,10 @@
       <SubType>Code</SubType>
       <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
       <CompilerDefines>VISU_NO_EXCEPTION_HANDLING</CompilerDefines>
+    </Compile>
+    <Compile Include="VISUs\VISU_Time.TcVIS">
+      <SubType>Code</SubType>
+      <DependentUpon>Visualization Manager.TcVMO</DependentUpon>
     </Compile>
     <Compile Include="VISU_TASK.TcTTO">
       <SubType>Code</SubType>

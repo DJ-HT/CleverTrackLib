@@ -13,7 +13,8 @@
 
 VAR
     //Startup HMI-Panel
-    TON_startup : TON;
+    TON_startup     : TON;
+    fb_startProcess : NT_StartProcess;
 
     //Reset Counter
     TON_ResetCounter : TON; // Reset Temparary Counter
@@ -62,6 +63,12 @@ END_VAR
 //Startup Terminal
 //***********************************************************************************************)
 TON_Startup(IN := TRUE, PT := T#5S);
+fb_startProcess(NETID     := '',
+                PATHSTR   := 'C:\Program Files (x86)\SpiderControl\MicroBrowser\MicroBrowser_XP.exe',
+                DIRNAME   := 'C:\Users\Administrator\AppData\Roaming\SpiderControl\Microbrowser',
+                COMNDLINE :=,
+                START     := TON_Startup.Q,
+                TMOUT     := T#10S);
 
 //***********************************************************************************************)
 //Parameter ÜBERPRÜFEN
@@ -115,28 +122,29 @@ _14_STATE();
 //***********************************************************************************************)
 //Lampen
 //***********************************************************************************************)
-_FB_LAMPE(enIN_State      := HMI.enState,
-          xIN_AlarmAktiv  := GVL.st105_aut.xOUT_AlarmST,
-          xIN_SafetyError := FALSE,
-          xIN_NotAus      := FALSE,
-          xIN_Mel1        :=,
-          xIN_Mel2        :=,
-          xIN_Mel3        :=,
-          xIN_Mel4        :=,
-          xIN_Mel5        :=,
-          xIN_Mel6        :=,
-          xIN_Mel7        :=,
-          tIN_Meldungen   := T#1000MS,
-          tIN_Impuls      := T#500ms,
-          xOUT_ErrFlag    =>);
+_FB_LAMPE(enIN_State         := HMI.enState,
+          xIN_AlarmAktiv     := GVL.st105_aut.xOUT_AlarmST,
+          xIN_SafetyError    := _02_Safety.xOUT_SafetyError,
+          xIN_NotAus         := _02_Safety.xOUT_NotAusBetaetigt,
+          xIN_Mel_1_GN_GN_YE :=,
+          xIN_Mel_2_GN_YE_GN :=,
+          xIN_Mel_3_GN_YE_YE :=,
+          xIN_Mel_4_YE_GN_GN :=,
+          xIN_Mel_5_YE_GN_YE :=,
+          xIN_Mel_6_YE_YE_GN :=,
+          xIN_Mel_7_YE_YE_YE :=,
+          tIN_Meldungen      := T#1000MS,
+          tIN_Impuls         := T#500ms,
+          xOUT_ErrFlag       =>);
 
-//BALLUFF LAMPE
-//OUT.QW194A3:=_FB_LAMPE.wOUT_Lampe;
-//OUT.QW194A6:=_FB_LAMPE.wOUT_Lampe;
-//OUT.Q194A3_SycStart:=_FB_LAMPE.xOUT_SyncStart;
-//OUT.Q194A6_SycStart:=_FB_LAMPE.xOUT_SyncStart;
-//OUT.Q194A3_SycImp:=_FB_LAMPE.xOUT_SyncImp;
-//OUT.Q194A6_SycImp:=_FB_LAMPE.xOUT_SyncImp;
+// BALLUFF LAMPE
+IO_BOX.Q0000_Balluf_Lampe_1_word     := _FB_LAMPE.wOUT_Lampe;
+IO_BOX.Q5000_Balluf_Lampe_2_word     := _FB_LAMPE.wOUT_Lampe;
+IO_BOX.Q0001_Balluf_Lampe_1_SycStart := _FB_LAMPE.xOUT_SyncStart;
+IO_BOX.Q5001_Balluf_Lampe_2_SycStart := _FB_LAMPE.xOUT_SyncStart;
+IO_BOX.Q0002_Balluf_Lampe_1_SycImp   := _FB_LAMPE.xOUT_SyncImp;
+IO_BOX.Q5002_Balluf_Lampe_2_SycImp   := _FB_LAMPE.xOUT_SyncImp;
+
 //LAMPE ENERGIE EIN 
 (*
 OUT.Q000_LAMP_NRJ:= _10_HMI.x_BLINK_500 AND 
@@ -156,7 +164,7 @@ OUT.Q_CPX9_1_Process_stopped := HMI.enState <= enState.StateSTOP;
 (***********************************************************************************************)
 (* HMI Alarme*)
 (***********************************************************************************************)
-FOR idx := 1 TO 100 BY 1 DO
+FOR idx := 1 TO 500 BY 1 DO
     HMI.xArAlarmHMI[idx] := HMI.strArALARM[idx].xAlarmOUT;
 END_FOR
 
@@ -171,7 +179,7 @@ _FB_SystemTime(timeLoDW => dw_ActTime, timeHiDW =>);
 dw_ActTime := dw_ActTime AND 16#FFFF0000;
 
 IF HMI.btArMain[8].rtrig THEN
-	HMI.PieceDoneTmp := 0;
+    HMI.PieceDoneTmp := 0;
 END_IF
 
 (***********************************************************************************************)

@@ -1,37 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.18">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="FB_ALARM" Id="{fda5aeb8-7ffd-435c-9f51-427e2c909aa2}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK FB_ALARM
+    <Declaration><![CDATA[// Manage structAlarm array. You can specify the number of alarms, but the maximum is 50
+FUNCTION_BLOCK FB_ALARM
 //	ALARMERZEUGUNG
-//	27.10.15/Dj
+//	04.08.2021/Rs
 VAR_INPUT
-	xIN_Alarm			: BOOL   := FALSE;		(* Alarmcondition *)
-	xIN_AlarmExit		: BOOL   := FALSE;		(* Zusätzliche Alarmcondition (z.B. Manuelmode etc, Alarm wird bei False quittiert *)
-	xIN_Save			: BOOL	 := TRUE;		(* Save Alarm *)
-	tIN_Time			: TIME	 := T#100MS;	(* Alarmverzögerung *)
-	xIN_QUIT			: BOOL;					(* Alarmquittierung *)
+    pstrIN_Alarm  : POINTER TO structAlarm;
+    iIN_ArraySize : INT;
 END_VAR
 VAR_OUTPUT
-	xOUT_Alarm		: BOOL;					(* Alarm Aktiv *)
 END_VAR
 VAR
-	TON_AlVerz: TON;						(* Timer für Alarverzögerung *)
+    iIndex : INT; //Index
+	arrTON : ARRAY[0..MAX_ELEMENT - 1] OF TON;
+END_VAR
+VAR CONSTANT
+	MAX_ELEMENT : INT := 50;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[TON_AlVerz(IN:=xIN_Alarm AND NOT xIN_AlarmExit , PT:=tIN_Time , Q=> , ET=> );
+      <ST><![CDATA[FOR iIndex := 0 TO MIN(iIN_ArraySize, MAX_ELEMENT) - 1 BY 1 DO
+    //Alarmverzögerung
+    arrTON[iIndex](IN := pstrIN_Alarm[iIndex].xAlarmIN AND NOT pstrIN_Alarm[iIndex].xAlarmOFF,
+                   PT := pstrIN_Alarm[iIndex].tAlarmVERZ);
 
-IF xIN_QUIT OR xIN_AlarmExit OR NOT xIN_Save THEN
-	xOUT_Alarm := FALSE;
-END_IF;
+    //Alarm Reset
+    IF pstrIN_Alarm[iIndex].xAlarmQUIT OR
+       pstrIN_Alarm[iIndex].xAlarmOFF OR
+       NOT pstrIN_Alarm[iIndex].xAlarmSAVE THEN
+        pstrIN_Alarm[iIndex].xAlarmOUT := FALSE;
+    END_IF
 
-IF TON_AlVerz.Q THEN
-	xOUT_Alarm := TRUE;
-END_IF;]]></ST>
+    IF arrTON[iIndex].Q THEN
+        pstrIN_Alarm[iIndex].xAlarmOUT := TRUE;
+    END_IF
+END_FOR
+]]></ST>
     </Implementation>
-    <LineIds Name="FB_ALARM">
-      <LineId Id="163" Count="7" />
-      <LineId Id="2" Count="0" />
-    </LineIds>
   </POU>
 </TcPlcObject>

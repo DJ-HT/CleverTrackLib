@@ -66,9 +66,15 @@ VAR
     i            : INT;
     measureIndex : INT; // measure index
 
-    testLevel_OK : BOOL; // TRUE when all measured level are OK
+    testLevel_Min_Left_NOK  : BOOL; // TRUE when powder level is under the minimum
+    testLevel_Max_Left_NOK  : BOOL; // TRUE when powder level is above the maximum
+    testLevel_Min_Right_NOK : BOOL; // TRUE when powder level is under the minimum
+    testLevel_Max_Right_NOK : BOOL; // TRUE when powder level is above the maximum
 
     visu_shuttle_x_position : LREAL; // position of the shuttle used in visu
+	
+	divisor_height_correction : LREAL := 4; // this divisor is used to reduce oscillation during height correction
+	// because we may not fix the height on the very next shuttle
 
 END_VAR
 VAR CONSTANT
@@ -90,7 +96,7 @@ END_IF;
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
-    iOUT_Step    := ST140_Measure_e.READY; // iPreStep;
+    iOUT_Step    := iPreStep; // iPreStep;
 END_IF;
 
 (*******************************************************************)
@@ -106,8 +112,8 @@ TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
 (*******************************************************************)
 (* OUTPUTS *)
 (*******************************************************************)
-// Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+// Error Flag
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST140_Measure_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST140_Measure_e.READY) AND (iOUT_Step < ST140_Measure_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -126,9 +132,16 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST140_Measure_e.DONE);
+xOUT_Wait := (iOUT_Step = ST140_Measure_e.DONE) OR
+             (iOUT_Step = ST140_Measure_e.READY) OR
+             (iOUT_Step = ST140_Measure_e.START) OR
+             (iOUT_Step = ST140_Measure_e.waitOnMover) OR
+             (iOUT_Step = ST140_Measure_e.SYNC_MOVER_LEAVE);
 
-xOUT_MoverFree := NOT (iOUT_Step >= ST140_Measure_e.MOVER_NEEDED_OP AND iOUT_Step < ST140_Measure_e.MOVER_FREE_OP);
+xOUT_MoverFree :=
+    NOT (iOUT_Step >= ST140_Measure_e.MOVER_NEEDED_OP AND iOUT_Step < ST140_Measure_e.MOVER_FREE_OP) AND
+    (iOUT_Step >= ST140_Measure_e.READY) AND
+    (iOUT_Step < ST140_Measure_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST140_Measure_e.waitOnMover,
@@ -202,13 +215,14 @@ ST140_Measure_e.READY: (* Start AUTO:END:LEER:STEP *)
 ST140_Measure_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
         iOUT_Step := ST140_Measure_e.waitOnMover;
+        iPreStep  := ST140_Measure_e.waitOnMover;
     END_IF;
 
 ST140_Measure_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST140] THEN
         IF Mover.GetLastStationDone() >= INT#140 THEN
             iOUT_Step := ST140_Measure_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#130 THEN
+        ELSIF Mover.GetLastStationDone() < INT#130 THEN
             iOUT_Step := ST140_Measure_e.SYNC_MOVER_LEAVE;
         ELSE
             MEMSET(ADR(arr_rMeasureTrack_Right), 0, SIZEOF(arr_rMeasureTrack_Right));
@@ -246,6 +260,7 @@ ST140_Measure_e.Move_shuttle_relative_right:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(20.0 / (MEASURE_PER_PIECE - 1)) THEN
             iOUT_Step := ST140_Measure_e.Measure_right;
+            iPreStep  := ST140_Measure_e.Measure_right;
         END_IF
     ELSE
         bOUT_Error := 10;
@@ -256,10 +271,12 @@ ST140_Measure_e.Move_shuttle_to_pos_left:
         IF _20_AUTO.recipe.st140.xIsTypeMiniOrSmart THEN
             IF Mover.MoveRelativeInsideStation(100.0) THEN
                 iOUT_Step    := ST140_Measure_e.Measure_left;
+                iPreStep     := ST140_Measure_e.Measure_left;
                 measureIndex := 0;
             END_IF
         ELSE
             iOUT_Step := ST140_Measure_e.Save_result_in_mover;
+            iPreStep  := ST140_Measure_e.Save_result_in_mover;
         END_IF
     ELSE
         bOUT_Error := 11;
@@ -277,6 +294,7 @@ ST140_Measure_e.Measure_left:
 
         IF measureIndex >= MEASURE_PER_PIECE THEN
             iOUT_Step := ST140_Measure_e.Save_result_in_mover;
+            iPreStep  := ST140_Measure_e.Save_result_in_mover;
         ELSE
             iOUT_Step := ST140_Measure_e.Move_shuttle_relative_left;
         END_IF
@@ -286,6 +304,7 @@ ST140_Measure_e.Move_shuttle_relative_left:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(20.0 / (MEASURE_PER_PIECE - 1)) THEN
             iOUT_Step := ST140_Measure_e.Measure_left;
+            iPreStep  := ST140_Measure_e.Measure_left;
         END_IF
     ELSE
         bOUT_Error := 12;
@@ -293,45 +312,128 @@ ST140_Measure_e.Move_shuttle_relative_left:
 
 ST140_Measure_e.Save_result_in_mover:
 
-    testLevel_OK := TRUE;
+    testLevel_Min_Left_NOK  := FALSE;
+    testLevel_Max_Left_NOK  := FALSE;
+    testLevel_Min_Right_NOK := FALSE;
+    testLevel_Max_Right_NOK := FALSE;
 
     IF NOT (MEASURE_SIMULATION AND CONST.USE_SIMULATION) THEN
 
-        FOR i := 0 TO MEASURE_PER_PIECE BY 1 DO
-            IF arr_rMeasureTrack_Right[i][LaserPlace_e.NearTrack] < _20_AUTO.recipe.st140.rMinHeightSensorRight OR
-               arr_rMeasureTrack_Right[i][LaserPlace_e.NearTrack] > _20_AUTO.recipe.st140.rMaxHeightSensorRight OR
-               arr_rMeasureTrack_Right[i][LaserPlace_e.NearDoor] < _20_AUTO.recipe.st140.rMinHeightSensorRight OR
-               arr_rMeasureTrack_Right[i][LaserPlace_e.NearDoor] > _20_AUTO.recipe.st140.rMaxHeightSensorRight THEN
-                testLevel_OK := FALSE;
+        FOR i := 0 TO MEASURE_PER_PIECE - 1 BY 1 DO
+            IF arr_rMeasureTrack_Right[LaserPlace_e.NearTrack][i] < _20_AUTO.recipe.st140.rMinHeightSensorRight OR
+               arr_rMeasureTrack_Right[LaserPlace_e.NearDoor][i] < _20_AUTO.recipe.st140.rMinHeightSensorRight THEN
+                // min value of the sensor means maximum fill
+                testLevel_Max_Right_NOK := TRUE;
+            END_IF
+
+            IF arr_rMeasureTrack_Right[LaserPlace_e.NearTrack][i] > _20_AUTO.recipe.st140.rMaxHeightSensorRight OR
+               arr_rMeasureTrack_Right[LaserPlace_e.NearDoor][i] > _20_AUTO.recipe.st140.rMaxHeightSensorRight THEN
+                // max value of the sensor means minimum fill
+                testLevel_Min_Right_NOK := TRUE;
             END_IF
         END_FOR
 
         IF _20_AUTO.recipe.st140.xIsTypeMiniOrSmart THEN
-            FOR i := 0 TO MEASURE_PER_PIECE BY 1 DO
-                IF arr_rMeasureTrack_Left[i][LaserPlace_e.NearTrack] < _20_AUTO.recipe.st140.rMinHeightSensorLeft OR
-                   arr_rMeasureTrack_Left[i][LaserPlace_e.NearTrack] > _20_AUTO.recipe.st140.rMaxHeightSensorLeft OR
-                   arr_rMeasureTrack_Left[i][LaserPlace_e.NearDoor] < _20_AUTO.recipe.st140.rMinHeightSensorLeft OR
-                   arr_rMeasureTrack_Left[i][LaserPlace_e.NearDoor] > _20_AUTO.recipe.st140.rMaxHeightSensorLeft THEN
-                    testLevel_OK := FALSE;
+            FOR i := 0 TO MEASURE_PER_PIECE - 1 BY 1 DO
+                IF arr_rMeasureTrack_Left[LaserPlace_e.NearTrack][i] < _20_AUTO.recipe.st140.rMinHeightSensorLeft OR
+                   arr_rMeasureTrack_Left[LaserPlace_e.NearDoor][i] < _20_AUTO.recipe.st140.rMinHeightSensorLeft THEN
+                    // min value of the sensor means maximum fill
+                    testLevel_Max_Left_NOK := TRUE;
+                END_IF
+
+                IF arr_rMeasureTrack_Left[LaserPlace_e.NearTrack][i] > _20_AUTO.recipe.st140.rMaxHeightSensorLeft OR
+                   arr_rMeasureTrack_Left[LaserPlace_e.NearDoor][i] > _20_AUTO.recipe.st140.rMaxHeightSensorLeft THEN
+                    // max value of the sensor means minimum fill
+                    testLevel_Min_Left_NOK := TRUE;
                 END_IF
             END_FOR
         END_IF
 
     END_IF
 
-    IF NOT testLevel_OK THEN
+    IF testLevel_Min_Left_NOK OR testLevel_Max_Left_NOK OR testLevel_Min_Right_NOK OR testLevel_Max_Right_NOK THEN
         IF __ISVALIDREF(Mover) THEN
             IF NOT Mover.SetLastStation(-140) THEN
                 ASSERT(0);
             END_IF
+
+            // All minimum
+            IF (testLevel_Min_Left_NOK AND testLevel_Min_Right_NOK) THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-D All min'));
+
+                // All maximum
+            ELSIF (testLevel_Max_Left_NOK AND testLevel_Max_Right_NOK) THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-E All max'));
+
+                // Both in error
+            ELSIF (testLevel_Min_Left_NOK OR testLevel_Max_Left_NOK) AND
+                  (testLevel_Min_Right_NOK OR testLevel_Max_Right_NOK) THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-F Both left and right'));
+
+                // min and max error on left
+            ELSIF (testLevel_Min_Left_NOK AND testLevel_Max_Left_NOK) THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-G Both left'));
+
+                // min and max error on right
+            ELSIF (testLevel_Min_Right_NOK AND testLevel_Max_Right_NOK) THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-H Both right'));
+
+            ELSIF testLevel_Min_Left_NOK THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-I Min left'));
+
+            ELSIF testLevel_Max_Left_NOK THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-J Max left'));
+
+            ELSIF testLevel_Min_Right_NOK THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-K Min right'));
+
+            ELSIF testLevel_Max_Right_NOK THEN
+                Mover.SetErrorCode(CONCAT(INT_TO_STRING(Mover.GetLastStationDone()), '-L Min right'));
+
+            ELSE
+                ASSERT(0); // Oops ... read the condition again !
+            END_IF
         END_IF
 
-        bOUT_Error := 1;
     ELSE
         IF __ISVALIDREF(Mover) THEN
             IF NOT Mover.SetLastStation(140) THEN
                 ASSERT(0);
             END_IF
+        END_IF
+    END_IF
+
+	// Adding a value makes the axis go down
+	// Substracting a value makes the axis go up
+    IF __ISVALIDREF(Mover) AND_THEN Mover.GetLastStationDone() = 130 THEN
+        IF testLevel_Min_Left_NOK THEN
+            GVL.ST130_01Y_Feedback_Offset := GVL.ST130_01Y_Feedback_Offset - 0.1;
+        END_IF
+        IF testLevel_Max_Left_NOK THEN
+            GVL.ST130_01Y_Feedback_Offset := GVL.ST130_01Y_Feedback_Offset + 0.1;
+        END_IF
+        IF testLevel_Min_Right_NOK THEN
+            GVL.ST130_01Y_Feedback_Offset := GVL.ST130_01Y_Feedback_Offset - 0.1;
+        END_IF
+        IF testLevel_Max_Right_NOK THEN
+            GVL.ST130_01Y_Feedback_Offset := GVL.ST130_01Y_Feedback_Offset + 0.1;
+        END_IF
+    END_IF
+
+	// Adding a value makes the axis go down
+	// Substracting a value makes the axis go up
+    IF __ISVALIDREF(Mover) AND_THEN Mover.GetLastStationDone() = 135 THEN
+        IF testLevel_Min_Left_NOK THEN
+            GVL.ST135_01Y_Feedback_Offset := GVL.ST135_01Y_Feedback_Offset - 0.1;
+        END_IF
+        IF testLevel_Max_Left_NOK THEN
+            GVL.ST135_01Y_Feedback_Offset := GVL.ST135_01Y_Feedback_Offset + 0.1;
+        END_IF
+        IF testLevel_Min_Right_NOK THEN
+            GVL.ST135_01Y_Feedback_Offset := GVL.ST135_01Y_Feedback_Offset - 0.1;
+        END_IF
+        IF testLevel_Max_Right_NOK THEN
+            GVL.ST135_01Y_Feedback_Offset := GVL.ST135_01Y_Feedback_Offset + 0.1;
         END_IF
     END_IF
 

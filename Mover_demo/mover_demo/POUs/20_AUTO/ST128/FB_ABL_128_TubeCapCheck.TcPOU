@@ -85,7 +85,7 @@ END_IF;
 IF (bOUT_Error <> 0) AND xIN_Quit THEN
     xOUT_ErrFlag := FALSE;
     bOUT_Error   := 0;
-    iOUT_Step    := ST128_TubeCapCheck_e.READY; // iPreStep;
+    iOUT_Step    := iPreStep; // iPreStep;
 END_IF;
 
 (*******************************************************************)
@@ -115,7 +115,7 @@ END_IF
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST128_TubeCapCheck_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST128_TubeCapCheck_e.READY) AND (iOUT_Step < ST128_TubeCapCheck_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -134,10 +134,16 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST128_TubeCapCheck_e.DONE);
+xOUT_Wait := (iOUT_Step = ST128_TubeCapCheck_e.DONE) OR
+             (iOUT_Step = ST128_TubeCapCheck_e.READY) OR
+             (iOUT_Step = ST128_TubeCapCheck_e.START) OR
+             (iOUT_Step = ST128_TubeCapCheck_e.waitOnMover) OR
+             (iOUT_Step = ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE);
 
 xOUT_MoverFree :=
-    NOT (iOUT_Step >= ST128_TubeCapCheck_e.MOVER_NEEDED_OP AND iOUT_Step < ST128_TubeCapCheck_e.MOVER_FREE_OP);
+    NOT ((iOUT_Step >= ST128_TubeCapCheck_e.MOVER_NEEDED_OP) AND (iOUT_Step < ST128_TubeCapCheck_e.MOVER_FREE_OP)) AND
+    (iOUT_Step >= ST128_TubeCapCheck_e.READY) AND
+    (iOUT_Step < ST128_TubeCapCheck_e.ERROR);
 
 iOUT_ProcessCompletion := F_GetPercent_2(iOUT_Step,
                                          ST128_TubeCapCheck_e.waitOnMover,
@@ -215,7 +221,7 @@ ST128_TubeCapCheck_e.waitOnMover:
     IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST128] THEN
         IF Mover.GetLastStationDone() >= INT#128 THEN
             iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
-		ELSIF Mover.GetLastStationDone() < INT#125 THEN
+        ELSIF Mover.GetLastStationDone() < INT#125 THEN
             iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
         ELSE
             iOUT_Step := ST128_TubeCapCheck_e.Move_shuttle_relative_right;
@@ -226,6 +232,7 @@ ST128_TubeCapCheck_e.Move_shuttle_relative_right:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(40.0) THEN
             iOUT_Step := ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_right;
+            iPreStep  := ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_right;
         END_IF
     ELSE
         bOUT_Error := 10;
@@ -237,6 +244,7 @@ ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_right:
             iOUT_Step := ST128_TubeCapCheck_e.Move_shuttle_to_pos_left;
         ELSE
             iOUT_Step := ST128_TubeCapCheck_e.Save_result_in_mover;
+            iPreStep  := ST128_TubeCapCheck_e.Save_result_in_mover;
         END_IF
     END_IF
 
@@ -244,6 +252,7 @@ ST128_TubeCapCheck_e.Move_shuttle_to_pos_left:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(60.0) THEN
             iOUT_Step := ST128_TubeCapCheck_e.Wait_move_done_pos_left;
+            iPreStep  := ST128_TubeCapCheck_e.Wait_move_done_pos_left;
         END_IF
     ELSE
         bOUT_Error := 11;
@@ -258,6 +267,7 @@ ST128_TubeCapCheck_e.Move_shuttle_relative_left:
     IF __ISVALIDREF(Mover) THEN
         IF Mover.MoveRelativeInsideStation(40.0) THEN
             iOUT_Step := ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_left;
+            iPreStep  := ST128_TubeCapCheck_e.Wait_move_and_check_tube_cap_left;
         END_IF
     ELSE
         bOUT_Error := 12;
@@ -273,15 +283,33 @@ ST128_TubeCapCheck_e.Save_result_in_mover:
        (_20_AUTO.recipe.st128.xIsTypeMiniOrSmart AND NOT capFoundLeft)) AND
        NOT (TUBE_CAP_CHECK_SIMULATION AND CONST.USE_SIMULATION) THEN
         iOUT_Step := ST128_TubeCapCheck_e.ERROR;
+
         IF __ISVALIDREF(Mover) THEN
+
+            IF NOT capFoundLeft AND NOT capFoundRight THEN
+                Mover.SetErrorCode('128-B Left and Right');
+
+            ELSIF capFoundLeft THEN
+                Mover.SetErrorCode('128-B Left');
+
+            ELSIF capFoundRight THEN
+                Mover.SetErrorCode('128-B Right');
+
+            ELSE
+                ASSERT(0); // Read your code again, you should never go here !
+
+            END_IF
+
             IF NOT Mover.SetLastStation(-128) THEN
                 ASSERT(0);
             END_IF
         END_IF
 
         bOUT_Error := 1;
+        iPreStep   := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
     ELSE
         iOUT_Step := ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
+
         IF __ISVALIDREF(Mover) THEN
             IF NOT Mover.SetLastStation(128) THEN
                 ASSERT(0);

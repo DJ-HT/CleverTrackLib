@@ -9,7 +9,8 @@ TYPE ST175_LASER_e :
     RESET := 0, // Reset
 
     INIT := 100, // Initialisieren 
-    Init_pneumatics,
+    Init_pneumatics := 110,
+	Init_laser_warmup := 120,
 
     READY := 999,  // READY to Start, Init Done 
     START := 1000, // Start Zyklisch
@@ -18,14 +19,14 @@ TYPE ST175_LASER_e :
     waitOnMover,     // wait until the mover is there
     MOVER_NEEDED_OP, // Since here, a mover in position is needed to perform the action
 
-    close_doors, // 
-    handling_down,          // 
-    LASER_start, // 
-    LASER_wait_on_finish, // 
-    handling_up, // 
-	move_shuttle_to_left_piece,
-	wait_shuttle_in_place,
-    open_doors, // 
+    close_doors := 1100, // 
+    handling_down := 1110,          // 
+    LASER_start := 1120, // 
+    LASER_wait_on_finish := 1130, // 
+    handling_up := 1140, // 
+	move_shuttle_to_left_piece := 1150,
+	wait_shuttle_in_place := 1160,
+    open_doors := 1170, // 
 
     SYNC_MOVER_LEAVE, // MoverMan need to take the mover
     DONE := 8000,     // Ablauf beendet 
@@ -50,7 +51,12 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"Init_pneumatics"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"110"</v>
+              <l n="LanguageTexts" t="ArrayList" />
+            </o>
+            <o>
+              <v n="TextID">"Init_laser_warmup"</v>
+              <v n="TextDefault">"120"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
@@ -80,42 +86,42 @@ END_TYPE
             </o>
             <o>
               <v n="TextID">"close_doors"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1100"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"handling_down"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1110"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"LASER_start"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1120"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"LASER_wait_on_finish"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1130"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"handling_up"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1140"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"move_shuttle_to_left_piece"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1150"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"wait_shuttle_in_place"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1160"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>
               <v n="TextID">"open_doors"</v>
-              <v n="TextDefault">""</v>
+              <v n="TextDefault">"1170"</v>
               <l n="LanguageTexts" t="ArrayList" />
             </o>
             <o>

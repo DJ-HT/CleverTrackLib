@@ -98,9 +98,9 @@ _FB_btSTART(pbtIN  := ADR(HMI.btArMain[9]),
 //****************************************************************************
 fb_State(xIN_AutoInit   := FALSE,
          xIN_DoRef      := FALSE,
-         xIN_ENERGIE    := TRUE,
-         xIN_AIR        := HMI.xAIRon,
-         xIN_EINRICHTEN :=,
+         xIN_ENERGIE    := _02_SAFETY.xOUT_MonOut,
+         xIN_AIR        := IN.I004_druckwachter_luftdruck_ok,
+         xIN_EINRICHTEN := _02_SAFETY.xOUT_Einrichten,
          xIN_AUTO       := HMI.btArMain[0].rtrig,
          xIN_STEP       := HMI.btArMain[1].rtrig,
          xIN_CYCLE      := HMI.btArMain[2].rtrig,
@@ -108,28 +108,99 @@ fb_State(xIN_AutoInit   := FALSE,
          xIN_INIT       := HMI.btArMain[4].rtrig,
          xIN_STOP       := HMI.btArMain[5].rtrig,
          xIN_LEER       := HMI.btArMain[6].rtrig,
-         xIN_InitEND    := (GVL.st105_aut.xOUT_InitDone OR NOT GVL.st105_aut.xIN_On) AND
-                           (GVL.st110_aut.xOUT_InitDone OR NOT GVL.st110_aut.xIN_On) AND
-                           (GVL.st115_aut.xOUT_InitDone OR NOT GVL.st115_aut.xIN_On) AND
-                           (GVL.st120_aut.xOUT_InitDone OR NOT GVL.st120_aut.xIN_On) AND
-                           (GVL.st125_aut.xOUT_InitDone OR NOT GVL.st125_aut.xIN_On) AND
-                           (GVL.st130_aut.xOUT_InitDone OR NOT GVL.st130_aut.xIN_On) AND
-                           (GVL.st135_aut.xOUT_InitDone OR NOT GVL.st135_aut.xIN_On) AND
-                           (GVL.st140_aut.xOUT_InitDone OR NOT GVL.st140_aut.xIN_On) AND
-                           (GVL.st145_aut.xOUT_InitDone OR NOT GVL.st145_aut.xIN_On) AND
-                           (GVL.st150_aut.xOUT_InitDone OR NOT GVL.st150_aut.xIN_On) AND
-                           (GVL.st155_aut.xOUT_InitDone OR NOT GVL.st155_aut.xIN_On) AND
-                           (GVL.st160_aut.xOUT_InitDone OR NOT GVL.st160_aut.xIN_On) AND
-                           (GVL.st165_aut.xOUT_InitDone OR NOT GVL.st165_aut.xIN_On) AND
-                           (GVL.st170_aut.xOUT_InitDone OR NOT GVL.st170_aut.xIN_On) AND
-                           (GVL.st175_aut.xOUT_InitDone OR NOT GVL.st175_aut.xIN_On) AND
-                           (GVL.st176_aut.xOUT_InitDone OR NOT GVL.st176_aut.xIN_On) AND
-                           (GVL.st180_aut.xOUT_InitDone OR NOT GVL.st180_aut.xIN_On) AND
-                           (GVL.st185_aut.xOUT_InitDone OR NOT GVL.st185_aut.xIN_On),
-         xIN_ALARM := (GVL.st105_aut.xOUT_AlarmST) AND
-                      (GVL.st105_aut.xOUT_ErrFlag OR GVL.st105_aut.xOUT_Wait OR NOT GVL.st105_aut.xIN_On),
-         xIN_LastDone  := (GVL.st105_aut.xOUT_Done OR NOT GVL.st105_aut.xIN_On),
-         xIN_WaitFBs   := (GVL.st105_aut.xOUT_Wait OR NOT GVL.st105_aut.xIN_On),
+         xIN_InitEND    := (GVL.st105_aut.xOUT_InitDone) AND
+                           (GVL.st110_aut.xOUT_InitDone) AND
+                           (GVL.st115_aut.xOUT_InitDone) AND
+                           (GVL.st120_aut.xOUT_InitDone) AND
+                           (GVL.st125_aut.xOUT_InitDone) AND
+                           (GVL.st130_aut.xOUT_InitDone) AND
+                           (GVL.st135_aut.xOUT_InitDone) AND
+                           (GVL.st140_aut.xOUT_InitDone) AND
+                           (GVL.st145_aut.xOUT_InitDone) AND
+                           (GVL.st150_aut.xOUT_InitDone) AND
+                           (GVL.st155_aut.xOUT_InitDone) AND
+                           (GVL.st160_aut.xOUT_InitDone) AND
+                           (GVL.st165_aut.xOUT_InitDone) AND
+                           (GVL.st170_aut.xOUT_InitDone) AND
+                           (GVL.st175_aut.xOUT_InitDone) AND
+                           (GVL.st176_aut.xOUT_InitDone) AND
+                           (GVL.st180_aut.xOUT_InitDone) AND
+                           (GVL.st185_aut.xOUT_InitDone),
+         xIN_ALARM := MAIN.MoverMan.xOUT_Error OR
+                      ((GVL.st105_aut.xOUT_AlarmST) OR
+                      (GVL.st110_aut.xOUT_AlarmST) OR
+                      (GVL.st115_aut.xOUT_AlarmST) OR
+                      (GVL.st120_aut.xOUT_AlarmST) OR
+                      (GVL.st125_aut.xOUT_AlarmST) OR
+                      (GVL.st128_aut.xOUT_AlarmST) OR
+                      (GVL.st130_aut.xOUT_AlarmST) OR
+                      (GVL.st135_aut.xOUT_AlarmST) OR
+                      (GVL.st140_aut.xOUT_AlarmST) OR
+                      (GVL.st145_aut.xOUT_AlarmST) OR
+                      (GVL.st150_aut.xOUT_AlarmST) OR
+                      (GVL.st155_aut.xOUT_AlarmST) OR
+                      (GVL.st160_aut.xOUT_AlarmST) OR
+                      (GVL.st165_aut.xOUT_AlarmST) OR
+                      (GVL.st170_aut.xOUT_AlarmST) OR
+                      (GVL.st175_aut.xOUT_AlarmST) OR
+                      (GVL.st180_aut.xOUT_AlarmST) OR
+                      (GVL.st185_aut.xOUT_AlarmST)) AND
+                      (GVL.st105_aut.xOUT_ErrFlag OR GVL.st105_aut.xOUT_Wait) AND
+                      (GVL.st110_aut.xOUT_ErrFlag OR GVL.st110_aut.xOUT_Wait) AND
+                      (GVL.st115_aut.xOUT_ErrFlag OR GVL.st115_aut.xOUT_Wait) AND
+                      (GVL.st120_aut.xOUT_ErrFlag OR GVL.st120_aut.xOUT_Wait) AND
+                      (GVL.st125_aut.xOUT_ErrFlag OR GVL.st125_aut.xOUT_Wait) AND
+                      // we ignore the state of ST128
+                      (GVL.st130_aut.xOUT_ErrFlag OR GVL.st130_aut.xOUT_Wait) AND
+                      (GVL.st135_aut.xOUT_ErrFlag OR GVL.st135_aut.xOUT_Wait) AND
+                      // we ignore the state of ST140
+                      (GVL.st145_aut.xOUT_ErrFlag OR GVL.st145_aut.xOUT_Wait) AND
+                      (GVL.st150_aut.xOUT_ErrFlag OR GVL.st150_aut.xOUT_Wait) AND
+                      (GVL.st155_aut.xOUT_ErrFlag OR GVL.st155_aut.xOUT_Wait) AND
+                      (GVL.st160_aut.xOUT_ErrFlag OR GVL.st160_aut.xOUT_Wait) AND
+                      (GVL.st165_aut.xOUT_ErrFlag OR GVL.st165_aut.xOUT_Wait) AND
+                      (GVL.st170_aut.xOUT_ErrFlag OR GVL.st170_aut.xOUT_Wait) AND
+                      (GVL.st175_aut.xOUT_ErrFlag OR GVL.st175_aut.xOUT_Wait) AND
+                      (GVL.st180_aut.xOUT_ErrFlag OR GVL.st180_aut.xOUT_Wait) AND
+                      (GVL.st185_aut.xOUT_ErrFlag OR GVL.st185_aut.xOUT_Wait),
+         xIN_LastDone := (NOT (HMI.enState = enState.StateLEER) OR
+                         (MAIN.MoverMan.xOUT_AllMoverEmpty AND GVL.st185_aut.xOUT_Done)) AND
+                         GVL.st105_aut.xOUT_Wait AND
+                         GVL.st110_aut.xOUT_Wait AND
+                         GVL.st115_aut.xOUT_Wait AND
+                         GVL.st120_aut.xOUT_Wait AND
+                         GVL.st125_aut.xOUT_Wait AND
+                         GVL.st128_aut.xOUT_Wait AND
+                         GVL.st130_aut.xOUT_Wait AND
+                         GVL.st135_aut.xOUT_Wait AND
+                         GVL.st140_aut.xOUT_Wait AND
+                         GVL.st145_aut.xOUT_Wait AND
+                         GVL.st150_aut.xOUT_Wait AND
+                         GVL.st155_aut.xOUT_Wait AND
+                         GVL.st160_aut.xOUT_Wait AND
+                         GVL.st165_aut.xOUT_Wait AND
+                         GVL.st170_aut.xOUT_Wait AND
+                         GVL.st175_aut.xOUT_Wait AND
+                         GVL.st180_aut.xOUT_Wait AND
+                         GVL.st185_aut.xOUT_Wait,
+         xIN_WaitFBs := GVL.st105_aut.xOUT_Wait AND
+                        GVL.st110_aut.xOUT_Wait AND
+                        GVL.st115_aut.xOUT_Wait AND
+                        GVL.st120_aut.xOUT_Wait AND
+                        GVL.st125_aut.xOUT_Wait AND
+                        GVL.st128_aut.xOUT_Wait AND
+                        GVL.st130_aut.xOUT_Wait AND
+                        GVL.st135_aut.xOUT_Wait AND
+                        GVL.st140_aut.xOUT_Wait AND
+                        GVL.st145_aut.xOUT_Wait AND
+                        GVL.st150_aut.xOUT_Wait AND
+                        GVL.st155_aut.xOUT_Wait AND
+                        GVL.st160_aut.xOUT_Wait AND
+                        GVL.st165_aut.xOUT_Wait AND
+                        GVL.st170_aut.xOUT_Wait AND
+                        GVL.st175_aut.xOUT_Wait AND
+                        GVL.st180_aut.xOUT_Wait AND
+                        GVL.st185_aut.xOUT_Wait,
          enINOUT_State := HMI.enState);
 
 sStateDbg := TO_STRING(HMI.enState);

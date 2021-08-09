@@ -6,9 +6,10 @@ VAR_INPUT
     xIN_StopMover : BOOL; // stop the mover from movinf
 END_VAR
 VAR_OUTPUT
-    outSimuCurrentPos : Pos2D_t; // Mover position, expressed as slot number
-    outSimuCurrentRot : INT;     // mover current rotation
-    isInPos           : BOOL;    // true when targetPos = currentPos
+    outSimuCurrentPos   : Pos2D_t; // Mover position, expressed as slot number
+    outSimuCurrentPosSC : Pos2D_t; // Mover position, expressed as pixel for SC
+    outSimuCurrentRot   : INT;     // mover current rotation
+    isInPos             : BOOL;    // true when targetPos = currentPos
 END_VAR
 VAR
     // with tick rate at 10ms, a value of 10 gives us 1m/s
@@ -25,20 +26,20 @@ VAR
     _lrNextStopPos : LREAL; // local variable used to get next stop
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
-	
-	_CurrentDir : MoverDirection_e := MoverDirection_e.Farward;
+
+    _CurrentDir : MoverDirection_e := MoverDirection_e.Farward;
 END_VAR
 
 VAR_TEMP
-	_MoverAccel : LREAL;	// Mover acceleration, can be positive or negative depending on the direction
+    _MoverAccel : LREAL; // Mover acceleration, can be positive or negative depending on the direction
 END_VAR
 
 VAR CONSTANT
-    MAX_POS            : LREAL := CONST.MAX_TRACK_LENGTH; // should be defined elsewhere ...
-    MAX_SIZE           : LREAL := CONST.MAX_MOVER_SIZE;   // Maxium size of the mover
+    MAX_POS  : LREAL := CONST.MAX_TRACK_LENGTH; // should be defined elsewhere ...
+    MAX_SIZE : LREAL := CONST.MAX_MOVER_SIZE;   // Maxium size of the mover
     //MOVER_ACCEL        : LREAL := 0.1;                      // Mover acceleration, in mm/tick^2
     //MOVER_VELOCITY_MAX : LREAL := 20;                     // Mover velocity, expressed as mm per tick, max is 10m/s
-    MOVER_VELOCITY_MIN : LREAL := 1;                      // Mover velocity, expressed as mm per tick, max is 10m/s
+    MOVER_VELOCITY_MIN : LREAL := 1; // Mover velocity, expressed as mm per tick, max is 10m/s
 END_VAR
 VAR_STAT
     _iInstanceCounter : INT := 1; // instance counter
@@ -101,8 +102,9 @@ IF _CurrentPos >= MAX_POS THEN
 END_IF
 
 isInPos := EqualDelta(_CurrentPos, _TargetPos, 1.0); // we use delta comparison beacause axis is always at a low value 
-outSimuCurrentPos
-    := THIS^.ResolvePos(this^.CurrentPos, outSimuCurrentRot);
+
+outSimuCurrentPos   := THIS^.ResolvePos(THIS^.CurrentPos, outSimuCurrentRot);
+outSimuCurrentPosSC := THIS^.ResolvePosSC(THIS^.CurrentPos, outSimuCurrentRot);
 
 _xStuck        := (THIS^._CurrentPos < (THIS^._LastPos + _Velocity)) AND NOT isInPos;
 THIS^._LastPos := THIS^._CurrentPos;
@@ -346,6 +348,97 @@ ELSE
     rotation     := 0;
 
 END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ResolvePosSC" Id="{e7662918-4d5b-4c9e-a1d8-15bac58007ec}">
+      <Declaration><![CDATA[METHOD ResolvePosSC : Pos2D_t
+VAR_INPUT
+    inX      : LREAL;
+    rotation : REFERENCE TO INT;
+END_VAR
+VAR CONSTANT
+    (* The track has this dimension in reality
+              __________
+     1030mm (___________) 1030 mm
+              4000 mm
+			  
+     and we map it like that:
+	   __   80 (radius)
+	  |  |
+	  |  |  800
+	  |  |
+	  |__|
+	        80 (raidus)
+    *)
+    START_X     : DINT  := 0;
+    START_Y     : DINT  := 0;
+    MAX_SIMU_DX : DINT  := 70;
+    MAX_SIMU_DY : DINT  := 800;
+    RADIUS_X    : LREAL := 35;
+    RADIUS_Y    : LREAL := 65.0;
+
+    FIRST_RADIUS_START  : LREAL := 4000;
+    FIRST_RADIUS_END    : LREAL := 5030;
+    SECOND_RADIUS_START : LREAL := 9030;
+    SECOND_RADIUS_END   : LREAL := 10060;
+END_VAR
+
+VAR
+    x_rad_calc : LREAL;
+    y_rad_calc : LREAL;
+    FACTOR_Y   : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FACTOR_Y := FIRST_RADIUS_START / MAX_SIMU_DY;
+
+IF inX < 0 THEN
+    ResolvePosSC.x := START_X;
+    ResolvePosSC.y := START_Y;
+    rotation       := 0;
+
+ELSIF inX >= 0 AND inX <= FIRST_RADIUS_START THEN
+    ResolvePosSC.x := START_X;
+    ResolvePosSC.y := START_Y + TO_DINT(inX / FACTOR_Y);
+    rotation       := 0;
+
+ELSIF inX > FIRST_RADIUS_START AND inX < FIRST_RADIUS_END THEN
+
+    // should go between -1RAD and +1RAD
+    x_rad_calc     := ((inX - FIRST_RADIUS_START) * 2 / (FIRST_RADIUS_END - FIRST_RADIUS_START) - 1) * PI / 2;
+    ResolvePosSC.x := TO_DINT(SIN(x_rad_calc) * RADIUS_X) + START_X + TO_DINT(RADIUS_X);
+
+    // should go from 0RAD to 1RAD, then 0RAD
+    y_rad_calc     := (1 - (inX - FIRST_RADIUS_START) * 2 / (FIRST_RADIUS_END - FIRST_RADIUS_START)) * PI / 2;
+    ResolvePosSC.y := TO_DINT(COS(y_rad_calc) * RADIUS_Y + START_Y + MAX_SIMU_DY);
+
+    rotation := TO_INT(SIN(x_rad_calc) * 90 + 90);
+
+ELSIF inX >= FIRST_RADIUS_END AND inX <= SECOND_RADIUS_START THEN
+    ResolvePosSC.x := START_X + MAX_SIMU_DX;
+    ResolvePosSC.y := START_Y + MAX_SIMU_DY - TO_DINT((inX - FIRST_RADIUS_END) / FACTOR_Y);
+    rotation       := 180;
+
+ELSIF inX > SECOND_RADIUS_START AND inX < SECOND_RADIUS_END THEN
+    // should go between -1RAD and +1RAD
+    x_rad_calc     := ((inX - SECOND_RADIUS_START) * 2 / (SECOND_RADIUS_END - SECOND_RADIUS_START) - 1) * PI / 2;
+    ResolvePosSC.x := START_X - TO_DINT(SIN(x_rad_calc) * RADIUS_X) + TO_DINT(RADIUS_X);
+
+    // should go from 0RAD to 1RAD, then 0RAD
+    y_rad_calc     := (1 - (inX - SECOND_RADIUS_START) * 2 / (SECOND_RADIUS_END - SECOND_RADIUS_START)) * PI / 2;
+    ResolvePosSC.y := START_Y - TO_DINT(COS(y_rad_calc) * RADIUS_Y);
+
+    rotation := TO_INT(SIN(x_rad_calc) * 90 + 270);
+
+ELSE
+    ResolvePosSC.x := START_X;
+    ResolvePosSC.y := START_Y;
+    rotation       := 0;
+
+END_IF
+
+ResolvePosSC.x := -ResolvePosSC.x;
 ]]></ST>
       </Implementation>
     </Method>

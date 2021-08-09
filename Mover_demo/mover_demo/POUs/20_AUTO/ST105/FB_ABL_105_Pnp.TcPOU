@@ -170,7 +170,7 @@ fb_axis105_11Z(enIN_State       := enIN_State,
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST105_Pnp_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST105_Pnp_e.READY) AND (iOUT_Step < ST105_Pnp_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -187,7 +187,12 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST105_Pnp_e.DONE);
+xOUT_Wait := (iOUT_Step = ST105_Pnp_e.DONE) OR
+             (iOUT_Step = ST105_Pnp_e.READY) OR
+             (iOUT_Step = ST105_Pnp_e.START) OR
+             (iOUT_Step = ST105_Pnp_e.waitOnMover) OR
+             (iOUT_Step = ST105_Pnp_e.SYNC_MOVER_LEAVE) OR
+             (iOUT_Step = ST105_Pnp_e.wait_on_feeder);
 
 xOUT_MoverFree := iOUT_Step >= ST105_Pnp_e.MOVER_FREE_OP AND iOUT_Step < ST105_Pnp_e.MOVER_NEEDED_OP;
 
@@ -311,7 +316,11 @@ ST105_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
 ST105_Pnp_e.START: (*  *)
     IF xIN_NextStep AND pxFG_Freigabe^ THEN
         IF enState.StateLEER = enIN_State THEN
-            iOUT_Step := ST105_Pnp_e.waitOnMover;
+            IF aut_status_from_robot.Ready_to_place THEN
+                iOUT_Step := ST105_Pnp_e.waitOnMover;
+            ELSIF __ISVALIDREF(Mover) THEN
+                iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
+            END_IF
         ELSE
             iOUT_Step := ST105_Pnp_e.wait_on_feeder;
         END_IF
@@ -336,6 +345,12 @@ ST105_Pnp_e.push_up_casing:
 ST105_Pnp_e.Robot_Pick:
     IF aut_status_from_robot.Picked THEN
         iOUT_Step := ST105_Pnp_e.Robot_wait_picked_falling;
+
+        // we don't generate an error here since this may hapen
+        // when we stop the machine during the robot movement
+    ELSIF aut_status_from_robot.Ready_to_place THEN
+        iOUT_Step := ST105_Pnp_e.waitOnMover;
+
     END_IF
 
 ST105_Pnp_e.Robot_wait_picked_falling:
@@ -350,19 +365,14 @@ ST105_Pnp_e.pusher_down:
 
 ST105_Pnp_e.waitOnMover: (*  *)
     IF xIN_NextStep AND (__ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST105]) THEN
-        IF enState.StateLEER = enIN_State THEN
+        IF (PNP_SIMULATION AND CONST.USE_SIMULATION) OR
+           ((enState.StateLEER = enIN_State) AND NOT aut_status_from_robot.Ready_to_place) THEN
             iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
         ELSE
-            iOUT_Step := ST105_Pnp_e.wait_on_feeder;
-
-            IF PNP_SIMULATION AND CONST.USE_SIMULATION THEN
+            IF Mover.GetLastStationDone() >= INT#105 THEN
                 iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
             ELSE
-                IF Mover.GetLastStationDone() >= INT#105 THEN
-                    iOUT_Step := ST105_Pnp_e.SYNC_MOVER_LEAVE;
-                ELSE
-                    iOUT_Step := ST105_Pnp_e.Robot_place;
-                END_IF
+                iOUT_Step := ST105_Pnp_e.Robot_place;
             END_IF
         END_IF
     END_IF;
@@ -372,10 +382,16 @@ ST105_Pnp_e.Robot_place:
         iOUT_Step := ST105_Pnp_e.Robot_wait_placed_falling;
 
         IF __ISVALIDREF(Mover) THEN
-            IF NOT Mover.SetLastStation(-105) THEN
+            IF NOT Mover.SetLastStation(105) THEN
                 ASSERT(0);
             END_IF
         END_IF
+
+        // we don't generate an error here since this may hapen
+        // when we stop the machine during the robot movement
+    ELSIF aut_status_from_robot.Ready_to_pick THEN
+        iOUT_Step := ST105_Pnp_e.wait_on_feeder;
+
     END_IF
 
 ST105_Pnp_e.Robot_wait_placed_falling:

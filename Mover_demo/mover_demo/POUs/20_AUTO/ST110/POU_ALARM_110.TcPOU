@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="POU_ALARM_110" Id="{a3e6eae5-86fa-4227-960f-63bed55e6add}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM POU_ALARM_110
+VAR_INPUT
+    xIN_QUIT      : BOOL; // Alarm quittieren
+    iIN_ArraySize : INT;
+    pstrIN_ALARM  : POINTER TO structAlarm;       // Array Alarmstruktur
+    refPOU        : REFERENCE TO FB_AUT_ABSTRACT; // the POU to test
+END_VAR
+VAR_OUTPUT
+    xOUT_AL_ST : BOOL; // Alarm Station aktiv
+END_VAR
+VAR
+    //Alarmbaustein
+    _FB_ALARM_ST : FB_ALARM;
+    //Local
+    iIndex : INT; // Index For Schleife	
+END_VAR
+VAR CONSTANT
+    sDefString : STRING := 'Error ST110,'; // Station #
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(********************** INITIALISIERE VARIABLEN ****************************)
+FOR iIndex := 0 TO iIN_ArraySize - 1 DO
+    pstrIN_ALARM[iIndex].xAlarmIN   := FALSE;
+    pstrIN_ALARM[iIndex].xAlarmOFF  := FALSE;
+    pstrIN_ALARM[iIndex].xAlarmSAVE := TRUE;
+    pstrIN_ALARM[iIndex].xAlarmQUIT := xIN_QUIT;
+    pstrIN_ALARM[iIndex].tAlarmVERZ := T#100MS;
+    pstrIN_ALARM[iIndex].sAlarmText := '';
+    pstrIN_ALARM[iIndex].bAlarmNr   := 0;
+END_FOR
+
+(********************** ALARME ****************************)
+pstrIN_ALARM[0].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Axis_110_01Y_error);
+pstrIN_ALARM[0].sAlarmText := CONCAT(sDefString, ' Axis 01Y in error');
+pstrIN_ALARM[0].bAlarmNr   := 0;
+
+pstrIN_ALARM[1].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Axis_110_02Z_error);
+pstrIN_ALARM[1].sAlarmText := CONCAT(sDefString, ' Axis 02Z (left) in error');
+pstrIN_ALARM[1].bAlarmNr   := 0;
+
+pstrIN_ALARM[2].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Axis_110_03Z_error);
+pstrIN_ALARM[2].sAlarmText := CONCAT(sDefString, ' Axis 03Z (right) in error');
+pstrIN_ALARM[2].bAlarmNr   := 0;
+
+pstrIN_ALARM[3].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Axis_110_04Z_error);
+pstrIN_ALARM[3].sAlarmText := CONCAT(sDefString, ' Axis 04Z in error');
+pstrIN_ALARM[3].bAlarmNr   := 0;
+
+pstrIN_ALARM[4].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Cylinder_vacuum_griper_left);
+pstrIN_ALARM[4].sAlarmText := CONCAT(sDefString, ' Cylinder .05 vacuum gripper right');
+pstrIN_ALARM[4].bAlarmNr   := 0;
+
+pstrIN_ALARM[5].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Cylinder_vacuum_griper_right);
+pstrIN_ALARM[5].sAlarmText := CONCAT(sDefString, ' Cylinder .06 vacuum gripper left');
+pstrIN_ALARM[5].bAlarmNr   := 0;
+
+pstrIN_ALARM[6].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Axis_110_10W_error);
+pstrIN_ALARM[6].sAlarmText := CONCAT(sDefString, ' Axis 10W in error');
+pstrIN_ALARM[6].bAlarmNr   := 0;
+
+pstrIN_ALARM[7].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Feeder_error);
+pstrIN_ALARM[7].sAlarmText := CONCAT(sDefString, ' One part of the feeder is in error');
+pstrIN_ALARM[7].bAlarmNr   := 0;
+
+pstrIN_ALARM[8].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Piece_in_unused_griper);
+pstrIN_ALARM[8].sAlarmText := CONCAT(sDefString, ' One part is handled by a unused griper');
+pstrIN_ALARM[8].bAlarmNr   := 0;
+
+pstrIN_ALARM[9].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Piece_missing_left_griper);
+pstrIN_ALARM[9].sAlarmText := CONCAT(sDefString, ' A piece is missing in the left griper');
+pstrIN_ALARM[9].bAlarmNr   := 0;
+
+pstrIN_ALARM[10].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Piece_missing_right_griper);
+pstrIN_ALARM[10].sAlarmText := CONCAT(sDefString, ' A piece is missing in the right griper');
+pstrIN_ALARM[10].bAlarmNr   := 0;
+
+pstrIN_ALARM[11].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Feeder_empty);
+pstrIN_ALARM[11].sAlarmText := CONCAT(sDefString, ' The feeder is empty');
+pstrIN_ALARM[11].bAlarmNr   := 0;
+
+pstrIN_ALARM[12].xAlarmIN   := (refPOU.bOUT_ErrorNum = ST110_Alarm_e.Reach_end_pos_without_needed_torque);
+pstrIN_ALARM[12].sAlarmText := CONCAT(sDefString, ' Verticals have reached the end position without measuring the necessary torque');
+pstrIN_ALARM[12].bAlarmNr   := 0;
+
+(********************** ALARM FB ****************************)
+_FB_ALARM_ST(pstrIN_Alarm  := pstrIN_ALARM,
+             iIN_ArraySize := ST110_Alarm_e._max);
+
+(********************** ALARM FB ****************************)
+xOUT_AL_ST := FALSE;
+
+FOR iIndex := 0 TO iIN_ArraySize - 1 DO
+    IF pstrIN_ALARM[iIndex].xAlarmOUT THEN
+        xOUT_AL_ST := TRUE;
+    END_IF
+END_FOR
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

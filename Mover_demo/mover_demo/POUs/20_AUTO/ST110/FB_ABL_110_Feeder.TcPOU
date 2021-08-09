@@ -144,9 +144,8 @@ ELSIF (enIN_State <> enState.StateMANU) THEN
     btfb_feeder.xINon := FALSE;
 END_IF;
 
-fb_feeder(xIN_Enable := ((enIN_State <= enState.StateAUTO) AND (enIN_State >= enState.StateSTEP)) OR btfb_feeder.xINon,
-          xIN_PieceInEnd
-              := TRUE, // IO_BOX.I6000_ST110_teil_in_vereinzelung, 
+fb_feeder(xIN_Enable                := (enIN_State > enState.StateEND) OR btfb_feeder.xINon,
+          xIN_PieceInEnd            := IO_BOX.I8001_ST110_maximum,
           xIN_PieceMax              := IO_BOX.I8001_ST110_maximum,
           xIN_InSimulation          := FEEDER_SIMULATION AND CONST.USE_SIMULATION,
           refIN_SimulatedFifo       := simu_fifo_feeder_to_rotTable,
@@ -205,7 +204,8 @@ fb_axis110_10W(enIN_State     := enIN_State,
                xIN_Execute    := ST110_Feeder_e.Init_set_table_pos = iOUT_Step OR
                                  ST110_Feeder_e.Init_table_go_to_zero = iOUT_Step OR
                                  ST110_Feeder_e.Init_simu_home_table = iOUT_Step OR
-                                 ST110_Feeder_e.load_piece = iOUT_Step,
+                                 ST110_Feeder_e.load_piece = iOUT_Step OR
+                                 ST110_Feeder_e.wait_rotary_table_done = iOUT_Step,
                xIN_Relative     := fb_axis110_10W.xIN_Execute,
                xIN_STOP         := FALSE,
                xIN_OFF          := FALSE,
@@ -228,7 +228,7 @@ ST110_Axis.axis110_10W.rActPos := LREAL_TO_REAL(simu_axis110_10W.pOUT_axisRef^.N
 (* OUTPUTS *)
 (*******************************************************************)
 // Error Flag 
-xOUT_ErrFlag := (bOUT_Error <> 0);
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST110_Feeder_e.ERROR = iOUT_Step);
 // Baustein befindet sich im Ablauf 
 xOUT_Busy := (iOUT_Step > ST110_Feeder_e.READY) AND (iOUT_Step < ST110_Feeder_e.DONE);
 // Baustein hat den Ablauf beendet
@@ -245,7 +245,8 @@ sOUT_Step := TO_STRING(iOUT_Step);
 //Fehlernummer	 
 bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
 (* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
-xOUT_Wait := (iOUT_Step = ST110_Feeder_e.DONE);
+xOUT_Wait := (iOUT_Step = ST110_Feeder_e.DONE) OR
+             (iOUT_Step = ST110_Feeder_e.READY);
 
 // TODO add simulation constant to prevent the output to be set
 IO_BOX.Q8000_ST110_freigabe_wf    := fb_feeder.xOUT_EnableFeeder AND NOT (FEEDER_SIMULATION AND CONST.USE_SIMULATION);
@@ -281,7 +282,11 @@ rtSTART(CLK := xIN_Start);
 
 IF 0 = bOUT_Error THEN
     IF fb_axis110_10W.xOUT_ErrFlag THEN
-        bOUT_Error := 11;
+        bOUT_Error := ST110_Alarm_e.Axis_110_10W_error;
+		
+	ELSIF NOT IO_BOX.I8002_ST110_alarm_forderband THEN
+        bOUT_Error := ST110_Alarm_e.Feeder_error;
+	
     END_IF
 ELSIF iOUT_Step < ST110_Feeder_e.ERROR THEN
     iOUT_Step := ST110_Feeder_e.ERROR;
@@ -380,6 +385,11 @@ ST110_Feeder_e.wait_on_a_piece:
     END_IF
 
 ST110_Feeder_e.load_piece:
+    IF NOT fb_axis110_10W.xOUT_DONE THEN
+        iOUT_Step := ST110_Feeder_e.wait_rotary_table_done;
+    END_IF
+
+ST110_Feeder_e.wait_rotary_table_done:
     IF fb_axis110_10W.xOUT_DONE THEN
         fifo.Put(1);
         iOUT_Step := ST110_Feeder_e.check_if_feeding_necessary;

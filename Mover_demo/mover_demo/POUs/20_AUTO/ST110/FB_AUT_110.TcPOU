@@ -28,11 +28,14 @@ VAR
     fb_Pnp    : FB_ABL_110_Pnp;
     fb_Feeder : FB_ABL_110_Feeder;
 
+    fb_stat_pnp    : FB_AUT_Statistics;
+    fb_stat_Feeder : FB_AUT_Statistics;
+
 END_VAR
 
 VAR CONSTANT
     ROT_TABLE_FREE_MAX_Y : REAL := 100.0; // If Y and Z axis is more than this value, the feeder cannot move
-    ROT_TABLE_FREE_MAX_Z : REAL := 50.0; // If Z and Y axis is more than this value, the feeder cannot move
+    ROT_TABLE_FREE_MAX_Z : REAL := 50.0;  // If Z and Y axis is more than this value, the feeder cannot move
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -64,37 +67,52 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
 
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
 fb_Pnp(xIN_Reset          := xReset,
        xIN_Init           := xIN_Init,
        xIN_Quit           := xIN_Quit,
-       xIN_Start          := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready,
+       xIN_Start          := enIN_State >= enState.StateLEER AND xRelease,
        xIN_Sperre         := NOT xIN_On,
        xIN_NextStep       := xNextStep,
        xIN_AlarmAktiv     := xIN_AlarmAktiv,
        xIN_DryCycle       := xIN_DryCycle,
-       xIN_RestartCYCL    := enIN_State >= enState.StateLEER, // only restart when the mover has move out
+       xIN_RestartCYCL    := enIN_State >= enState.StateLEER,
        enIN_State         := enIN_State,
        tIN_Timeout        := tIN_Timeout,
-       pxFG_Freigabe      := ADR(xDummy),
+       pxFG_Freigabe      := ADR(xRelease),
        Mover              := THIS^.Mover,
        xIN_PceReadyToPick := fb_Feeder.xOUT_Done);
 
 fb_Feeder(xIN_Reset       := xReset,
           xIN_Init        := xIN_Init,
           xIN_Quit        := xIN_Quit,
-          xIN_Start       := enIN_State >= enState.StateLEER, //AND _FB_ABL_100A.xOUT_Done AND _FB_ABL_100A.xOUT_Ready, 
+          xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
           xIN_Sperre      := NOT xIN_On,
           xIN_NextStep    := xNextStep,
           xIN_AlarmAktiv  := xIN_AlarmAktiv,
           xIN_DryCycle    := xIN_DryCycle,
-          xIN_RestartCYCL := enIN_State >= enState.StateLEER, // only restart when the mover has move out
+          xIN_RestartCYCL := enIN_State >= enState.StateLEER,
           enIN_State      := enIN_State,
           tIN_Timeout     := tIN_Timeout,
-          pxFG_Freigabe   := ADR(xDummy),
+          pxFG_Freigabe   := ADR(xRelease),
           // special
           xIN_PickPiece            := fb_Pnp.xOUT_PickPiece,
           xIN_RotTableBlockedByPnp := (ST110_Axis.axis110_01Y.rActPos > ROT_TABLE_FREE_MAX_Y) AND
                                       (ST110_Axis.axis110_02Z.rActPos > ROT_TABLE_FREE_MAX_Z));
+
+fb_stat_pnp(xIN_Enable  := enState.StateAUTO = enIN_State,
+            xIN_Waiting := fb_Pnp.xOUT_Wait,
+            xIN_Running := (fb_Pnp.iOUT_Step >= ST110_Pnp_e.START) AND
+                           (fb_Pnp.iOUT_Step <= ST110_Pnp_e.DONE),
+            // Since we use a mover system, a cycle is done when we are waiting on a mover
+            xIN_Done := fb_Pnp.iOUT_Step = ST110_Pnp_e.waitOnMover);
+
+fb_stat_Feeder(xIN_Enable  := enState.StateAUTO = enIN_State,
+               xIN_Waiting := fb_feeder.xOUT_Wait,
+               xIN_Running := (fb_feeder.iOUT_Step >= ST110_Feeder_e.START) AND
+                              (fb_feeder.iOUT_Step <= ST110_Feeder_e.DONE),
+               xIN_Done := fb_feeder.iOUT_Step = ST110_Feeder_e.DONE);
 
 (*******************************************************************)
 (* Mover reset flags *)
@@ -106,14 +124,25 @@ fb_Feeder(xIN_Reset       := xReset,
 xOUT_InitDone := fb_Pnp.xOUT_InitDone AND fb_Feeder.xOUT_InitDone;
 xOUT_Ready    := fb_Pnp.xOUT_Ready AND fb_Feeder.xOUT_Ready;
 xOUT_Done     := fb_Pnp.xOUT_Done;
-xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag;
-xOUT_Wait     := fb_Pnp.xOUT_Wait;
+xOUT_ErrFlag  := fb_Pnp.xOUT_ErrFlag OR fb_Feeder.xOUT_ErrFlag;
+xOUT_Wait     := fb_Pnp.xOUT_Wait AND fb_Feeder.xOUT_Wait;
 xOUT_AlarmST  := xOUT_ErrFlag;
+
+IF fb_Pnp.xOUT_ErrFlag THEN
+    bOUT_ErrorNum := fb_Pnp.bOUT_Error;
+ELSIF fb_Feeder.xOUT_ErrFlag THEN
+    bOUT_ErrorNum := fb_Feeder.bOUT_Error;
+ELSE
+	bOUT_ErrorNum := 0;
+END_IF
 
 (*******************************************************************)
 (* Bausteinaufruf Error Station *)
 (*******************************************************************)
-// POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
+POU_ALARM_110(xIN_QUIT      := xIN_Quit,
+              iIN_ArraySize := ST110_Alarm_e._max,
+              pstrIN_ALARM  := ADR(HMI.strArALARM[21]),
+              refPOU        := THIS^);
 ]]></ST>
     </Implementation>
     <Property Name="iCompletionPC" Id="{f03aab34-0709-45b8-80fe-12aa7c735bba}">

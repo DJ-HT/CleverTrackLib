@@ -5,6 +5,8 @@
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
+    xOUT_AllMoverEmpty : BOOL; // TRUE when LastStationVisited from all shuttle are 0
+    xOUT_Error         : BOOL; // CleverTrack is in error and needs a reset
 END_VAR
 VAR
     _PieceHolderList : ARRAY[1..2] OF FB_PieceHolder[(0),
@@ -193,51 +195,10 @@ VAR
                     3,
                     85)];
 
+    // Smart
     _StationSet1 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
-                                                  0, // ST110
-                                                  -1, // ST115
-                                                  -1, // ST120
-                                                  0,  // ST125
-                                                  0,  // ST128
-                                                  1,  // ST130
-                                                  -1, // ST135
-                                                  0,  // ST140
-                                                  0,  // ST145
-                                                  2,  // ST150
-                                                  0,  // ST155
-                                                  3,  // ST160
-                                                  3, // ST165
-                                                  0,  // ST170
-                                                  0,  // ST174
-                                                  4,  // ST175
-                                                  -1, // ST176
-                                                  -1, // ST180
-                                                  0]; // ST185
-    _StationSet2 :
-        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
                                                   0,  // ST110
-                                                  -1, // ST115
-                                                  0,  // ST120
-                                                  0,  // ST125
-                                                  0,  // ST128
-                                                  1,  // ST130
-                                                  -1, // ST135
-                                                  0,  // ST140
-                                                  0,  // ST145
-                                                  2,  // ST150
-                                                  -1, // ST155
-                                                  3,  // ST160
-                                                  3, // ST165
-                                                  0,  // ST170
-                                                  0,  // ST174
-                                                  4,  // ST175
-                                                  -1, // ST176
-                                                  -1, // ST180
-                                                  0]; // ST185
-    _StationSet3 :
-        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
-                                                  0, // ST110
                                                   -1, // ST115
                                                   -1, // ST120
                                                   0,  // ST125
@@ -254,9 +215,77 @@ VAR
                                                   0,  // ST174
                                                   4,  // ST175
                                                   -1, // ST176
-                                                  -1, // ST180
+                                                  0,  // ST180
                                                   0]; // ST185
+
+    // Pro
+    _StationSet2 :
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+                                                  0,  // ST110
+                                                  -1, // ST115
+                                                  0,  // ST120
+                                                  0,  // ST125
+                                                  0,  // ST128
+                                                  1,  // ST130
+                                                  -1, // ST135
+                                                  0,  // ST140
+                                                  0,  // ST145
+                                                  2,  // ST150
+                                                  -1, // ST155
+                                                  3,  // ST160
+                                                  3,  // ST165
+                                                  0,  // ST170
+                                                  0,  // ST174
+                                                  4,  // ST175
+                                                  -1, // ST176
+                                                  0,  // ST180
+                                                  0]; // ST185
+
+    // Mini
+    _StationSet3 :
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+                                                  0,  // ST110
+                                                  -1, // ST115
+                                                  -1, // ST120
+                                                  0,  // ST125
+                                                  0,  // ST128
+                                                  1,  // ST130
+                                                  -1, // ST135
+                                                  0,  // ST140
+                                                  0,  // ST145
+                                                  2,  // ST150
+                                                  0,  // ST155
+                                                  3,  // ST160
+                                                  3,  // ST165
+                                                  0,  // ST170
+                                                  0,  // ST174
+                                                  4,  // ST175
+                                                  -1, // ST176
+                                                  0,  // ST180
+                                                  0]; // ST185
+    // Blue    
     _StationSet4 :
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+                                                  -1, // ST110
+                                                  -1, // ST115
+                                                  -1, // ST120
+                                                  0,  // ST125
+                                                  0,  // ST128
+                                                  1,  // ST130
+                                                  -1, // ST135
+                                                  0,  // ST140
+                                                  0,  // ST145
+                                                  2,  // ST150
+                                                  0,  // ST155
+                                                  3,  // ST160
+                                                  3,  // ST165
+                                                  -1, // ST170
+                                                  0,  // ST174
+                                                  4,  // ST175
+                                                  -1, // ST176
+                                                  0,  // ST180
+                                                  0]; // ST185
+    _StationSet5 :
         ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,
                                                   0,
                                                   0,
@@ -277,15 +306,65 @@ VAR
                                                   0,
                                                   0,
                                                   0];
+    _StationSet6 :
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0,
+                                                  0];
+		// Pro Blue
+    _StationSet7 :
+        ARRAY[1..CONST.STATION_NUMBER] OF INT := [0,  // ST105
+                                                  -1, // ST110
+                                                  -1, // ST115
+                                                  0,  // ST120
+                                                  0,  // ST125
+                                                  0,  // ST128
+                                                  1,  // ST130
+                                                  -1, // ST135
+                                                  0,  // ST140
+                                                  0,  // ST145
+                                                  2,  // ST150
+                                                  -1, // ST155
+                                                  3,  // ST160
+                                                  3,  // ST165
+                                                  -1, // ST170
+                                                  0,  // ST174
+                                                  4,  // ST175
+                                                  -1, // ST176
+                                                  0,  // ST180
+                                                  0]; // ST185
 
-    _SelWorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF INT
-        := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4)];
+    _SelWorkStationList : ARRAY[1..7] OF POINTER TO ARRAY[1..CONST.STATION_NUMBER] OF INT
+        := [ADR(_StationSet1), ADR(_StationSet2), ADR(_StationSet3), ADR(_StationSet4), ADR(_StationSet5), ADR(_StationSet6), ADR(_StationSet7)];
 
     _WorkStationList : ARRAY[1..CONST.MAX_RECIPE_NUMBER] OF
         FB_StationMan[(ADR(_StationList), _SelWorkStationList[1], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[2], _PieceHolderList[1]),
                       (ADR(_StationList), _SelWorkStationList[3], _PieceHolderList[1]),
-                      (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[1])];
+                      (ADR(_StationList), _SelWorkStationList[4], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[7], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1]),
+                      (ADR(_StationList), _SelWorkStationList[5], _PieceHolderList[1])];
 
     step : INT := 0; //test step
 
@@ -303,8 +382,8 @@ VAR
     HMI_TimeMax    : DINT               := 1100;
     HMI_xStopMover : BOOL               := FALSE;
     HMI_iSelMover  : INT                := 1;
-	
-	HMI_send_all_shuttle_to_unload : BOOL;
+
+    HMI_send_all_shuttle_to_unload : BOOL;
 
     _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
 END_VAR
@@ -317,7 +396,8 @@ VAR_STAT
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[(* ---------------------------------------------------------------------------- *)
+(* THIS IS A PARTICULAR IMPLEMENTATION OF CLEVERTRAKLIB. THIS SHOULD BE REMOVED *)
 CASE step OF
 
 0: // setup everything
@@ -401,6 +481,8 @@ CASE step OF
 // do nothing, init done
 
 END_CASE
+
+(* ---------------------------------------------------------------------------- *)
 
 // should be done elsewhere ...
 SIMU.lrAccelMover := SIMU.lrAccelMoverSlider * SIMU.lrAccelMoverSlider;
@@ -562,6 +644,9 @@ FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
                 ASSERT(0);
                 _MoverList[mv_i].State := MoverState_e.OperationDone;
 
+            ELSIF _MoverList[mv_i].Station.Process.xMoverShouldLeave THEN
+                _MoverList[mv_i].State := MoverState_e.OperationDone;
+
             ELSE
                 IF NOT _MoverList[mv_i].IsInStationPos() THEN
                     _MoverList[mv_i].State := MoverState_e.WaitRelativeMoveEnd;
@@ -642,6 +727,9 @@ IF CONST.BIND_WITH_TRACK AND gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.enabl
             // echo at position
             gMoverAxis.Q_CT_Shuttle_to_BR.asStruct[mv_i].bCommand.echo_in_pos :=
                 gMoverAxis.I_CT_Shuttle_from_BR.asStruct[mv_i].bStatus.in_position;
+
+            // Quit
+            gMoverAxis.Q_CT_Track_to_BR.asStruct.bCommand.resetErrors := HMI.btArMain[7].press;
         END_IF
     END_FOR
 END_IF
@@ -678,7 +766,21 @@ IF NOT CONST.BIND_WITH_TRACK THEN
     _MoverList[MOVER_NUMBER].MoverAxis.IsColliding(_MoverList[1].MoverAxis); // do not forget to test this case, too
     _MoverList[MOVER_NUMBER].MoverAxis.WillCollide(_MoverList[1].MoverAxis);
 END_IF
+
 // end collision check **********************************************
+
+// start output affectation **********************************************
+xOUT_AllMoverEmpty := TRUE;
+
+FOR mv_i := 1 TO MOVER_NUMBER BY 1 DO
+    IF _MoverList[mv_i].GetLastStationDone() <> 0 THEN
+        xOUT_AllMoverEmpty := FALSE;
+    END_IF
+END_FOR
+
+xOUT_Error := gMoverAxis.I_CT_Track_from_BR.asStruct.bStatus.error;
+
+// end output affectation **********************************************
 ]]></ST>
     </Implementation>
     <Method Name="CheckWaitPosNotBehindStation" Id="{91490bb8-300b-4074-8087-f20c1e8574d1}">
@@ -851,6 +953,45 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="IsMoverInRange" Id="{6965b54e-1f0e-4b71-958b-7a4c20eb19af}">
+      <Declaration><![CDATA[// Is a shuttle present in the given region?
+// If 'from_pos' is greater than 'to_pos', this means we look in
+// a region that include the begining of the track
+METHOD PUBLIC IsMoverInRange : BOOL
+VAR_INPUT
+    from_pos : LREAL; // begin of the tested region (included)
+    to_pos   : LREAL; // end of the tested region (included)
+END_VAR
+VAR
+    i       : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IsMoverInRange := FALSE;
+
+IF from_pos < to_pos THEN
+    FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+        IF (THIS^._MoverList[i].MoverAxis.CurrentPos >= from_pos) AND
+           (THIS^._MoverList[i].MoverAxis.CurrentPos <= to_pos) THEN
+		   IsMoverInRange := TRUE;
+		   EXIT;
+		   
+        END_IF
+    END_FOR
+ELSE // we test a region that pass by the maximum track length
+    FOR i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
+        IF (THIS^._MoverList[i].MoverAxis.CurrentPos >= from_pos) OR
+           (THIS^._MoverList[i].MoverAxis.CurrentPos <= to_pos) THEN
+		   IsMoverInRange := TRUE;
+		   EXIT;
+		   
+        END_IF
+    END_FOR
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="IsMoverLost" Id="{a86b0de5-72c6-4a8d-9bd7-0385975e09ca}">
       <Declaration><![CDATA[// If the target station of a mover is not between the target of the previous and the next mover
 // this function will return true. This function is attendend to debug only
@@ -955,6 +1096,20 @@ FOR mv_i := 1 TO THIS^.MOVER_NUMBER BY 1 DO
         EXIT;
     END_IF
 END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsProcessUsed" Id="{50177cad-7f94-4a42-a096-75439a7b8ec1}">
+      <Declaration><![CDATA[// Is the given process used by the current station configuration?
+METHOD IsProcessUsed : BOOL
+VAR_INPUT
+    this_process : REFERENCE TO FB_AUT_ABSTRACT;
+END_VAR
+VAR
+	i : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsProcessUsed := THIS^._WorkStationList[PH_num].IsProcessUsed(this_process);
 ]]></ST>
       </Implementation>
     </Method>

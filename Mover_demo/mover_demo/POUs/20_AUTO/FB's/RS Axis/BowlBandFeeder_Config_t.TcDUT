@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="BowlBandFeeder_Config_t" Id="{8a8228b0-0600-41bb-bc68-c48d5ad9a246}">
+    <Declaration><![CDATA[TYPE BowlBandFeeder_Config_t :
+STRUCT
+    NumPartsToMaxSensor  : INT;  // Number of parts from separator to maximum sensor
+    PassageTimeOfPart_ms : DINT; // Time needed by a part to travel through the sensor
+    MinPartsInFeeder     : INT;  // Trigger level to enable the bowl
+    OverFillingTime_s    : INT;  // Trigger time to stop the bowl
+    FeederEmptyTime_s    : INT;  // Time in second needed to detect a empty feeder (or a Jam)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,11 +1,11 @@
-﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  07/27/21 18:13:08
+﻿#!-- PPO FILE GENERATED FROM  SpiderControl PLC Editor Beckhoff on  08/05/21 09:29:23
 #!-- Spider Control PPO CSV File version 5 since Jan 2016 utf8 support in editor and server and clients 
 #!-- Spider Control PPO CSV File version 6 since July2020 init ppo val col support in editor and server and clients 
 #!-- Start PPO INIT File
 #!-- VERSION = 6
 #!-- TYPE = 1
-#!-- TS = 61003094
-#!-- N = 2829
+#!-- TS = 610b9353
+#!-- N = 2868
 EMPTY_VAR_NAME;EMPTY_VAR_NAME; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo105Z11@];PLC1.AXIS.bInPos[@CO_AxisNo105Z11@]; ; ; ; ; ; ; ; ; ; ;
 PLC1.AXIS.bInPos[@CO_AxisNo110Y01@];PLC1.AXIS.bInPos[@CO_AxisNo110Y01@]; ; ; ; ; ; ; ; ; ; ;
@@ -964,6 +964,7 @@ PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_AS;PLC1.GVL.st125_aut.fb_P
 PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_AS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_GS;PLC1.GVL.st125_aut.fb_Pnp.fb_handlingSolerohrRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st128_aut._Mover._ID;PLC1.GVL.st128_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut._Mover._ID;PLC1.GVL.st130_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut.fb_Dose.fb_axis130_01Z.rOUT_ActPos;PLC1.GVL.st130_aut.fb_Dose.fb_axis130_01Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st130_aut.fb_Dose.fb_axis130_10Z.rOUT_ActPos;PLC1.GVL.st130_aut.fb_Dose.fb_axis130_10Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
@@ -1015,6 +1016,7 @@ PLC1.GVL.st175_aut.fb_doorExit.fb_handling.xIN_AS;PLC1.GVL.st175_aut.fb_doorExit
 PLC1.GVL.st175_aut.fb_doorExit.fb_handling.xIN_GS;PLC1.GVL.st175_aut.fb_doorExit.fb_handling.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st175_aut.fb_laser.fb_handling.xIN_AS;PLC1.GVL.st175_aut.fb_laser.fb_handling.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st175_aut.fb_laser.fb_handling.xIN_GS;PLC1.GVL.st175_aut.fb_laser.fb_handling.xIN_GS; ; ; ; ; ; ; ; ; ; ;
+PLC1.GVL.st176_aut._Mover._ID;PLC1.GVL.st176_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st180_aut._Mover._ID;PLC1.GVL.st180_aut._Mover._ID; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st180_aut.fb_Pnp.fb_axis180_01Y.rOUT_ActPos;PLC1.GVL.st180_aut.fb_Pnp.fb_axis180_01Y.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st180_aut.fb_Pnp.fb_axis180_02Z.rOUT_ActPos;PLC1.GVL.st180_aut.fb_Pnp.fb_axis180_02Z.rOUT_ActPos; ; ; ; ; ; ; ; ; ; ;
@@ -1039,7 +1041,7 @@ PLC1.GVL.st185_aut.fb_Pnp.fb_gripperLeft.xIN_AS;PLC1.GVL.st185_aut.fb_Pnp.fb_gri
 PLC1.GVL.st185_aut.fb_Pnp.fb_gripperLeft.xIN_GS;PLC1.GVL.st185_aut.fb_Pnp.fb_gripperLeft.xIN_GS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st185_aut.fb_Pnp.fb_gripperRight.xIN_AS;PLC1.GVL.st185_aut.fb_Pnp.fb_gripperRight.xIN_AS; ; ; ; ; ; ; ; ; ; ;
 PLC1.GVL.st185_aut.fb_Pnp.fb_gripperRight.xIN_GS;PLC1.GVL.st185_aut.fb_Pnp.fb_gripperRight.xIN_GS; ; ; ; ; ; ; ; ; ; ;
-PLC1.HMI.PieceDoneTmp;PLC1.HMI.PieceDoneTmp; ; ;int; ; ; ; ; ; ; ;
+PLC1.HMI.PieceDoneTmp;PLC1.HMI.PieceDoneTmp; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI._FB_Keba.s_in;PLC1.HMI._FB_Keba.s_in; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btArMain[0].button;PLC1.HMI.btArMain[0].button; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.btArMain[0].disable;PLC1.HMI.btArMain[0].disable; ; ; ; ; ; ; ; ; ; ;
@@ -1423,7 +1425,7 @@ PLC1.HMI.btManuCylinders[@CO_StatNoXXX@][7].error;PLC1.HMI.btManuCylinders[@CO_S
 PLC1.HMI.btManuCylinders[@CO_StatNoXXX@][7].on;PLC1.HMI.btManuCylinders[@CO_StatNoXXX@][7].on; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.enState;PLC1.HMI.enState; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.iSelectJogAxis;PLC1.HMI.iSelectJogAxis; ; ; ; ; ; ; ; ; ; ;
-PLC1.HMI.lrPiecePerMinute;PLC1.HMI.lrPiecePerMinute; ; ;double; ; ; ; ; ; ; ;
+PLC1.HMI.lrPiecePerMinute;PLC1.HMI.lrPiecePerMinute; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.sCurrentHMI1;PLC1.HMI.sCurrentHMI1; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.sCurrentHMI2;PLC1.HMI.sCurrentHMI2; ; ; ; ; ; ; ; ; ; ;
 PLC1.HMI.xArAlarmHMI[100];PLC1.HMI.xArAlarmHMI[100]; ; ; ; ; ; ; ; ; ; ;
@@ -2659,6 +2661,42 @@ PLC1.IO_BOX.I8206_ST120_hublader_links_niveaukontrolle;PLC1.IO_BOX.I8206_ST120_h
 PLC1.IO_BOX.I8302_ST120_hublader_rechts_niveaukontrolle;PLC1.IO_BOX.I8302_ST120_hublader_rechts_niveaukontrolle; ; ; ; ; ; ; ; ; ; ;
 PLC1.IO_BOX.I8401_ST125_maximum_wf;PLC1.IO_BOX.I8401_ST125_maximum_wf; ; ; ; ; ; ; ; ; ; ;
 PLC1.IO_BOX.I9002_ST180_entlad_fullstandskontroll_box;PLC1.IO_BOX.I9002_ST180_entlad_fullstandskontroll_box; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[10]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[10]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[10]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[10]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[11]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[11]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[11]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[11]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[12]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[12]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[12]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[12]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[13]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[13]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[13]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[13]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[14]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[14]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[14]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[14]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[15]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[15]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[15]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[15]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[16]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[16]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[16]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[16]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[17]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[17]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[17]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[17]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[18]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[18]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[18]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[18]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[1]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[1]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[1]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[1]._MoverAxis.outSimuCurrentPosSC.y; ; ;int; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[2]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[2]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[2]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[2]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[3]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[3]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[3]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[3]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[4]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[4]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[4]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[4]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[5]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[5]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[5]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[5]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[6]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[6]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[6]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[6]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[7]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[7]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[7]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[7]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[8]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[8]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[8]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[8]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[9]._MoverAxis.outSimuCurrentPosSC.x;PLC1.MAIN.MoverMan._MoverList[9]._MoverAxis.outSimuCurrentPosSC.x; ; ; ; ; ; ; ; ; ; ;
+PLC1.MAIN.MoverMan._MoverList[9]._MoverAxis.outSimuCurrentPosSC.y;PLC1.MAIN.MoverMan._MoverList[9]._MoverAxis.outSimuCurrentPosSC.y; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.dwArTimeST102[10];PLC1.PERS.dwArTimeST102[10]; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiCountHauto;PLC1.PERS.udiCountHauto; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiCountHon;PLC1.PERS.udiCountHon; ; ; ; ; ; ; ; ; ; ;
@@ -2666,7 +2704,7 @@ PLC1.PERS.udiTempNOK;PLC1.PERS.udiTempNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTempOK;PLC1.PERS.udiTempOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalNOK;PLC1.PERS.udiTotalNOK; ; ; ; ; ; ; ; ; ; ;
 PLC1.PERS.udiTotalOK;PLC1.PERS.udiTotalOK; ; ; ; ; ; ; ; ; ; ;
-PLC1.ST16x_Axis.axis160_01Z.rActPos;PLC1.ST16x_Axis.axis160_01Z.rActPos; ; ;float; ; ; ; ; ; ; ;
+PLC1.ST16x_Axis.axis160_01Z.rActPos;PLC1.ST16x_Axis.axis160_01Z.rActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1.ST16x_Axis.axis165_01Z.rActPos;PLC1.ST16x_Axis.axis165_01Z.rActPos; ; ; ; ; ; ; ; ; ; ;
 PLC1._10_HMI._key_keba_1.s_in;PLC1._10_HMI._key_keba_1.s_in; ; ; ; ; ; ; ; ; ; ;
 PLC1._10_HMI._key_keba_2.s_in;PLC1._10_HMI._key_keba_2.s_in; ; ; ; ; ; ; ; ; ; ;
@@ -2835,5 +2873,6 @@ PLC1.if_TruMark.Status.b15_Mark_Active;PLC1.if_TruMark.Status.b15_Mark_Active; ;
 PLC1.if_TruMark.Status.b1_Laser_Ready;PLC1.if_TruMark.Status.b1_Laser_Ready; ; ; ; ; ; ; ; ; ; ;
 PLC1.if_TruMark.Status.b3_Shutter_Open;PLC1.if_TruMark.Status.b3_Shutter_Open; ; ; ; ; ; ; ; ; ; ;
 dropDown;dropDown; ; ; ; ; ; ; ; ; ; ;
+izels:OTF.PPO1;izels:OTF.PPO1; ; ; ; ; ; ; ; ; ; ;
 #!-- End PPO INIT File
 

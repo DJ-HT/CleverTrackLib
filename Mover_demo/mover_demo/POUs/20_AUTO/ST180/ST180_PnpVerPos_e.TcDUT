@@ -3,10 +3,11 @@
   <DUT Name="ST180_PnpVerPos_e" Id="{d3709665-c922-4ae4-b042-562ee08cd9af}">
     <Declaration><![CDATA[TYPE ST180_PnpVerPos_e :
 (
-    up_empty,
+    up_waiting_mover,
     down_empty,
     up_full,
     down_full,
+	up_after_unload,
     _max
 );
 END_TYPE

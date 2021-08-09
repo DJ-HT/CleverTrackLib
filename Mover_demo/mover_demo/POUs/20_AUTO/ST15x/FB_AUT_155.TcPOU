@@ -27,6 +27,8 @@ VAR
     (* Bausteine *)
     fb_Uss : FB_ABL_150;
 
+    fb_stat : FB_AUT_Statistics;
+
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[(*******************************************************************)
@@ -56,6 +58,9 @@ xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuC
 (*******************************************************************)
 (* Bausteinaufrufe Abläufe *)
 (*******************************************************************)
+
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
 fb_Uss.xIN_welding_bits.Bereit       := IN.I024_ultraschall_bereit_155_20;
 fb_Uss.xIN_welding_bits.Fehler       := IN.I025_ultraschall_fehler_155_20;
 fb_Uss.xIN_welding_bits.US_on        := IN.I026_ultraschall_us_on_155_20;
@@ -64,7 +69,7 @@ fb_Uss.xIN_welding_bits.NullPosition := IN.I027_ultraschall_nullpos_155_20;
 fb_Uss(xIN_Reset       := xReset,
        xIN_Init        := xIN_Init,
        xIN_Quit        := xIN_Quit,
-       xIN_Start       := enIN_State >= enState.StateLEER,
+       xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
        xIN_Sperre      := NOT xIN_On,
        xIN_NextStep    := xNextStep,
        xIN_AlarmAktiv  := xIN_AlarmAktiv,
@@ -72,15 +77,17 @@ fb_Uss(xIN_Reset       := xReset,
        xIN_RestartCYCL := enIN_State >= enState.StateLEER,
        enIN_State      := enIN_State,
        tIN_Timeout     := tIN_Timeout,
-       pxFG_Freigabe   := ADR(xDummy),
+       pxFG_Freigabe   := ADR(xRelease),
        // CleverTrackLib
        Mover := THIS^.Mover,
        // hardware input
        xIN_capDetector             := IO_BOX.I2306_ST155_deckel_vohanden,
        xIN_kraftubersetzunh_zuruck := IO_BOX.I2304_ST155_kraftubersetzung_zuruck,
        xIN_kraftubersetzunh_vor    := IO_BOX.I2305_ST155_kraftubersetzung_vor,
+       pIN_ButtonMaintaining       := ADR(HMI.btManuCylinders[StationList_e.ST155][1]),
        xIN_welding_bits            :=, // set above
        iIN_StationNumber           := 155,
+       sIN_errorCodeSide           := 'Right',
        // hardware output
        xOUT_moverMaintening_valve => IO_BOX.Q0203_14_ST155_kraftubersetzung,
        xOUT_welding_bits          =>); // set below
@@ -91,6 +98,13 @@ OUT.Q032_ST155_ultraschall_data_bit_0 := fb_Uss.xOUT_welding_bits.Data_Hex1;
 OUT.Q033_ST155_ultraschall_data_bit_1 := fb_Uss.xOUT_welding_bits.Data_Hex2;
 OUT.Q034_ST155_ultraschall_data_bit_2 := fb_Uss.xOUT_welding_bits.Data_Hex4;
 OUT.Q035_ST155_ultraschall_data_bit_3 := fb_Uss.xOUT_welding_bits.Data_Hex8;
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_Uss.xOUT_Wait,
+        xIN_Running := (fb_Uss.iOUT_Step >= ST150_Uss_e.START) AND
+                       (fb_Uss.iOUT_Step <= ST150_Uss_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_Uss.iOUT_Step = ST150_Uss_e.waitOnMover);
 
 (*******************************************************************)
 (* Mover reset flags *)
