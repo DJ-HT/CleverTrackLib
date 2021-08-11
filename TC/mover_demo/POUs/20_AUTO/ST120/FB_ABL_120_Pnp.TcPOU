@@ -449,13 +449,13 @@ ST120_Pnp_e.Init_check_if_pces_handled:
         bOUT_Error := ST120_Alarm_e.Piece_missing_right_griper;
         iOUT_Step  := ST120_Pnp_e.ERROR;
 
-        // if both are open, we don't make further checks
-    ELSIF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inGS) AND
-          (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inGS) THEN
-        iOUT_Step := ST120_Pnp_e.waitOnMover;
-
-    ELSE
+        // if both are open, we don't make further checks	
+		//open meens empty -> get pieces
+    ELSIF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
+          (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
         iOUT_Step := ST120_Pnp_e.READY;
+    ELSE
+        iOUT_Step := ST120_Pnp_e.waitOnMover;
     END_IF
 
 (***** READY / INIT DONE *****)

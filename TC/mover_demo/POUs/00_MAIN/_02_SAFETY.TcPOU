@@ -88,6 +88,8 @@ VAR_OUTPUT
     XOUT_ESD : BOOL; //NOT-AUS D
     XOUT_ESH : BOOL; //NOT-AUS H
     XOUT_ESP : BOOL; //NOT-AUS Panel
+	
+	T_RESET : TON;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -161,7 +163,8 @@ xOUT_MonOut    := xIN_MonOut;
 //--------------------------------------------------------------------------
 //RESET + Einrichten	
 //--------------------------------------------------------------------------
-xOUT_ResetES    := HMI.Tast_BL OR IN.I_CPX9_1_ResetBp;
+T_RESET(IN:=HMI.btArMain[7].button,PT:=T#2S);
+xOUT_ResetES    := HMI.Tast_BL OR IN.I_CPX9_1_ResetBp OR T_RESET.Q;
 xOUT_Einrichten := xArIN_Input3[1];
 
 ////--------------------------------------------------------------------------
