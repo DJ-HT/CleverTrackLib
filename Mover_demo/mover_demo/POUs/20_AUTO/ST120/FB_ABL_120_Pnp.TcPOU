@@ -561,7 +561,7 @@ ST120_Pnp_e.PnP_Ver_ShuttleUp:
 ST120_Pnp_e.SYNC_MOVER_LEAVE:
     // The mover needs to be taken by MoverMan
     IF NOT __ISVALIDREF(Mover) THEN
-        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inGS AND
+        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inGS) AND
            (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inGS) THEN
             iOUT_Step := ST120_Pnp_e.DONE;
         ELSE
