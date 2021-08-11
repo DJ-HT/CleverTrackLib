@@ -17,7 +17,9 @@ MoverMan();
 
 //AUTO
 _20_AUTO(xIN_Quit:= _14_STATE._FB_btQUIT.pbtIN^.rtrig , enIN_State:= HMI.enState);
-]]></ST>
+
+//DJ Test
+DEBUG();]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
