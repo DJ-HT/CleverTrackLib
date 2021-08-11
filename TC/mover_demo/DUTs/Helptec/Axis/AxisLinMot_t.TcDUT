@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="AxisLinMot_t" Id="{04884da4-db4a-477e-bdf7-017d3931d523}">
+    <Declaration><![CDATA[TYPE AxisLinMot_t EXTENDS AxisBeckhoff_t :
+STRUCT
+    bCtrlHi AT %Q* : BYTE; // Axis control word, Hi-Byte
+    wState  AT %I* : WORD; // Axis status word
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

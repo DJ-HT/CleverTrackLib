@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Safety" Id="{56de0a7d-91e6-4a33-ab1c-d15c00998b8b}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Safety
+VAR_INPUT
+
+	xIN_ComErr 		AT 	%I*	:	BOOL;		// Kommunikations Error
+	xIN_FBErr		AT	%I*	: 	BOOL;		// Funktionsbaustein Error
+	xIN_OtherErr 	AT	%I*	: 	BOOL;		// Anderer Error
+	
+	tIN_ResetTime			:	TIME;		// Reset Zeit
+END_VAR
+VAR_OUTPUT
+	xOUT_ErrAck  	AT	%Q*	:	BOOL;		// Error Acknowledge
+	xOUT_RunStop  	AT	%Q*	:	BOOL;		// Run Stop
+END_VAR
+VAR
+	iStep					:	INT;		// Schritt
+	TON_Reset				:	TON;		// Reset
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//START SAFETY
+TON_Reset(IN:=iStep = 0, PT:= tIN_ResetTime);
+CASE iStep OF
+	0:	//AUS
+		xOUT_RunStop:=FALSE;
+		xOUT_ErrAck := FALSE;
+		IF TON_Reset.Q THEN
+			IF NOT (xIN_ComErr OR xIN_FBErr OR xIN_OtherErr) THEN
+				iStep := 10;
+			ELSE
+				iStep := 30;
+			END_IF
+		END_IF;
+		
+	10:	//START
+		xOUT_RunStop := TRUE;
+		xOUT_ErrAck := FALSE;
+		IF NOT (xIN_ComErr OR xIn_FBErr OR xIN_OtherErr) THEN
+			iStep := 20;
+		ELSE
+			iStep := 30;
+		END_IF
+	20:	//LÄUFT
+		IF xIN_ComErr OR xIN_FbErr OR xIN_OtherErr THEN
+			iStep := 30;
+		END_IF
+	30:	//ERROR
+		xOUT_ErrAck := TRUE;
+		iStep := 0;
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

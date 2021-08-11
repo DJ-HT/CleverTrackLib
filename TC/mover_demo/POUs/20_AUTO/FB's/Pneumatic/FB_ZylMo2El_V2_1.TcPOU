@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ZylMo2El_V2_1" Id="{c97c25b5-dc23-4d2d-b25e-865cbe8931f2}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ZylMo2El_V2_1
+VAR_INPUT
+	/// Zurücksetzen
+	xIN_Reset: BOOL := FALSE;
+	/// Error Quittieren
+	xIN_Quit: BOOL := FALSE;
+	/// Manuell bewegen zulässig
+	xIN_Manu: BOOL := FALSE;
+	/// Taste Manuel umschalten
+	pbtIN_Button: POINTER TO structButton;
+	/// Endlage GS
+	xIN_GS: BOOL;
+	/// Endlage AS 
+	xIN_AS: BOOL;
+	/// Freigabe bewegung
+	xIN_FREE: BOOL;
+	/// Nach GS
+	xINtoGS: BOOL;
+	/// Nach AS
+	xINtoAS: BOOL;
+	/// Zeit bis Error GS zu AS
+	tIN_ErrAS: TIME := TIME#3s0ms;
+	/// Zeit bis Error AS zu GS
+	tIN_ErrGS: TIME := TIME#3s0ms;
+	/// Verzögerung in AS
+	tIN_WaitAS: TIME := TIME#10ms;
+	/// Verzögerung in GS
+	tIN_WaitGS: TIME := TIME#10ms;
+END_VAR
+VAR_OUTPUT
+	/// Err anstehend
+	xOUT_ErrFlag: BOOL;
+	/// Err Art
+	bOUT_Error: BYTE;
+	/// Ventilstellung	
+	xOUT_VALVE: BOOL;
+	/// State in AS
+	xOUT_inAS: BOOL;
+	/// State in GS	
+	xOUT_inGS: BOOL;
+END_VAR
+VAR
+	/// State
+	iState: INT;
+	/// State zurück nach Alarm
+	iPreState: INT;
+	/// Taste
+	btMANU: FB_BUTTON;
+	/// Verzögerung AS zu GS Alarm
+	TON_ErrGS: TON;
+	/// Verzögerung GS zu AS Alarm
+	TON_ErrAS: TON;
+	/// Verzögerung Sensor nicht GS
+	TOF_GS: TOF;
+	/// Verzögerung Sensor nicht AS
+	TOF_AS: TOF;
+	/// Verzögerung Beide Sensoren
+	TON_GS_AS: TON;
+	/// Verzögerung Sensor inAS
+	TON_WaitAS: TON;
+	/// Verzögerung Sensor inGS
+	TON_WaitGS: TON;
+	/// Anwahl Zylinder
+	xZYL: BOOL;
+END_VAR
+VAR CONSTANT
+	/// Zurückgesetzt
+	RESET: INT := 0;
+	/// In Grundstellung
+	IN_GS: INT := 10;
+	/// Bewegung nach Arbeitsstellung
+	MOVE_AS: INT := 20;
+	/// In Arbeitsstellung
+	IN_AS: INT := 30;
+	/// Bewegung nach Grundstellung
+	MOVE_GS: INT := 40;
+	/// Error
+	ERROR: INT := 99;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*********************************** Button MANU *************************************)
+//	TASTE MANUELL
+btMANU(pbtIN:= pbtIN_Button,
+	xINdis:= NOT xIN_Manu, 
+	xINon:= xOUT_VALVE, 
+	xINerr:= xOUT_ErrFlag);
+	
+(*********************************** ALLGEMEIN ****************************************)
+// Zurücksetzen
+IF xIN_Reset THEN 
+	iPreState := RESET;
+	iState := RESET;
+END_IF	
+
+//Quittieren
+IF xIN_Quit AND (bOUT_Error<>0) THEN
+	bOUT_Error:=0;
+	iState:=iPreState;
+END_IF
+
+(************************** ALLGMEINE ERRORS *********************************)
+// Beide Endlagen
+IF TON_GS_AS.Q THEN
+	bOUT_Error := 1;
+	iPreState := RESET;
+	iState := ERROR;
+END_IF
+//Parameter Err 
+(*Beispiel
+IF xIN_ToAS AND NOT xIN_ToGS THEN
+	bOUT_Error:= 90;
+	iPreState := RESET;
+	iState := ERROR;
+END_IF
+*)
+
+(************************************Timer*********************************************)
+TON_ErrAS(in:= (iState=MOVE_AS) AND NOT xIN_AS,pt:=tIN_ErrAS);
+TON_ErrGS(in:= (iState=MOVE_GS) AND NOT xIN_GS ,pt:=tIN_ErrGS);
+TOF_GS(IN:=xIN_GS,PT:=T#250MS);
+TOF_AS(IN:=xIN_AS,PT:=T#250MS);
+TON_GS_AS(IN:=xIN_GS AND xIN_AS,PT:=T#250MS);
+TON_WaitAS(in:= xIN_AS, PT:= tIN_WaitAS);
+TON_WaitGS(in:= xIN_GS, PT:= tIN_WaitGS);
+
+
+(************************************STATE********************************************)
+CASE iState OF 
+
+	RESET:
+	(*Schrittkette zurückgesetzt*)
+			IF  xIN_GS THEN 
+				iState:= IN_GS;
+				xZYL := FALSE; // Roger S. 27.07.2021 When in GS during reset, you need to re-order the opening of your cylinder
+			ELSIF xIN_AS THEN
+				xZYL := TRUE;
+				iState:= IN_AS;
+			ELSIF xZYL THEN
+				iState := MOVE_AS;
+			ELSE
+				iState := MOVE_GS;
+			END_IF
+			
+	IN_GS:
+	(*Zylinder befindet sich in Grundstellung*)
+			IF xIN_Manu THEN
+				IF pbtIN_Button^.rtrig THEN 
+					iState := MOVE_AS;
+				END_IF
+			ELSIF xINtoAS AND xIN_FREE THEN
+				iState := MOVE_AS;
+			ELSIF NOT TOF_GS.Q THEN 	//Endlage GS verloren
+				bOUT_Error := 2;
+				iPreState := MOVE_GS;
+				iState := ERROR;
+			END_IF
+			
+	MOVE_AS:
+	(*Zylinder bewegt sich von GS in Arbeitstellung*)
+			xZYL := TRUE;
+			IF 	TON_WaitAS.Q OR xIN_Manu THEN
+				iState := IN_AS;
+			ELSIF TON_ErrAS.Q THEN  // Endlage AS nicht erreicht
+				bOUT_Error:=3;
+				iPreState := MOVE_AS;
+				iState := ERROR;
+			END_IF
+			
+	IN_AS:
+	(*Zylinder befindet sich in Arbeitstellung*)
+			IF xIN_Manu THEN
+				IF pbtIN_Button^.rtrig THEN 
+					iState := MOVE_GS;
+				END_IF
+			ELSIF xINtoGS AND xIN_FREE THEN 
+				iState := MOVE_GS;
+			ELSIF NOT TOF_AS.Q THEN //Endlage AS verloren
+				bOUT_Error := 4;
+				iPreState := MOVE_AS;
+				iState := ERROR;
+			END_IF
+
+	MOVE_GS:
+	(*Zylinder bewegt sich von GS in Arbeitstellung*)
+			xZYL := FALSE;
+			IF 	TON_WaitGS.Q OR xIN_Manu THEN
+				iState := IN_GS;
+			ELSIF TON_ErrGS.Q THEN  // Endlage GS nicht erreicht
+				bOUT_Error:=5;
+				iPreState := MOVE_GS;
+				iState := ERROR;
+			END_IF
+
+	ERROR:
+		(*Es ist ein Err eingetroffen*)
+		IF (bOUT_Error=0) THEN
+			bOUT_Error:= 91;
+		END_IF;
+	
+ELSE
+	//Case befindet sich in einem undefiniertem zustand!
+	bOUT_Error:= 99;
+	iState:= ERROR;
+END_CASE
+
+
+
+(**************************Output*********************************************************)
+ xOUT_ErrFlag	:= (bOUT_Error<>0);
+ bOUT_Error		:= bOUT_Error;		//Im State gesteuert
+IF xIN_FREE THEN
+	 xOUT_VALVE		:= xZYL; 
+END_IF;		
+ xOUT_InAS 		:= (iState=IN_AS);
+ xOUT_InGS 		:= (iState=IN_GS);
+ 
+(*****************************************************************************************)
+
+	]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,451 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Mover" Id="{147d877f-8a39-46b8-8ff1-e23190be69f7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Mover IMPLEMENTS IObject
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    _ID           : INT;                           // hard id number of the mover
+    _MoverAxis    : REFERENCE TO FB_SimuMoverAxis; // reference to an FB_SimuMoverAxis
+    _AttachedTool : REFERENCE TO FB_PieceHolder;   // attached toolhead
+    _Station      : REFERENCE TO FB_Station;       // current station
+
+    _State : MoverState_e := MoverState_e.WaitOnNextStation; // current mover state
+
+    _ActualTargetOffset  : LREAL; // final offset to apply to the current/next target
+    _MovingProcessOffset : LREAL; (* added offset by the process, 
+                                     used to compute the new position of the shuttle inside the station *)
+
+    _LastStationDone : INT;    // the number of the last station done. If negative, the piece is not good at this station
+    _ErrorCode       : STRING; // The error code that comes with the last station done. reset afer 
+
+    _iID : INT := 0; // instance ID, is set during FB_Init using the value of _iInstanceCounter 
+END_VAR
+VAR CONSTANT
+END_VAR
+VAR_STAT
+    _iInstanceCounter : INT := 1; // instance counter
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Property Name="ActualTargetOffset" Id="{766155b6-a03b-4774-953b-46f447da7c1e}">
+      <Declaration><![CDATA[// This is the final offset to apply when moving to a target
+PROPERTY PUBLIC ActualTargetOffset : LREAL]]></Declaration>
+      <Get Name="Get" Id="{85f65cbc-71ca-49e5-9af2-96f83b7fcf58}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ActualTargetOffset := THIS^._ActualTargetOffset;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="AttachedPieceHolder" Id="{1f1520b6-17b9-443d-9101-58c2158353cb}">
+      <Declaration><![CDATA[PROPERTY AttachedPieceHolder : REFERENCE TO FB_PieceHolder]]></Declaration>
+      <Get Name="Get" Id="{7bc424cc-e238-4415-b174-26b9a1b9bd88}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[AttachedPieceHolder REF=_AttachedTool;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b3043ba1-5edb-429d-81cb-c6094b6860ba}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_AttachedTool REF= AttachedPieceHolder;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="Equals" Id="{f14740f4-58b8-4c64-8940-c4b242e3aa11}">
+      <Declaration><![CDATA[METHOD Equals : BOOL
+VAR_INPUT
+    object : ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Equals := THIS = object.pValue;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{f1ad25b4-41be-48ac-a3cf-a51a38b48b2b}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+    bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+    bInCopyCode  : BOOL; // if TRUE, the instance afterwards gets moved into the copy code (online change)
+    ID           : INT;  // hard id number of the mover
+
+    MoverAxis : REFERENCE TO FB_SimuMoverAxis; // reference to an FB_SimuMoverAxis
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._iID := THIS^._iInstanceCounter;
+THIS^._iInstanceCounter := THIS^._iInstanceCounter +1;
+THIS^._ID := ID;
+THIS^._MoverAxis REF= MoverAxis;
+THIS^._AttachedTool REF=0;
+THIS^._Station REF=0;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetErrorCode" Id="{3d951b18-e05e-404b-a099-b7a7240b5ee2}">
+      <Declaration><![CDATA[METHOD GetErrorCode : STRING
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetErrorCode := THIS^._ErrorCode;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetLastStationDone" Id="{cfcf4c70-0bf5-4b76-a872-6dddf7d5257b}">
+      <Declaration><![CDATA[// Get the last station done. The number is always positive
+// To know if the piece is bad, you have to use the IsPieceBad method
+METHOD PUBLIC GetLastStationDone : INT
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetLastStationDone := ABS(THIS^._LastStationDone);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsBehind" Id="{1364b0b6-81a4-4545-a8c6-935b8f76ea04}">
+      <Declaration><![CDATA[// Is this mover behind a given position?
+// this method do the opposit as IsInFront
+METHOD IsBehind : BOOL
+VAR_INPUT
+    lrPosition : LREAL; // position to test
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsBehind := lrPosition > THIS^._MoverAxis.CurrentPos;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsInFront" Id="{42e385d9-249e-426b-a8a4-bd8bc25cd49a}">
+      <Declaration><![CDATA[// Is this mover is in front of a given position?
+// Use this function also to check if the next station is behind the mover or not.
+// In this case, the mover needs to complet its turn for accessing the given station
+METHOD IsInFront : BOOL
+VAR_INPUT
+    lrPosition : LREAL; // position to test
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsInFront := lrPosition < THIS^._MoverAxis.CurrentPos;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsInStationPos" Id="{8f1d1c8f-d3a0-4e9f-9fe0-8845545f2ce3}">
+      <Declaration><![CDATA[METHOD IsInStationPos : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// we have to substract the piecholder offset to find the station position again
+IF CONST.BIND_WITH_TRACK THEN
+    // IsInStationPos :=
+    //     THIS^.Station.Position.isInPos(gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
+    //                                    THIS^._AttachedTool.PosOffset -
+    //                                    THIS^.Station.Offset);
+    IF __ISVALIDREF(THIS^.Station) THEN
+        //IsInStationPos :=
+        //    gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.at_target AND
+        //    (gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bDestinationStation = THIS^.Station.SuperTrackNumber);
+        IsInStationPos :=
+            THIS^.Station.Position.isInPos(gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].diCurrentPos_um / 1000 -
+                                           THIS^._AttachedTool.PosOffset -
+                                           THIS^.Station.Offset -
+                                           THIS^._MovingProcessOffset) AND
+            gMoverAxis.I_CT_Shuttle_from_BR.asStruct[THIS^._ID].bStatus.at_target;
+    ELSE
+        IsInStationPos := FALSE;
+    END_IF
+ELSE
+    IsInStationPos := THIS^.Station.Position
+        .isInPos(THIS^.MoverAxis.CurrentPos - THIS^._AttachedTool.PosOffset - THIS^.Station.Offset);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsPieceBad" Id="{686730a8-52e6-424a-8de7-342567669f56}">
+      <Declaration><![CDATA[// Is the carried piece bad? A piece is bad when the last visited station
+// is negative
+METHOD PUBLIC IsPieceBad : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsPieceBad := THIS^._LastStationDone < 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MoverAxis" Id="{667c64f3-25b7-4e93-87f1-34db05ea3af9}">
+      <Declaration><![CDATA[PROPERTY MoverAxis : REFERENCE TO FB_SimuMoverAxis]]></Declaration>
+      <Get Name="Get" Id="{c2459c87-114e-4ec7-b3db-caf985555ebd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MoverAxis REF= _MoverAxis;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{05348f58-2bb4-4f7f-8f83-3865d24f3ec6}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_MoverAxis REF= MoverAxis;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="MoveRelativeInsideStation" Id="{e03e38bc-fe93-41b3-b2de-36cb4be61842}">
+      <Declaration><![CDATA[// When a mover is given to a process, this process is allowed to
+// use this command to move the shuttle
+METHOD PUBLIC MoveRelativeInsideStation : BOOL
+VAR_INPUT
+    offsetPosition : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MoveRelativeInsideStation := FALSE;
+
+IF (MoverState_e.InOperation = THIS^.State) AND
+   (ABS(offsetPosition + THIS^.Station.Offset + THIS^._MovingProcessOffset) < LREAL#500.0) THEN
+    THIS^.State                := MoverState_e.PerformRelativeMove;
+    THIS^._MovingProcessOffset := offsetPosition + THIS^._MovingProcessOffset;
+    MoveRelativeInsideStation  := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MoveToStation" Id="{eca588ef-140f-424d-b8d0-9320c30f98a1}">
+      <Declaration><![CDATA[// Move to the current set station. Can only move if the current process are running
+METHOD MoveToStation : REFERENCE TO FB_Mover
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
+    THIS^.MoverAxis
+        .MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
+
+    THIS^._MovingProcessOffset := 0;
+    THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset;
+    THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
+ELSE
+    ASSERT(0); // should not be called when we are in operation !
+END_IF
+
+MoveToStation REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="MoveToWaitSpot" Id="{e6a96abf-85ca-4700-ac8c-39eb7eb170c8}">
+      <Declaration><![CDATA[// Move to waiting spot
+// The mover will not move if the waiting spot can not store
+// a full mover
+METHOD MoveToWaitSpot : REFERENCE TO FB_Mover
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^._State <> MoverState_e.InOperation THEN
+    IF THIS^.Station.WaitPos <= (THIS^.Station.Position.lrWorkPosition - CONST.MAX_MOVER_SIZE) THEN
+        THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.WaitPos + THIS^._AttachedTool.PosOffset + THIS^.Station.Offset));
+    ELSE
+        THIS^.MoverAxis.MoveTo(TO_POS(THIS^.Station.Position.lrWorkPosition +
+                                      THIS^._AttachedTool.PosOffset +
+                                      THIS^.Station.Offset));
+    END_IF
+
+    THIS^._MovingProcessOffset := 0;
+    THIS^._ActualTargetOffset  := THIS^._AttachedTool.PosOffset + THIS^.Station.Offset + THIS^.Station._WaitPosOffset;
+    THIS^._State               := MoverState_e.WaitLeaveCurrentStation;
+ELSE
+    ASSERT(0); // never use this command when we are in operation
+END_IF
+
+MoveToWaitSpot REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="MovingProcessOffset" Id="{5efad44e-a624-4841-b07f-de69581e97e3}">
+      <Declaration><![CDATA[PROPERTY PUBLIC MovingProcessOffset : LREAL]]></Declaration>
+      <Get Name="Get" Id="{fe3c85cb-71f1-46e6-b2f6-c639c791b5e4}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[MovingProcessOffset := THIS^._MovingProcessOffset;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="SetErrorCode" Id="{ec670e6e-8425-45b1-9a44-b348c0483370}">
+      <Declaration><![CDATA[METHOD SetErrorCode : BOOL
+VAR_INPUT
+	error_code : STRING; // error code in string format
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF LEN(THIS^._ErrorCode) > 0 THEN
+    SetErrorCode := FALSE;
+ELSE
+    THIS^._ErrorCode := error_code;
+    SetErrorCode     := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetLastStation" Id="{6eeb15ca-bd96-4e70-bcf9-69f9b8c0ae17}">
+      <Declaration><![CDATA[// Set the last station visited as soon as you won't redo the process
+// again on your piece. It is recommanded to first set the piece as bad
+// (negative current station number) as soon as the process has begun,
+// then if the process has ended successfuly, you can again set
+// the last station visited with the positive current station number.
+// This method returns FALSE when the absolute value of the given station
+// number is smaller than the current value
+// To remove pieces from the shuttle, use the UnloadPieces method
+METHOD PUBLIC SetLastStation : BOOL
+VAR_INPUT
+    value : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF ABS(value) < ABS(THIS^._LastStationDone) THEN
+    SetLastStation := FALSE;
+ELSE
+    IF THIS^._LastStationDone < 0 THEN
+        value := 0 - ABS(value);
+    END_IF
+
+    THIS^._LastStationDone := value;
+    SetLastStation         := TRUE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetPieceHolder" Id="{3656c226-034e-4545-af0f-2c2902573b50}">
+      <Declaration><![CDATA[// Set a specic piece holder. This will affect the station position offset
+METHOD SetPieceHolder : REFERENCE TO FB_Mover
+VAR_INPUT
+	pieceHolder : REFERENCE TO FB_PieceHolder;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __ISVALIDREF(pieceHolder) THEN
+	THIS^._AttachedTool REF=pieceHolder;
+END_IF
+SetPieceHolder REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetStation" Id="{99a6cded-9b90-4798-b54e-b9966cee1bc2}">
+      <Declaration><![CDATA[// Set the next station of the mover. This action does not make the mover moves. 
+// First you need to set the station. Then, depending on the station scenario,
+// you will run to it when its current process is finished or move to it
+// as quick as possible
+METHOD SetStation : REFERENCE TO FB_Mover
+VAR_INPUT
+	Station : REFERENCE TO FB_Station;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF __ISVALIDREF(Station) AND_THEN (THIS^._State <> MoverState_e.InOperation) THEN
+    THIS^._Station REF= Station;
+    THIS^._State   := MoverState_e.WaitOnNextStation;
+ELSE
+    ASSERT(0);
+END_IF
+
+SetStation REF= THIS^;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="State" Id="{450dea2c-6489-4063-a805-699ccf8a7f48}">
+      <Declaration><![CDATA[PROPERTY State : MoverState_e]]></Declaration>
+      <Get Name="Get" Id="{a0133e0b-8f6e-4d2b-81b4-55f4faaae79f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[State := _State;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{b22fe45a-1d49-466d-bfcd-05811e0eef14}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_State := State;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="Station" Id="{7bbd8745-ad21-4808-9c00-2034901cee36}">
+      <Declaration><![CDATA[PROPERTY Station : REFERENCE TO FB_Station]]></Declaration>
+      <Get Name="Get" Id="{c1123c17-aefe-44e5-a428-dc0f7f2b27ab}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[Station REF=_Station;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{2c75b98f-8c6d-40fc-a63d-e74234713015}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[_Station REF=Station;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Method Name="TO_POS" Id="{0a18dcda-f783-4400-9438-3adfacc7213c}">
+      <Declaration><![CDATA[// take a position and return always a positive integer between 0 and MAX_TRACK_LENGTH
+METHOD PRIVATE TO_POS : DINT
+VAR_INPUT
+	pos : LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF pos < 0 THEN
+    TO_POS := LREAL_TO_DINT(pos + CONST.MAX_TRACK_LENGTH);
+
+ELSIF pos >= CONST.MAX_TRACK_LENGTH THEN
+    TO_POS := LREAL_TO_DINT(pos) MOD LREAL_TO_DINT(CONST.MAX_TRACK_LENGTH);
+
+ELSE
+    TO_POS := LREAL_TO_DINT(pos);
+
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ToString" Id="{54c07018-71f2-4cf5-9d31-ef8ca5167ad0}">
+      <Declaration><![CDATA[METHOD ToString : STRING
+VAR_INPUT
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[ToString := CONCAT('FB_Mover_', TO_STRING(THIS^._iID));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="UnloadPieces" Id="{46c806c8-1d14-4c11-9ac5-810173d6edc3}">
+      <Declaration><![CDATA[// Unload all the pieces. This sets the _LastStationDone to 0
+METHOD PUBLIC UnloadPieces : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^._LastStationDone <> 0 THEN
+    UnloadPieces           := TRUE;
+    THIS^._LastStationDone := 0;
+    THIS^._ErrorCode       := '';
+ELSE
+    UnloadPieces := FALSE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

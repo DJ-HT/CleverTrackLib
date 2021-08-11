@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST110_Feeder_e" Id="{e9b37908-490f-439f-b93a-9692cf1a8275}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE ST110_Feeder_e :
+(
+    RESET := 0, // Reset
+
+    INIT := 100, // Initialisieren 
+    Init_home_table := 110,
+    Init_simu_home_table := 120,
+    Init_table_go_to_zero := 130,
+    Init_reset_search_index := 140,
+    Init_set_table_pos := 150,
+    Init_see_if_piece_there := 160,
+
+    READY := 999,  // READY to Start, Init Done 
+    START := 1000, // Start Zyklisch
+    check_if_feeding_necessary := 1010,
+	wait_on_a_piece := 1020,
+	load_piece := 1030,
+	wait_rotary_table_done := 1040,
+
+    DONE := 8000,  // Ablauf beendet 
+    ERROR := 9000, // Fehler 
+    _max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

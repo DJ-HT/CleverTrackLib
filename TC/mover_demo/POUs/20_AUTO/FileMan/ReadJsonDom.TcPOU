@@ -1,0 +1,500 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="ReadJsonDom" Id="{279571ce-db73-4cae-bbb0-df8c1ed5f757}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION ReadJsonDom : BOOL
+VAR_INPUT
+END_VAR
+VAR
+    fb_json : FB_JsonDomParser;
+
+    json_head              : SJsonValue;
+    json_value             : SJsonValue;
+    json_iStationTimeDef1  : SJsonValue;
+    json_iStationTimeDef2  : SJsonValue;
+    json_recipeList        : SJsonValue;
+    json_linearAxis        : SJsonValue;
+    json_defProfile        : SJsonValue;
+    json_movesList         : SJsonValue;
+    json_cylinder2Pos      : SJsonValue;
+    json_stationOffsets    : SJsonValue;
+    json_st110             : SJsonValue;
+    json_FeederConfig      : SJsonValue;
+    json_st115             : SJsonValue;
+    json_st120             : SJsonValue;
+    json_FeederConfigLeft  : SJsonValue;
+    json_FeederConfigRight : SJsonValue;
+    json_st125             : SJsonValue;
+    json_st145             : SJsonValue;
+    json_st180             : SJsonValue;
+    json_i                 : SJsonValue;
+    json_ii                : SJsonValue;
+    json_iii               : SJsonValue;
+
+    i   : INT;
+    ii  : INT;
+    iii : INT;
+
+END_VAR
+VAR_IN_OUT
+    sMessage : STRING(10000);
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[json_head := fb_json.ParseDocument(sMessage);
+
+IF fb_json.HasMember(json_head, 'iStationTimeDef1') THEN
+    json_iStationTimeDef1 := fb_json.FindMember(json_head, 'iStationTimeDef1');
+
+    IF fb_json.IsArray(json_iStationTimeDef1) THEN
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef1)) - 1, CONST.STATION_NUMBER - 1) BY 1 DO
+            json_i                       := fb_json.GetArrayValueByIdx(json_iStationTimeDef1, TO_UDINT(i));
+            PERS.iStationTimeDef1[i + 1] := TO_DINT(fb_json.GetInt(json_i));
+        END_FOR
+    END_IF
+END_IF
+
+IF fb_json.HasMember(json_head, 'iStationTimeDef2') THEN
+    json_iStationTimeDef2 := fb_json.FindMember(json_head, 'iStationTimeDef2');
+
+    IF fb_json.IsArray(json_iStationTimeDef2) THEN
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_iStationTimeDef2)) - 1, CONST.STATION_NUMBER - 1) BY 1 DO
+            json_i                       := fb_json.GetArrayValueByIdx(json_iStationTimeDef2, TO_UDINT(i));
+            PERS.iStationTimeDef2[i + 1] := TO_DINT(fb_json.GetInt(json_i));
+        END_FOR
+    END_IF
+END_IF
+
+IF fb_json.HasMember(json_head, 'recipeList') THEN
+    json_recipeList := fb_json.FindMember(json_head, 'recipeList');
+
+    IF fb_json.IsArray(json_recipeList) THEN
+        FOR i := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_recipeList)) - 1, CONST.MAX_RECIPE_NUMBER - 0) BY 1 DO
+            json_i := fb_json.GetArrayValueByIdx(json_recipeList, TO_UDINT(i));
+
+            IF fb_json.HasMember(json_i, 'linearAxis') THEN
+                json_linearAxis := fb_json.FindMember(json_i, 'linearAxis');
+
+                IF fb_json.IsArray(json_linearAxis) THEN
+                    FOR ii := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_linearAxis)) - 1, LinearAxis_e._max - 1 - 0) BY
+                        1 DO
+                        json_ii := fb_json.GetArrayValueByIdx(json_linearAxis, TO_UDINT(ii));
+
+                        IF fb_json.HasMember(json_ii, 'defProfile') THEN
+                            json_defProfile := fb_json.FindMember(json_ii, 'defProfile');
+
+                            IF fb_json.HasMember(json_defProfile, 'lrVelocity') THEN
+                                json_value := fb_json.FindMember(json_defProfile, 'lrVelocity');
+                                PERS.recipeList[i + 0].linearAxis[ii + 0].defProfile.lrVelocity
+                                    := TO_REAL(fb_json.GetDouble(json_value));
+                            END_IF
+
+                            IF fb_json.HasMember(json_defProfile, 'lrAccel') THEN
+                                json_value := fb_json.FindMember(json_defProfile, 'lrAccel');
+                                PERS.recipeList[i + 0].linearAxis[ii + 0].defProfile.lrAccel
+                                    := TO_REAL(fb_json.GetDouble(json_value));
+                            END_IF
+
+                            IF fb_json.HasMember(json_defProfile, 'lrDecel') THEN
+                                json_value := fb_json.FindMember(json_defProfile, 'lrDecel');
+                                PERS.recipeList[i + 0].linearAxis[ii + 0].defProfile.lrDecel
+                                    := TO_REAL(fb_json.GetDouble(json_value));
+                            END_IF
+
+                            IF fb_json.HasMember(json_defProfile, 'lrJerk') THEN
+                                json_value := fb_json.FindMember(json_defProfile, 'lrJerk');
+                                PERS.recipeList[i + 0].linearAxis[ii + 0].defProfile.lrJerk
+                                    := TO_REAL(fb_json.GetDouble(json_value));
+                            END_IF
+                        END_IF
+
+                        IF fb_json.HasMember(json_ii, 'movesList') THEN
+                            json_movesList := fb_json.FindMember(json_ii, 'movesList');
+
+                            IF fb_json.IsArray(json_movesList) THEN
+                                FOR iii := 0 TO
+                                    MIN(TO_INT(fb_json.GetArraySize(json_movesList)) - 1, CONST.MAX_VECTOR_LIST - 0) BY
+                                    1 DO
+                                    json_iii := fb_json.GetArrayValueByIdx(json_movesList, TO_UDINT(iii));
+
+                                    IF fb_json.HasMember(json_iii, 'lrVelocity') THEN
+                                        json_value := fb_json.FindMember(json_iii, 'lrVelocity');
+                                        PERS.recipeList[i + 0].linearAxis[ii + 0].movesList[iii + 0].lrVelocity
+                                            := TO_REAL(fb_json.GetDouble(json_value));
+                                    END_IF
+
+                                    IF fb_json.HasMember(json_iii, 'lrAccel') THEN
+                                        json_value := fb_json.FindMember(json_iii, 'lrAccel');
+                                        PERS.recipeList[i + 0].linearAxis[ii + 0].movesList[iii + 0].lrAccel
+                                            := TO_REAL(fb_json.GetDouble(json_value));
+                                    END_IF
+
+                                    IF fb_json.HasMember(json_iii, 'lrDecel') THEN
+                                        json_value := fb_json.FindMember(json_iii, 'lrDecel');
+                                        PERS.recipeList[i + 0].linearAxis[ii + 0].movesList[iii + 0].lrDecel
+                                            := TO_REAL(fb_json.GetDouble(json_value));
+                                    END_IF
+
+                                    IF fb_json.HasMember(json_iii, 'lrJerk') THEN
+                                        json_value := fb_json.FindMember(json_iii, 'lrJerk');
+                                        PERS.recipeList[i + 0].linearAxis[ii + 0].movesList[iii + 0].lrJerk
+                                            := TO_REAL(fb_json.GetDouble(json_value));
+                                    END_IF
+
+                                    IF fb_json.HasMember(json_iii, 'lrPosition') THEN
+                                        json_value := fb_json.FindMember(json_iii, 'lrPosition');
+                                        PERS.recipeList[i + 0].linearAxis[ii + 0].movesList[iii + 0].lrPosition
+                                            := TO_LREAL(fb_json.GetDouble(json_value));
+                                    END_IF
+
+                                    IF fb_json.HasMember(json_iii, 'TriggerType') THEN
+                                        json_value := fb_json.FindMember(json_iii, 'TriggerType');
+                                        PERS.recipeList[i + 0].linearAxis[ii + 0].movesList[iii + 0].TriggerType
+                                            := TO_INT(fb_json.GetInt(json_value));
+                                    END_IF
+
+                                    IF fb_json.HasMember(json_iii, 'TriggerPos') THEN
+                                        json_value := fb_json.FindMember(json_iii, 'TriggerPos');
+                                        PERS.recipeList[i + 0].linearAxis[ii + 0].movesList[iii + 0].TriggerPos
+                                            := TO_LREAL(fb_json.GetDouble(json_value));
+                                    END_IF
+
+                                    IF fb_json.HasMember(json_iii, 'Timeout_ms') THEN
+                                        json_value := fb_json.FindMember(json_iii, 'Timeout_ms');
+                                        PERS.recipeList[i + 0].linearAxis[ii + 0].movesList[iii + 0].Timeout_ms
+                                            := TO_DINT(fb_json.GetInt(json_value));
+                                    END_IF
+                                END_FOR
+                            END_IF
+                        END_IF
+                    END_FOR
+                END_IF
+            END_IF
+
+            IF fb_json.HasMember(json_i, 'cylinder2Pos') THEN
+                json_cylinder2Pos := fb_json.FindMember(json_i, 'cylinder2Pos');
+
+                IF fb_json.IsArray(json_cylinder2Pos) THEN
+                    FOR ii := 0 TO MIN(TO_INT(fb_json.GetArraySize(json_cylinder2Pos)) - 1, StationList_e._max - 1) BY
+                        1 DO
+                        json_ii := fb_json.GetArrayValueByIdx(json_cylinder2Pos, TO_UDINT(ii));
+
+                        IF fb_json.IsArray(json_ii) THEN
+                            FOR iii := 0 TO
+                                MIN(TO_INT(fb_json.GetArraySize(json_ii)) - 1, CONST.MAX_CYLINDER_PER_STATION - 1) BY
+                                1 DO
+                                json_iii := fb_json.GetArrayValueByIdx(json_ii, TO_UDINT(iii));
+
+                                IF fb_json.HasMember(json_iii, 'toGS_alarm_time') THEN
+                                    json_value := fb_json.FindMember(json_iii, 'toGS_alarm_time');
+                                    PERS.recipeList[i + 0].cylinder2Pos[ii + 0][iii + 0].toGS_alarm_time
+                                        := TO_DINT(fb_json.GetInt(json_value));
+                                END_IF
+
+                                IF fb_json.HasMember(json_iii, 'toAS_alarm_time') THEN
+                                    json_value := fb_json.FindMember(json_iii, 'toAS_alarm_time');
+                                    PERS.recipeList[i + 0].cylinder2Pos[ii + 0][iii + 0].toAS_alarm_time
+                                        := TO_DINT(fb_json.GetInt(json_value));
+                                END_IF
+
+                                IF fb_json.HasMember(json_iii, 'toGS_wait_time') THEN
+                                    json_value := fb_json.FindMember(json_iii, 'toGS_wait_time');
+                                    PERS.recipeList[i + 0].cylinder2Pos[ii + 0][iii + 0].toGS_wait_time
+                                        := TO_DINT(fb_json.GetInt(json_value));
+                                END_IF
+
+                                IF fb_json.HasMember(json_iii, 'toAS_wait_time') THEN
+                                    json_value := fb_json.FindMember(json_iii, 'toAS_wait_time');
+                                    PERS.recipeList[i + 0].cylinder2Pos[ii + 0][iii + 0].toAS_wait_time
+                                        := TO_DINT(fb_json.GetInt(json_value));
+                                END_IF
+                            END_FOR
+                        END_IF
+                    END_FOR
+                END_IF
+
+                IF fb_json.HasMember(json_i, 'stationOffsets') THEN
+                    json_stationOffsets := fb_json.FindMember(json_i, 'stationOffsets');
+
+                    IF fb_json.IsArray(json_stationOffsets) THEN
+                        FOR ii := 0 TO
+                            MIN(TO_INT(fb_json.GetArraySize(json_stationOffsets)) - 1, CONST.STATION_NUMBER - 1 - 0) BY
+                            1 DO
+                            json_ii := fb_json.GetArrayValueByIdx(json_stationOffsets, TO_UDINT(ii));
+                            PERS.recipeList[i + 0].stationOffsets[ii + 0]
+                                := TO_REAL(fb_json.GetDouble(json_ii));
+                        END_FOR
+                    END_IF
+                END_IF
+
+                IF fb_json.HasMember(json_i, 'st110') THEN
+                    json_st110 := fb_json.FindMember(json_i, 'st110');
+
+                    IF fb_json.HasMember(json_st110, 'xUseVerLeft') THEN
+                        json_value                               := fb_json.FindMember(json_st110, 'xUseVerLeft');
+                        PERS.recipeList[i + 0].st110.xUseVerLeft := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st110, 'xUseVerRight') THEN
+                        json_value                                := fb_json.FindMember(json_st110, 'xUseVerRight');
+                        PERS.recipeList[i + 0].st110.xUseVerRight := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st110, 'FeederConfig') THEN
+                        json_FeederConfig := fb_json.FindMember(json_st110, 'FeederConfig');
+
+                        IF fb_json.HasMember(json_FeederConfig, 'InFilterDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'InFilterDelay');
+                            PERS.recipeList[i + 0].st110.FeederConfig.InFilterDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'StartDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'StartDelay');
+                            PERS.recipeList[i + 0].st110.FeederConfig.StartDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'StopDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'StopDelay');
+                            PERS.recipeList[i + 0].st110.FeederConfig.StopDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'EmptyDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'EmptyDelay');
+                            PERS.recipeList[i + 0].st110.FeederConfig.EmptyDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+                    END_IF
+                END_IF
+
+                IF fb_json.HasMember(json_i, 'st115') THEN
+                    json_st115 := fb_json.FindMember(json_i, 'st115');
+
+                    IF fb_json.HasMember(json_st115, 'xUseVerLeft') THEN
+                        json_value                               := fb_json.FindMember(json_st115, 'xUseVerLeft');
+                        PERS.recipeList[i + 0].st115.xUseVerLeft := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st115, 'xUseVerRight') THEN
+                        json_value                                := fb_json.FindMember(json_st115, 'xUseVerRight');
+                        PERS.recipeList[i + 0].st115.xUseVerRight := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st115, 'FeederConfig') THEN
+                        json_FeederConfig := fb_json.FindMember(json_st115, 'FeederConfig');
+
+                        IF fb_json.HasMember(json_FeederConfig, 'InFilterDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'InFilterDelay');
+                            PERS.recipeList[i + 0].st115.FeederConfig.InFilterDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'StartDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'StartDelay');
+                            PERS.recipeList[i + 0].st115.FeederConfig.StartDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'StopDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'StopDelay');
+                            PERS.recipeList[i + 0].st115.FeederConfig.StopDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'EmptyDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'EmptyDelay');
+                            PERS.recipeList[i + 0].st115.FeederConfig.EmptyDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+                    END_IF
+                END_IF
+
+                IF fb_json.HasMember(json_i, 'st120') THEN
+                    json_st120 := fb_json.FindMember(json_i, 'st120');
+
+                    IF fb_json.HasMember(json_st120, 'xUseVerLeft') THEN
+                        json_value                               := fb_json.FindMember(json_st120, 'xUseVerLeft');
+                        PERS.recipeList[i + 0].st120.xUseVerLeft := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st120, 'xUseVerRight') THEN
+                        json_value                                := fb_json.FindMember(json_st120, 'xUseVerRight');
+                        PERS.recipeList[i + 0].st120.xUseVerRight := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st120, 'FeederConfigLeft') THEN
+                        json_FeederConfigLeft := fb_json.FindMember(json_st120, 'FeederConfigLeft');
+
+                        IF fb_json.HasMember(json_FeederConfigLeft, 'InFilterDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfigLeft, 'InFilterDelay');
+                            PERS.recipeList[i + 0].st120.FeederConfigLeft.InFilterDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfigLeft, 'StartDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfigLeft, 'StartDelay');
+                            PERS.recipeList[i + 0].st120.FeederConfigLeft.StartDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfigLeft, 'StopDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfigLeft, 'StopDelay');
+                            PERS.recipeList[i + 0].st120.FeederConfigLeft.StopDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfigLeft, 'EmptyDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfigLeft, 'EmptyDelay');
+                            PERS.recipeList[i + 0].st120.FeederConfigLeft.EmptyDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+                    END_IF
+
+                    IF fb_json.HasMember(json_st120, 'FeederConfigRight') THEN
+                        json_FeederConfigRight := fb_json.FindMember(json_st120, 'FeederConfigRight');
+
+                        IF fb_json.HasMember(json_FeederConfigRight, 'InFilterDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfigRight, 'InFilterDelay');
+                            PERS.recipeList[i + 0].st120.FeederConfigRight.InFilterDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfigRight, 'StartDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfigRight, 'StartDelay');
+                            PERS.recipeList[i + 0].st120.FeederConfigRight.StartDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfigRight, 'StopDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfigRight, 'StopDelay');
+                            PERS.recipeList[i + 0].st120.FeederConfigRight.StopDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfigRight, 'EmptyDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfigRight, 'EmptyDelay');
+                            PERS.recipeList[i + 0].st120.FeederConfigRight.EmptyDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+                    END_IF
+                END_IF
+
+                IF fb_json.HasMember(json_i, 'st125') THEN
+                    json_st125 := fb_json.FindMember(json_i, 'st125');
+
+                    IF fb_json.HasMember(json_st125, 'xUseVerLeft') THEN
+                        json_value := fb_json.FindMember(json_st125, 'xUseVerLeft');
+                        PERS.recipeList[i + 0].st125.xUseVerLeft
+                            := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st125, 'xUseVerRight') THEN
+                        json_value := fb_json.FindMember(json_st125, 'xUseVerRight');
+                        PERS.recipeList[i + 0].st125.xUseVerRight
+                            := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st125, 'FeederConfig') THEN
+                        json_FeederConfig := fb_json.FindMember(json_st125, 'FeederConfig');
+
+                        IF fb_json.HasMember(json_FeederConfig, 'InFilterDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'InFilterDelay');
+                            PERS.recipeList[i + 0].st125.FeederConfig.InFilterDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'StartDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'StartDelay');
+                            PERS.recipeList[i + 0].st125.FeederConfig.StartDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'StopDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'StopDelay');
+                            PERS.recipeList[i + 0].st125.FeederConfig.StopDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'EmptyDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'EmptyDelay');
+                            PERS.recipeList[i + 0].st125.FeederConfig.EmptyDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+                    END_IF
+                END_IF
+
+                IF fb_json.HasMember(json_i, 'st145') THEN
+                    json_st145 := fb_json.FindMember(json_i, 'st145');
+
+                    IF fb_json.HasMember(json_st145, 'xUseVerLeft') THEN
+                        json_value := fb_json.FindMember(json_st145, 'xUseVerLeft');
+                        PERS.recipeList[i + 0].st145.xUseVerLeft
+                            := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st145, 'xUseVerRight') THEN
+                        json_value := fb_json.FindMember(json_st145, 'xUseVerRight');
+                        PERS.recipeList[i + 0].st145.xUseVerRight
+                            := (fb_json.GetBool(json_value));
+                    END_IF
+
+                    IF fb_json.HasMember(json_st145, 'FeederConfig') THEN
+                        json_FeederConfig := fb_json.FindMember(json_st145, 'FeederConfig');
+
+                        IF fb_json.HasMember(json_FeederConfig, 'InFilterDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'InFilterDelay');
+                            PERS.recipeList[i + 0].st145.FeederConfig.InFilterDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'StartDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'StartDelay');
+                            PERS.recipeList[i + 0].st145.FeederConfig.StartDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'StopDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'StopDelay');
+                            PERS.recipeList[i + 0].st145.FeederConfig.StopDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+
+                        IF fb_json.HasMember(json_FeederConfig, 'EmptyDelay') THEN
+                            json_value := fb_json.FindMember(json_FeederConfig, 'EmptyDelay');
+                            PERS.recipeList[i + 0].st145.FeederConfig.EmptyDelay
+                                := TO_DINT(fb_json.GetInt(json_value));
+                        END_IF
+                    END_IF
+                END_IF
+            END_IF
+
+            IF fb_json.HasMember(json_i, 'st180') THEN
+                json_st180 := fb_json.FindMember(json_i, 'st180');
+
+                IF fb_json.HasMember(json_st180, 'xUseVerLeft') THEN
+                    json_value                               := fb_json.FindMember(json_st180, 'xUseVerLeft');
+                    PERS.recipeList[i + 0].st180.xUseVerLeft := (fb_json.GetBool(json_value));
+                END_IF
+
+                IF fb_json.HasMember(json_st180, 'xUseVerRight') THEN
+                    json_value                                := fb_json.FindMember(json_st180, 'xUseVerRight');
+                    PERS.recipeList[i + 0].st180.xUseVerRight := (fb_json.GetBool(json_value));
+                END_IF
+            END_IF
+        END_FOR
+    END_IF
+END_IF
+
+IF fb_json.HasMember(json_head, 'iRecipeCurrent') THEN
+    json_value          := fb_json.FindMember(json_head, 'iRecipeCurrent');
+    PERS.iRecipeCurrent := TO_INT(fb_json.GetInt(json_value));
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="ReadJsonDom">
+      <LineId Id="3" Count="449" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

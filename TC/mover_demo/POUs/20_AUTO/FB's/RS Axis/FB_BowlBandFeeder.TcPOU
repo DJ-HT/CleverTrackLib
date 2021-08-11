@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_BowlBandFeeder" Id="{0cb38cc1-11f3-4d3a-9fe6-3bd8eb8316c8}" SpecialFunc="None">
+    <Declaration><![CDATA[// This function bloc controls a dual feeder composed typically by a bowl and a linear part
+// 
+
+FUNCTION_BLOCK FB_BowlBandFeeder
+VAR_INPUT
+    stIN_config : BowlBandFeeder_Config_t := (NumPartsToMaxSensor := 10,
+                                              PassageTimeOfPart_ms := 500,
+                                              MinPartsInFeeder := 5,
+                                              OverFillingTime_s := 0,
+                                              FeederEmptyTime_s := 60);
+    xIN_EnableFeeder  : BOOL;          // enable this function block
+    xIN_InSimulation  : BOOL;          // Ignore hardware inputs and generate output automatically
+    tIN_BandEmptyTime : TIME := T#10S; // Time before we empty the fifo (used when PassageTimeOfPart_ms is too small or when pices where removed) 
+
+    xIN_NeedPiece : BOOL; // Enable the band part to take a piece
+    xIN_MaxSensor : BOOL; // Hardware sensor to maximum position
+END_VAR
+VAR_OUTPUT
+    xOUT_EnableBowl  : BOOL; // enable the bowl part (or first part, more far from the machine)
+    xOUT_EnableBand  : BOOL; // Enable the band part (or the second part, more near of the machine)
+    xOUT_FeederEmpty : BOOL; // The bowl is empty or jamed
+END_VAR
+VAR
+    detectFirstPieceTon  : TON;
+    generatePieceTrigTon : TON;
+    detectPieceTrig      : F_TRIG;
+    emptyTon             : TON;
+    fifo                 : FB_Fifo;
+    bowlEnableTof        : TOF;
+    bandEmptyTon         : TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+bandEmptyTon(IN := xIN_NeedPiece AND NOT bandEmptyTon.Q, PT := tIN_BandEmptyTime);
+
+// If the band was activated for too long without giving a pieces, that means we have 
+// to run the bowl part of the feeder. We perform this by empty the fifo
+IF bandEmptyTon.Q THEN
+    fifo.Empty();
+END_IF
+
+detectFirstPieceTon(IN := xIN_MaxSensor AND xOUT_EnableBand,
+                    PT := DINT_TO_TIME(stIN_config.PassageTimeOfPart_ms));
+
+// We increment only the fifo after the first pieces have traveled
+generatePieceTrigTon(IN := detectFirstPieceTon.Q AND NOT generatePieceTrigTon.Q,
+                     PT := DINT_TO_TIME(stIN_config.PassageTimeOfPart_ms));
+
+detectPieceTrig(CLK := xIN_MaxSensor);
+
+fifo.Put(BOOL_TO_INT((detectPieceTrig.Q OR generatePieceTrigTon.Q) AND xOUT_EnableBand));
+
+IF fifo.GetLen() < stIN_config.MinPartsInFeeder THEN
+    bowlEnableTof.IN := TRUE;
+ELSIF fifo.IsFull() OR NOT xIN_EnableFeeder THEN
+    bowlEnableTof.IN := FALSE;
+END_IF
+
+bowlEnableTof(IN :=, // set above
+              PT := DINT_TO_TIME(BOOL_TO_DINT(xIN_EnableFeeder) * stIN_config.OverFillingTime_s * 1000));
+
+xOUT_EnableBowl := xIN_EnableFeeder AND bowlEnableTof.Q;
+
+xOUT_EnableBand := xIN_EnableFeeder AND (xOUT_EnableBowl OR xIN_NeedPiece);
+
+emptyTon(IN := NOT xIN_MaxSensor AND xOUT_EnableBowl,
+         PT := DINT_TO_TIME(stIN_config.FeederEmptyTime_s * 1000));
+
+xOUT_FeederEmpty := emptyTon.Q;
+]]></ST>
+    </Implementation>
+    <Method Name="Pop" Id="{5e8e75b4-2782-4997-8237-7fb69467110c}">
+      <Declaration><![CDATA[// take num_of_element from the BowlBand fifo
+// If there is no enough element inside the fifo, the fifo
+// is set to empty and FALSE is returned
+// else Pop returns TRUE
+METHOD PUBLIC Pop : BOOL
+VAR_INPUT
+	num_of_element : INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF THIS^.fifo.GetLen() < num_of_element THEN
+	THIS^.fifo.Empty();
+	Pop := FALSE;
+ELSE
+	THIS^.fifo.Pop(num_of_element);
+	Pop := TRUE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="FeederDelays_t" Id="{9c906e79-b45f-44d9-82fe-7e23ff9e10fb}">
+    <Declaration><![CDATA[TYPE FeederDelays_t :
+STRUCT
+    InFilterDelay : DINT; // delay to filter the input, see FB_Feeder2Sensors
+    StartDelay    : DINT; // delay to start the feeder, see FB_Feeder2Sensors
+    StopDelay     : DINT; // delay to stop the feeder, see FB_Feeder2Sensors
+    EmptyDelay    : DINT; // delay before the feeder is considered as empty, see FB_Feeder2Sensors
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

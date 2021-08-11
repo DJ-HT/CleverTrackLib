@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <Itf Name="IProcessSampleMover" Id="{195f15bd-9eda-40e2-b294-c2855f6d4080}">
+    <Declaration><![CDATA[INTERFACE IProcessSampleMover
+]]></Declaration>
+    <Method Name="GiveMover" Id="{05754a6a-14fd-48de-96ed-ce6d8bb38e23}">
+      <Declaration><![CDATA[METHOD GiveMover : IProcessSampleMover
+VAR_INPUT
+	mover : REFERENCE TO FB_Mover;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="iCompletionPC" Id="{6db509f1-8e66-42c7-a6f6-52dd0036abd7}">
+      <Declaration><![CDATA[(* % of completion of the process *)
+PROPERTY iCompletionPC : INT]]></Declaration>
+      <Get Name="Get" Id="{bd0f7132-4974-4853-bf43-00fdbbb7be66}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="Mover" Id="{c41497ec-1348-4cbd-95a7-d74ce88b4fa5}">
+      <Declaration><![CDATA[PROPERTY Mover : REFERENCE TO FB_Mover]]></Declaration>
+      <Get Name="Get" Id="{e76e790c-206c-467b-836b-d4f7d9b67b0c}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{f5acdb4b-1a0a-41ea-b02d-77cb2e3b4ecf}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="ProcessExecution" Id="{d6a47de7-07ac-40a7-8905-6b77607cab96}">
+      <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
+      <Get Name="Get" Id="{abfb2323-927a-4eaf-b818-504027a59069}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{b50cd2a1-64ca-491a-9967-81f0fe5dab32}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Method Name="TakeMover" Id="{3acae537-92dc-4a43-a882-c4eebcf3abe5}">
+      <Declaration><![CDATA[METHOD TakeMover : IProcessSampleMover
+VAR_INPUT
+END_VAR
+
+]]></Declaration>
+    </Method>
+    <Method Name="ToString" Id="{05bc73c8-e07f-4c82-97c1-78e00ad73b24}">
+      <Declaration><![CDATA[METHOD ToString : STRING
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="xBusy" Id="{1041503a-54a6-491b-9afa-d4d0ae17ac9e}">
+      <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{3344ece1-021a-4b27-95cb-0b4d6347cdae}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{8fcb6030-ecd7-49e6-b79c-3339cfaf6658}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="xDone" Id="{053db443-2a2e-4ed0-b237-45f4c8234bfc}">
+      <Declaration><![CDATA[PROPERTY xDone : BOOL]]></Declaration>
+      <Get Name="Get" Id="{927a77db-bfdd-41ad-aa2e-352cdb3b8777}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="xMoverPathFree" Id="{21f460cf-4be6-4d69-8b42-e843fb9d5832}">
+      <Declaration><![CDATA[PROPERTY xMoverPathFree : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2f541f27-218a-4623-bf7e-1e818b56871e}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="xMoverShouldLeave" Id="{2faa0c16-abad-47e1-b62c-82684c5ff897}">
+      <Declaration><![CDATA[PROPERTY xMoverShouldLeave : BOOL]]></Declaration>
+      <Get Name="Get" Id="{6ea81ec5-f6c7-479b-a111-fb0bb0437553}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST110_PnpVerPos_e" Id="{ec2150e1-bde0-414a-b93a-aeac75a814a7}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'to_string'}
+TYPE ST110_PnpVerPos_e :
+(
+    UpEmpty,               // Up position when the Pnp is empty
+    DownEmpty,             // Down position when the Pnp is picking the piece
+    UpFull,                // Up position when the Pnp has gripped the piece
+    DownFullQuick,         // down position with quick speed
+    DownFullTorqueControl, // down position with low speed for torque control
+    _max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

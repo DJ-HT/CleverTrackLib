@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="JXCE1_Baustein" Id="{18930b12-3f63-4173-ad67-0c2a89c4a261}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK JXCE1_Baustein
+VAR_INPUT
+	MOTOR_ON : BOOL;				(*The motor turns on*)
+	RET_ORIG : BOOL;				(*Motor searches "Home" position*)
+	JOG_FORWARD : BOOL;				(*Jog+*)
+	JOG_BACKWARD : BOOL;			(*Jog -*)
+	START_OP : BOOL;				(*Start action Positioning / force mod*)
+	HOLD : BOOL;					(*Hold action*)
+	RESET : BOOL;					(*Reset action*)
+	SPEED : UINT := 0;				(*Move Speed [mm/s]*)
+	MOVEMENT_MODE : BYTE := 0;		(*Rel.=1 / Abs.=2*)
+	POS : DINT := 0;				(*Position [0.01mm]*)
+	ACC : UINT := 0;				(*Acceleration [mm/s²]*)
+	DEC : UINT := 0;				(*Deceleration [mm/s²]*)
+	PUSH_FOR : UINT := 0;			(*Pushing force [%]*)
+	TRIG_LV : UINT := 0;			(*Trigger LV [%]*)
+	PUSH_SPE : UINT := 0;			(*Pushing speed [mm/s]*)
+	MOV_FOR:  UINT;					(*Moving force [%]*)
+	AREA_1 : DINT := 0;				(*Area 1 [0.01mm]*)
+	AREA_2 : DINT := 0;				(*Area 2 [0.01mm]*)
+	IN_POS : DINT := 0;				(*In position [0.01mm]*)
+	INPUT_AREA : typeInputArea;		(*Input protocoll information*)
+END_VAR
+VAR_OUTPUT
+	READY : BOOL;					(*Motor is on and no alarm was generate*)
+	ORIG_SET : BOOL;				(*Home position is set*)
+	BUSY : BOOL;					(*Actuautor does an action*)
+	INP : BOOL;			    		(*Position reached / force reached*)
+	AREA : BOOL;					(*Actuator is in the area*)
+	ALARM : BOOL;					(*Alarm was generate*)
+	CUR_POS : DINT;					(*Shows current position [0.01mm]*)
+	CUR_SPE : UINT;					(*Shows current speed [mm/s]*)
+	CUR_PUSH_FOR : UINT;			(*Shows current pushing force [%]*)
+	TAR_POS : DINT;					(*Shows target position [0.01mm]*)
+	ALARM_1 : BYTE;					(*Shows Alarm*)
+	ALARM_2 : BYTE;					(*Shows Alarm*)
+	ALARM_3 : BYTE;					(*Shows Alarm*)
+	ALARM_4 : BYTE;					(*Shows Alarm*)
+	OUTPUT_AREA : typeOutputArea;	(*Output protocol information*)
+END_VAR
+VAR
+	OutPorToWhiSigAreAll : typeOutPorToWhiSigAreAll;
+	SigAllToTheInpPor : typeSigAllToInpPor;
+	NumericalDataFlag : typeNumDatFla;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*Split the signals of the parameter "Signal allocated to the input port"*)
+SigAllToTheInpPor.Busy := INPUT_AREA.SigAllToTheInpPor.8;
+SigAllToTheInpPor.SvRe := INPUT_AREA.SigAllToTheInpPor.9;
+SigAllToTheInpPor.SetOn := INPUT_AREA.SigAllToTheInpPor.10;
+SigAllToTheInpPor.Inp := INPUT_AREA.SigAllToTheInpPor.11;
+SigAllToTheInpPor.Area := INPUT_AREA.SigAllToTheInpPor.12;
+SigAllToTheInpPor.EStop := INPUT_AREA.SigAllToTheInpPor.14;
+SigAllToTheInpPor.Alarm := INPUT_AREA.SigAllToTheInpPor.15;
+
+(*Connecting the Signals for parameter*)
+(*1*)  (*Output port to which signals are allocated*)
+OUTPUT_AREA.OutPorToWhiSigAreAll.8 := OutPorToWhiSigAreAll.Hold;
+OUTPUT_AREA.OutPorToWhiSigAreAll.9 := OutPorToWhiSigAreAll.SvOn;
+OUTPUT_AREA.OutPorToWhiSigAreAll.10 := OutPorToWhiSigAreAll.Drive;
+OUTPUT_AREA.OutPorToWhiSigAreAll.11 := OutPorToWhiSigAreAll.Reset;
+OUTPUT_AREA.OutPorToWhiSigAreAll.12 := OutPorToWhiSigAreAll.Setup;
+OUTPUT_AREA.OutPorToWhiSigAreAll.13 := OutPorToWhiSigAreAll.JogBackward;
+OUTPUT_AREA.OutPorToWhiSigAreAll.14 := OutPorToWhiSigAreAll.JogForward;
+(*2*) (*Numerical data flag*)
+OUTPUT_AREA.NumericalDataFlag.4 := NumericalDataFlag.MovementMode;
+OUTPUT_AREA.NumericalDataFlag.5 := NumericalDataFlag.Speed;
+OUTPUT_AREA.NumericalDataFlag.6 := NumericalDataFlag.Position;
+OUTPUT_AREA.NumericalDataFlag.7 := NumericalDataFlag.Acceleration;
+OUTPUT_AREA.NumericalDataFlag.8 := NumericalDataFlag.Deceleration;
+OUTPUT_AREA.NumericalDataFlag.9 := NumericalDataFlag.PushingForce;
+OUTPUT_AREA.NumericalDataFlag.10 := NumericalDataFlag.TriggerLv;
+OUTPUT_AREA.NumericalDataFlag.11 := NumericalDataFlag.PushingSpeed;
+OUTPUT_AREA.NumericalDataFlag.12 := NumericalDataFlag.MovingForce;
+OUTPUT_AREA.NumericalDataFlag.13 := NumericalDataFlag.Area1;
+OUTPUT_AREA.NumericalDataFlag.14 := NumericalDataFlag.Area2;
+OUTPUT_AREA.NumericalDataFlag.15 := NumericalDataFlag.InPosTolRange;
+
+(*Motor on*)
+OutPorToWhiSigAreAll.SvOn := MOTOR_ON;
+
+(*Return to orig*)
+OutPorToWhiSigAreAll.Setup := RET_ORIG AND SigAllToTheInpPor.SvRe;
+
+(*Jog -*)
+OutPorToWhiSigAreAll.JogBackward := JOG_BACKWARD AND SigAllToTheInpPor.SvRe;
+
+(*Jog +*)
+OutPorToWhiSigAreAll.JogForward := JOG_FORWARD AND SigAllToTheInpPor.SvRe;
+
+(*Hold*)
+OutPorToWhiSigAreAll.Hold := HOLD;
+
+(*Reset*)
+OutPorToWhiSigAreAll.Reset := RESET;
+
+(*Input Area for output*)
+READY := INPUT_AREA.ControllerInformationFlag.4;
+ORIG_SET := SigAllToTheInpPor.SetOn;
+BUSY := SigAllToTheInpPor.Busy;
+INP := SigAllToTheInpPor.Inp;
+AREA := SigAllToTheInpPor.Area;
+ALARM := SigAllToTheInpPor.Alarm;
+CUR_POS := INPUT_AREA.CurrentPosition;
+CUR_SPE := INPUT_AREA.CurrentSpeed;
+CUR_PUSH_FOR := INPUT_AREA.CurrentPushForce;
+TAR_POS := INPUT_AREA.TargetPosition;
+ALARM_1 := INPUT_AREA.Alarm1;
+ALARM_2 := INPUT_AREA.Alarm2;
+ALARM_3 := INPUT_AREA.Alarm3;
+ALARM_4 := INPUT_AREA.Alarm4;
+
+(*Start positioning / force mode*)
+	IF START_OP AND SigAllToTheInpPor.SetOn AND NOT RESET THEN
+	    (*Allowing numerical data input*)
+	    NumericalDataFlag.MovementMode := 1;
+	    NumericalDataFlag.Speed := 1;
+	    NumericalDataFlag.Position := 1;
+	    NumericalDataFlag.Acceleration := 1;
+	    NumericalDataFlag.Deceleration := 1;
+	    NumericalDataFlag.PushingForce := 1;
+	    NumericalDataFlag.TriggerLv := 1;
+	    NumericalDataFlag.PushingSpeed := 1;
+	    NumericalDataFlag.MovingForce := 1;
+	    NumericalDataFlag.Area1 := 1;
+	    NumericalDataFlag.Area2 := 1;
+	    NumericalDataFlag.InPosTolRange := 1;
+
+	    (*Input values to output values*)
+	    OUTPUT_AREA.Speed := SPEED;
+	    OUTPUT_AREA.OperationMethod := MOVEMENT_MODE;
+	    OUTPUT_AREA.TargetPosition := POS;
+	    OUTPUT_AREA.Acceleration := ACC;
+	    OUTPUT_AREA.Deceleration := DEC;
+	    OUTPUT_AREA.PushingForce := PUSH_FOR;
+	    OUTPUT_AREA.TriggerLv := TRIG_LV;
+	    OUTPUT_AREA.PushingSpeed := PUSH_SPE;
+	    OUTPUT_AREA.PushingForceForPos := MOV_FOR;
+	    OUTPUT_AREA.Area1 := AREA_1;
+	    OUTPUT_AREA.Area2 := AREA_2;
+	    OUTPUT_AREA.PositioningWidth := IN_POS;
+
+	    (*Set start flag*)
+	    OUTPUT_AREA.StartFlag := 1;
+
+	ELSIF NOT START_OP AND NOT SigAllToTheInpPor.Busy THEN
+	    (*Reset start flag*)
+	    OUTPUT_AREA.StartFlag := 0;
+	    (*Prohibit numerical data input*)
+	    NumericalDataFlag.MovementMode := 0;
+	    NumericalDataFlag.Speed := 0;
+	    NumericalDataFlag.Position := 0;
+	    NumericalDataFlag.Acceleration := 0;
+	    NumericalDataFlag.Deceleration := 0;
+	    NumericalDataFlag.PushingForce := 0;
+	    NumericalDataFlag.TriggerLv := 0;
+	    NumericalDataFlag.PushingForce := 0;
+	    NumericalDataFlag.MovingForce := 0;
+	    NumericalDataFlag.Area1 := 0;
+	    NumericalDataFlag.Area2 := 0;
+	    NumericalDataFlag.InPosTolRange := 0;
+	END_IF;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

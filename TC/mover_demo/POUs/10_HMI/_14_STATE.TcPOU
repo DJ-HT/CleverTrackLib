@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="_14_STATE" Id="{c95d7638-51ff-4919-9f91-365eb2425efb}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM _14_STATE
+(****************************************************************************)
+//STATE PROGRAMM
+//	- Control Buttons
+//	- Status Anlage
+//
+//	05.09.2019/Dj
+//
+//	Version:
+(****************************************************************************)
+VAR
+    fb_State  : FB_State; //Status der Maschine
+    sStateDbg : STRING;   // enState but in string format
+
+    //Control Buttons
+    _FB_btAUTO          : FB_BUTTON;
+    _FB_btSTEP          : FB_BUTTON;
+    _FB_btEND           : FB_BUTTON;
+    _FB_btMANU          : FB_BUTTON;
+    _FB_btINIT          : FB_BUTTON;
+    _FB_btSTOP          : FB_BUTTON;
+    _FB_btLEER          : FB_BUTTON;
+    _FB_btQUIT          : FB_BUTTON;
+    _FB_btSTART         : FB_BUTTON;
+    _FB_btRESET_COUNTER : FB_BUTTON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//****************************************************************************
+// 	CONTROL BUTTONS
+//****************************************************************************
+//	AUTO 
+_FB_btAUTO(pbtIN  := ADR(HMI.btArMain[0]),
+           xINdis := (HMI.enState < enState.StateREADY),
+           xINon  := (HMI.enState = enState.StateAUTO),
+           xINerr := FALSE);
+
+//STEP
+_FB_btSTEP(pbtIN  := ADR(HMI.btArMain[1]),
+           xINdis := (HMI.enState < enState.StateREADY),
+           xINon  := (HMI.enState = enState.StateSTEP),
+           xINerr := FALSE);
+
+//END
+_FB_btEND(pbtIN  := ADR(HMI.btArMain[2]),
+          xINdis := (HMI.enState < enState.StateREADY),
+          xINon  := (HMI.enState = enState.StateEND),
+          xINerr := FALSE);
+
+//MANU
+_FB_btMANU(pbtIN  := ADR(HMI.btArMain[3]),
+           xINdis := (HMI.enState > enState.StateSTEP) OR
+                     (HMI.enState = enState.StateALARM) OR
+                     (HMI.enState < enState.StateAIRon),
+           xINon  := (HMI.enState = enState.StateMANU),
+           xINerr := FALSE);
+
+//INIT
+_FB_btINIT(pbtIN  := ADR(HMI.btArMain[4]),
+           xINdis := (HMI.enState < enState.StateENGIZED),
+           xINon  := (HMI.enState = enState.StateINIT),
+           xINerr := FALSE);
+
+//STOP
+_FB_btSTOP(pbtIN  := ADR(HMI.btArMain[5]),
+           xINdis := (HMI.enState < enState.StateENGIZED),
+           xINon  := FALSE,
+           xINerr := FALSE);
+
+//LEERFAHREN
+_FB_btLEER(pbtIN  := ADR(HMI.btArMain[6]),
+           xINdis := FALSE,
+           xINon  := FALSE,
+           xINerr := FALSE);
+
+//QUIT
+_FB_btQUIT(pbtIN  := ADR(HMI.btArMain[7]),
+           xINdis := FALSE,
+           xINon  := FALSE,
+           xINerr := HMI.xAlarm);
+
+_FB_btRESET_COUNTER(pbtIN  := ADR(HMI.btArMain[8]),
+                    xINdis := FALSE,
+                    xINon  := HMI.btArMain[8].press,
+                    xINerr := FALSE);
+
+//START
+_FB_btSTART(pbtIN  := ADR(HMI.btArMain[9]),
+            xINdis := HMI.enState < enState.StateREADY,
+            xINon  := HMI.btArMain[9].on,
+            xINerr := FALSE);
+
+//****************************************************************************
+// 	STATE FB
+//****************************************************************************
+fb_State(xIN_AutoInit   := FALSE,
+         xIN_DoRef      := FALSE,
+         xIN_ENERGIE    := _02_SAFETY.xOUT_MonOut,
+         xIN_AIR        := IN.I004_druckwachter_luftdruck_ok,
+         xIN_EINRICHTEN := _02_SAFETY.xOUT_Einrichten,
+         xIN_AUTO       := HMI.btArMain[0].rtrig,
+         xIN_STEP       := HMI.btArMain[1].rtrig,
+         xIN_CYCLE      := HMI.btArMain[2].rtrig,
+         xIN_MANU       := HMI.btArMain[3].rtrig,
+         xIN_INIT       := HMI.btArMain[4].rtrig,
+         xIN_STOP       := HMI.btArMain[5].rtrig,
+         xIN_LEER       := HMI.btArMain[6].rtrig,
+         xIN_InitEND    := (GVL.st105_aut.xOUT_InitDone) AND
+                           (GVL.st110_aut.xOUT_InitDone) AND
+                           (GVL.st115_aut.xOUT_InitDone) AND
+                           (GVL.st120_aut.xOUT_InitDone) AND
+                           (GVL.st125_aut.xOUT_InitDone) AND
+                           (GVL.st130_aut.xOUT_InitDone) AND
+                           (GVL.st135_aut.xOUT_InitDone) AND
+                           (GVL.st140_aut.xOUT_InitDone) AND
+                           (GVL.st145_aut.xOUT_InitDone) AND
+                           (GVL.st150_aut.xOUT_InitDone) AND
+                           (GVL.st155_aut.xOUT_InitDone) AND
+                           (GVL.st160_aut.xOUT_InitDone) AND
+                           (GVL.st165_aut.xOUT_InitDone) AND
+                           (GVL.st170_aut.xOUT_InitDone) AND
+                           (GVL.st175_aut.xOUT_InitDone) AND
+                           (GVL.st176_aut.xOUT_InitDone) AND
+                           (GVL.st180_aut.xOUT_InitDone) AND
+                           (GVL.st185_aut.xOUT_InitDone),
+         xIN_ALARM := MAIN.MoverMan.xOUT_Error OR
+                      ((GVL.st105_aut.xOUT_AlarmST) OR
+                      (GVL.st110_aut.xOUT_AlarmST) OR
+                      (GVL.st115_aut.xOUT_AlarmST) OR
+                      (GVL.st120_aut.xOUT_AlarmST) OR
+                      (GVL.st125_aut.xOUT_AlarmST) OR
+                      (GVL.st128_aut.xOUT_AlarmST) OR
+                      (GVL.st130_aut.xOUT_AlarmST) OR
+                      (GVL.st135_aut.xOUT_AlarmST) OR
+                      (GVL.st140_aut.xOUT_AlarmST) OR
+                      (GVL.st145_aut.xOUT_AlarmST) OR
+                      (GVL.st150_aut.xOUT_AlarmST) OR
+                      (GVL.st155_aut.xOUT_AlarmST) OR
+                      (GVL.st160_aut.xOUT_AlarmST) OR
+                      (GVL.st165_aut.xOUT_AlarmST) OR
+                      (GVL.st170_aut.xOUT_AlarmST) OR
+                      (GVL.st175_aut.xOUT_AlarmST) OR
+                      (GVL.st180_aut.xOUT_AlarmST) OR
+                      (GVL.st185_aut.xOUT_AlarmST)) AND
+                      (GVL.st105_aut.xOUT_ErrFlag OR GVL.st105_aut.xOUT_Wait) AND
+                      (GVL.st110_aut.xOUT_ErrFlag OR GVL.st110_aut.xOUT_Wait) AND
+                      (GVL.st115_aut.xOUT_ErrFlag OR GVL.st115_aut.xOUT_Wait) AND
+                      (GVL.st120_aut.xOUT_ErrFlag OR GVL.st120_aut.xOUT_Wait) AND
+                      (GVL.st125_aut.xOUT_ErrFlag OR GVL.st125_aut.xOUT_Wait) AND
+                      // we ignore the state of ST128
+                      (GVL.st130_aut.xOUT_ErrFlag OR GVL.st130_aut.xOUT_Wait) AND
+                      (GVL.st135_aut.xOUT_ErrFlag OR GVL.st135_aut.xOUT_Wait) AND
+                      // we ignore the state of ST140
+                      (GVL.st145_aut.xOUT_ErrFlag OR GVL.st145_aut.xOUT_Wait) AND
+                      (GVL.st150_aut.xOUT_ErrFlag OR GVL.st150_aut.xOUT_Wait) AND
+                      (GVL.st155_aut.xOUT_ErrFlag OR GVL.st155_aut.xOUT_Wait) AND
+                      (GVL.st160_aut.xOUT_ErrFlag OR GVL.st160_aut.xOUT_Wait) AND
+                      (GVL.st165_aut.xOUT_ErrFlag OR GVL.st165_aut.xOUT_Wait) AND
+                      (GVL.st170_aut.xOUT_ErrFlag OR GVL.st170_aut.xOUT_Wait) AND
+                      (GVL.st175_aut.xOUT_ErrFlag OR GVL.st175_aut.xOUT_Wait) AND
+                      (GVL.st180_aut.xOUT_ErrFlag OR GVL.st180_aut.xOUT_Wait) AND
+                      (GVL.st185_aut.xOUT_ErrFlag OR GVL.st185_aut.xOUT_Wait),
+         xIN_LastDone := (NOT (HMI.enState = enState.StateLEER) OR
+                         (MAIN.MoverMan.xOUT_AllMoverEmpty AND GVL.st185_aut.xOUT_Done)) AND
+                         GVL.st105_aut.xOUT_Wait AND
+                         GVL.st110_aut.xOUT_Wait AND
+                         GVL.st115_aut.xOUT_Wait AND
+                         GVL.st120_aut.xOUT_Wait AND
+                         GVL.st125_aut.xOUT_Wait AND
+                         GVL.st128_aut.xOUT_Wait AND
+                         GVL.st130_aut.xOUT_Wait AND
+                         GVL.st135_aut.xOUT_Wait AND
+                         GVL.st140_aut.xOUT_Wait AND
+                         GVL.st145_aut.xOUT_Wait AND
+                         GVL.st150_aut.xOUT_Wait AND
+                         GVL.st155_aut.xOUT_Wait AND
+                         GVL.st160_aut.xOUT_Wait AND
+                         GVL.st165_aut.xOUT_Wait AND
+                         GVL.st170_aut.xOUT_Wait AND
+                         GVL.st175_aut.xOUT_Wait AND
+                         GVL.st180_aut.xOUT_Wait AND
+                         GVL.st185_aut.xOUT_Wait,
+         xIN_WaitFBs := GVL.st105_aut.xOUT_Wait AND
+                        GVL.st110_aut.xOUT_Wait AND
+                        GVL.st115_aut.xOUT_Wait AND
+                        GVL.st120_aut.xOUT_Wait AND
+                        GVL.st125_aut.xOUT_Wait AND
+                        GVL.st128_aut.xOUT_Wait AND
+                        GVL.st130_aut.xOUT_Wait AND
+                        GVL.st135_aut.xOUT_Wait AND
+                        GVL.st140_aut.xOUT_Wait AND
+                        GVL.st145_aut.xOUT_Wait AND
+                        GVL.st150_aut.xOUT_Wait AND
+                        GVL.st155_aut.xOUT_Wait AND
+                        GVL.st160_aut.xOUT_Wait AND
+                        GVL.st165_aut.xOUT_Wait AND
+                        GVL.st170_aut.xOUT_Wait AND
+                        GVL.st175_aut.xOUT_Wait AND
+                        GVL.st180_aut.xOUT_Wait AND
+                        GVL.st185_aut.xOUT_Wait,
+         enINOUT_State := HMI.enState);
+
+sStateDbg := TO_STRING(HMI.enState);
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

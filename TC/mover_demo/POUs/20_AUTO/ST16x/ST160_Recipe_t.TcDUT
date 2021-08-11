@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST160_Recipe_t" Id="{34ae7bc1-90d5-4547-bc33-0df5746ede05}">
+    <Declaration><![CDATA[TYPE ST160_Recipe_t :
+STRUCT
+    Use_element_left  : BOOL; //a 
+    Use_element_right : BOOL; // 
+    Program_number    : USINT; // 
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

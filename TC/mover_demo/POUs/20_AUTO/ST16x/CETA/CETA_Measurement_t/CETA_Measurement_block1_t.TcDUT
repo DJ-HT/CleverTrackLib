@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CETA_Measurement_block1_t" Id="{c92e7f14-3592-490e-9f98-54940877aba5}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE CETA_Measurement_block1_t :
+STRUCT
+    Program_number : USINT;
+    Result         : USINT;
+    Test_mode      : USINT;
+    Date_day       : USINT;
+    Date_month     : USINT;
+    Date_year      : USINT;
+    Date_century   : USINT;
+    Time_hour      : USINT;
+    Time_minute    : USINT;
+    Time_second    : USINT;
+    Data_offset_12 : CETA_Res_Data_t;
+    Data_offset_16 : CETA_Res_Data_t;
+    Data_offset_20 : CETA_Res_Data_t;
+    Data_offset_24 : CETA_Res_Data_t;
+    Data_offset_28 : CETA_Res_Data_t;
+    Data_offset_32 : CETA_Res_Data_t;
+    Data_offset_36 : CETA_Res_Data_t;
+    Data_offset_40 : CETA_Res_Data_t;
+    Data_offset_44 : CETA_Res_Data_t;
+    Data_offset_48 : CETA_Res_Data_t;
+    Data_offset_52 : CETA_Res_Data_t;
+    Data_offset_56 : CETA_Res_Data_t;
+    Data_offset_60 : CETA_Res_Data_t;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="_02_SAFETY" Id="{1d11b277-8721-45f2-8362-d5a102755ff3}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM _02_SAFETY
+(****************************************************************************)
+//SAVETY PROGRAMM
+//	04.09.2019/Dj
+//
+//	Version:
+(****************************************************************************)
+VAR
+    //Module
+    uiArIN_State AT %I* : ARRAY[1..7] OF UINT; //Module State 
+    (* 	1=140D1 
+																		2=140D3 
+																		3=140D5
+																		4=140D7
+																		5=140D9
+																		6=141D1
+																		6=141D3
+																		*)
+    uiArOUT_State AT %I* : ARRAY[1..3] OF UINT; //Module State 
+    (* 	1=141D1 
+																		2=141D3 
+																		3=141D5
+																	*)
+
+    //GR001 IN
+    xIN_Reset_bp AT %I* : BOOL;                // blue reset button
+    xArIN_Input1 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
+    xArIN_Input2 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
+    xArIN_Input3 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
+    xArIN_Input4 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
+    xArIN_Input5 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
+    xArIN_Input6 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
+    xArIN_Input7 AT %I* : ARRAY[0..7] OF BOOL; //Mapping Inputs 
+    (* 	1=140D1 
+																		2=140D3 
+																		3=140D5
+																		4=140D7
+																		5=140D9
+																		6=141D1
+																		7=141D3
+																	*)
+    //GR002 EStop						
+    xIN_ESdelOut AT %I* : BOOL; //EStop del Out
+    xIN_ESout    AT %I* : BOOL; //EStop	Out
+    xOUT_ResetES AT %Q* : BOOL; //Reset ES
+
+    //GR003 Türen
+    xIN_MonDelOut AT %I* : BOOL; //Mon del Out Türen
+    xIN_MonOut    AT %I* : BOOL; //Mon Out Türen
+
+    //GR004 AXIS
+
+    //GR005 OUT
+
+    //FB's
+    _FB_Gr001Input   : FB_Safety;
+    _FB_Gr002NotHalt : FB_Safety;
+    _FB_Gr003Tuer    : FB_Safety;
+    _FB_Gr004Axis    : FB_Safety;
+    _FB_Gr005Output  : FB_Safety;
+    _FB_Gr010InputB  : FB_Safety;
+
+END_VAR
+VAR_OUTPUT
+    xOUT_MonDelOut : BOOL; //Mon del Out
+    xOUT_MonOut    : BOOL; //Mon Out	
+
+    xOUT_ESdelOut : BOOL; //EStop del Out
+    xOUT_ESout    : BOOL; //EStop Out	
+
+    xOUT_SafetyError     : BOOL; //Error Safety
+    xOUT_NotAusBetaetigt : BOOL; //Kein Not-Aus gedrückt
+    xOUT_Einrichten      : BOOL; //Einrichten -1-
+
+    XOUT_ST1 : BOOL; //Türe1
+    XOUT_ST2 : BOOL; //Türe2
+    XOUT_HTA : BOOL; //HubtürA
+    XOUT_HTB : BOOL; //HubtürB
+    XOUT_HTC : BOOL; //HubtürC
+    XOUT_HTD : BOOL; //HubtürD
+
+    XOUT_ESA : BOOL; //NOT-AUS A
+    XOUT_ESB : BOOL; //NOT-AUS B
+    XOUT_ESC : BOOL; //NOT-AUS C
+    XOUT_ESD : BOOL; //NOT-AUS D
+    XOUT_ESH : BOOL; //NOT-AUS H
+    XOUT_ESP : BOOL; //NOT-AUS Panel
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//--------------------------------------------------------------------------
+//SAFETY BAUSTEINE AUFRUFEN
+//--------------------------------------------------------------------------	
+_FB_Gr001Input(tIN_ResetTime := T#500MS);
+_FB_Gr002NotHalt(tIN_ResetTime := T#500MS);
+_FB_Gr003Tuer(tIN_ResetTime := T#500MS);
+_FB_Gr004Axis(tIN_ResetTime := T#500MS);
+_FB_Gr005Output(tIN_ResetTime := T#500MS);
+_FB_Gr010InputB(tIN_ResetTime := T#500MS);
+
+//BAUSTEIN ERROR
+xOUT_SafetyError := _FB_Gr001Input.xIN_ComErr OR //Gruppe Input
+                    _FB_Gr001Input.xIN_FBErr OR
+                    _FB_Gr001Input.xIN_OtherErr OR
+                    _FB_Gr002NotHalt.xIN_ComErr OR //Gruppe Not-Halt
+                    _FB_Gr002NotHalt.xIN_FBErr OR
+                    _FB_Gr002NotHalt.xIN_OtherErr OR
+                    _FB_Gr003Tuer.xIN_ComErr OR //Gruppe Tür
+                    _FB_Gr003Tuer.xIN_FBErr OR
+                    _FB_Gr003Tuer.xIN_OtherErr OR
+                    _FB_Gr004Axis.xIN_ComErr OR //Gruppe Achsen
+                    _FB_Gr004Axis.xIN_FBErr OR
+                    _FB_Gr004Axis.xIN_OtherErr OR
+                    _FB_Gr005Output.xIN_ComErr OR //Gruppe Output
+                    _FB_Gr005Output.xIN_FBErr OR
+                    _FB_Gr005Output.xIN_OtherErr OR
+                    _FB_Gr001Input.xIN_ComErr OR //Gruppe InputB
+                    _FB_Gr001Input.xIN_FBErr OR
+                    _FB_Gr001Input.xIN_OtherErr;
+
+//--------------------------------------------------------------------------
+//NOT-AUS / ENERGIE ZUUSAMMENFASSUNG
+//--------------------------------------------------------------------------	
+xOUT_ESdelOut := xIN_ESdelOut;
+xOUT_ESOut    := xIN_ESOut;
+
+xOUT_MonDelOut := xIN_MonDelOut;
+xOUT_MonOut    := xIN_MonOut;
+
+//--------------------------------------------------------------------------
+//NOT-AUS - TÜREN für HMI, TASTEN NICHT ENTRIEGELT	
+//--------------------------------------------------------------------------	
+//XOUT_ST1 := xArIN_Input5[0] AND xArIN_Input5[1]; //Türe1
+//XOUT_ST2 := xArIN_Input5[2] AND
+//            xArIN_Input5[3] AND
+//            xArIN_Input5[4] AND
+//            xArIN_Input5[5]; //Türe2
+
+//XOUT_HTA := xArIN_Input6[0] AND xArIN_Input6[1]; //Hubtüre A
+//XOUT_HTB := xArIN_Input6[2] AND xArIN_Input6[3]; //Hubtüre B
+//XOUT_HTC := xArIN_Input6[4] AND xArIN_Input6[5]; //Hubtüre C
+//XOUT_HTD := xArIN_Input6[6] AND xArIN_Input6[7]; //Hubtüre D
+//
+//XOUT_ESA := xArIN_Input1[0] AND xArIN_Input1[1]; //NOT-AUS A
+//XOUT_ESB := xArIN_Input1[2] AND xArIN_Input1[3]; //NOT-AUS A
+//XOUT_ESC := xArIN_Input1[4] AND xArIN_Input1[5]; //NOT-AUS A
+//XOUT_ESD := xArIN_Input1[6] AND xArIN_Input1[7]; //NOT-AUS A
+//XOUT_ESH := xArIN_Input2[6] AND xArIN_Input2[7]; //NOT-AUS A
+//XOUT_ESP := xArIN_Input3[2] AND xArIN_Input3[3]; //NOT-AUS A
+//
+//xOUT_NotAusBetaetigt := XOUT_ESA AND
+//                        XOUT_ESB AND
+//                        XOUT_ESC AND
+//                        XOUT_ESD AND
+//                        XOUT_ESH AND
+//                        XOUT_ESP;
+
+//--------------------------------------------------------------------------
+//RESET + Einrichten	
+//--------------------------------------------------------------------------
+xOUT_ResetES    := HMI.Tast_BL OR IN.I_CPX9_1_ResetBp;
+xOUT_Einrichten := xArIN_Input3[1];
+
+////--------------------------------------------------------------------------
+////Tür Verriegelung	
+////--------------------------------------------------------------------------
+//// OUT.Q020_T1_VERR  := (HMI.enState > enState.StateSTEP);
+//// OUT.Q021_T2L_VERR := OUT.Q020_T1_VERR;
+//// OUT.Q022_T2R_VERR := OUT.Q020_T1_VERR;
+//
+//xOUT_ESout     := TRUE;
+//xOUT_ESdelOut  := TRUE;
+//xOUT_MonOut    := TRUE;
+//xOUT_MonDelOut := TRUE;
+//xOUT_Einrichten := FALSE;  // true when doors are open]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

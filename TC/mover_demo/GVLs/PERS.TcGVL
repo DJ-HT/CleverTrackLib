@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="PERS" Id="{fbf39650-67ca-4454-aedb-fafdd3046409}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL RETAIN PERSISTENT
+    (***********************************************************************************************)
+    (* COUNTER *)
+    (***********************************************************************************************)
+    //COUNTER 
+    udiTotalOK  : UDINT; // Total Counter  OK 
+    udiTotalNOK : UDINT; // Total Counter  NOK 
+
+    udiTempOK  : UDINT; // Temporary Counter  OK 
+    udiTempNOK : UDINT; // Temporary Counter  NOK 
+
+    //OPERATING HOURS
+    udiCountHon    : UDINT; // Operating hours SYSTEM POWER ON [h] 
+    udiCount6Mon   : UDINT; // Operating hours SYSTEM POWER ON [6min (0.1h)] 
+    udiCountHauto  : UDINT; // Operating hours SYSTEM IN AUTOMATIC MODE [h] 
+    udiCount6Mauto : UDINT; // Operating hours SYSTEM IN AUTOMATIC MODE [6min (0.1h)] 
+
+    (***********************************************************************************************)
+    (* PARAMETER *)
+    (***********************************************************************************************)
+    udiArCntST00 : ARRAY[0..4] OF UDINT; (* Counter ST00 
+															0:
+	*)
+    (***********************************************************************************************)
+    (* Timer *)
+    (***********************************************************************************************)
+    //Zylinder																		
+    dwArTimeZylST01 : ARRAY[0..20] OF DWORD; (* Time Zylinder Station 01
+																0: GENERAL
+																1: 
+	*)
+    //Diverse
+    dwArTimeST00 : ARRAY[0..10] OF DWORD; (* Time zur ST00
+                                                            0:
+                                                            1:  
+                                                        *)
+
+    (***********************************************************************************************)
+    (* Werte *)
+    (***********************************************************************************************)
+    iWTstat : ARRAY[1..10] OF INT; (* STATUS WT [Station]
+																<0: NIO
+																 0: LEER
+																>0: STATION
+															*)
+
+    (***********************************************************************************************)
+    (* Application *)
+    (***********************************************************************************************)
+
+    {attribute 'to_json'}
+    iStationTimeDef1 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+    {attribute 'to_json'}
+    iStationTimeDef2 : ARRAY[1..CONST.STATION_NUMBER] OF DINT;
+
+    //{attribute 'to_json'}
+    //_20_AUTO.recipe : Recipe_21_101_t;
+
+    {attribute 'to_json'}
+    recipeList : ARRAY[0..CONST.MAX_RECIPE_NUMBER] OF Recipe_21_101_t; // registery of recipe
+	
+    eRecipeCurrent : RecipeType_e; // selected recipe to be executed
+	
+    {attribute 'to_json'}
+    iRecipeCurrent : INT; // selected recipe to be executed
+
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

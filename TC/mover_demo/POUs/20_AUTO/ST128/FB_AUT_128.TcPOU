@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_AUT_128" Id="{049e48f5-c9b2-48f9-b6d7-fff915eec8b0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_128 EXTENDS FB_AUT_ABSTRACT
+(****************************************************************************)
+(*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
+(*	Status				ungetestet											*)
+(*  Version:			1.0													*)
+(*	Beschrieb:																*)
+(*																			*)
+(*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
+(*																			*)
+(*																			*)
+(* 	25.09.2019/Dj															*)
+(****************************************************************************)
+(*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
+(****************************************************************************)
+VAR_INPUT
+    (* spezifische Eingänge *)
+
+END_VAR
+VAR_OUTPUT
+    (* spezifische Ausgänge *)
+
+END_VAR
+VAR
+    (* Bausteine *)
+    fb_TubeCapCheck : FB_ABL_128_TubeCapCheck; // 
+
+    fb_stat : FB_AUT_Statistics;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+
+(*******************************************************************)
+(* Flanken / Merker *)
+(*******************************************************************)
+//MANU CYCLE
+IF (enIN_State = StateMANU) AND xIN_ManuCycle THEN
+    xManuCycle := TRUE;
+END_IF;
+
+IF (enIN_State <> StateMANU) OR xOUT_Done THEN
+    xManuCycle := FALSE;
+END_IF
+
+//NEXT STEP
+xNextStep := (enIN_State > StateSTEP) OR
+             ((enIN_State = StateSTEP) AND xIN_Step) OR
+             ((enIN_State = StateMANU) AND xManuCycle);
+
+//RESET
+xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
+
+(*******************************************************************)
+(* Bausteinaufrufe Abläufe *)
+(*******************************************************************)
+
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
+fb_TubeCapCheck(xIN_Reset       := xReset,
+                xIN_Init        := xIN_Init,
+                xIN_Quit        := xIN_Quit,
+                xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
+                xIN_Sperre      := NOT xIN_On,
+                xIN_NextStep    := xNextStep,
+                xIN_AlarmAktiv  := xIN_AlarmAktiv,
+                xIN_DryCycle    := xIN_DryCycle,
+                xIN_RestartCYCL := enIN_State >= enState.StateLEER,
+                enIN_State      := enIN_State,
+                tIN_Timeout     := tIN_Timeout,
+                pxFG_Freigabe   := ADR(xRelease),
+                Mover           := THIS^.Mover);
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_TubeCapCheck.xOUT_Wait,
+        xIN_Running := (fb_TubeCapCheck.iOUT_Step >= ST128_TubeCapCheck_e.START) AND
+                       (fb_TubeCapCheck.iOUT_Step <= ST128_TubeCapCheck_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_TubeCapCheck.iOUT_Step = ST128_TubeCapCheck_e.waitOnMover);
+
+(*******************************************************************)
+(* Mover reset flags *)
+(*******************************************************************)
+
+(*******************************************************************)
+(* OUTPUT *)
+(*******************************************************************)
+xOUT_InitDone := fb_TubeCapCheck.xOUT_InitDone;
+xOUT_Ready    := fb_TubeCapCheck.xOUT_Ready;
+xOUT_Done     := fb_TubeCapCheck.xOUT_Done;
+xOUT_ErrFlag  := fb_TubeCapCheck.xOUT_ErrFlag;
+xOUT_Wait     := fb_TubeCapCheck.xOUT_Wait;
+xOUT_AlarmST  := xOUT_ErrFlag;
+
+(*******************************************************************)
+(* Bausteinaufruf Error Station *)
+(*******************************************************************)
+// POU_ERR_VORLAGE(xIN_QUIT:=xIN_Quit , pstrArIN_ALARM:=ADR(HMI.strArALARM[1]));
+]]></ST>
+    </Implementation>
+    <Property Name="iCompletionPC" Id="{b7d64034-5787-4172-8b2a-a1b876fe109c}">
+      <Declaration><![CDATA[(* % of completion of the process *)
+PROPERTY iCompletionPC : INT
+]]></Declaration>
+      <Get Name="Get" Id="{2e8bbf19-c527-4361-9b7b-ee1f049ced6f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iCompletionPC := THIS^.fb_TubeCapCheck.iOUT_ProcessCompletion;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ProcessExecution" Id="{f3023781-571e-46aa-b50d-e64793e3da91}">
+      <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
+      <Get Name="Get" Id="{9860076d-83c3-4d3d-8aa8-f193d806af5f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ProcessExecution := THIS^._ProcessExecution;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{1b03b9b7-b1e8-4a43-b9a5-872421ff5ac3}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._ProcessExecution := ProcessExecution;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xBusy" Id="{07614fe9-1e85-4e53-a210-3e8b94da5c71}">
+      <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{92757eee-7ab8-4a92-8362-e70e3fd66ef8}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xBusy := THIS^.fb_TubeCapCheck.xOUT_Busy;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{e87b2242-008b-400a-9a4b-397f7d2b7f90}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xDone" Id="{6d391c83-3367-410c-af5b-893309786a55}">
+      <Declaration><![CDATA[PROPERTY xDone : BOOL]]></Declaration>
+      <Get Name="Get" Id="{6b51fec9-0ba7-4c91-9148-2385325d9d2e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xDone := THIS^.fb_TubeCapCheck.xOUT_Ready OR THIS^.fb_TubeCapCheck.xOUT_Done;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="xMoverPathFree" Id="{adc9f012-5e1b-4132-8a4a-52e0c58a8fa8}">
+      <Declaration><![CDATA[PROPERTY xMoverPathFree : BOOL]]></Declaration>
+      <Get Name="Get" Id="{7e7828af-ab37-47bd-8b83-55c22db96e46}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverPathFree := THIS^.fb_TubeCapCheck.xOUT_MoverFree OR THIS^.fb_TubeCapCheck.xOUT_Ready OR THIS^.fb_TubeCapCheck.xOUT_Done;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="xMoverShouldLeave" Id="{67b9ff8a-926d-488d-8dfe-d3beb416576f}">
+      <Declaration><![CDATA[PROPERTY xMoverShouldLeave : BOOL]]></Declaration>
+      <Get Name="Get" Id="{2a9a8713-53a5-49c0-848f-306378bf9f7b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_TubeCapCheck.iOUT_Step = ST128_TubeCapCheck_e.SYNC_MOVER_LEAVE;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

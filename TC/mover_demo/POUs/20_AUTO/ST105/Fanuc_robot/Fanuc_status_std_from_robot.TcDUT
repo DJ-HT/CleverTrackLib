@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="Fanuc_status_std_from_robot" Id="{dd730151-ad51-4b98-abf4-830b105e2b44}">
+    <Declaration><![CDATA[TYPE Fanuc_status_std_from_robot :
+STRUCT
+    CMD_enable   : BIT;
+    SYSTEM_Ready : BIT;
+    PRG_Running  : BIT;
+    Prg_Paused   : BIT;
+    Motion_Held  : BIT;
+    Fault        : BIT;
+    AT_Perch     : BIT;
+    TP_enabled   : BIT;
+    Batt_Alarm   : BIT;
+    Busy         : BIT;
+    Ack1_SNO1    : BIT;
+    Ack2_SNO2    : BIT;
+    Ack3_SNO3    : BIT;
+    Ack4_SNO4    : BIT;
+    Ack5_SNO5    : BIT;
+    Ack6_SNO6    : BIT;
+    Ack7_SNO7    : BIT;
+    Ack8_SNO8    : BIT;
+    SNACK        : BIT;
+    RESERVED     : BIT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

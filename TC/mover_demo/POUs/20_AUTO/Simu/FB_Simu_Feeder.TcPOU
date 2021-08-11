@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_Simu_Feeder" Id="{0ba57ef8-5354-4b8f-8f60-7d8ff4bec0ce}" SpecialFunc="None">
+    <Declaration><![CDATA[// This simu FB is used to generate pieces randomly
+// A piece is given during a given amount of time throug 'xOUT_NewPiece'
+// Use this output as your nearest sensor 
+FUNCTION_BLOCK FB_Simu_Feeder
+VAR_INPUT
+    xIN_Enable         : BOOL; // enable the feeder
+    xIN_PceSensor      : BOOL; // physical piece sensor, when simu_fifo is disabled, xOUT_NewPiece taks this value
+    tIN_NewPieceTime   : DINT;
+    iIN_WaitTimeMin_ms : DINT;
+    iIN_WaitTimeMax_ms : DINT;
+END_VAR
+VAR_OUTPUT
+    xOUT_NewPiece : BOOL;
+END_VAR
+VAR
+    _rand          : DRAND;
+    _enableClock   : BOOL  := FALSE;
+    _startTime_ms  : UDINT := 0;
+    _timeToWait_ms : DINT  := 0;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF xIN_Enable AND NOT _EnableClock THEN
+    THIS^.GetNewRandomTime();
+    xOUT_NewPiece := FALSE;
+END_IF
+
+_EnableClock := xIN_Enable;
+
+IF xIN_Enable AND THIS^.IsTimeElapsed() THEN
+    IF NOT xOUT_NewPiece THEN
+        _timeToWait_ms := tIN_NewPieceTime;
+		THIS^._startTime_ms := GetTick();
+    ELSE
+        THIS^.GetNewRandomTime();
+    END_IF
+
+    xOUT_NewPiece := NOT xOUT_NewPiece;
+ELSIF NOT xIN_Enable THEN
+    xOUT_NewPiece := xIN_PceSensor;
+END_IF
+]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{b206eb2d-ff37-42c8-9c10-344bfe6e6033}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[this^._rand.Seed := TO_INT(F_GetSystemTime());]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetNewRandomTime" Id="{c21ca524-be6d-43a8-986c-1e2ef6ddddab}">
+      <Declaration><![CDATA[METHOD PRIVATE GetNewRandomTime : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[THIS^._startTime_ms := GetTick();
+THIS^._rand();
+THIS^._timeToWait_ms :=
+    TO_DINT(THIS^._rand.Num * (THIS^.iIN_WaitTimeMax_ms - THIS^.iIN_WaitTimeMin_ms) + THIS^.iIN_WaitTimeMin_ms);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsTimeElapsed" Id="{cd32827f-9609-438a-b852-edacf5462ed9}">
+      <Declaration><![CDATA[METHOD IsTimeElapsed : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IsTimeElapsed := TO_DINT(GetTick() - _startTime_ms) > _timeToWait_ms;]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="AxisLinMotConst_t" Id="{0f9d9364-25a4-4fc3-9811-958fd2dcd576}">
+    <Declaration><![CDATA[TYPE AxisLinMotConst_t :
+STRUCT
+    POS_MIN   : REAL; // Software limit switch of the minimum position
+    POS_MAX   : REAL; // Software limit switch of the maximum position
+    VELO_MAX  : REAL; // Maximum allowed velocity
+    VELO_MANU : REAL; // Velocity in manual mode
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

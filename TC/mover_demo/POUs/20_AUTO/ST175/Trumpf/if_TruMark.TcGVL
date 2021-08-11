@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="if_TruMark" Id="{9956c178-6aea-41e5-baeb-90d668e31026}">
+    <Declaration><![CDATA[{attribute 'qualified_only' := ''}
+VAR_GLOBAL
+	// starts a TLV command
+	bTlvCmd: BOOL;
+	// starts a BIT command
+	bBitCmd: BOOL;
+	// reset error
+	bResetErr: BOOL;
+	// input parameter for TLV command
+	diTlvTag: DINT;
+	// input parameter for TLV command
+	sTlvValueIn: STRING;
+	// input parameter for BIT command	(32 bit)
+	dwBitIn: DWORD;
+	// indicates if TruMark_Profibus is running
+	bBusy: BOOL;
+	// indicates if an error (Communication / Bussystem) is occured
+	bError: BOOL;
+	sErrorMsg: STRING;
+	// return code of a TLV command
+	byTlvReturnCode: BYTE;
+	// return value of a TLV command
+	sTlvRespons: STRING;
+	// extended error code
+	byTlvExtErrCode: BYTE;
+	// current status
+	Status: TruMarkLaserStatus;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

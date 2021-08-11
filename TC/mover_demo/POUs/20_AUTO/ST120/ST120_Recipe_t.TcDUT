@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST120_Recipe_t" Id="{9403bfc6-5a03-4fd8-a37a-1b19e718cfc1}">
+    <Declaration><![CDATA[TYPE ST120_Recipe_t :
+STRUCT
+    xUseVerLeft               : BOOL; // Is the left vertical picker element is used
+    xUseVerRight              : BOOL; // Is the right vertical picker element is used
+    FeederConfigLeft          : FeederDelays_t;
+    FeederConfigRight         : FeederDelays_t;
+    TON_PieceInSeperatorLeft  : DINT; // TON waiting time after sensor has detected a presensce (left)
+    TON_PieceInSeperatorRight : DINT; // TON waiting time after sensor has detected a presensce (right)
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

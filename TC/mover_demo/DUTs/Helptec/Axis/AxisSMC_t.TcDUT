@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="AxisSMC_t" Id="{c2e3c65f-fd36-4572-ada3-dfadaa4f015e}">
+    <Declaration><![CDATA[TYPE AxisSMC_t EXTENDS AxisBase_t :
+STRUCT
+    typeOUT AT %Q* : typeOutputArea; // Axis reference SMC output
+    typeIN  AT %I* : typeInputArea;  // Axis reference SMC input
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

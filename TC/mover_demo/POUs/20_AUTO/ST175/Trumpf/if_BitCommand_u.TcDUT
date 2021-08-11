@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="if_BitCommand_u" Id="{f6835c1c-7810-44c6-84a1-28d63c3de89e}">
+    <Declaration><![CDATA[TYPE if_BitCommand_u :
+UNION
+    awPBOM : ARRAY[0..1] OF WORD;
+    dwPBOM : DWORD;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

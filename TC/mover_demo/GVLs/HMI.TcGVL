@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="HMI" Id="{687ca587-9d31-405e-8ad6-0cc233431a10}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    (*******************************************************************)
+    (* Globale HMI Variablen *)
+    (*******************************************************************)
+    xImmer0 : BOOL := FALSE; //ALLWAYS FALSE
+    xImmer1 : BOOL := TRUE;  //ALLWAYS TRUE
+
+    (*******************************************************************)
+    (* Flags *)
+    (*******************************************************************)
+    enState   : enState; //SYSTEM STATUS
+    xInitDone : BOOL;    //SYSTEM INITIALIZED
+    xRefDone  : BOOL;    //Axis REF
+    xAlarm    : BOOL;    //ALARM AKTIV
+    xMessage  : BOOL;    //MELDUNG AKTIV
+    xWait     : BOOL;    //ALLE FBs warten
+    xAIRon    : BOOL;    //Luftdruck IO
+    xSPC      : BOOL;    //SPC angewählt
+
+    Tast_BL : BOOL; // ... 
+
+    (*******************************************************************)
+    (* Buttons *)
+    (*******************************************************************)
+    //Control
+    btArMain : ARRAY[0..20] OF structButton; (*	
+													0: AUTO
+													1: STEP
+													2: END
+													3: MANU
+													4: INIT
+													5: STOP
+													6: LEER
+													7: QUIT
+													8: RESET TEMP COUNTER
+													9: START
+													10: HUBTÜREn ALLE
+													11: HUBTÜRE 1
+													12: HUBTÜRE 2
+													13: HUBTÜRE 3
+													14: HUBTÜRE 4
+												*)
+    //Manual pneumatics
+    // see below for button button instance 
+    btManuCylinders : ARRAY[0..StationList_e._max] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF structButton;
+    (* 
+	 * [StationList_e.ST105] 0
+     * [0]: Zyklus [1]: Robot get [2]: Robot set [3] Feeder
+	 *
+     * [StationList_e.ST110] 1
+     * [0]: Zyklus [1]: Vacum Gripper left [2]: Vacum Gripper right [3]: Feeder
+     *
+     * [StationList_e.ST115] 2
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: Feeder
+     *
+     * [StationList_e.ST120] 3
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: Rotative cylinder left
+     * [4]: Rotative cylinder right [5]: Hublader left [6]: Hublader right
+	 * [7]: feeder left [8]: feeder right
+     *
+     * [StationList_e.ST125] 4
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right [3]: lock cylinder left
+     * [4]: lock cylinder right [5]: Gripper Solerohr left [6]: Gripper Solerohr right
+	 * [7]: feeder 
+     *
+     * [StationList_e.ST130] 5
+     * [0]: Zyklus [1]: cell open left [2]: cell open right [3]: cell fill left
+     * [4]: cell fill right [5]: vib cell left [6]: vib cell right
+	 * [7]: holder patrone [8]: vib patrone left [9]: vib patrone right [10]: Feeder 
+     *
+     * [StationList_e.ST135] 6
+	 * dito ST130
+	 *
+     * [StationList_e.ST145] 8
+     * [0]: Zyklus [1]: Vacum Gripper left [2]: Vacum Gripper right [3]: Feeder
+	 *
+     * [StationList_e.ST150] 9
+     * [0]: Zyklus [1]: mover maintening [2]: start welding
+	 *
+     * [StationList_e.ST155] 10
+     * [0]: Zyklus [1]: mover maintening [2]: start welding
+	 *
+     * [StationList_e.ST160] 11
+     * [0]: Zyklus [1]: holder left [2]: holder right [3]: seal left
+	 * [4]: seal right [5]: fill left [6]: fill right [7]: start test
+	 *
+     * [StationList_e.ST165] 12
+     * [0]: Zyklus [1]: holder left [2]: holder right [3]: seal left
+	 * [4]: seal right [5]: fill left [6]: fill right [7]: start test
+	 *
+     * [StationList_e.ST170] 13
+     * [0]: Zyklus [1]: start test left [2]: start test right
+	 *
+     * [StationList_e.ST175] 14
+     * [0]: Zyklus [1]: holder [2]: cabine in [3]: cabine out
+	 * [4]: start laser
+	 *
+     * [StationList_e.ST180] 15
+     * [0]: Zyklus [1]: Gripper left [2]: Gripper right 
+	 * [3]: holder left [4]: holder right
+	 *
+     * [StationList_e.ST185] 11
+     * [0]: Zyklus [1]:  [2]: 
+     *)
+
+    btArST150 : ARRAY[0..20] OF structButton; (*	0 : Start USS
+	                                                1 : Reset US
+											   *)
+
+    btArForceCyclus     : ARRAY[0..StationList_e._max - 1] OF structButton;
+    bArForceCyclusState : ARRAY[0..StationList_e._max - 1] OF BOOL;
+
+    (*******************************************************************)
+    (* ALARME  *)
+    (*******************************************************************)
+    strArALARM  : ARRAY[1..500] OF structAlarm;
+    strArMSG    : ARRAY[1..100] OF structAlarm;
+    xArAlarmHMI : ARRAY[1..9999] OF BOOL;
+
+    (*******************************************************************)
+    (* ANZEIGE - Werte *)
+    (*******************************************************************)
+    iSelectAxis     : LinearAxis_e := LinearAxis_e.ST110_01Y;
+    iSelectAxisCopy : LinearAxis_e := LinearAxis_e._max;
+    btCopyAxisCfg   : structButton;
+
+    iSelectCylinder     : StationList_e := StationList_e.ST105;
+    iSelectCylinderCopy : StationList_e := StationList_e._max;
+    btCopyCylinderCfg   : structButton;
+
+    iSelectJogAxis : Axis_e;
+
+    (*******************************************************************)
+    (* Cycle Time [STATION]*)
+    (*******************************************************************)
+    dwArStartTime_ms : ARRAY[0..StationList_e._max - 1] OF DWORD;
+    dwArCycleTime_ms : ARRAY[0..StationList_e._max - 1] OF DWORD;
+
+    lrPiecePerMinute : LREAL;
+
+    PieceDoneTmp : DINT; // number of piece done since last reset
+
+    (*******************************************************************)
+    (* Recipe HMI management *)
+    (*******************************************************************)
+    btCopyRecipe  : structButton;
+    btSetDefault  : structButton;
+    movesNames    : ARRAY[0..LinearAxis_e._max - 1] OF ARRAY[0..CONST.MAX_VECTOR_LIST] OF STRING;
+    cylinderNames : ARRAY[0..StationList_e._max - 1] OF ARRAY[0..CONST.MAX_CYLINDER_PER_STATION] OF STRING;
+
+    (*******************************************************************)
+    (* Mover manual bt *)
+    (*******************************************************************)
+    selectedShuttle : INT := 1; // selected shuttle from the HMI
+
+    (*******************************************************************)
+    (* Diverses *)
+    (*******************************************************************)
+    xWriteALlog : BOOL;         // Alarmlog schreiben in File
+    btWritePers : structButton; // write pers data in filesystem
+
+    sCurrentHMI2 : STRING; // ???
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CT_Track_Tc_to_BR_u" Id="{6db1b6e0-b7b6-4977-b80f-d16896df11be}">
+    <Declaration><![CDATA[{attribute 'pack_mode' := '1'}
+TYPE CT_Track_Tc_to_BR_u :
+UNION
+    asStruct : CT_Track_Tc_to_BR_t;
+    asArray  : ARRAY[0..SIZEOF(CT_Track_Tc_to_BR_t)-1] OF USINT;
+END_UNION
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

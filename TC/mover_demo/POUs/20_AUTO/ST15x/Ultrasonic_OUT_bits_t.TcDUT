@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="Ultrasonic_OUT_bits_t" Id="{80d67b85-683c-4a2b-a38f-a46e5b9bdcac}">
+    <Declaration><![CDATA[TYPE Ultrasonic_OUT_bits_t :
+STRUCT
+    Start     : BIT;
+    Reset     : BIT;
+    Data_Hex1 : BIT;
+    Data_Hex2 : BIT;
+    Data_Hex4 : BIT;
+    Data_Hex8 : BIT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST105_Recipe_t" Id="{f879e561-bf89-4110-95a9-d2f5967a32cf}">
+    <Declaration><![CDATA[TYPE ST105_Recipe_t :
+STRUCT
+    xUseVerLeft        : BOOL; // Is the left vertical picker element is used
+    xUseVerRight       : BOOL; // Is the right vertical picker element is used
+    FeederConfig       : FeederDelays_t;
+    FeederSize         : DINT; // tell the feeder slots number, if it has 2 slots or 
+    PickOffset_X_deci  : UINT; // X offset of picking position
+    PickOffset_Y_deci  : UINT; // Y offset of picking position
+    PickUpPos_Z_deci   : UINT; // Z traveling height from pick to place position
+    isPickOffset_X_neg : BOOL; // tell the robot that PickOffset_X_deci is negative
+    isPickOffset_Y_neg : BOOL; // tell the robot that PickOffset_Y_deci is negative
+    isPickUpPos_Z_neg  : BOOL; // tell the robot that PickUpPos_Z_deci is negative
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

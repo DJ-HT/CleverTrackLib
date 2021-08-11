@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="AXIS" Id="{dceb5ac4-c0b9-49d4-9a4e-e676386f04ad}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+(*******************************************************************)
+(* ACHSEN KONSTANTEN *)
+(*******************************************************************)
+VAR_GLOBAL CONSTANT
+
+END_VAR
+VAR_GLOBAL
+    (*******************************************************************)
+    (* ACHSEN Variablen *)
+    (*******************************************************************)
+    //Axis Allgemein Teachen und Anzeige
+    bTeachAxisNr  : BYTE;                              // Zu Teachende Achse # (von HMI)
+    bTeachInPos   : BYTE;                              // Achse in Position (Teachpos (99= nicht in Pos))
+    bTeachPos     : ARRAY[0..Axis_e._max - 1] OF BYTE; // Achse Teach Position (Anzufahrende Position #)
+    rTeachIncAxis : REAL := 0.1;                       // Axis Inching Wert
+    rTeachVelo    : REAL := 10;                        // Achse Geschwindigkeit (Anzeige)
+    rTeachPos     : REAL;                              // Achse Teach Position (Anzufahrende Position Wert)
+    rTeachActPos  : REAL;                              // Achse AKTUELLE Position (AKTUEL
+    rTeachPosMin  : REAL;                              // Achse PositionsminimumLER Position Wert)
+    rTeachPosMax  : REAL;                              // Achse Positionsmaximum
+    rJogVelo_pc   : REAL                := REAL#10.0;  // global jog velocity in pc
+    arrJogValues  : ARRAY[0..7] OF REAL := [0.01,      // lookup table for jog % value
+                                            0.05,
+                                            0.1,
+                                            0.5,
+                                            1.0,
+                                            5.0,
+                                            10.0,
+                                            50.0];
+
+    btTeachArAxis : ARRAY[0..Axis_e._max - 1] OF ARRAY[0..8] OF structButton; (* Buttons AXIS
+                                                    0: Disable 
+                                                    1: Inching 
+                                                    2: Slow 
+                                                    3: Fast 
+                                                    4: Move Abs/Rel   
+                                                    5: Manu Move NEGATIVE
+                                                    6: Manu Move POSITIVE  
+													7: Start Homing 
+													8: Teachpos Übernehmen*)
+END_VAR
+
+(*******************************************************************)
+(* ACHSEN Positionen von HMI*)
+(*******************************************************************)
+VAR_GLOBAL RETAIN
+
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

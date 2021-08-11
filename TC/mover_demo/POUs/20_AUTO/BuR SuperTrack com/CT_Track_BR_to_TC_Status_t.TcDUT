@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="CT_Track_BR_to_TC_Status_t" Id="{895bf04e-25a8-4591-aecf-7b99ae78353a}">
+    <Declaration><![CDATA[// track status from BR to Twincat
+{attribute 'pack_mode' := '1'}
+TYPE CT_Track_BR_to_TC_Status_t :
+STRUCT
+    ready                 : BIT; // The track is ready to take commands
+    error                 : BIT; // The track is in error
+    powerOn               : BIT; // The shuttles are energized
+    inOperation           : BIT; // The track is now under control of CleverTrackLib
+    allIdSet              : BIT; // All the ID's are set and verified
+    unknownMoverAtTarget1 : BIT; // Tell TC that the shuttle is at the first target ready to take order
+    reserve7              : BIT; // 
+    reserve8              : BIT; // 
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

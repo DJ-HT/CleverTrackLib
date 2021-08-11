@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST185_PnpVerPos_e" Id="{664742c8-16bc-404c-8b16-2099cc51cb79}">
+    <Declaration><![CDATA[TYPE ST185_PnpVerPos_e :
+(
+    up_waiting_mover,
+    down_empty,
+    up_full,
+    down_full,
+	up_after_unload,
+    _max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

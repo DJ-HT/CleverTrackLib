@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ALARM32" Id="{a5140b04-bca5-4150-a8ae-92d2001e455d}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ALARM32
+//	ALARMERZEUGUNG
+//	27.10.15/Dj
+VAR_INPUT
+    pstrArIN_Alarm : POINTER TO ARRAY[1..32] OF structAlarm;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    iIndex     : INT;                 //Index
+    TON_AlVerz : ARRAY[1..32] OF TON; (* Timer für Alarverzögerung *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FOR iIndex := 1 TO 32 DO
+	//Alarmverzögerung
+	TON_AlVerz[iIndex](IN:=pstrArIN_Alarm^[iIndex].xAlarmIN AND NOT pstrArIN_Alarm^[iIndex].xAlarmOFF, PT:=pstrArIN_Alarm^[iIndex].tAlarmVERZ);
+	//Alarm Reset
+	IF pstrArIN_Alarm^[iIndex].xAlarmQUIT OR pstrArIN_Alarm^[iIndex].xAlarmOFF OR NOT pstrArIN_Alarm^[iIndex].xAlarmSAVE THEN
+		pstrArIN_Alarm^[iIndex].xAlarmOUT := FALSE;
+	END_IF
+	IF TON_AlVerz[iIndex].Q THEN
+		pstrArIN_Alarm^[iIndex].xAlarmOUT := TRUE;
+	END_IF
+END_FOR
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

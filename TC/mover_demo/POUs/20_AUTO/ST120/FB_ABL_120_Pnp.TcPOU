@@ -1,0 +1,594 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ABL_120_Pnp" Id="{e8fb820e-6cdb-43fd-838a-fc94fa0c9913}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ABL_120_Pnp
+(****************************************************************************************)
+(*	TITEL				laden kristall- Modul	    										*)
+(*	Status				ungetestet                         								*)
+(*	Beschrieb:			Ablaufbeschreibung												*)
+(*																						*)
+(*	Steps:	self-explained using enum													*)
+(***********************************Revisionen*******************************************)
+(*	see github blames																	*)
+(****************************************************************************************)
+
+VAR_INPUT
+    xIN_Reset       : BOOL;          // Schrittkette zurücksetzen 
+    xIN_Init        : BOOL;          // Initialisieren
+    xIN_Quit        : BOOL;          // Fehler quittieren 
+    xIN_Start       : BOOL;          // Startbefehl
+    xIN_Sperre      : BOOL;          // FB Sperren 
+    xIN_NextStep    : BOOL;          // Nächsten Schritt ausführen 
+    xIN_AlarmAktiv  : BOOL;          // Anlage hat Alarm
+    xIN_DryCycle    : BOOL;          // Fahren ohne Teile
+    xIN_RestartCYCL : BOOL;          // Zyklus erneut starten im STEP, END, LEERFAHREN
+    enIN_State      : enState;       // Status Anlage
+    tIN_Timeout     : TIME := T#10s; // Timout
+
+    pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
+
+    // Application specific
+    Mover              : REFERENCE TO FB_Mover;
+    xIN_PceReadyToPick : BOOL; // the piece(s) is/are ready to picked
+END_VAR
+VAR_OUTPUT
+    (* standart Ausgänge *)
+    xOUT_ErrFlag  : BOOL;        // Error Flag 
+    xOUT_Busy     : BOOL;        // Baustein befindet sich im Ablauf 
+    xOUT_Done     : BOOL;        // Baustein hat den Ablauf beendet 		
+    xOUT_Ready    : BOOL;        // Ready to begin, should be the same state as done	
+    xOUT_Timeout  : BOOL;        // Timeout FB 
+    xOUT_InitDone : BOOL;        // initialisierung fertig
+    xOUT_Wait     : BOOL;        // Wartet auf Bedingung
+    iOUT_Step     : ST120_Pnp_e; // Aktueller Schritt 
+    sOUT_Step     : STRING;      // Aktueller Schritt but in string format
+    bOUT_Error    : BYTE;        // Fehlernummer
+
+    iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
+    xOUT_MoverFree         : BOOL; // The mover is free to move
+    xOUT_PickPiece         : BOOL; // Set to true when a piece is picked
+
+END_VAR
+VAR
+    (* Standard *)
+    (* Schritt *)
+    iLastStep : ST120_Pnp_e; // Merker letzter Schritt 
+    iPreStep  : ST120_Pnp_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST120_Pnp_e; // aktueller Schritt
+
+    // Trigger Starten 
+    rtSTART : R_TRIG;
+    // Timer TimeOut 
+    TON_Timeout : TON;
+
+    (* Bausteine *)
+
+    (* Spezial *)
+    fb_axis120_01Y : FB_AxisLM_V1_1;
+    fb_axis120_02Z : FB_AxisLM_V1_1;
+
+    fb_PnpHorAxis : FB_LinearMotionMan;
+    fb_PnpVerAxis : FB_LinearMotionMan;
+
+    fb_gripperLeft    : FB_ZylMo2El_V2_1;
+    fb_gripperRight   : FB_ZylMo2El_V2_1;
+    simu_gripperLeft  : FB_Simu_Zyl2Pos;
+    simu_gripperRight : FB_Simu_Zyl2Pos;
+
+    fb_simu_axis120_01Y : FB_Simu_AxisLM_V1_1;
+    fb_simu_axis120_02Z : FB_Simu_AxisLM_V1_1;
+
+END_VAR
+VAR CONSTANT
+    PNP_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Trigger  *)
+(*******************************************************************)
+(* Zurücksetzen *)
+IF xIN_RESET THEN
+    iPreStep  := ST120_Pnp_e.RESET;
+    iOUT_Step := ST120_Pnp_e.RESET;
+END_IF
+
+(* Error Quittieren *)
+IF (bOUT_Error <> 0) AND xIN_Quit THEN
+    xOUT_ErrFlag := FALSE;
+    bOUT_Error   := 0;
+    iOUT_Step    := iPreStep;
+END_IF
+
+(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
+            PT := tIN_Timeout);
+
+(*******************************************************************)
+(* Bausteine *)
+(*******************************************************************)
+fb_PnpHorAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST120_01Y],
+              xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
+              lrIN_CurrPos    := fb_axis120_01Y.rOUT_ActPos,
+              lrIN_Delta_mm   := 0.5,
+              iIN_CurrentStep := iOUT_Step,
+              iIN_moveNumber  := ST120_PnpHorPos_e._max);
+
+fb_simu_axis120_01Y(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis120_01Y.bOUT_AxisCntr,
+                    wIN_AxisState       := ST120_Axis.axis120_01Y.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST120_01Y]),
+                    pIN_axisHW          := ADR(ST120_Axis.axis120_01Y.axis),
+                    rIN_PosActual       := fb_axis120_01Y.rOUT_ActPos,
+                    rIN_PosMax          := ST120_Axis.const120_01Y.POS_MAX,
+                    rIN_PosMin          := ST120_Axis.const120_01Y.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
+
+fb_axis120_01Y(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST120_01Y]),
+               xIN_DisButtons   :=,
+               xIN_Quit         := xIN_Quit,
+               xIN_PARAMok      := TRUE, (*TODO*)
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST120_Axis.const120_01Y.POS_MIN,
+               rIN_POSMAX       := ST120_Axis.const120_01Y.POS_MAX,
+               rIN_VELOMAX      := ST120_Axis.const120_01Y.VELO_MAX,
+               rIN_VELOMANU     := ST120_Axis.const120_01Y.VELO_MANU,
+               rIN_VELOOPEN     := ST120_Axis.const120_01Y.VELO_MANU / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               xIN_Execute      := fb_PnpHorAxis.xOUT_Execute,
+               xIN_Home         := ST120_Pnp_e.Init_HomeHorizontals = iAktStep,
+               xIN_Relative     :=,
+               rIN_Position     := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrPosition),
+               rIN_Velocity     := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrVelocity),
+               rIN_Acceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrAccel),
+               rIN_Deceleration := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrDecel),
+               rIN_Jerk         := TO_REAL(fb_PnpHorAxis.OUT_MoveProfile.lrJerk),
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST120_01Y].movesList[AXIS.bTeachPos[Axis_e.ST120_01Y]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Reset       := (ST120_Pnp_e.RESET = iAktStep) OR xIN_Reset,
+               // the simu fb gives the hardware signal when the simulation is disabled
+               wAxisState    := fb_simu_axis120_01Y.wOUT_AxisState,
+               bOUT_AxisCntr => ST120_Axis.axis120_01Y.bCtrlHi,
+               rOUT_ActPos   => ST120_Axis.axis120_01Y.rActPos,
+               axisIN_REF    := fb_simu_axis120_01Y.pOUT_axisRef^);
+
+fb_PnpVerAxis(config          := _20_AUTO.recipe.linearAxis[LinearAxis_e.ST120_02Z],
+              xIN_Init        := enIN_State = enState.StateINIT,
+              xIN_Reset       := xIN_Reset,
+              lrIN_CurrPos    := fb_axis120_02Z.rOUT_ActPos,
+              lrIN_Delta_mm   := 0.5,
+              iIN_CurrentStep := iOUT_Step,
+              iIN_moveNumber  := ST120_PnpVerPos_e._max);
+
+fb_simu_axis120_02Z(xIN_Enable          := PNP_SIMULATION AND CONST.USE_SIMULATION,
+                    bIN_AxisCntr        := fb_axis120_02Z.bOUT_AxisCntr,
+                    wIN_AxisState       := ST120_Axis.axis120_02Z.wState,
+                    udiIN_HomingTime_ms := 2000,
+                    pIN_axisSimu        := ADR(SIMU.axis_ref[Axis_e.ST120_02Z]),
+                    pIN_axisHW          := ADR(ST120_Axis.axis120_02Z.axis),
+                    rIN_PosActual       := fb_axis120_02Z.rOUT_ActPos,
+                    rIN_PosMax          := ST120_Axis.const120_02Z.POS_MAX,
+                    rIN_PosMin          := ST120_Axis.const120_02Z.POS_MIN,
+                    rIN_PixMax          := 100,
+                    rIN_PixMin          := 0);
+
+fb_axis120_02Z(enIN_State       := enIN_State,
+               parIN_Buttons    := ADR(AXIS.btTeachArAxis[Axis_e.ST120_02Z]),
+               xIN_DisButtons   :=,
+               xIN_Quit         := xIN_Quit,
+               xIN_PARAMok      := TRUE, (*TODO*)
+               xIN_FREE         := TRUE,
+               xIN_FREE_HOME    := TRUE,
+               rIN_POSMIN       := ST120_Axis.const120_02Z.POS_MIN,
+               rIN_POSMAX       := ST120_Axis.const120_02Z.POS_MAX,
+               rIN_VELOMAX      := ST120_Axis.const120_02Z.VELO_MAX,
+               rIN_VELOMANU     := ST120_Axis.const120_02Z.VELO_MANU,
+               rIN_VELOOPEN     := ST120_Axis.const120_02Z.VELO_MANU / 4,
+               rIN_JogInc       := AXIS.rTeachIncAxis,
+               xIN_Execute      := fb_PnpVerAxis.xOUT_Execute,
+               xIN_Home         := ST120_Pnp_e.Init_HomeVerticals = iAktStep,
+               xIN_Relative     :=,
+               rIN_Position     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrPosition),
+               rIN_Velocity     := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrVelocity),
+               rIN_Acceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrAccel),
+               rIN_Deceleration := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrDecel),
+               rIN_Jerk         := TO_REAL(fb_PnpVerAxis.OUT_MoveProfile.lrJerk),
+               rIN_PosManu      :=
+               TO_REAL(_20_AUTO.recipe
+                           .linearAxis[LinearAxis_e.ST120_02Z].movesList[AXIS.bTeachPos[Axis_e.ST120_02Z]].lrPosition),
+               rIN_VeloJogManu := TO_REAL(Axis.rJogVelo_pc),
+               xIN_Reset       := (ST120_Pnp_e.RESET = iAktStep) OR xIN_Reset,
+               // the simu fb gives the hardware signal when the simulation is disabled
+               wAxisState    := fb_simu_axis120_02Z.wOUT_AxisState,
+               bOUT_AxisCntr => ST120_Axis.axis120_02Z.bCtrlHi,
+               rOUT_ActPos   => ST120_Axis.axis120_02Z.rActPos,
+               axisIN_REF    := fb_simu_axis120_02Z.pOUT_axisRef^);
+
+fb_gripperLeft(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
+               xIN_Quit     := xIN_Quit,
+               xIN_Manu     := enState.StateMANU = enIN_State,
+               pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][1]),
+               xIN_GS       := simu_gripperLeft.xOUT_inGS,
+               xIN_AS       := simu_gripperLeft.xOUT_inAS,
+               xIN_FREE     := TRUE,
+               xINtoGS      := _20_AUTO.recipe.st120.xUseVerLeft AND ST120_Pnp_e.Gripper_close = iOUT_Step,
+               xINtoAS      := (ST120_Pnp_e.Gripper_open = iOUT_Step) OR
+                               (ST120_Pnp_e.Init_open_left_clamp = iOUT_Step),
+               tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                             [ST120_Cylinders_e.GreiferLinks].toAS_alarm_time),
+               tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                             [ST120_Cylinders_e.GreiferLinks].toGS_alarm_time),
+               tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                              [ST120_Cylinders_e.GreiferLinks].toAS_wait_time),
+               tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                              [ST120_Cylinders_e.GreiferLinks].toGS_wait_time));
+
+simu_gripperLeft(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+                 xIN_inGS   := IO_BOX.I6300_ST120_greifer_links_geschlossen,
+                 xIN_inAS   := IO_BOX.I6301_ST120_greifer_links_offen,
+                 xIN_valve  := fb_gripperLeft.xOUT_VALVE,
+                 tIN_GS_ms  := 200,  //ms
+                 tIN_AS_ms  := 200); //ms
+
+fb_gripperRight(xIN_Reset    := xIN_Reset OR (ST120_Pnp_e.RESET = iOUT_Step),
+                xIN_Quit     := xIN_Quit,
+                xIN_Manu     := enState.StateMANU = enIN_State,
+                pbtIN_Button := ADR(HMI.btManuCylinders[StationList_e.ST120][2]),
+                xIN_GS       := simu_gripperRight.xOUT_inGS,
+                xIN_AS       := simu_gripperRight.xOUT_inAS,
+                xIN_FREE     := TRUE,
+                xINtoGS      := _20_AUTO.recipe.st120.xUseVerRight AND (ST120_Pnp_e.Gripper_close = iOUT_Step),
+                xINtoAS      := (ST120_Pnp_e.Gripper_open = iOUT_Step) OR
+                                (ST120_Pnp_e.Init_open_right_clamp = iOUT_Step),
+                tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                              [ST120_Cylinders_e.GreiferRechts].toAS_alarm_time),
+                tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                              [ST120_Cylinders_e.GreiferRechts].toGS_alarm_time),
+                tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                               [ST120_Cylinders_e.GreiferRechts].toAS_wait_time),
+                tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST120]
+                                               [ST120_Cylinders_e.GreiferRechts].toGS_wait_time));
+
+simu_gripperRight(xIN_Enable := TRUE, // PNP_SIMULATION AND CONST.USE_SIMULATION,
+                  xIN_inGS   := IO_BOX.I6302_ST120_greifer_rechts_geschlossen,
+                  xIN_inAS   := IO_BOX.I6303_ST120_greifer_rechts_offen,
+                  xIN_valve  := fb_gripperRight.xOUT_VALVE,
+                  tIN_GS_ms  := 200,  //ms
+                  tIN_AS_ms  := 200); //ms
+
+(*******************************************************************)
+(* OUTPUTS *)
+(*******************************************************************)
+// Error Flag 
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST120_Pnp_e.ERROR = iOUT_Step);
+// Baustein befindet sich im Ablauf 
+xOUT_Busy := (iOUT_Step > ST120_Pnp_e.READY) AND (iOUT_Step < ST120_Pnp_e.DONE);
+// Baustein hat den Ablauf beendet
+xOUT_Done := (iOUT_Step = ST120_Pnp_e.DONE);
+// Process ready
+xOUT_Ready := (iOUT_Step = ST120_Pnp_e.READY) OR (iOUT_Step = ST120_Pnp_e.waitOnMover);
+// Timeout FB 				 		
+xOUT_Timeout := TON_Timeout.Q;
+// Itialisierung fertig			
+xOUT_InitDone := (iOUT_Step = ST120_Pnp_e.READY) OR (iOUT_Step = ST120_Pnp_e.waitOnMover);
+// Aktueller Schritt			
+iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
+sOUT_Step := TO_STRING(iOUT_Step);
+//Fehlernummer	 
+bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
+(* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
+xOUT_Wait := (iOUT_Step = ST120_Pnp_e.DONE) OR
+             (iOUT_Step = ST120_Pnp_e.READY) OR
+             (iOUT_Step = ST120_Pnp_e.START) OR
+             (iOUT_Step = ST120_Pnp_e.waitOnMover) OR
+             (iOUT_Step = ST120_Pnp_e.SYNC_MOVER_LEAVE) OR
+             (iOUT_Step = ST120_Pnp_e.PnP_WaitOnFeeder);
+
+xOUT_MoverFree := iOUT_Step >= ST120_Pnp_e.MOVER_FREE_OP AND iOUT_Step < ST120_Pnp_e.MOVER_NEEDED_OP;
+
+iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
+                                         ST120_Pnp_e.PnP_Hor_ToRotTablePos,
+                                         ST120_Pnp_e.PnP_Hor_ToTrackPos,
+                                         ST120_Pnp_e.PnP_Ver_ShuttleDown,
+                                         ST120_Pnp_e.PnP_Ver_ShuttleUp);
+
+xOUT_PickPiece := iOUT_Step = ST120_Pnp_e.PnP_Ver_RotTableUp;
+
+IO_BOX.Q5202_14_ST120_greifer_links  := fb_gripperLeft.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+IO_BOX.Q5203_14_ST120_greifer_rechts := fb_gripperRight.xOUT_VALVE AND NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+IO_BOX.Q5212_14_ST120_stop_vertical_axis := NOT fb_simu_axis120_02Z.pIN_axisHW^.Status.Error AND
+                                            _02_SAFETY.xOUT_ESout AND
+                                            _02_SAFETY.xOUT_MonOut AND
+                                            NOT (PNP_SIMULATION AND CONST.USE_SIMULATION);
+
+(*******************************************************************)
+(* Ablauf *)
+(*******************************************************************)
+
+(* Sperren *)
+IF xIN_Sperre THEN
+    iPreStep  := ST120_Pnp_e.RESET;
+    iOUT_Step := ST120_Pnp_e.RESET;
+    RETURN;
+END_IF;
+
+(* Schritt Merker *)
+IF iAktStep <> iOUT_Step THEN
+    iLastStep := iAktStep;
+    iAktStep  := iOUT_Step;
+END_IF
+
+(* START *)
+rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_axis120_01Y.xOUT_ErrFlag THEN
+        bOUT_Error := ST120_Alarm_e.Axis_120_01Y_error;
+    ELSIF fb_axis120_02Z.xOUT_ErrFlag THEN
+        bOUT_Error := ST120_Alarm_e.Axis_120_02Z_error;
+    ELSIF fb_gripperLeft.xOUT_ErrFlag THEN
+        bOUT_Error := ST120_Alarm_e.Cylinder_griper_left;
+    ELSIF fb_gripperRight.xOUT_ErrFlag THEN
+        bOUT_Error := ST120_Alarm_e.Cylinder_griper_right;
+    END_IF
+ELSIF iOUT_Step < ST120_Pnp_e.ERROR THEN
+    iOUT_Step := ST120_Pnp_e.ERROR;
+END_IF
+
+(*******************************************************************)
+(* Schrittkette  *)
+(*******************************************************************)
+CASE iOUT_Step OF
+
+(***** RESET *****)
+ST120_Pnp_e.RESET: (* Schritt 0-99 *)
+    //Initialisierungen
+    //Start Init Ablauf
+    IF xIN_Init THEN
+        iOUT_Step := ST120_Pnp_e.INIT;
+        //Start Manu Ablauf
+    ELSIF enIN_State = StateMANU AND xIN_NextStep THEN
+        iOUT_Step := ST120_Pnp_e.INIT;
+    END_IF;
+
+(***** INIT *****)
+ST120_Pnp_e.INIT: (* Grundstellung ? *)
+    IF fb_axis120_02Z.xOUT_HOMED THEN
+        iOUT_Step := ST120_Pnp_e.Init_VerticalsUp;
+    ELSE
+        iOUT_Step := ST120_Pnp_e.Init_HomeVerticals;
+    END_IF
+
+ST120_Pnp_e.Init_HomeVerticals:
+    IF fb_axis120_02Z.xOUT_HOMED THEN
+        iOUT_Step := ST120_Pnp_e.Init_VerticalsUp;
+    END_IF
+
+ST120_Pnp_e.Init_VerticalsUp:
+    IF fb_gripperLeft.xIN_AS OR fb_gripperRight.xIN_AS THEN
+        IF fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.UpFull).xOUT_InPos THEN
+            IF fb_axis120_01Y.xOUT_READY OR fb_axis120_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST120_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST120_Pnp_e.Init_HomeHorizontals;
+            END_IF
+        END_IF
+    ELSE
+        IF fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
+            IF fb_axis120_01Y.xOUT_READY OR fb_axis120_01Y.xOUT_HOMED THEN
+                iOUT_Step := ST120_Pnp_e.Init_HorizontalsToTrack;
+            ELSE
+                iOUT_Step := ST120_Pnp_e.Init_HomeHorizontals;
+            END_IF
+        END_IF
+    END_IF
+
+ST120_Pnp_e.Init_HomeHorizontals:
+    IF fb_axis120_01Y.xOUT_HOMED THEN
+        iOUT_Step := ST120_Pnp_e.Init_HorizontalsToTrack;
+    END_IF
+
+ST120_Pnp_e.Init_HorizontalsToTrack:
+    IF fb_PnpHorAxis.MoveTo(ST120_PnpHorPos_e.GS).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.Init_adjust_left_clamp;
+    END_IF
+
+ST120_Pnp_e.Init_adjust_left_clamp:
+    // a piece is in the griper when there is no GS signal
+    IF _20_AUTO.recipe.st120.xUseVerLeft THEN
+        iOUT_Step := ST120_Pnp_e.Init_adjust_right_clamp;
+    ELSE
+        iOUT_Step := ST120_Pnp_e.Init_open_left_clamp;
+    END_IF
+
+ST120_Pnp_e.Init_open_left_clamp:
+    IF fb_gripperLeft.xIN_AS THEN
+        IF _20_AUTO.recipe.st120.xUseVerRight THEN
+            iOUT_Step := ST120_Pnp_e.Init_adjust_right_clamp;
+        ELSE
+            iOUT_Step := ST120_Pnp_e.Init_check_if_pces_handled;
+        END_IF
+    END_IF
+
+ST120_Pnp_e.Init_adjust_right_clamp:
+    // a piece is in the griper when there is no GS signal
+    IF _20_AUTO.recipe.st120.xUseVerRight THEN
+        iOUT_Step := ST120_Pnp_e.Init_check_if_pces_handled;
+    ELSE
+        iOUT_Step := ST120_Pnp_e.Init_open_right_clamp;
+    END_IF
+
+ST120_Pnp_e.Init_open_right_clamp:
+    IF fb_gripperRight.xIN_AS THEN
+        iOUT_Step := ST120_Pnp_e.Init_check_if_pces_handled;
+    END_IF
+
+ST120_Pnp_e.Init_check_if_pces_handled:
+    IF (NOT _20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperLeft.xIN_AS) OR
+       (NOT _20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperRight.xIN_AS) THEN
+        bOUT_Error := ST120_Alarm_e.Piece_in_unused_griper;
+        iOUT_Step  := ST120_Pnp_e.ERROR;
+
+    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND fb_gripperLeft.xOUT_inAS) AND
+          (_20_AUTO.recipe.st120.xUseVerRight AND NOT fb_gripperRight.xOUT_inAS) THEN
+        bOUT_Error := ST120_Alarm_e.Piece_missing_left_griper;
+        iOUT_Step  := ST120_Pnp_e.ERROR;
+
+    ELSIF (_20_AUTO.recipe.st120.xUseVerLeft AND NOT fb_gripperLeft.xOUT_inAS) AND
+          (_20_AUTO.recipe.st120.xUseVerRight AND fb_gripperRight.xOUT_inAS) THEN
+        bOUT_Error := ST120_Alarm_e.Piece_missing_right_griper;
+        iOUT_Step  := ST120_Pnp_e.ERROR;
+
+        // if both are open, we don't make further checks
+    ELSIF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inGS) AND
+          (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inGS) THEN
+        iOUT_Step := ST120_Pnp_e.waitOnMover;
+
+    ELSE
+        iOUT_Step := ST120_Pnp_e.READY;
+    END_IF
+
+(***** READY / INIT DONE *****)
+ST120_Pnp_e.READY:    (* Start AUTO,END,LEER,STEP *)
+    IF xIN_Start THEN //IF rtSTART.Q THEN
+        iOUT_Step := ST120_Pnp_e.START;
+    END_IF
+
+(***** START  ZYKLISCH *****)
+ST120_Pnp_e.START: (*  *)
+    IF xIN_NextStep AND pxFG_Freigabe^ THEN
+        IF enState.StateLEER = enIN_State THEN
+            IF __ISVALIDREF(Mover) THEN
+                IF Mover.GetLastStationDone() > 0 THEN
+                    iOUT_Step := ST120_Pnp_e.PnP_Hor_ToRotTablePos;
+                ELSE
+                    iOUT_Step := ST120_Pnp_e.waitOnMover;
+                END_IF
+            END_IF
+        ELSE
+            iOUT_Step := ST120_Pnp_e.PnP_Hor_ToRotTablePos;
+        END_IF
+    END_IF;
+
+ST120_Pnp_e.PnP_Hor_ToRotTablePos:
+    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST120_PnpHorPos_e.AS).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.PnP_WaitOnFeeder;
+    END_IF
+
+ST120_Pnp_e.PnP_WaitOnFeeder:
+    IF xIN_PceReadyToPick THEN
+        iOUT_Step := ST120_Pnp_e.PnP_Ver_RotTableDown;
+    END_IF
+
+ST120_Pnp_e.PnP_Ver_RotTableDown:
+    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.DownEmpty).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.Gripper_close;
+    END_IF;
+
+ST120_Pnp_e.Gripper_close:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inGS) AND
+       (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inGS) THEN
+        iOUT_Step := ST120_Pnp_e.PnP_Ver_RotTableUp;
+    END_IF;
+
+ST120_Pnp_e.PnP_Ver_RotTableUp:
+    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.UpFull).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.PnP_Hor_ToTrackPos;
+    END_IF;
+
+ST120_Pnp_e.PnP_Hor_ToTrackPos:
+    IF xIN_NextStep AND fb_PnpHorAxis.MoveTo(ST120_PnpHorPos_e.GS).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.waitOnMover;
+    END_IF
+
+ST120_Pnp_e.waitOnMover: (*  *)
+    IF xIN_NextStep AND __ISVALIDREF(Mover) OR HMI.bArForceCyclusState[StationList_e.ST120] THEN
+        IF Mover.GetLastStationDone() >= INT#120 THEN
+            iOUT_Step := ST120_Pnp_e.SYNC_MOVER_LEAVE;
+        ELSIF Mover.GetLastStationDone() < INT#105 THEN
+            iOUT_Step := ST120_Pnp_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleDown;
+        END_IF
+    END_IF;
+
+ST120_Pnp_e.PnP_Ver_ShuttleDown:
+    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.DownFullQuick).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleTorqueControl;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(120) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
+    END_IF;
+
+// We need a fb that enables for us torque control. Here we just go a bit further
+ST120_Pnp_e.PnP_Ver_ShuttleTorqueControl:
+    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.DownFullTorqueControl).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.Gripper_open;
+    END_IF;
+
+ST120_Pnp_e.Gripper_open:
+    IF xIN_NextStep AND
+       (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
+       (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
+        iOUT_Step := ST120_Pnp_e.PnP_Ver_ShuttleUp;
+    END_IF;
+
+ST120_Pnp_e.PnP_Ver_ShuttleUp:
+    IF xIN_NextStep AND fb_PnpVerAxis.MoveTo(ST120_PnpVerPos_e.UpEmpty).xOUT_InPos THEN
+        iOUT_Step := ST120_Pnp_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(120) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
+    END_IF;
+
+ST120_Pnp_e.SYNC_MOVER_LEAVE:
+    // The mover needs to be taken by MoverMan
+    IF NOT __ISVALIDREF(Mover) THEN
+        IF (NOT _20_AUTO.recipe.st120.xUseVerLeft OR fb_gripperLeft.xOUT_inAS) AND
+           (NOT _20_AUTO.recipe.st120.xUseVerRight OR fb_gripperRight.xOUT_inAS) THEN
+            iOUT_Step := ST120_Pnp_e.DONE;
+        ELSE
+            iOUT_Step := ST120_Pnp_e.waitOnMover;
+        END_IF
+    END_IF
+
+(***** DONE *****)
+ST120_Pnp_e.DONE: (* Letzter Schritt  *)
+    IF NOT xIN_AlarmAktiv THEN
+        //AUTO
+        IF (enIN_State = StateAUTO) AND xIN_RestartCYCL THEN
+            iOUT_Step := ST120_Pnp_e.START;
+            //STEP / END / LEERFAHREN restart
+        ELSIF (enIN_State < StateAUTO) AND (enIN_State >= enState.StateSTEP) AND xIN_RestartCYCL THEN
+            iOUT_Step := ST120_Pnp_e.START;
+            //STEP / END / LEERFAHREN fertig
+        ELSIF (enIN_State = StateREADY) THEN
+            iOUT_Step := ST120_Pnp_e.READY;
+        END_IF;
+    END_IF;
+
+(************ ERROR *************)
+ST120_Pnp_e.ERROR: (* ERROR *) ;
+
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

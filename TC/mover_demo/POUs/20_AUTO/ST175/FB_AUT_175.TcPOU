@@ -1,0 +1,196 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_AUT_175" Id="{e703c51e-8801-4586-ba20-b4cb8ee017c9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_AUT_175 EXTENDS FB_AUT_ABSTRACT
+(****************************************************************************)
+(*	POU_AUT_zxx			Bausteinaufrufe Station	zxx							*)
+(*	Status				ungetestet											*)
+(*  Version:			1.0													*)
+(*	Beschrieb:																*)
+(*																			*)
+(*	Abläufe:			FB_ABLzxxA		Hauptablauf							*)
+(*																			*)
+(*																			*)
+(* 	25.09.2019/Dj															*)
+(****************************************************************************)
+(*	dd.mm.yyyy   KZ    x.y			Beschrieb								*)
+(****************************************************************************)
+VAR_INPUT
+
+    (* spezifische Eingänge *)
+
+END_VAR
+VAR_OUTPUT
+
+    (* spezifische Ausgänge *)
+
+END_VAR
+VAR
+    (* Bausteine *)
+    fb_laser : FB_ABL_175;
+
+    fb_stat : FB_AUT_Statistics;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+
+(*******************************************************************)
+(* Flanken / Merker *)
+(*******************************************************************)
+//MANU CYCLE
+IF (enIN_State = StateMANU) AND xIN_ManuCycle THEN
+    xManuCycle := TRUE;
+END_IF;
+
+IF (enIN_State <> StateMANU) OR xOUT_Done THEN
+    xManuCycle := FALSE;
+END_IF
+
+//NEXT STEP
+xNextStep := (enIN_State > StateSTEP) OR
+             ((enIN_State = StateSTEP) AND xIN_Step) OR
+             ((enIN_State = StateMANU) AND xManuCycle);
+
+//RESET
+xReset := (enIN_State < StateREADY) AND (enIN_State <> StateINIT) AND NOT xManuCycle;
+
+(*******************************************************************)
+(* Bausteinaufrufe Abläufe *)
+(*******************************************************************)
+
+xRelease := MAIN.MoverMan.IsProcessUsed(THIS^);
+
+fb_laser(xIN_Reset       := xReset,
+         xIN_Init        := xIN_Init,
+         xIN_Quit        := xIN_Quit,
+         xIN_Start       := enIN_State >= enState.StateLEER AND xRelease,
+         xIN_Sperre      := NOT xIN_On,
+         xIN_NextStep    := xNextStep,
+         xIN_AlarmAktiv  := xIN_AlarmAktiv,
+         xIN_DryCycle    := xIN_DryCycle,
+         xIN_RestartCYCL := enIN_State >= enState.StateLEER,
+         enIN_State      := enIN_State,
+         tIN_Timeout     := tIN_Timeout,
+         pxFG_Freigabe   := ADR(xRelease),
+         // CleverTrackLib
+         Mover := THIS^.Mover);
+
+fb_stat(xIN_Enable  := enState.StateAUTO = enIN_State,
+        xIN_Waiting := fb_laser.xOUT_Wait,
+        xIN_Running := (fb_laser.iOUT_Step >= ST175_LASER_e.START) AND
+                       (fb_laser.iOUT_Step <= ST175_LASER_e.DONE),
+        // Since we use a mover system, a cycle is done when we are waiting on a mover
+        xIN_Done := fb_laser.iOUT_Step = ST175_LASER_e.waitOnMover);
+
+(*******************************************************************)
+(* Bausteinaufruf Error Station *)
+(*******************************************************************)
+// POU_ERR_VORLAGE(xIN_QUIT := xIN_Quit, pstrArIN_ALARM := ADR(HMI.strArALARM[1]));
+
+(*******************************************************************)
+(* OUTPUT *)
+(*******************************************************************)
+xOUT_InitDone := fb_laser.xOUT_InitDone;
+xOUT_Ready    := fb_laser.xOUT_Ready;
+xOUT_Done     := fb_laser.xOUT_Done;
+xOUT_ErrFlag  := fb_laser.xOUT_ErrFlag;
+xOUT_Wait     := fb_laser.xOUT_Wait;
+xOUT_AlarmST  := xOUT_ErrFlag;
+]]></ST>
+    </Implementation>
+    <Property Name="iCompletionPC" Id="{e2fa9667-8677-4294-9ac2-dc0271992986}">
+      <Declaration><![CDATA[(* % of completion of the process *)
+PROPERTY iCompletionPC : INT
+]]></Declaration>
+      <Get Name="Get" Id="{27af7196-12b2-4880-a690-b9435b6d778c}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[iCompletionPC := THIS^.fb_laser.iOUT_ProcessCompletion;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="ProcessExecution" Id="{22b82c88-6347-43bc-90d0-6902106442d4}">
+      <Declaration><![CDATA[PROPERTY ProcessExecution : ProcessExecution_e]]></Declaration>
+      <Get Name="Get" Id="{e67a2328-cdab-4115-a777-cfdb3e283460}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[ProcessExecution := THIS^._ProcessExecution;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{1ef539a5-5959-4248-9c95-75b8da59ad81}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[THIS^._ProcessExecution := ProcessExecution;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xBusy" Id="{380ab12d-553d-4db8-89b1-8a31b58ec5f4}">
+      <Declaration><![CDATA[PROPERTY xBusy : BOOL]]></Declaration>
+      <Get Name="Get" Id="{4142ea11-5e05-484f-944f-258292f096dd}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xBusy := THIS^.fb_laser.xOUT_Busy;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{9f90a352-cb01-46b5-9482-c59db03ec73b}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="xDone" Id="{fe270e69-7b35-4c4b-8d42-e68ef775a001}">
+      <Declaration><![CDATA[PROPERTY xDone : BOOL]]></Declaration>
+      <Get Name="Get" Id="{45fc742f-1c27-4f7e-a250-57ed93bb37a0}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xDone := THIS^.fb_laser.xOUT_Ready OR THIS^.fb_laser.xOUT_Done;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="xMoverPathFree" Id="{1c7fad61-69f4-40ed-9109-38ada4defd02}">
+      <Declaration><![CDATA[PROPERTY xMoverPathFree : BOOL]]></Declaration>
+      <Get Name="Get" Id="{5e1095eb-bdf7-49aa-8c87-0a868a7a81a7}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverPathFree := THIS^.fb_laser.xOUT_MoverFree OR THIS^.fb_laser.xOUT_Ready OR THIS^.fb_laser.xOUT_Done;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="xMoverShouldLeave" Id="{c90cfc5b-9667-4380-a9e2-31543a87542f}">
+      <Declaration><![CDATA[PROPERTY xMoverShouldLeave : BOOL]]></Declaration>
+      <Get Name="Get" Id="{8cf35ae6-3233-4d0c-aaf2-7962d57fd8ff}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[xMoverShouldLeave := THIS^.fb_laser.iOUT_Step = ST175_LASER_e.SYNC_MOVER_LEAVE;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

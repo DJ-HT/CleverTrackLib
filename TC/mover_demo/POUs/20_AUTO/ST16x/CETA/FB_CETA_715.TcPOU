@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_CETA_715" Id="{fffbda69-0930-4a95-a754-c73a30b608f0}" SpecialFunc="None">
+    <Declaration><![CDATA[// Manage CETATEST void test
+// Use the method to perform actions
+// Please call each method only once (Use the command only during transition between step) 
+FUNCTION_BLOCK PUBLIC FB_CETA_715
+VAR_INPUT
+    xIN_StatusBits : CETA_IN_u;            // connect this to the 2 first byte of the input of the CETATEST
+    xIN_Data       : ARRAY[0..61] OF BYTE; // connect those 62 bytes right after xIN_StatusBits
+    xIN_Reset      : BOOL;                 // Reset errors
+END_VAR
+VAR_OUTPUT
+    xOUT_CommandBits    : CETA_OUT_u;           // connect this to the 2 first byte of the Output of the CETATEST
+    xOUT_Data           : ARRAY[0..29] OF BYTE; // connect those 30 bytes right after xIN_StatusBits
+    xOUT_DataReady      : BOOL;
+    xOUT_Error_Flag     : BOOL;
+    bOUT_ErrorCode      : BYTE;
+    sOUT_ErrorMessage   : STRING;
+    xOUT_Measure_1_GOOD : BOOL; // TRUE when the last measurement in canal 1 was GOOD
+    bOUT_Error_1        : BYTE;
+    xOUT_Measure_2_GOOD : BOOL; // TRUE when the last measurement in canal 2 was GOOD
+    bOUT_Error_2        : BYTE;
+    xOUT_ReadyToStart   : BOOL; // you can send a start signal
+END_VAR
+VAR
+    iStep       : INT := 0;
+    ton_TimeOut : TON;
+
+    iBlockNumber : INT := 0;
+
+    error_message : CETA_error_handling_t;
+
+    ceta_measurement_data : CETA_Measurement_t;
+
+    xResultGood : BOOL := FALSE;
+
+END_VAR
+VAR CONSTANT
+    DEFAULT_COMMAND_BIT : UINT := 16#00;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+ton_TimeOut(IN := 200 = iStep OR 1100 = iStep, PT := T#10S);
+
+CASE iStep OF
+
+0: // reset
+    xOUT_CommandBits.raw := 0;
+
+    IF xIN_StatusBits.bits.b09_communication_possible THEN
+        iStep := 100;
+    END_IF
+
+100: // ready to take command
+    // wait on command and read error when there is one
+    IF xIN_StatusBits.bits.b08_error_bit THEN
+        iStep       := 1000;
+        xResultGood := FALSE;
+    END_IF
+
+200: // command is sending, wait on a answer
+
+    IF ton_TimeOut.Q THEN
+        iStep             := 1500;
+        bOUT_ErrorCode    := 0;
+        sOUT_ErrorMessage := 'Command timeout';
+
+    ELSIF xOUT_CommandBits.bits.b00_start_stop THEN
+        IF xIN_StatusBits.bits.b00_measurement_complete THEN
+            iStep               := 240;
+            iBlockNumber        := 0;
+            xOUT_Measure_1_GOOD := FALSE;
+            xOUT_Measure_2_GOOD := FALSE;
+        END_IF
+
+    ELSIF xOUT_CommandBits.bits.b01_send_parameters THEN
+        IF xIN_StatusBits.bits.b02_parameters_available THEN
+            iStep := 300;
+        END_IF
+
+    ELSIF xOUT_CommandBits.bits.b02_request_parameters THEN
+        IF xIN_StatusBits.bits.b02_parameters_available THEN
+            iStep := 300;
+        END_IF
+
+    ELSIF xOUT_CommandBits.bits.b03_request_error_code THEN
+        IF xIN_StatusBits.bits.b03_error_code_available THEN
+            iStep := 1200;
+        END_IF
+
+    ELSIF xOUT_CommandBits.bits.b04_change_front_panel_lock_state THEN
+        IF xIN_StatusBits.bits.b04_front_panel_lock_state THEN // TODO
+            iStep := 0;
+        END_IF
+
+    ELSIF xOUT_CommandBits.bits.b05_assign_program_number THEN
+        IF xIN_StatusBits.bits.b05_program_number_assigned THEN
+            iStep := 0;
+        END_IF
+
+    ELSIF xOUT_CommandBits.bits.b06_request_system_information THEN
+        IF xIN_StatusBits.bits.b06_system_information_available THEN
+            iStep := 300;
+        END_IF
+
+    ELSIF xOUT_CommandBits.bits.b07_request_cycle_counter THEN
+        IF xIN_StatusBits.bits.b07_cycle_counter_available THEN
+            iStep := 300;
+        END_IF
+
+        // ELSIF xOUT_CommandBits.bits.request_next_result_block THEN
+        //     IF xIN_StatusBits.bits.ne THEN
+        //         iStep := 300;
+        //     END_IF
+    END_IF
+
+240:
+
+    iStep := 250;
+
+    // copy 
+    CASE iBlockNumber OF
+    0:
+        MEMCPY(ADR(ceta_measurement_data.Block0), ADR(xIN_Data), SIZEOF(ceta_measurement_data.Block0));
+    1:
+        MEMCPY(ADR(ceta_measurement_data.Block1), ADR(xIN_Data), SIZEOF(ceta_measurement_data.Block1));
+    2:
+        MEMCPY(ADR(ceta_measurement_data.Block2), ADR(xIN_Data), SIZEOF(ceta_measurement_data.Block2));
+
+    ELSE
+        iStep := 1500; // should not read more than 3 blocks !
+    END_CASE
+
+    iBlockNumber := iBlockNumber + 1;
+
+250:
+
+    // Here we test for iBlockNumber 1 but we have increment the value before
+    IF 2 = iBlockNumber THEN
+        xOUT_Measure_1_GOOD := ceta_measurement_data.Block1.Result_chanel_1 = CETA_REsult_e.OK;
+        xOUT_Measure_2_GOOD := ceta_measurement_data.Block1.Result_chanel_2 = CETA_REsult_e.OK;
+
+        IF NOT xOUT_Measure_1_GOOD THEN
+            bOUT_Error_1 := ceta_measurement_data.Block1.Result_chanel_1;
+        ELSE
+            bOUT_Error_1 := 0;
+        END_IF
+
+        IF NOT xOUT_Measure_2_GOOD THEN
+            bOUT_Error_2 := ceta_measurement_data.Block1.Result_chanel_2;
+        ELSE
+            bOUT_Error_2 := 0;
+        END_IF
+    END_IF
+
+    IF xIN_StatusBits.bits.b11_result_block_handshake_bit THEN
+        iStep := 260;
+    ELSE
+        iStep := 300;
+    END_IF
+
+260:
+    IF NOT xIN_StatusBits.bits.b11_result_block_handshake_bit THEN
+        iStep := 240;
+    END_IF
+
+    xOUT_CommandBits.bits.b11_request_next_result_block := xIN_StatusBits.bits.b11_result_block_handshake_bit;
+
+300: // data available
+    xOUT_CommandBits.raw := 0;
+// Use the read() method to return to state 100
+
+1000: // read error code
+    xOUT_CommandBits.raw := 0;
+    //
+    xOUT_CommandBits.bits.b03_request_error_code := TRUE;
+
+    iStep := 1100;
+
+1100: // read error code
+    IF ton_TimeOut.Q THEN
+        iStep := 0; // reset .. there is nothing we can do
+    ELSIF xIN_StatusBits.bits.b03_error_code_available THEN
+        iStep := 1200;
+    END_IF
+
+1200: // read error
+    error_message.command_in_error.raw := xIN_Data[0] + SHL(TO_UINT(xIN_Data[1]), 8);
+
+    bOUT_ErrorCode := error_message.error_code;
+
+    IF 0 = error_message.command_in_error.raw THEN
+        sOUT_ErrorMessage := 'CETA in error, not due to Ethercat communication';
+
+    ELSIF xOUT_CommandBits.bits.b01_send_parameters THEN
+        sOUT_ErrorMessage := 'send_parameters command failed';
+
+    ELSIF xOUT_CommandBits.bits.b02_request_parameters THEN
+        sOUT_ErrorMessage := 'request_parameters command failed';
+
+    ELSIF xOUT_CommandBits.bits.b03_request_error_code THEN
+        sOUT_ErrorMessage := 'request_error_code command failed';
+
+    ELSIF xOUT_CommandBits.bits.b04_change_front_panel_lock_state THEN
+        sOUT_ErrorMessage := 'change_front_panel_lock_state command failed';
+
+    ELSIF xOUT_CommandBits.bits.b05_assign_program_number THEN
+        sOUT_ErrorMessage := 'assign_program_number command failed';
+
+    ELSIF xOUT_CommandBits.bits.b06_request_system_information THEN
+        sOUT_ErrorMessage := 'request_system_information command failed';
+
+    ELSIF xOUT_CommandBits.bits.b07_request_cycle_counter THEN
+        sOUT_ErrorMessage := 'request_cycle_counter command failed';
+
+    END_IF
+
+    iStep := 1500;
+
+1500: // in error, wait on reset
+    IF xIN_Reset THEN
+        sOUT_ErrorMessage                         := '';
+        bOUT_ErrorCode                            := 0;
+        xOUT_CommandBits.raw                      := 0;
+        xOUT_CommandBits.bits.b08_reset_error_bit := TRUE;
+        iStep                                     := 0;
+    END_IF
+
+END_CASE
+
+xOUT_DataReady    := 300 = iStep;
+xOUT_Error_Flag   := 1500 = iStep;
+xOUT_ReadyToStart := xIN_StatusBits.bits.b10_device_ready_to_start;
+]]></ST>
+    </Implementation>
+    <Method Name="GetParameter" Id="{90e8271d-7322-4297-b828-4a5666bdeb98}">
+      <Declaration><![CDATA[METHOD GetParameter : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetResult" Id="{8caaa0b1-0282-4f2e-901f-83ccbf17d128}">
+      <Declaration><![CDATA[METHOD GetResult : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF 300 = THIS^.iStep THEN
+    GetResult   := TRUE;
+    THIS^.iStep := 0;
+ELSE
+    GetResult := FALSE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="SetProgramNumber" Id="{d4cd72eb-e62e-4ba7-8b58-50ab6677d0f6}">
+      <Declaration><![CDATA[METHOD SetProgramNumber : BOOL
+VAR_INPUT
+	program_number : USINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF 100 = THIS^.iStep THEN
+	THIS^.iStep := 200;
+	THIS^.xOUT_CommandBits.bits.b05_assign_program_number := TRUE;
+	THIS^.xOUT_Data[0] := USINT_TO_BYTE(program_number);
+	SetProgramNumber := TRUE;
+ELSE
+    THIS^.iStep      := 0;
+	SetProgramNumber := FALSE;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="StartMeasurement" Id="{3a6f0f3a-903d-4e67-9032-25c962bd9a03}">
+      <Declaration><![CDATA[METHOD StartMeasurement : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF 100 = THIS^.iStep THEN
+    THIS^.iStep                                := 200;
+    THIS^.xOUT_CommandBits.bits.b00_start_stop := TRUE;
+    StartMeasurement                           := TRUE;
+ELSE
+    THIS^.iStep      := 0;
+    StartMeasurement := FALSE;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

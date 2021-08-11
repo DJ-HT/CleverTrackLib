@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="ST130_DosierkammerPos_e" Id="{5a71f79b-5fb8-44ae-b921-d30c40b3dcfb}">
+    <Declaration><![CDATA[TYPE ST130_DosierkammerPos_e :
+(
+    up_GS,
+    down_AS,
+    _max
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

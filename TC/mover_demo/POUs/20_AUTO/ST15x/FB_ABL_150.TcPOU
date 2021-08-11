@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ABL_150" Id="{6aafcf0a-18e7-48ce-b2c0-f9078f0d620f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ABL_150
+(****************************************************************************************)
+(*	TITEL				laden kristall- Modul	    										*)
+(*	Status				ungetestet                         								*)
+(*	Beschrieb:			Ablaufbeschreibung												*)
+(*																						*)
+(*	Steps:	self-explained using enum													*)
+(***********************************Revisionen*******************************************)
+(*	see github blames																	*)
+(****************************************************************************************)
+
+VAR_INPUT
+    xIN_Reset       : BOOL;          // Schrittkette zurücksetzen 
+    xIN_Init        : BOOL;          // Initialisieren
+    xIN_Quit        : BOOL;          // Fehler quittieren 
+    xIN_Start       : BOOL;          // Startbefehl
+    xIN_Sperre      : BOOL;          // FB Sperren 
+    xIN_NextStep    : BOOL;          // Nächsten Schritt ausführen 
+    xIN_AlarmAktiv  : BOOL;          // Anlage hat Alarm
+    xIN_DryCycle    : BOOL;          // Fahren ohne Teile
+    xIN_RestartCYCL : BOOL;          // Zyklus erneut starten im STEP, END, LEERFAHREN
+    enIN_State      : enState;       // Status Anlage
+    tIN_Timeout     : TIME := T#10s; // Timout
+
+    pxFG_Freigabe : POINTER TO BOOL; //Freigabe von Station
+
+    // Application specific
+    Mover : REFERENCE TO FB_Mover;
+
+    xIN_capDetector             : BOOL;
+    xIN_kraftubersetzunh_zuruck : BOOL;
+    xIN_kraftubersetzunh_vor    : BOOL;
+    pIN_ButtonMaintaining       : POINTER TO structButton;
+
+    xIN_welding_bits : Ultrasonic_IN_bits_t;
+
+    iIN_StationNumber : INT;    // station number 
+    sIN_errorCodeSide : STRING; // added string to the error code, (e.g. left or right)
+
+END_VAR
+VAR_OUTPUT
+    (* standart Ausgänge *)
+    xOUT_ErrFlag  : BOOL;        // Error Flag 
+    xOUT_Busy     : BOOL;        // Baustein befindet sich im Ablauf 
+    xOUT_Done     : BOOL;        // Baustein hat den Ablauf beendet 		
+    xOUT_Ready    : BOOL;        // Ready to begin, should be the same state as done	
+    xOUT_Timeout  : BOOL;        // Timeout FB 
+    xOUT_InitDone : BOOL;        // initialisierung fertig
+    xOUT_Wait     : BOOL;        // Wartet auf Bedingung
+    iOUT_Step     : ST150_Uss_e; // Aktueller Schritt 
+    sOUT_Step     : STRING;      // Aktueller Schritt but in string format
+    bOUT_Error    : BYTE;        // Fehlernummer
+
+    iOUT_ProcessCompletion : INT;  //process completion, express in % (0-100)
+    xOUT_MoverFree         : BOOL; // The mover is free to move
+
+    xOUT_moverMaintening_valve : BOOL;
+    xOUT_welding_bits          : Ultrasonic_OUT_bits_t;
+
+END_VAR
+VAR
+    (* Standard *)
+    (* Schritt *)
+    iLastStep : ST150_Uss_e; // Merker letzter Schritt 
+    iPreStep  : ST150_Uss_e; // Schritt zurück nach Alarm 
+    iAktStep  : ST150_Uss_e; // aktueller Schritt
+
+    // Trigger Starten 
+    rtSTART : R_TRIG;
+    // Timer TimeOut 
+    TON_Timeout : TON;
+
+    (* Bausteine *)
+
+    (* Spezial *)
+    fb_moverMaintening   : FB_ZylMo2El_V2_1;
+    simu_moverMaintening : FB_Simu_Zyl2Pos;
+
+    TON_UssError     : TON;
+    TON_CapDetection : TON;
+
+END_VAR
+VAR CONSTANT
+    USS_SIMULATION : BOOL := FALSE; // Set to TRUE to simulate this part of the program
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*******************************************************************)
+(* Trigger  *)
+(*******************************************************************)
+(* Zurücksetzen *)
+IF xIN_RESET THEN
+    iPreStep  := ST150_Uss_e.RESET;
+    iOUT_Step := ST150_Uss_e.RESET;
+END_IF;
+
+(* Error Quittieren *)
+IF (bOUT_Error <> 0) AND xIN_Quit THEN
+    xOUT_ErrFlag := FALSE;
+    bOUT_Error   := 0;
+    iOUT_Step    := iPreStep;
+END_IF;
+
+(*******************************************************************)
+(* Timer *)
+(*******************************************************************)
+TON_Timeout(IN := xIN_NextStep AND (iLastStep = iOUT_Step) (*todo FG *) ,
+            PT := tIN_Timeout);
+
+TON_UssError(IN := ST150_Uss_e.uss_start = iOUT_Step,
+             PT := DINT_TO_TIME(_20_AUTO.recipe.st150.USS_ErrorTime_ms));
+
+TON_CapDetection(IN := ST150_Uss_e.check_cap_present = iOUT_Step,
+                 PT := T#500MS);
+
+(*******************************************************************)
+(* Bausteine *)
+(*******************************************************************)
+fb_moverMaintening(xIN_Reset    := xIN_Reset OR (ST150_Uss_e.RESET = iOUT_Step),
+                   xIN_Quit     := xIN_Quit,
+                   xIN_Manu     := enState.StateMANU = enIN_State,
+                   pbtIN_Button := pIN_ButtonMaintaining,
+                   xIN_GS       := simu_moverMaintening.xOUT_inGS,
+                   xIN_AS       := simu_moverMaintening.xOUT_inAS,
+                   xIN_FREE     := TRUE,
+                   xINtoGS      := (ST150_Uss_e.Init_ResetUss_maintaining_down = iOUT_Step) OR
+                                   (ST150_Uss_e.mover_maintening_down = iOUT_Step),
+                   xINtoAS   := ST150_Uss_e.mover_maintening_up = iOUT_Step,
+                   tIN_ErrAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST150]
+                                                 [ST150_Cylinders_e.Kraftbstutzung].toAS_alarm_time),
+                   tIN_ErrGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST150]
+                                                 [ST150_Cylinders_e.Kraftbstutzung].toGS_alarm_time),
+                   tIN_WaitAS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST150]
+                                                  [ST150_Cylinders_e.Kraftbstutzung].toAS_wait_time),
+                   tIN_WaitGS := DINT_TO_TIME(_20_AUTO.recipe.cylinder2Pos[StationList_e.ST150]
+                                                  [ST150_Cylinders_e.Kraftbstutzung].toGS_wait_time));
+
+simu_moverMaintening(xIN_Enable := USS_SIMULATION AND CONST.USE_SIMULATION,
+                     xIN_inGS   := xIN_kraftubersetzunh_zuruck,
+                     xIN_inAS   := xIN_kraftubersetzunh_vor,
+                     xIN_valve  := fb_moverMaintening.xOUT_VALVE,
+                     tIN_GS_ms  := 200,  // ms
+                     tIN_AS_ms  := 200); // ms
+
+(*******************************************************************)
+(* OUTPUTS *)
+(*******************************************************************)
+// Error Flag 
+xOUT_ErrFlag := (bOUT_Error <> 0) OR (ST150_Uss_e.ERROR = iOUT_Step);
+// Baustein befindet sich im Ablauf 
+xOUT_Busy := (iOUT_Step > ST150_Uss_e.READY) AND (iOUT_Step < ST150_Uss_e.DONE);
+// Baustein hat den Ablauf beendet
+xOUT_Done := (iOUT_Step = ST150_Uss_e.DONE);
+// Process ready
+xOUT_Ready := (iOUT_Step = ST150_Uss_e.READY) OR (iOUT_Step = ST150_Uss_e.waitOnMover);
+// Timeout FB 				 		
+xOUT_Timeout := TON_Timeout.Q;
+// Itialisierung fertig			
+xOUT_InitDone := (iOUT_Step = ST150_Uss_e.READY) OR (iOUT_Step = ST150_Uss_e.waitOnMover);
+// Aktueller Schritt			
+iOUT_Step := iOUT_Step; //Im Ablauf gesetzt		
+sOUT_Step := TO_STRING(iOUT_Step);
+//Fehlernummer	 
+bOUT_Error := bOUT_Error; //Im Ablauf/FB gesetzt	
+(* Warte (alle Schritte wo auf FG oder Teile gewartet wird) *)
+xOUT_Wait := (iOUT_Step = ST150_Uss_e.DONE) OR
+             (iOUT_Step = ST150_Uss_e.READY) OR
+             (iOUT_Step = ST150_Uss_e.START) OR
+             (iOUT_Step = ST150_Uss_e.waitOnMover) OR
+             (iOUT_Step = ST150_Uss_e.SYNC_MOVER_LEAVE);
+
+xOUT_MoverFree :=
+    NOT (iOUT_Step >= ST150_Uss_e.MOVER_NEEDED_OP AND iOUT_Step < ST150_Uss_e.MOVER_FREE_OP) AND
+    (iOUT_Step >= ST150_Uss_e.READY) AND
+    (iOUT_Step < ST150_Uss_e.ERROR);
+
+iOUT_ProcessCompletion := F_GetPercent_2(iAktStep,
+                                         iAktStep,
+                                         iAktStep,
+                                         ST150_Uss_e.check_cap_present,
+                                         ST150_Uss_e.SYNC_MOVER_LEAVE);
+
+xOUT_moverMaintening_valve :=
+    fb_moverMaintening.xOUT_VALVE AND NOT (USS_SIMULATION AND CONST.USE_SIMULATION);
+
+xOUT_welding_bits.Start :=
+    (ST150_Uss_e.uss_start = iOUT_Step) AND
+    NOT (USS_SIMULATION AND CONST.USE_SIMULATION) AND
+    xIN_capDetector;
+
+xOUT_welding_bits.Reset :=
+    (_14_STATE._FB_btQUIT.pbtIN^.press AND
+    NOT (ST150_Uss_e.uss_working = iOUT_Step) AND
+    NOT (ST150_Uss_e.uss_start = iOUT_Step)) OR
+    (ST150_Uss_e.Init_ResetUss_maintaining_down = iOUT_Step);
+
+xOUT_welding_bits.Data_Hex1 := _20_AUTO.recipe.st150.USS_Type.0; // _20_AUTO.recipe.st150.USS_Type = 1;
+xOUT_welding_bits.Data_Hex2 := _20_AUTO.recipe.st150.USS_Type.1; // _20_AUTO.recipe.st150.USS_Type = 2;
+xOUT_welding_bits.Data_Hex4 := _20_AUTO.recipe.st150.USS_Type.2; // _20_AUTO.recipe.st150.USS_Type = 3;
+xOUT_welding_bits.Data_Hex8 := _20_AUTO.recipe.st150.USS_Type.3; // _20_AUTO.recipe.st150.USS_Type = 4;
+
+(*******************************************************************)
+(* Ablauf *)
+(*******************************************************************)
+
+(* Sperren *)
+IF xIN_Sperre THEN
+    iPreStep  := ST150_Uss_e.RESET;
+    iOUT_Step := ST150_Uss_e.RESET;
+    RETURN;
+END_IF;
+
+(* Schritt Merker *)
+IF iAktStep <> iOUT_Step THEN
+    iLastStep := iAktStep;
+    iAktStep  := iOUT_Step;
+END_IF
+
+(* START *)
+rtSTART(CLK := xIN_Start);
+
+IF 0 = bOUT_Error THEN
+    IF fb_moverMaintening.xOUT_ErrFlag THEN
+        bOUT_Error := 11;
+    ELSIF USS_SIMULATION AND CONST.USE_SIMULATION AND xIN_welding_bits.Fehler THEN
+        bOUT_Error := 12;
+    ELSIF TON_UssError.Q THEN
+        bOUT_Error := 13;
+    END_IF
+ELSIF iOUT_Step < ST150_Uss_e.ERROR THEN
+    iOUT_Step := ST150_Uss_e.ERROR;
+END_IF
+
+(*******************************************************************)
+(* Schrittkette  *)
+(*******************************************************************)
+CASE iOUT_Step OF
+
+(***** RESET *****)
+ST150_Uss_e.RESET: (* Schritt 0-99 *)
+    //Initialisierungen
+    //Start Init Ablauf
+    IF xIN_Init THEN
+        iOUT_Step := ST150_Uss_e.INIT;
+        //Start Manu Ablauf
+    ELSIF enIN_State = StateMANU AND xIN_NextStep THEN
+        iOUT_Step := ST150_Uss_e.INIT;
+    END_IF;
+
+(***** INIT *****)
+ST150_Uss_e.INIT: (* Grundstellung ? *)
+    iOUT_Step := ST150_Uss_e.Init_ResetUss_maintaining_down;
+
+ST150_Uss_e.Init_ResetUss_maintaining_down:
+    IF fb_moverMaintening.xOUT_inGS THEN
+        iOUT_Step := ST150_Uss_e.READY;
+    END_IF
+
+(***** READY / INIT DONE *****)
+ST150_Uss_e.READY:    (* Start AUTO,END,LEER,STEP *)
+    IF xIN_Start THEN //IF rtSTART.Q THEN
+        iOUT_Step := ST150_Uss_e.START;
+    END_IF
+
+(***** START  ZYKLISCH *****)
+ST150_Uss_e.START: (*  *)
+    IF xIN_NextStep AND pxFG_Freigabe^ THEN
+        iOUT_Step := ST150_Uss_e.waitOnMover;
+        iPreStep  := ST150_Uss_e.INIT;
+    END_IF;
+
+ST150_Uss_e.waitOnMover: (*  *)
+    IF xIN_NextStep AND __ISVALIDREF(Mover) THEN
+        IF Mover.GetLastStationDone() >= iIN_StationNumber THEN
+            iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
+        ELSIF Mover.GetLastStationDone() < INT#145 THEN
+            iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
+        ELSE
+            iOUT_Step := ST150_Uss_e.check_cap_present;
+            iPreStep  := ST150_Uss_e.waitOnMover;
+        END_IF
+    END_IF;
+
+ST150_Uss_e.check_cap_present:
+    IF xIN_capDetector OR (USS_SIMULATION AND CONST.USE_SIMULATION) THEN
+        iOUT_Step := ST150_Uss_e.mover_maintening_up;
+    ELSIF TON_CapDetection.Q THEN
+        // Mover.SetErrorCode(CONCAT(CONCAT(INT_TO_STRING(iIN_StationNumber), '-B '), sIN_errorCodeSide));
+        bOUT_Error := 8; // TODO to be removed
+    END_IF
+
+ST150_Uss_e.mover_maintening_up:
+    IF xIN_NextStep AND fb_moverMaintening.xOUT_inAS THEN
+        IF USS_SIMULATION AND CONST.USE_SIMULATION THEN
+            iOUT_Step := ST150_Uss_e.mover_maintening_down;
+        ELSE
+            IF xIN_welding_bits.Bereit THEN
+                iOUT_Step := ST150_Uss_e.uss_start;
+                iPreStep  := ST150_Uss_e.waitOnMover;
+
+                IF __ISVALIDREF(Mover) THEN
+                    IF NOT Mover.SetLastStation(iIN_StationNumber) THEN
+                        ASSERT(0);
+                    END_IF
+                END_IF
+            ELSE
+                // bOUT_Error := 1; // welding not ready
+            END_IF
+        END_IF;
+    END_IF;
+
+ST150_Uss_e.uss_start:
+    IF xIN_NextStep AND NOT xIN_welding_bits.NullPosition THEN
+        iOUT_Step := ST150_Uss_e.uss_working;
+    END_IF
+
+ST150_Uss_e.uss_working:
+    IF xIN_NextStep AND
+       (NOT xIN_welding_bits.US_on AND
+       xIN_welding_bits.NullPosition) THEN
+        iOUT_Step := ST150_Uss_e.mover_maintening_down;
+    END_IF
+
+ST150_Uss_e.mover_maintening_down:
+    IF xIN_NextStep AND fb_moverMaintening.xOUT_inGS THEN
+        iOUT_Step := ST150_Uss_e.SYNC_MOVER_LEAVE;
+
+        IF __ISVALIDREF(Mover) THEN
+            IF NOT Mover.SetLastStation(iIN_StationNumber) THEN
+                ASSERT(0);
+            END_IF
+        END_IF
+    END_IF;
+
+ST150_Uss_e.SYNC_MOVER_LEAVE:
+    // The mover needs to be taken by MoverMan
+    IF NOT __ISVALIDREF(Mover) THEN
+        iOUT_Step := ST150_Uss_e.DONE;
+    END_IF
+
+(***** DONE *****)
+ST150_Uss_e.DONE: (* Letzter Schritt  *)
+    IF NOT xIN_AlarmAktiv THEN
+        //AUTO
+        IF (enIN_State = StateAUTO) AND xIN_RestartCYCL THEN
+            iOUT_Step := ST150_Uss_e.START;
+            //STEP / END / LEERFAHREN restart
+        ELSIF (enIN_State < StateAUTO) AND (enIN_State >= enState.StateSTEP) AND xIN_RestartCYCL THEN
+            iOUT_Step := ST150_Uss_e.START;
+            //STEP / END / LEERFAHREN fertig
+        ELSIF (enIN_State = StateREADY) THEN
+            iOUT_Step := ST150_Uss_e.READY;
+        END_IF;
+    END_IF;
+
+(************ ERROR *************)
+ST150_Uss_e.ERROR: (* ERROR *) ;
+
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="IN" Id="{65b7ec83-7f69-49a4-8b73-6f7a70b23d37}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    (*******************************************************************)
+    (* EINGÄNGE Schrank A *)
+    (*******************************************************************)
+    (* Modul *)
+    //-EL1809 16DI 155D2
+    I000_                          AT %IX00.0 : BOOL; //
+    I001_monitor_24V               AT %IX00.1 : BOOL; // Netzgerät Schaltschrank A Überwachung +24V
+    I002_monitor_BR                AT %IX00.2 : BOOL; // Netzgerüt B&R Überwachung +24V
+    I003_lufter_safety             AT %IX00.3 : BOOL; // Lüfter Safety ok
+    I004_druckwachter_luftdruck_ok AT %IX00.4 : BOOL; // Druckwächter Luftdruck ok
+    I005_klimagerat_ok             AT %IX00.5 : BOOL; // Klimagerät ok
+    I006_                          AT %IX00.6 : BOOL; //
+    I007_                          AT %IX00.7 : BOOL; //
+
+    I010_distanzsensor_verschmutzung_140_51 AT %IX01.0 : BOOL; // Distanzsensor 140.51 Verschmutzung
+    I011_distanzsensor_verschmutzung_140_52 AT %IX01.1 : BOOL; // Distanzsensor 140.52 Verschmutzung
+    I012_                                   AT %IX01.2 : BOOL; // 
+    I013_                                   AT %IX01.3 : BOOL; // 
+    I014_                                   AT %IX01.4 : BOOL; // 
+    I015_                                   AT %IX01.5 : BOOL; // 
+    I016_                                   AT %IX01.6 : BOOL; // 
+    I017_                                   AT %IX01.7 : BOOL; // 
+
+    //-EL1809 16DI 155D7
+    I020_ultraschall_bereit_150_20  AT %IX02.0 : BOOL; // Ultraschall 150.20 Bereit
+    I021_ultraschall_fehler_150_20  AT %IX02.1 : BOOL; // Ultraschall 150.20 Fehler
+    I022_ultraschall_us_on_150_20   AT %IX02.2 : BOOL; // Ultraschall 150.20 US on
+    I023_ultraschall_nullpos_150_20 AT %IX02.3 : BOOL; // Ultraschall 150.20 Nullposition
+    I024_ultraschall_bereit_155_20  AT %IX02.4 : BOOL; // Ultraschall 155.20 Bereit
+    I025_ultraschall_fehler_155_20  AT %IX02.5 : BOOL; // Ultraschall 155.20 Fehler
+    I026_ultraschall_us_on_155_20   AT %IX02.6 : BOOL; // Ultraschall 155.20 US on
+    I027_ultraschall_nullpos_155_20 AT %IX02.7 : BOOL; // Ultraschall 155.20 Nullposifion
+
+    I030_rfid_test_link_out1_170_20 AT %IX03.0 : BOOL; // RFID Test links 170.20 OUT 1
+    I031_rfid_test_link_out2_170_20 AT %IX03.1 : BOOL; // RFID Test links 170.20 OUT 2
+    I032_rfid_test_link_out3_170_20 AT %IX03.2 : BOOL; // RFID Test links 170.20 OUT 3
+    I033_rfid_test_link_out1_170_21 AT %IX03.3 : BOOL; // RFID Test links 170.21 OUT 1
+    I034_rfid_test_link_out2_170_21 AT %IX03.4 : BOOL; // RFID Test links 170.21 OUT 2
+    I035_rfid_test_link_out3_170_21 AT %IX03.5 : BOOL; // RFID Test links 170.21 OUT 3
+    I036_                           AT %IX03.6 : BOOL; // 
+    I037_                           AT %IX03.7 : BOOL; // 
+
+    //-EL1809 16DI 15602
+    I040_ AT %IX04.0 : BOOL; // 
+    I041_ AT %IX04.1 : BOOL; // 
+    I042_ AT %IX04.2 : BOOL; // 
+    I043_ AT %IX04.3 : BOOL; // 
+    I044_ AT %IX04.4 : BOOL; // 
+    I045_ AT %IX04.5 : BOOL; // 
+    I046_ AT %IX04.6 : BOOL; // 
+    I047_ AT %IX04.7 : BOOL; // 
+
+    I050_ AT %IX05.0 : BOOL; // 
+    I051_ AT %IX05.1 : BOOL; // 
+    I052_ AT %IX05.2 : BOOL; // 
+    I053_ AT %IX05.3 : BOOL; // 
+    I054_ AT %IX05.4 : BOOL; // 
+    I055_ AT %IX05.5 : BOOL; // 
+    I056_ AT %IX05.6 : BOOL; // 
+    I057_ AT %IX05.7 : BOOL; // 
+
+    (*******************************************************************)
+    (* EINGÄNGE Schrank B *)
+    (*******************************************************************)
+    (* Modul *)
+    //-EL1809 16DI 10155D2
+    I500_laser_sammelfehler_175          AT %IX50.0 : BOOL; // Sauger Laser 175.21 Sammelfehler
+    I501_laser_filter_voll_175           AT %IX50.1 : BOOL; // Sauger Laser 175.21 Filter voll
+    I502_laser_drehzahl_175              AT %IX50.2 : BOOL; // Sauger Laser 175.21 Drehzahl
+    I503_laser_temperatur_175            AT %IX50.3 : BOOL; // Sauger Laser 175.21 Temperatur
+    I504_distanzsensor_verschmutzung_125 AT %IX50.4 : BOOL; // Distanzsensor 125.51 Verschmutzung
+    I505_uberwachung_24V                 AT %IX50.5 : BOOL; // Netzgerät Schaltschrank B Überwachung +24V
+    I506_klimagerat_ok                   AT %IX50.6 : BOOL; // Klimagerät schaltschrank B ok
+    I507_entladeBand_125_alarm           AT %IX50.7 : BOOL; // Entladeband 185.21 Alarm
+
+    I510_lufter_safey_ok AT %IX51.0 : BOOL; // Lüfter Safety Schaltschrank B ok
+    I511_                AT %IX51.1 : BOOL; // 
+    I512_                AT %IX51.2 : BOOL; // 
+    I513_                AT %IX51.3 : BOOL; // 
+    I514_                AT %IX51.4 : BOOL; // 
+    I515_                AT %IX51.5 : BOOL; // 
+    I516_                AT %IX51.6 : BOOL; // 
+    I517_                AT %IX51.7 : BOOL; // 
+
+    //-EL1809 16DI 1015507
+    I520_                AT %IX52.0 : BOOL; // 
+    I521_ AT %IX52.1 : BOOL; // 
+    I522_                AT %IX52.2 : BOOL; // 
+    I523_ AT %IX52.3 : BOOL; // 
+    I524_                AT %IX52.4 : BOOL; // 
+    I525_ AT %IX52.5 : BOOL; // 
+    I526_                AT %IX52.6 : BOOL; // 
+    I527_ AT %IX52.7 : BOOL; // 
+
+    I530_ AT %IX53.0 : BOOL; // 
+    I531_ AT %IX53.1 : BOOL; // 
+    I532_ AT %IX53.2 : BOOL; // 
+    I533_ AT %IX53.3 : BOOL; // 
+    I534_ AT %IX53.4 : BOOL; // 
+    I535_ AT %IX53.5 : BOOL; // 
+    I536_ AT %IX53.6 : BOOL; // 
+    I537_ AT %IX53.7 : BOOL; // 
+
+    AI01_ST140_level_track_side AT %I* : UINT; // laser sensor used to measure powder level, placed at the track side
+    AI02_ST140_level_door_side  AT %I* : UINT; // laser sensor used to measure powder level, placed at the door side
+
+    AI11_ST130_valve_feedback_left  AT %I* : UINT; // current flow of the proportional valve
+    AI12_ST130_valve_feedback_right AT %I* : UINT; // current flow of the proportional valve
+    AI13_ST135_valve_feedback_left  AT %I* : UINT; // current flow of the proportional valve
+    AI14_ST135_valve_feedback_right AT %I* : UINT; // current flow of the proportional valve
+
+    AI21_ST125_piece_height AT %I* : UINT; // laser sensor value, detect pieces in round table
+    AI22_                   AT %I* : UINT;
+
+    I_CPX9_1_ResetBp AT %I* : BOOL; // Blue button on the panel
+    I_CPX9_1_greenBp AT %I* : BOOL; // Green button on the panel
+    I_CPX9_1_redBp   AT %I* : BOOL; // Red button on the panel
+
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>

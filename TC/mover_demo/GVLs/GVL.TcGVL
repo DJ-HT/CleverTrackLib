@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="GVL" Id="{94734850-411d-4576-a0e7-f0a38cdbbc44}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+    (*******************************************************************)
+    (* Allgemeine Globale Variablen *)
+    (*******************************************************************)
+    (******* FREIGABEN *********)
+    //ST01
+    xFG_ST01akVZ : BOOL; // Vereinzelung Teil anwesend
+    xFG_ST01akWT : BOOL; // WT anwesend
+    //ST02
+    xFG_ST02akWT : BOOL; // WT anwesend
+
+    st105_aut : FB_AUT_105;    // Laden Filtergehäuse
+    st110_aut : FB_AUT_110;    // Laden RFID-Ring
+    st115_aut : FB_AUT_115;    // Laden kristal
+    st120_aut : FB_AUT_120;    // Laden Solerohr
+    st125_aut : FB_AUT_125;    // Laden filterhut
+    st128_aut : FB_AUT_128;    // Control filterhut
+    st130_aut : FB_AUT_130;    // Dosieren A
+    st135_aut : FB_AUT_135;    // Dosieren B
+    st140_aut : FB_AUT_140;    // Niveaukontrolle
+    st145_aut : FB_AUT_145;    // Laden Patronendeckel
+    st150_aut : FB_AUT_150;    // Utralson A
+    st155_aut : FB_AUT_155;    // Ultrason B
+    st160_aut : FB_AUT_160;    // Prüfig A
+    st165_aut : FB_AUT_165;    // Prüfig B
+    st170_aut : FB_AUT_170;    // Program RFID
+    st175_aut : FB_AUT_175;    // Laser A
+    st176_aut : FB_AUT_MODIFY; // Laser B
+    st180_aut : FB_AUT_180;    // Entladen schlecht
+    st185_aut : FB_AUT_185;    // Entladen gut
+	
+	ST130_01Y_Feedback_Offset : LREAL; // Offset automatically adjusted by ST140
+	ST135_01Y_Feedback_Offset : LREAL; // Offset automatically adjusted by ST140
+
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>
